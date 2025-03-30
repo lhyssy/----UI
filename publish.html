@@ -215,7 +215,6 @@
 
     <script src="js/common.js"></script>
     <script>
-        // 页面特定脚本
         document.addEventListener('DOMContentLoaded', function() {
             // 切换开关
             const switches = document.querySelectorAll('.switch input');
@@ -226,10 +225,18 @@
                         slider.classList.remove('bg-gray-300');
                         slider.classList.add('bg-green-500');
                         slider.style.setProperty('--before-transform', 'translateX(24px)');
+                        
+                        // 显示设置已开启的提示
+                        const settingType = this.closest('.content-card').querySelector('span').textContent;
+                        showToast(`${settingType}已开启`, 'success');
                     } else {
                         slider.classList.remove('bg-green-500');
                         slider.classList.add('bg-gray-300');
                         slider.style.setProperty('--before-transform', 'translateX(0)');
+                        
+                        // 显示设置已关闭的提示
+                        const settingType = this.closest('.content-card').querySelector('span').textContent;
+                        showToast(`${settingType}已关闭`, 'info');
                     }
                 });
             });
@@ -239,14 +246,18 @@
             platformOptions.forEach(option => {
                 option.addEventListener('click', function() {
                     const checkIcon = this.querySelector('.check-icon i');
+                    const platformName = this.querySelector('h4').textContent;
+                    
                     if (checkIcon.classList.contains('fa-circle')) {
                         checkIcon.classList.remove('far', 'fa-circle', 'text-gray-300');
                         checkIcon.classList.add('fas', 'fa-check-circle', 'text-green-500');
                         this.classList.add('selected');
+                        showToast(`已选择发布到: ${platformName}`, 'success');
                     } else {
                         checkIcon.classList.remove('fas', 'fa-check-circle', 'text-green-500');
                         checkIcon.classList.add('far', 'fa-circle', 'text-gray-300');
                         this.classList.remove('selected');
+                        showToast(`已取消发布到: ${platformName}`, 'info');
                     }
                     
                     // 更新发布按钮状态
@@ -265,6 +276,12 @@
                 } else {
                     publishButton.classList.remove('disabled');
                     publishButton.removeAttribute('disabled');
+                    
+                    // 添加轻微的脉冲效果
+                    publishButton.classList.add('pulse');
+                    setTimeout(() => {
+                        publishButton.classList.remove('pulse');
+                    }, 1000);
                 }
             }
             
@@ -279,12 +296,21 @@
                         return;
                     }
                     
+                    // 获取所有选中的平台名称
+                    const selectedPlatforms = [];
+                    document.querySelectorAll('.platform-option.selected').forEach(platform => {
+                        selectedPlatforms.push(platform.querySelector('h4').textContent);
+                    });
+                    
                     // 显示发布中的状态
-                    const loadingToast = showToast('发布中...', 'loading');
+                    showToast(`正在发布到 ${selectedPlatforms.join('、')}...`, 'loading');
                     
                     // 模拟发布过程
                     setTimeout(() => {
-                        loadingToast.remove();
+                        // 移除之前的提示
+                        document.querySelectorAll('.toast-container').forEach(toast => toast.remove());
+                        
+                        // 显示发布成功的提示
                         showToast('发布成功！', 'success');
                         
                         // 2秒后跳转回首页
@@ -295,64 +321,6 @@
                 });
             }
             
-            // 显示消息提示
-            function showToast(message, type = 'info') {
-                // 移除现有的toast
-                const existingToast = document.querySelector('.toast-container');
-                if (existingToast) {
-                    existingToast.remove();
-                }
-                
-                // 创建新的toast
-                const toast = document.createElement('div');
-                toast.className = `toast-container ${type}`;
-                
-                // 添加图标
-                let icon = '';
-                switch(type) {
-                    case 'success':
-                        icon = '<i class="fas fa-check-circle"></i>';
-                        break;
-                    case 'error':
-                        icon = '<i class="fas fa-exclamation-circle"></i>';
-                        break;
-                    case 'warning':
-                        icon = '<i class="fas fa-exclamation-triangle"></i>';
-                        break;
-                    case 'loading':
-                        icon = '<div class="loading-spinner-sm"></div>';
-                        break;
-                    default:
-                        icon = '<i class="fas fa-info-circle"></i>';
-                }
-                
-                toast.innerHTML = `
-                    <div class="toast-content">
-                        <div class="toast-icon">${icon}</div>
-                        <div class="toast-message">${message}</div>
-                    </div>
-                `;
-                
-                document.body.appendChild(toast);
-                
-                // 添加显示类（用于动画）
-                setTimeout(() => {
-                    toast.classList.add('show');
-                }, 10);
-                
-                // 如果不是加载中，自动隐藏
-                if (type !== 'loading') {
-                    setTimeout(() => {
-                        toast.classList.remove('show');
-                        setTimeout(() => {
-                            toast.remove();
-                        }, 300);
-                    }, 3000);
-                }
-                
-                return toast;
-            }
-            
             // 初始化开关状态
             switches.forEach(input => {
                 const event = new Event('change');
@@ -361,6 +329,17 @@
             
             // 初始化发布按钮状态
             updatePublishButtonState();
+            
+            // 添加内容卡片的悬停效果
+            document.querySelector('.content-card').addEventListener('mouseenter', function() {
+                this.classList.add('shadow-md');
+                this.style.transform = 'translateY(-2px)';
+            });
+            
+            document.querySelector('.content-card').addEventListener('mouseleave', function() {
+                this.classList.remove('shadow-md');
+                this.style.transform = 'translateY(0)';
+            });
         });
     </script>
     <style>
