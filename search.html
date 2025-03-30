@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>助农宣传 - 搜索结果</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            background-color: #f8f9fa;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .safe-area {
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+        .nav-item.active {
+            color: #07c160;
+        }
+        .nav-item.active i {
+            color: #07c160;
+        }
+        .search-bar {
+            background-color: #f3f4f6;
+            border-radius: 16px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            height: 42px;
+        }
+        .search-bar:focus-within {
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .search-input {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            width: 100%;
+            padding: 4px 0;
+            margin-left: 8px;
+        }
+        .filter-tag {
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 16px;
+            background-color: #f3f4f6;
+            color: #6b7280;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .filter-tag.active {
+            background: linear-gradient(90deg, #07c160, #0d9b77);
+            color: white;
+            box-shadow: 0 2px 6px rgba(7, 193, 96, 0.2);
+        }
+        .result-item {
+            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+            border-radius: 16px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+        .result-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+        .product-image {
+            height: 140px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 12px 12px 0 0;
+        }
+        .product-tag {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-right: 4px;
+        }
+        .tag-organic {
+            background-color: #d1fae5;
+            color: #059669;
+        }
+        .tag-premium {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+        .tag-new {
+            background-color: #e0f2fe;
+            color: #0284c7;
+        }
+        .tag-limited {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+        .price-tag {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ef4444;
+        }
+        .old-price {
+            font-size: 12px;
+            color: #9ca3af;
+            text-decoration: line-through;
+        }
+        .tab-indicator {
+            height: 2px;
+            background: linear-gradient(90deg, #07c160, #0d9b77);
+            border-radius: 2px;
+            transition: transform 0.3s ease;
+        }
+        .farmer-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .location-badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 10px;
+            color: #6b7280;
+            background-color: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+        .card-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(4px);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 500;
+            color: #059669;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .article-item {
+            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+            border-radius: 16px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.02);
+            padding: 16px;
+        }
+        .article-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+        .article-image {
+            height: 80px;
+            width: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .search-stats {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+        .author-badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 10px;
+            color: #6b7280;
+            background-color: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-right: 4px;
+        }
+        .user-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+            border-radius: 16px;
+            padding: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+        .user-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            object-fit: cover;
+        }
+        .follow-btn {
+            background: linear-gradient(90deg, #07c160, #0d9b77);
+            color: white;
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        .verified-badge {
+            color: #0284c7;
+            font-size: 14px;
+            margin-left: 2px;
+        }
+        .back-to-top {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4b5563;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="safe-area">
+    <!-- 顶部导航 -->
+    <div class="bg-white p-4 sticky top-0 z-10 shadow-sm">
+        <div class="flex items-center space-x-3">
+            <a href="home.html" class="text-gray-600">
+                <i class="fas fa-arrow-left text-lg"></i>
+            </a>
+            <div class="search-bar flex-1">
+                <i class="fas fa-search text-gray-400"></i>
+                <input type="text" value="有机蔬菜" class="search-input" placeholder="搜索农产品、农户或文章">
+                <i class="fas fa-times-circle text-gray-400"></i>
+            </div>
+            <button class="text-green-600 font-medium text-sm">搜索</button>
+        </div>
+    </div>
+    
+    <!-- 分类过滤器 -->
+    <div class="bg-white pt-2 pb-3 px-4 border-b border-gray-100 sticky top-16 z-10">
+        <div class="overflow-x-auto hide-scrollbar">
+            <div class="flex space-x-2 pb-2">
+                <div class="filter-tag active">全部</div>
+                <div class="filter-tag">产品 (56)</div>
+                <div class="filter-tag">文章 (24)</div>
+                <div class="filter-tag">农户 (18)</div>
+                <div class="filter-tag">教程 (12)</div>
+                <div class="filter-tag">模板 (8)</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 搜索结果统计 -->
+    <div class="px-4 py-3 bg-white border-b border-gray-100">
+        <div class="flex justify-between items-center">
+            <div class="search-stats">找到 118 个"有机蔬菜"相关结果</div>
+            <div class="flex items-center space-x-2 text-sm text-gray-600">
+                <span>排序</span>
+                <i class="fas fa-chevron-down text-xs"></i>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 搜索结果 - 产品 -->
+    <div class="px-4 py-4">
+        <h2 class="text-lg font-bold mb-3">相关产品</h2>
+        
+        <div class="grid grid-cols-2 gap-3">
+            <div class="result-item">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" class="product-image" alt="有机胡萝卜">
+                    <div class="card-badge">
+                        <i class="fas fa-leaf mr-1"></i> 有机认证
+                    </div>
+                </div>
+                <div class="p-3">
+                    <div class="flex">
+                        <span class="product-tag tag-organic">有机</span>
+                        <span class="product-tag tag-premium">精选</span>
+                    </div>
+                    <h3 class="font-medium text-gray-900 mt-1 mb-1 truncate">农家新鲜有机胡萝卜</h3>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="price-tag">¥12.8</span>
+                            <span class="old-price ml-1">¥15.8</span>
+                        </div>
+                        <div class="location-badge">
+                            <i class="fas fa-map-marker-alt mr-1"></i>山东
+                        </div>
+                    </div>
+                    <div class="flex items-center mt-2 text-xs text-gray-500">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" class="farmer-avatar mr-1" alt="农户头像">
+                        <span>胡萝卜大王</span>
+                        <i class="fas fa-check-circle verified-badge ml-1"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="result-item">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1575218823251-78d74eae6813?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" class="product-image" alt="有机青菜">
+                    <div class="card-badge">
+                        <i class="fas fa-bolt mr-1"></i> 热销98%
+                    </div>
+                </div>
+                <div class="p-3">
+                    <div class="flex">
+                        <span class="product-tag tag-organic">有机</span>
+                        <span class="product-tag tag-new">新品</span>
+                    </div>
+                    <h3 class="font-medium text-gray-900 mt-1 mb-1 truncate">时令有机小青菜 新鲜直达</h3>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="price-tag">¥9.9</span>
+                            <span class="old-price ml-1">¥12.9</span>
+                        </div>
+                        <div class="location-badge">
+                            <i class="fas fa-map-marker-alt mr-1"></i>江苏
+                        </div>
+                    </div>
+                    <div class="flex items-center mt-2 text-xs text-gray-500">
+                        <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" class="farmer-avatar mr-1" alt="农户头像">
+                        <span>绿色蔬菜园</span>
+                        <i class="fas fa-check-circle verified-badge ml-1"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="result-item">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" class="product-image" alt="有机菠菜">
+                </div>
+                <div class="p-3">
+                    <div class="flex">
+                        <span class="product-tag tag-organic">有机</span>
+                    </div>
+                    <h3 class="font-medium text-gray-900 mt-1 mb-1 truncate">富含铁质有机菠菜</h3>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="price-tag">¥8.5</span>
+                        </div>
+                        <div class="location-badge">
+                            <i class="fas fa-map-marker-alt mr-1"></i>安徽
+                        </div>
+                    </div>
+                    <div class="flex items-center mt-2 text-xs text-gray-500">
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" class="farmer-avatar mr-1" alt="农户头像">
+                        <span>菠菜达人</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="result-item">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1540148426945-6cf22a6b2383?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" class="product-image" alt="有机土豆">
+                    <div class="card-badge">
+                        <i class="fas fa-fire mr-1"></i> 抢购中
+                    </div>
+                </div>
+                <div class="p-3">
+                    <div class="flex">
+                        <span class="product-tag tag-organic">有机</span>
+                        <span class="product-tag tag-limited">限量</span>
+                    </div>
+                    <h3 class="font-medium text-gray-900 mt-1 mb-1 truncate">农家天然有机土豆</h3>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="price-tag">¥6.9</span>
+                            <span class="old-price ml-1">¥9.9</span>
+                        </div>
+                        <div class="location-badge">
+                            <i class="fas fa-map-marker-alt mr-1"></i>甘肃
+                        </div>
+                    </div>
+                    <div class="flex items-center mt-2 text-xs text-gray-500">
+                        <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" class="farmer-avatar mr-1" alt="农户头像">
+                        <span>马铃薯之家</span>
+                        <i class="fas fa-check-circle verified-badge ml-1"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-2 mb-6">
+            <button class="text-green-600 font-medium text-sm">
+                查看全部56个产品 <i class="fas fa-chevron-right ml-1"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- 搜索结果 - 文章 -->
+    <div class="px-4 py-2">
+        <h2 class="text-lg font-bold mb-3">相关文章</h2>
+        
+        <div class="space-y-3">
+            <div class="article-item">
+                <div class="flex">
+                    <div class="flex-1 pr-3">
+                        <div class="flex items-center mb-1">
+                            <div class="author-badge">
+                                <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" class="w-3 h-3 rounded-full mr-1" alt="">
+                                有机农业专家
+                            </div>
+                            <div class="text-xs text-gray-500">3天前</div>
+                        </div>
+                        <h3 class="font-medium text-gray-900 mb-1">有机蔬菜种植攻略：从种子到餐桌的全过程</h3>
+                        <p class="text-xs text-gray-600 line-clamp-2">本文详细介绍了有机蔬菜的种植技术，从选种、土壤准备、播种、培育到采收的完整流程，帮助农户打造纯天然有机蔬菜...</p>
+                        <div class="flex items-center mt-2 text-xs text-gray-500">
+                            <div class="flex items-center mr-3">
+                                <i class="far fa-eye mr-1"></i>
+                                <span>2.3k</span>
+                            </div>
+                            <div class="flex items-center mr-3">
+                                <i class="far fa-thumbs-up mr-1"></i>
+                                <span>185</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="far fa-comment mr-1"></i>
+                                <span>32</span>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1499529112087-3cb3b73cec95?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" class="article-image" alt="有机蔬菜种植">
+                </div>
+            </div>
+            
+            <div class="article-item">
+                <div class="flex">
+                    <div class="flex-1 pr-3">
+                        <div class="flex items-center mb-1">
+                            <div class="author-badge">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" class="w-3 h-3 rounded-full mr-1" alt="">
+                                健康饮食顾问
+                            </div>
+                            <div class="text-xs text-gray-500">1周前</div>
+                        </div>
+                        <h3 class="font-medium text-gray-900 mb-1">为什么有机蔬菜更有营养？科学解析其健康价值</h3>
+                        <p class="text-xs text-gray-600 line-clamp-2">本文从营养学角度分析有机蔬菜的健康价值，包括更高的维生素含量、更少的农药残留以及更好的口感，对比常规种植蔬菜的优势...</p>
+                        <div class="flex items-center mt-2 text-xs text-gray-500">
+                            <div class="flex items-center mr-3">
+                                <i class="far fa-eye mr-1"></i>
+                                <span>5.1k</span>
+                            </div>
+                            <div class="flex items-center mr-3">
+                                <i class="far fa-thumbs-up mr-1"></i>
+                                <span>426</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="far fa-comment mr-1"></i>
+                                <span>78</span>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1543362906-acfc16c67564?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" class="article-image" alt="有机蔬菜营养">
+                </div>
+            </div>
+            
+            <div class="article-item">
+                <div class="flex">
+                    <div class="flex-1 pr-3">
+                        <div class="flex items-center mb-1">
+                            <div class="author-badge">
+                                <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" class="w-3 h-3 rounded-full mr-1" alt="">
+                                农产品营销专家
+                            </div>
+                            <div class="text-xs text-gray-500">2周前</div>
+                        </div>
+                        <h3 class="font-medium text-gray-900 mb-1">有机蔬菜如何定价？ 6大因素影响产品溢价能力</h3>
+                        <p class="text-xs text-gray-600 line-clamp-2">本文分析了影响有机蔬菜定价的6大因素，包括成本结构、市场需求、认证级别、品牌影响力、销售渠道以及季节性变化，帮助农户科学定价...</p>
+                        <div class="flex items-center mt-2 text-xs text-gray-500">
+                            <div class="flex items-center mr-3">
+                                <i class="far fa-eye mr-1"></i>
+                                <span>3.7k</span>
+                            </div>
+                            <div class="flex items-center mr-3">
+                                <i class="far fa-thumbs-up mr-1"></i>
+                                <span>310</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="far fa-comment mr-1"></i>
+                                <span>45</span>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" class="article-image" alt="有机蔬菜定价">
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-2 mb-6">
+            <button class="text-green-600 font-medium text-sm">
+                查看全部24篇文章 <i class="fas fa-chevron-right ml-1"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- 搜索结果 - 农户 -->
+    <div class="px-4 py-2">
+        <h2 class="text-lg font-bold mb-3">相关农户</h2>
+        
+        <div class="grid grid-cols-2 gap-3">
+            <div class="user-card">
+                <div class="flex flex-col items-center">
+                    <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" class="user-avatar mb-2" alt="农户头像">
+                    <div class="flex items-center mb-1">
+                        <h3 class="font-medium">绿色蔬菜园</h3>
+                        <i class="fas fa-check-circle verified-badge"></i>
+                    </div>
+                    <div class="text-xs text-gray-600 mb-2">有机蔬菜种植 · 江苏</div>
+                    <div class="text-xs text-gray-500 mb-3">已有1234人关注</div>
+                    <button class="follow-btn">+ 关注</button>
+                </div>
+            </div>
+            
+            <div class="user-card">
+                <div class="flex flex-col items-center">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" class="user-avatar mb-2" alt="农户头像">
+                    <div class="flex items-center mb-1">
+                        <h3 class="font-medium">有机农场主</h3>
+                        <i class="fas fa-check-circle verified-badge"></i>
+                    </div>
+                    <div class="text-xs text-gray-600 mb-2">综合有机种植 · 山东</div>
+                    <div class="text-xs text-gray-500 mb-3">已有867人关注</div>
+                    <button class="follow-btn">+ 关注</button>
+                </div>
+            </div>
+            
+            <div class="user-card">
+                <div class="flex flex-col items-center">
+                    <img src="https://images.unsplash.com/photo-1543362906-acfc16c67564?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=200&q=80" class="user-avatar mb-2" alt="农户头像">
+                    <div class="flex items-center mb-1">
+                        <h3 class="font-medium">贵州山地农场</h3>
+                    </div>
+                    <div class="text-xs text-gray-600 mb-2">有机蔬果种植 · 贵州</div>
+                    <div class="text-xs text-gray-500 mb-3">已有521人关注</div>
+                    <button class="follow-btn">+ 关注</button>
+                </div>
+            </div>
+            
+            <div class="user-card">
+                <div class="flex flex-col items-center">
+                    <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" class="user-avatar mb-2" alt="农户头像">
+                    <div class="flex items-center mb-1">
+                        <h3 class="font-medium">都市有机农夫</h3>
+                        <i class="fas fa-check-circle verified-badge"></i>
+                    </div>
+                    <div class="text-xs text-gray-600 mb-2">阳台有机种植 · 北京</div>
+                    <div class="text-xs text-gray-500 mb-3">已有1689人关注</div>
+                    <button class="follow-btn">+ 关注</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-2 mb-6">
+            <button class="text-green-600 font-medium text-sm">
+                查看全部18位农户 <i class="fas fa-chevron-right ml-1"></i>
+            </button>
+        </div>
+    </div>
+    
+    <!-- 回到顶部按钮 -->
+    <div id="backToTop" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <!-- 底部导航 -->
+    <div class="pt-2">
+        <div class="flex justify-around items-center bg-white py-2 border-t border-gray-200">
+            <a href="home.html" class="nav-item active flex flex-col items-center">
+                <i class="fas fa-home text-xl mb-1"></i>
+                <span class="text-xs">首页</span>
+            </a>
+            <a href="upload.html" class="nav-item text-gray-500 flex flex-col items-center">
+                <i class="fas fa-plus-circle text-xl mb-1"></i>
+                <span class="text-xs">创建</span>
+            </a>
+            <a href="tutorials.html" class="nav-item text-gray-500 flex flex-col items-center">
+                <i class="fas fa-book text-xl mb-1"></i>
+                <span class="text-xs">教程</span>
+            </a>
+            <a href="profile.html" class="nav-item text-gray-500 flex flex-col items-center">
+                <i class="fas fa-user text-xl mb-1"></i>
+                <span class="text-xs">我的</span>
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // 回到顶部按钮
+        window.addEventListener('scroll', function() {
+            const backToTopBtn = document.getElementById('backToTop');
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+        
+        document.getElementById('backToTop').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // 制表符切换
+        const filterTags = document.querySelectorAll('.filter-tag');
+        filterTags.forEach(tag => {
+            tag.addEventListener('click', function() {
+                filterTags.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html> 

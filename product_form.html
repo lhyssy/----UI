@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>助农宣传 - 产品录入</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            background-color: #f8f9fc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .safe-area {
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+        .form-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+            border-radius: 16px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+        .form-card-header {
+            background: linear-gradient(90deg, #07c160, #0d9b77);
+            padding: 14px 20px;
+            color: white;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+        }
+        .form-card-body {
+            padding: 20px;
+        }
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4b5563;
+            margin-bottom: 8px;
+        }
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s;
+            outline: none;
+        }
+        .form-input:focus {
+            background: white;
+            border-color: #07c160;
+            box-shadow: 0 0 0 3px rgba(7, 193, 96, 0.1);
+        }
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+            transition: all 0.3s;
+            outline: none;
+        }
+        .form-select:focus {
+            background-color: white;
+            border-color: #07c160;
+            box-shadow: 0 0 0 3px rgba(7, 193, 96, 0.1);
+        }
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s;
+            outline: none;
+            min-height: 120px;
+            resize: none;
+        }
+        .form-textarea:focus {
+            background: white;
+            border-color: #07c160;
+            box-shadow: 0 0 0 3px rgba(7, 193, 96, 0.1);
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #07c160, #0d9b77);
+            color: white;
+            border-radius: 12px;
+            padding: 14px 20px;
+            font-weight: 500;
+            font-size: 15px;
+            box-shadow: 0 4px 12px rgba(7, 193, 96, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(7, 193, 96, 0.3);
+        }
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #6b7280;
+            border-radius: 12px;
+            padding: 14px 20px;
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 24px;
+        }
+        .step-indicator::before {
+            content: "";
+            position: absolute;
+            top: 12px;
+            left: 15px;
+            right: 15px;
+            height: 2px;
+            background: #e5e7eb;
+            z-index: 1;
+        }
+        .step {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: #6b7280;
+            position: relative;
+            z-index: 2;
+        }
+        .step.active {
+            background: #07c160;
+            color: white;
+        }
+        .step.completed {
+            background: #07c160;
+            color: white;
+        }
+        .step-label {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+        .step.active .step-label, .step.completed .step-label {
+            color: #07c160;
+            font-weight: 500;
+        }
+        .upload-area {
+            width: 100%;
+            height: 180px;
+            background: #f3f4f6;
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .upload-area:hover {
+            background: #e5e7eb;
+            border-color: #9ca3af;
+        }
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(7, 193, 96, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #07c160;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .preview-item {
+            width: calc(25% - 6px);
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .preview-remove {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 20px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+            cursor: pointer;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .checkbox-item.selected {
+            background: rgba(7, 193, 96, 0.1);
+            color: #07c160;
+        }
+        .checkbox-item i {
+            margin-right: 4px;
+        }
+        .checkbox-input {
+            display: none;
+        }
+        .form-hint {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+        }
+        .input-group-text {
+            padding: 0 16px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 0 12px 12px 0;
+            font-size: 14px;
+            color: #6b7280;
+            height: 46px;
+            display: flex;
+            align-items: center;
+        }
+        .input-group .form-input {
+            border-radius: 12px 0 0 12px;
+            border-right: none;
+        }
+        .form-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            outline: none;
+        }
+        .form-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #07c160;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .slider-value {
+            text-align: center;
+            font-size: 14px;
+            color: #4b5563;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+        .color-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .color-option {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .color-option.selected::after {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+        }
+        .size-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .size-option {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            background: #f3f4f6;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .size-option.selected {
+            background: #07c160;
+            color: white;
+        }
+        .nav-tabs {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 16px;
+        }
+        .nav-tab {
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #6b7280;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .nav-tab.active {
+            color: #07c160;
+            border-bottom-color: #07c160;
+            font-weight: 500;
+        }
+        .location-button {
+            background: rgba(7, 193, 96, 0.1);
+            color: #07c160;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 8px;
+        }
+        .location-button i {
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body class="safe-area">
+    <!-- 顶部导航 -->
+    <div class="bg-white p-4 sticky top-0 z-20 shadow-sm">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="upload.html" class="text-gray-600 mr-3">
+                    <i class="fas fa-arrow-left text-lg"></i>
+                </a>
+                <h1 class="text-lg font-bold">新建产品</h1>
+            </div>
+            <button class="text-green-600 font-medium text-sm">帮助</button>
+        </div>
+    </div>
+    
+    <!-- 步骤指示器 -->
+    <div class="px-4 py-6 bg-white shadow-sm">
+        <div class="step-indicator">
+            <div class="step completed">
+                <i class="fas fa-check text-xs"></i>
+                <div class="step-label">基本信息</div>
+            </div>
+            <div class="step active">
+                <span>2</span>
+                <div class="step-label">产品详情</div>
+            </div>
+            <div class="step">
+                <span>3</span>
+                <div class="step-label">规格定价</div>
+            </div>
+            <div class="step">
+                <span>4</span>
+                <div class="step-label">物流服务</div>
+            </div>
+            <div class="step">
+                <span>5</span>
+                <div class="step-label">确认提交</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 内容区域 -->
+    <div class="flex-1 px-4 py-4 overflow-y-auto">
+        <!-- 产品详情表单 -->
+        <div class="form-card">
+            <div class="form-card-header">
+                <i class="fas fa-seedling mr-2"></i> 产品详细信息
+            </div>
+            <div class="form-card-body">
+                <div class="form-group">
+                    <label class="form-label">产品名称 <span class="text-red-500">*</span></label>
+                    <input type="text" class="form-input" placeholder="请输入产品名称，如：有机红富士苹果" value="有机红富士苹果">
+                    <div class="form-hint">简洁明了，突出产品特点，建议20字以内</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">产品分类 <span class="text-red-500">*</span></label>
+                    <div class="flex space-x-3">
+                        <select class="form-select flex-1">
+                            <option>水果</option>
+                            <option>蔬菜</option>
+                            <option>禽畜</option>
+                            <option>水产</option>
+                            <option>干货</option>
+                            <option>其他</option>
+                        </select>
+                        <select class="form-select flex-1">
+                            <option>苹果</option>
+                            <option>橙子</option>
+                            <option>梨</option>
+                            <option>葡萄</option>
+                            <option>其他</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">产品图片 <span class="text-red-500">*</span></label>
+                    <div class="upload-area">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="text-sm text-gray-600">点击或拖拽图片上传</div>
+                        <div class="text-xs text-gray-400 mt-1">支持JPG、PNG、WEBP格式，单张不超过5MB</div>
+                    </div>
+                    <div class="image-preview">
+                        <div class="preview-item">
+                            <img src="https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&q=80" alt="苹果图片">
+                            <div class="preview-remove">
+                                <i class="fas fa-times"></i>
+                            </div>
+                        </div>
+                        <div class="preview-item">
+                            <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&q=80" alt="苹果图片">
+                            <div class="preview-remove">
+                                <i class="fas fa-times"></i>
+                            </div>
+                        </div>
+                        <div class="preview-item">
+                            <img src="https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&q=80" alt="苹果图片">
+                            <div class="preview-remove">
+                                <i class="fas fa-times"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-hint">第一张图片将作为主图，建议上传4-9张高清图片</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">产品特性 <span class="text-red-500">*</span></label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item selected">
+                            <input type="checkbox" class="checkbox-input" checked>
+                            <i class="fas fa-leaf"></i> 有机认证
+                        </label>
+                        <label class="checkbox-item selected">
+                            <input type="checkbox" class="checkbox-input" checked>
+                            <i class="fas fa-award"></i> 绿色食品
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" class="checkbox-input">
+                            <i class="fas fa-globe-asia"></i> 地理标志
+                        </label>
+                        <label class="checkbox-item selected">
+                            <input type="checkbox" class="checkbox-input" checked>
+                            <i class="fas fa-seedling"></i> 无公害
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" class="checkbox-input">
+                            <i class="fas fa-star"></i> 特产
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" class="checkbox-input">
+                            <i class="fas fa-gifts"></i> 礼盒包装
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">产品简介 <span class="text-red-500">*</span></label>
+                    <textarea class="form-textarea" placeholder="请介绍您的产品特点和优势">本产品选用高海拔山区果园种植的优质红富士苹果，采用有机种植方式，不使用任何化学农药和肥料。果实色泽鲜艳，口感脆甜多汁，富含维生素和矿物质，是健康生活的理想选择。</textarea>
+                    <div class="form-hint">详细描述产品的特点、口感、营养价值等信息</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">种植环境</label>
+                    <textarea class="form-textarea" placeholder="请描述产品的种植或养殖环境">位于海拔1200米的高山果园，昼夜温差大，光照充足，土壤富含矿物质，采用梯田种植方式，周边无工业污染，灌溉使用山泉水，果园套种绿肥，形成有机生态循环系统。</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">种植位置</label>
+                    <div>
+                        <select class="form-select mb-2">
+                            <option>陕西省</option>
+                            <option>山东省</option>
+                            <option>甘肃省</option>
+                            <option>河北省</option>
+                        </select>
+                        <select class="form-select mb-2">
+                            <option>延安市</option>
+                            <option>西安市</option>
+                            <option>宝鸡市</option>
+                            <option>咸阳市</option>
+                        </select>
+                        <select class="form-select">
+                            <option>洛川县</option>
+                            <option>黄陵县</option>
+                            <option>富县</option>
+                            <option>延长县</option>
+                        </select>
+                        <button class="location-button">
+                            <i class="fas fa-map-marker-alt"></i> 定位当前位置
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 产品详情参数 -->
+        <div class="form-card">
+            <div class="form-card-header">
+                <i class="fas fa-list-ul mr-2"></i> 产品参数
+            </div>
+            <div class="form-card-body">
+                <div class="nav-tabs">
+                    <div class="nav-tab active">基本参数</div>
+                    <div class="nav-tab">营养成分</div>
+                    <div class="nav-tab">种植标准</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">产品规格</label>
+                    <input type="text" class="form-input" placeholder="如：中果70-75mm" value="中果70-75mm">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">保存方式</label>
+                    <input type="text" class="form-input" placeholder="如：常温/冷藏保存" value="0-5℃冷藏保存">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">保质期</label>
+                    <div class="input-group">
+                        <input type="number" class="form-input" value="60">
+                        <div class="input-group-text">天</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">产品净重</label>
+                    <div class="input-group">
+                        <input type="number" class="form-input" value="5">
+                        <div class="input-group-text">kg</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">甜度</label>
+                    <input type="range" class="form-slider" min="0" max="10" value="8" id="sweetnessSlider">
+                    <div class="slider-value"><span id="sweetnessValue">8</span>/10</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">口感</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item selected">
+                            <input type="checkbox" class="checkbox-input" checked>
+                            脆甜
+                        </label>
+                        <label class="checkbox-item selected">
+                            <input type="checkbox" class="checkbox-input" checked>
+                            多汁
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" class="checkbox-input">
+                            香浓
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" class="checkbox-input">
+                            软糯
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" class="checkbox-input">
+                            酸甜
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">果实颜色</label>
+                    <div class="color-options">
+                        <div class="color-option" style="background-color: #f87171;"></div>
+                        <div class="color-option selected" style="background-color: #ef4444;"></div>
+                        <div class="color-option" style="background-color: #dc2626;"></div>
+                        <div class="color-option" style="background-color: #b91c1c;"></div>
+                        <div class="color-option" style="background-color: #fb923c;"></div>
+                        <div class="color-option" style="background-color: #f97316;"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">果实大小</label>
+                    <div class="size-options">
+                        <div class="size-option">特小果</div>
+                        <div class="size-option">小果</div>
+                        <div class="size-option selected">中果</div>
+                        <div class="size-option">大果</div>
+                        <div class="size-option">特大果</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 包装与认证 -->
+        <div class="form-card">
+            <div class="form-card-header">
+                <i class="fas fa-certificate mr-2"></i> 包装与认证
+            </div>
+            <div class="form-card-body">
+                <div class="form-group">
+                    <label class="form-label">包装方式</label>
+                    <select class="form-select">
+                        <option>纸箱装</option>
+                        <option>礼盒装</option>
+                        <option>编织袋装</option>
+                        <option>散装</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">认证信息</label>
+                    <div class="upload-area" style="height: 120px;">
+                        <div class="upload-icon">
+                            <i class="fas fa-file-upload"></i>
+                        </div>
+                        <div class="text-sm text-gray-600">上传认证证书</div>
+                        <div class="text-xs text-gray-400 mt-1">支持JPG、PNG、PDF格式</div>
+                    </div>
+                    <div class="image-preview">
+                        <div class="preview-item">
+                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&q=80" alt="认证证书">
+                            <div class="preview-remove">
+                                <i class="fas fa-times"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">供应周期</label>
+                    <div class="flex space-x-3">
+                        <select class="form-select flex-1">
+                            <option>10月</option>
+                            <option selected>9月</option>
+                            <option>8月</option>
+                            <option>7月</option>
+                        </select>
+                        <span class="flex items-center">至</span>
+                        <select class="form-select flex-1">
+                            <option>1月</option>
+                            <option>2月</option>
+                            <option selected>3月</option>
+                            <option>4月</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">生产日期</label>
+                    <input type="date" class="form-input" value="2023-09-15">
+                </div>
+            </div>
+        </div>
+        
+        <!-- 按钮 -->
+        <div class="flex space-x-3 mt-6 mb-6">
+            <button class="btn-secondary">返回上一步</button>
+            <button class="btn-primary">保存并继续</button>
+        </div>
+    </div>
+    
+    <script>
+        // 甜度滑块
+        const sweetnessSlider = document.getElementById('sweetnessSlider');
+        const sweetnessValue = document.getElementById('sweetnessValue');
+        
+        sweetnessSlider.addEventListener('input', function() {
+            sweetnessValue.textContent = this.value;
+        });
+        
+        // 复选框切换
+        const checkboxItems = document.querySelectorAll('.checkbox-item');
+        checkboxItems.forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                const checkbox = this.querySelector('input[type="checkbox"]');
+                checkbox.checked = !checkbox.checked;
+            });
+        });
+        
+        // 颜色选择
+        const colorOptions = document.querySelectorAll('.color-option');
+        colorOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                colorOptions.forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+        
+        // 尺寸选择
+        const sizeOptions = document.querySelectorAll('.size-option');
+        sizeOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                sizeOptions.forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+        
+        // Tab切换
+        const navTabs = document.querySelectorAll('.nav-tab');
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                navTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                // 这里可以添加显示不同内容区域的逻辑
+            });
+        });
+    </script>
+</body>
+</html> 
