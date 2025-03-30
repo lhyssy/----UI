@@ -187,6 +187,21 @@
             </div>
             <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
         </div>
+        <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100" data-type="calendar">
+            <div class="flex items-center">
+                <i class="fas fa-calendar-alt text-lg text-cyan-500 w-6"></i>
+                <span class="ml-3 menu-text">营销日历</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+        </div>
+        <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100" data-type="notifications">
+            <div class="flex items-center">
+                <i class="fas fa-bell text-lg text-red-500 w-6"></i>
+                <span class="ml-3 menu-text">消息通知</span>
+                <span class="ml-2 bg-red-500 text-white text-xs px-1.5 rounded-full">3</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+        </div>
         <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100" data-type="reviews">
             <div class="flex items-center">
                 <i class="fas fa-star text-lg text-yellow-500 w-6"></i>
@@ -267,6 +282,12 @@
                     switch (menuType) {
                         case 'wallet':
                             window.location.href = 'wallet.html';
+                            break;
+                        case 'calendar':
+                            window.location.href = 'marketing_calendar.html';
+                            break;
+                        case 'notifications':
+                            window.location.href = 'notifications.html';
                             break;
                         case 'reviews':
                             showToast('查看评价', 'info');
