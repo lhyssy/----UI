@@ -760,4 +760,35 @@ input.invalid, textarea.invalid {
 .delay-700 { animation-delay: 0.7s; }
 .delay-800 { animation-delay: 0.8s; }
 .delay-900 { animation-delay: 0.9s; }
-.delay-1000 { animation-delay: 1s; } 
+.delay-1000 { animation-delay: 1s; }
+
+/* 按钮点击效果 */
+.click-effect {
+    transform: scale(0.95);
+    opacity: 0.8;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+/* 统一按钮样式和交互 */
+button, 
+.bottom-nav-item, 
+.menu-item, 
+[data-link],
+.feature-card,
+.product-tag,
+.tab-item {
+    transition: transform 0.15s ease, opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+}
+
+button:active, 
+.bottom-nav-item:active, 
+.menu-item:active, 
+[data-link]:active,
+.feature-card:active,
+.product-tag:active,
+.tab-item:active {
+    transform: scale(0.95);
+    opacity: 0.8;
+} 

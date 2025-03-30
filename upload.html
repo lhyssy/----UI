@@ -10,155 +10,214 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f8f9fa;
+            background-color: #f7f8fa;
             color: #333;
-            max-width: 100%;
-            overflow-x: hidden;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
-        .header {
-            background: white;
-        }
-        .back-button {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .upload-area {
-            border: 2px dashed rgba(7, 193, 96, 0.4);
-            border-radius: 16px;
-            background-color: rgba(7, 193, 96, 0.02);
-            min-height: 200px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .upload-area:hover {
-            border-color: rgba(7, 193, 96, 0.8);
-            background-color: rgba(7, 193, 96, 0.05);
-        }
-        .upload-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: rgba(7, 193, 96, 0.1);
-            color: #07c160;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            margin: 0 auto;
-        }
-        .info-card {
+        
+        .drop-area {
+            border: 2px dashed #e5e7eb;
             border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
         }
-        .primary-button {
-            background: linear-gradient(135deg, #07c160 0%, #0d9b77 100%);
+        
+        .drop-area.active {
+            border-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+        
+        .product-tag {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .product-tag.active {
+            background-color: #10b981;
             color: white;
-            border-radius: 24px;
-            padding: 10px 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(7, 193, 96, 0.2);
         }
-        .primary-button:hover {
-            box-shadow: 0 6px 15px rgba(7, 193, 96, 0.3);
-            transform: translateY(-2px);
+        
+        .upload-button {
+            background-color: #10b981;
+            color: white;
+            border-radius: 8px;
+            padding: 10px;
+            width: 100%;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
-        .bottom-nav {
-            background: white;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        
+        .upload-button:disabled {
+            background-color: #d1d5db;
+            cursor: not-allowed;
         }
-        .bottom-nav-item {
-            font-size: 12px;
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(16, 185, 129, 0.3);
+            border-radius: 50%;
+            border-top-color: #10b981;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
         }
-        .bottom-nav-item i {
-            font-size: 22px;
-            margin-bottom: 2px;
-            transition: all 0.3s ease;
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
-        .bottom-nav-item.active {
-            color: #07c160;
+        
+        .upload-success {
+            color: #10b981;
+            font-size: 50px;
+            margin: 20px auto;
+            animation: pop 0.5s ease;
+        }
+        
+        @keyframes pop {
+            0% {
+                transform: scale(0);
+            }
+            70% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .input-field {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            width: 100%;
+            transition: border-color 0.2s ease;
+        }
+        
+        .input-field:focus {
+            border-color: #10b981;
+            outline: none;
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 200px;
+            border-radius: 8px;
+            object-fit: cover;
+            display: none;
         }
     </style>
 </head>
-<body>
-    <!-- 顶部导航 -->
-    <header class="header py-4 px-5 flex items-center justify-between">
-        <button class="back-button slide-right" id="backButton">
-            <i class="fas fa-arrow-left"></i>
-        </button>
-        <h1 class="text-xl font-semibold slide-down">上传产品照片</h1>
-        <div class="w-8"></div> <!-- 占位 -->
-    </header>
-
-    <div class="container mx-auto px-4 pb-16 mt-4">
-        <!-- 上传区域 -->
-        <div class="upload-area flex flex-col items-center justify-center p-6 fade-in stagger-item">
-            <div class="upload-icon pulse mb-4">
-                <i class="fas fa-cloud-upload-alt"></i>
-            </div>
-            <h3 class="font-medium text-lg mb-2">点击或拖拽上传图片</h3>
-            <p class="text-gray-500 text-sm text-center mb-4">上传高清的农产品照片，效果更佳</p>
-            <button class="bg-green-50 text-green-600 px-4 py-2 rounded-full text-sm btn-special">
-                <i class="fas fa-image mr-1"></i> 选择图片
+<body class="pb-20">
+    <!-- 头部导航 -->
+    <div class="sticky top-0 z-10 bg-white shadow-sm">
+        <div class="flex justify-between items-center px-4 py-3">
+            <button id="backButton" class="text-gray-700">
+                <i class="fas fa-arrow-left text-lg"></i>
             </button>
-        </div>
-
-        <!-- 上传指南 -->
-        <div class="info-card bg-white p-4 mt-6 slide-up stagger-item">
-            <h3 class="font-medium flex items-center mb-3">
-                <i class="fas fa-info-circle text-blue-500 mr-2"></i>
-                上传指南
-            </h3>
-            <ul class="text-gray-600 text-sm space-y-2">
-                <li class="flex items-start">
-                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                    <span>上传清晰的农产品照片，建议分辨率不低于1000x1000</span>
-                </li>
-                <li class="flex items-start">
-                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                    <span>多角度拍摄可以获得更好的宣传效果</span>
-                </li>
-                <li class="flex items-start">
-                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                    <span>尽量使用自然光线，突出产品的真实色彩和质感</span>
-                </li>
-            </ul>
-        </div>
-
-        <!-- 产品信息 -->
-        <div class="info-card bg-white p-4 mt-5 slide-up stagger-item">
-            <h3 class="font-medium flex items-center mb-3">
-                <i class="fas fa-apple-alt text-red-500 mr-2"></i>
-                产品信息
-            </h3>
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">产品名称</label>
-                    <input type="text" placeholder="请输入农产品名称" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">产地</label>
-                    <input type="text" placeholder="请输入产地" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                </div>
-            </div>
-        </div>
-
-        <!-- 下一步按钮 -->
-        <div class="mt-8 text-center">
-            <button class="primary-button w-full max-w-xs mx-auto slide-up" id="nextButton">
-                <span class="flex items-center justify-center">
-                    下一步
-                    <i class="fas fa-arrow-right ml-2"></i>
-                </span>
-            </button>
+            <h1 class="text-lg font-medium">上传产品照片</h1>
+            <div class="w-8"></div>
         </div>
     </div>
-
+    
+    <div class="px-4 py-5">
+        <!-- 上传区域 -->
+        <div class="upload-area">
+            <div class="drop-area flex flex-col items-center justify-center py-8 mb-6">
+                <div class="text-green-500 mb-3">
+                    <i class="fas fa-cloud-upload-alt text-4xl"></i>
+                </div>
+                <p class="text-gray-600 font-medium">点击或拖拽上传图片</p>
+                <p class="text-gray-400 text-sm mt-1">上传高清的农产品照片，效果更佳</p>
+                <button class="mt-4 px-4 py-2 bg-green-50 text-green-600 rounded-lg text-sm">
+                    <i class="fas fa-image mr-1"></i>
+                    选择图片
+                </button>
+                <input type="file" id="fileInput" accept="image/*" class="hidden" multiple>
+                <img id="imagePreview" class="image-preview mt-4" alt="图片预览">
+            </div>
+            
+            <!-- 上传指南 -->
+            <div class="bg-white rounded-xl p-4 mb-6 shadow-sm">
+                <h3 class="font-medium flex items-center mb-3">
+                    <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                    上传指南
+                </h3>
+                <ul class="text-sm text-gray-600 space-y-2">
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-green-500 mt-0.5 mr-2"></i>
+                        <span>上传清晰的农产品照片，建议分辨率不低于1000x1000</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-green-500 mt-0.5 mr-2"></i>
+                        <span>多角度拍摄可以获得更好的宣传效果</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-green-500 mt-0.5 mr-2"></i>
+                        <span>尽量使用自然光线，突出产品的真实色彩和质感</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- 产品信息 -->
+            <div class="bg-white rounded-xl p-4 mb-6 shadow-sm">
+                <h3 class="font-medium flex items-center mb-3">
+                    <i class="fas fa-apple-alt text-red-500 mr-2"></i>
+                    产品信息
+                </h3>
+                
+                <div class="mb-4">
+                    <label class="block text-sm text-gray-600 mb-1">产品名称</label>
+                    <input type="text" id="productName" class="input-field" placeholder="请输入农产品名称">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm text-gray-600 mb-1">产地</label>
+                    <input type="text" id="productOrigin" class="input-field" placeholder="请输入产地">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm text-gray-600 mb-1">产品类型</label>
+                    <div class="flex flex-wrap gap-2 mt-1">
+                        <div class="product-tag px-3 py-1 bg-gray-100 rounded-full text-sm">水果</div>
+                        <div class="product-tag px-3 py-1 bg-gray-100 rounded-full text-sm">蔬菜</div>
+                        <div class="product-tag px-3 py-1 bg-gray-100 rounded-full text-sm">谷物</div>
+                        <div class="product-tag px-3 py-1 bg-gray-100 rounded-full text-sm">坚果</div>
+                        <div class="product-tag px-3 py-1 bg-gray-100 rounded-full text-sm">有机</div>
+                        <div class="product-tag px-3 py-1 bg-gray-100 rounded-full text-sm">其他</div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm text-gray-600 mb-1">产品描述</label>
+                    <textarea id="productDesc" class="input-field h-24" placeholder="请简要描述产品特点、种植方式等信息"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">价格信息</label>
+                    <div class="flex items-center">
+                        <span class="text-red-500 mr-1">¥</span>
+                        <input type="number" id="productPrice" class="input-field" placeholder="0.00">
+                        <select id="priceUnit" class="input-field ml-2">
+                            <option value="kg">每公斤</option>
+                            <option value="jin">每斤</option>
+                            <option value="box">每盒</option>
+                            <option value="piece">每件</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 下一步按钮 -->
+        <button class="upload-button" id="uploadButton" disabled>
+            <i class="fas fa-arrow-right mr-1"></i>
+            下一步
+        </button>
+    </div>
+    
     <!-- 底部导航栏 -->
     <div class="fixed bottom-0 left-0 right-0 bg-white py-2 px-5 border-t border-gray-100">
         <div class="flex justify-between">
@@ -184,36 +243,16 @@
     <script src="js/common.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 上传按钮点击事件
-            document.querySelector('.upload-button').addEventListener('click', function() {
-                const uploadArea = document.querySelector('.upload-area');
-                
-                // 显示加载状态
-                uploadArea.innerHTML = `
-                    <div class="loading-spinner"></div>
-                    <p class="text-gray-500 mt-3">正在处理您的图片...</p>
-                `;
-                
-                // 模拟上传过程
-                setTimeout(() => {
-                    uploadArea.innerHTML = `
-                        <div class="upload-success">
-                            <i class="fas fa-check-circle"></i>
-                        </div>
-                        <p class="text-green-500 font-medium">上传成功！</p>
-                        <p class="text-gray-500 mt-1">正在跳转到预览页面...</p>
-                    `;
-                    
-                    // 跳转到预览页面
-                    setTimeout(() => {
-                        window.location.href = 'preview.html';
-                    }, 1500);
-                }, 2000);
-            });
-            
-            // 拖放上传功能
+            // 文件上传相关元素
             const dropArea = document.querySelector('.drop-area');
+            const fileInput = document.getElementById('fileInput');
+            const imagePreview = document.getElementById('imagePreview');
+            const uploadButton = document.getElementById('uploadButton');
+            const productName = document.getElementById('productName');
+            const productOrigin = document.getElementById('productOrigin');
+            const productDesc = document.getElementById('productDesc');
             
+            // 监听拖拽事件
             ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
                 dropArea.addEventListener(eventName, preventDefaults, false);
             });
@@ -223,6 +262,7 @@
                 e.stopPropagation();
             }
             
+            // 拖拽样式变化
             ['dragenter', 'dragover'].forEach(eventName => {
                 dropArea.addEventListener(eventName, highlight, false);
             });
@@ -232,54 +272,112 @@
             });
             
             function highlight() {
-                dropArea.classList.add('bg-green-50', 'border-green-300');
+                dropArea.classList.add('active');
             }
             
             function unhighlight() {
-                dropArea.classList.remove('bg-green-50', 'border-green-300');
+                dropArea.classList.remove('active');
             }
             
+            // 处理拖拽上传
             dropArea.addEventListener('drop', handleDrop, false);
             
             function handleDrop(e) {
                 const dt = e.dataTransfer;
                 const files = dt.files;
-                
+                handleFiles(files);
+            }
+            
+            // 处理上传文件
+            function handleFiles(files) {
                 if (files.length > 0) {
-                    // 显示上传成功效果
-                    const uploadArea = document.querySelector('.upload-area');
-                    uploadArea.innerHTML = `
-                        <div class="loading-spinner"></div>
-                        <p class="text-gray-500 mt-3">正在处理您的图片...</p>
-                    `;
-                    
-                    setTimeout(() => {
-                        uploadArea.innerHTML = `
-                            <div class="upload-success">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                            <p class="text-green-500 font-medium">上传成功！</p>
-                            <p class="text-gray-500 mt-1">正在跳转到预览页面...</p>
-                        `;
+                    const file = files[0]; // 只处理第一张图片
+                    if (file.type.match('image.*')) {
+                        const reader = new FileReader();
                         
-                        // 跳转到预览页面
-                        setTimeout(() => {
-                            window.location.href = 'preview.html';
-                        }, 1500);
-                    }, 2000);
+                        reader.onload = function(e) {
+                            // 显示图片预览
+                            imagePreview.src = e.target.result;
+                            imagePreview.style.display = 'block';
+                            
+                            // 启用上传按钮
+                            checkFormStatus();
+                        }
+                        
+                        reader.readAsDataURL(file);
+                        showToast('图片已选择', 'success');
+                    } else {
+                        showToast('请上传图片文件', 'error');
+                    }
                 }
             }
             
-            // 点击产品类型标签
-            const productTags = document.querySelectorAll('.product-tag');
-            productTags.forEach(tag => {
+            // 点击选择图片
+            dropArea.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            fileInput.addEventListener('change', function() {
+                handleFiles(this.files);
+            });
+            
+            // 产品标签点击
+            document.querySelectorAll('.product-tag').forEach(tag => {
                 tag.addEventListener('click', function() {
-                    productTags.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // 显示选中的产品类型提示
-                    showToast(`已选择: ${this.textContent.trim()}`, 'success');
+                    this.classList.toggle('active');
+                    checkFormStatus();
                 });
+            });
+            
+            // 监听输入变化
+            [productName, productOrigin, productDesc].forEach(input => {
+                input.addEventListener('input', checkFormStatus);
+            });
+            
+            // 检查表单状态，决定是否启用上传按钮
+            function checkFormStatus() {
+                if (
+                    imagePreview.style.display === 'block' && 
+                    productName.value.trim() !== '' && 
+                    productOrigin.value.trim() !== ''
+                ) {
+                    uploadButton.removeAttribute('disabled');
+                } else {
+                    uploadButton.setAttribute('disabled', 'disabled');
+                }
+            }
+            
+            // 上传按钮点击事件
+            uploadButton.addEventListener('click', function() {
+                if (this.hasAttribute('disabled')) return;
+                
+                // 模拟上传过程
+                const uploadArea = document.querySelector('.upload-area');
+                uploadArea.innerHTML = `
+                    <div class="bg-white rounded-xl p-8 text-center">
+                        <div class="loading-spinner"></div>
+                        <p class="mt-4 text-gray-600">正在处理您的图片...</p>
+                        <p class="text-gray-400 text-sm mt-2">请稍候，这可能需要几秒钟时间</p>
+                    </div>
+                `;
+                
+                // 模拟上传延迟
+                setTimeout(() => {
+                    uploadArea.innerHTML = `
+                        <div class="bg-white rounded-xl p-8 text-center">
+                            <div class="upload-success">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <p class="mt-4 text-gray-800 font-medium">上传成功！</p>
+                            <p class="text-gray-600 text-sm mt-2">正在跳转到宣传图文生成页面...</p>
+                        </div>
+                    `;
+                    
+                    // 延迟跳转
+                    setTimeout(() => {
+                        window.location.href = 'preview.html';
+                    }, 1500);
+                }, 2000);
             });
         });
     </script>

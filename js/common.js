@@ -366,7 +366,12 @@ function initNavigation() {
             e.preventDefault();
             const link = this.getAttribute('data-link');
             if (link) {
-                navigateTo(link);
+                // 点击效果
+                addClickEffect(this);
+                // 延迟跳转
+                setTimeout(() => {
+                    navigateTo(link);
+                }, 150);
             }
         });
     });
@@ -381,6 +386,34 @@ function initNavigation() {
             item.classList.remove('active');
         }
     });
+
+    // 为菜单项添加统一点击效果
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', function() {
+            addClickEffect(this);
+        });
+    });
+
+    // 为所有按钮添加统一点击效果
+    document.querySelectorAll('button').forEach(button => {
+        button.addEventListener('click', function() {
+            addClickEffect(this);
+        });
+    });
+}
+
+/**
+ * 添加点击效果
+ * @param {HTMLElement} element - 要添加效果的元素
+ */
+function addClickEffect(element) {
+    // 添加点击效果类
+    element.classList.add('click-effect');
+    
+    // 移除效果类
+    setTimeout(() => {
+        element.classList.remove('click-effect');
+    }, 150);
 }
 
 /**
@@ -565,6 +598,23 @@ style.textContent = `
         margin: 0 auto;
         font-size: 30px;
         color: #10b981;
+    }
+
+    .click-effect {
+        transform: scale(0.95);
+        opacity: 0.8;
+        transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    /* 统一按钮样式 */
+    button, .bottom-nav-item, .menu-item, [data-link] {
+        transition: transform 0.15s ease, opacity 0.15s ease, background-color 0.15s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    button:active, .bottom-nav-item:active, .menu-item:active, [data-link]:active {
+        transform: scale(0.95);
+        opacity: 0.8;
     }
 `;
 

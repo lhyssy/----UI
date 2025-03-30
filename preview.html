@@ -183,12 +183,12 @@
     </div>
     
     <!-- 底部操作栏 -->
-    <div class="bg-white p-4 shadow-md">
+    <div class="bg-white p-4 shadow-md pb-20">
         <div class="flex space-x-3">
             <a href="#" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-medium text-center">
                 <i class="fas fa-save mr-1"></i> 保存草稿
             </a>
-            <a href="publish.html" class="flex-1 bg-green-500 text-white py-3 rounded-lg font-medium text-center">
+            <a href="publish.html" class="flex-1 bg-green-500 text-white py-3 rounded-lg font-medium text-center publish-button">
                 <i class="fas fa-paper-plane mr-1"></i> 去发布
             </a>
         </div>
@@ -219,6 +219,9 @@
     <script src="js/common.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // 模拟内容生成效果
+            simulateContentGeneration();
+            
             // 模板切换
             const templateOptions = document.querySelectorAll('.template-option');
             const previewContent = document.querySelector('.preview-content');
@@ -230,8 +233,11 @@
                     
                     // 切换模板时的动画效果
                     previewContent.classList.add('template-change');
+                    
+                    // 更新模板样式
+                    const templateStyle = this.getAttribute('data-style');
                     setTimeout(() => {
-                        // 这里可以根据选择的模板更改预览内容
+                        updateTemplateStyle(templateStyle);
                         previewContent.classList.remove('template-change');
                     }, 300);
                     
@@ -240,57 +246,205 @@
                 });
             });
             
-            // 保存/发布按钮点击事件
-            document.querySelector('.publish-button').addEventListener('click', function() {
-                showToast('准备发布...', 'loading');
+            // 根据模板类型更新样式
+            function updateTemplateStyle(style) {
+                const contentWrapper = document.querySelector('.preview-content');
+                const titleElement = document.querySelector('.preview-title');
+                const descElement = document.querySelector('.preview-desc');
+                const imageElement = document.querySelector('.preview-image');
                 
-                // 模拟处理
+                // 移除所有样式类
+                contentWrapper.className = 'preview-content p-4';
+                
+                // 应用新样式
+                switch(style) {
+                    case 'elegant':
+                        contentWrapper.classList.add('bg-white', 'rounded-xl', 'shadow-sm');
+                        titleElement.className = 'preview-title text-xl font-serif font-bold text-gray-800 mb-2';
+                        descElement.className = 'preview-desc text-sm text-gray-600 leading-relaxed';
+                        imageElement.className = 'preview-image w-full h-48 object-cover rounded-lg mb-4';
+                        break;
+                    case 'modern':
+                        contentWrapper.classList.add('bg-gradient-to-br', 'from-gray-50', 'to-gray-100', 'rounded-xl', 'shadow-sm');
+                        titleElement.className = 'preview-title text-lg font-bold text-gray-800 mb-2';
+                        descElement.className = 'preview-desc text-sm text-gray-600 leading-relaxed';
+                        imageElement.className = 'preview-image w-full h-48 object-cover rounded-xl mb-4 shadow-sm';
+                        break;
+                    case 'vibrant':
+                        contentWrapper.classList.add('bg-gradient-to-r', 'from-green-50', 'to-blue-50', 'rounded-xl', 'shadow-sm');
+                        titleElement.className = 'preview-title text-xl font-bold text-green-600 mb-2';
+                        descElement.className = 'preview-desc text-sm text-gray-700 leading-relaxed';
+                        imageElement.className = 'preview-image w-full h-48 object-cover rounded-lg mb-4 shadow-sm';
+                        break;
+                    case 'minimal':
+                    default:
+                        contentWrapper.classList.add('bg-white', 'rounded-xl', 'shadow-sm');
+                        titleElement.className = 'preview-title text-lg font-medium text-gray-800 mb-2';
+                        descElement.className = 'preview-desc text-sm text-gray-600 leading-relaxed';
+                        imageElement.className = 'preview-image w-full h-48 object-cover rounded-lg mb-4';
+                        break;
+                }
+            }
+            
+            // 模拟内容生成
+            function simulateContentGeneration() {
+                const contentArea = document.querySelector('.content-area');
+                
+                // 显示加载状态
+                contentArea.innerHTML = `
+                    <div class="text-center py-16">
+                        <div class="loading-spinner mx-auto"></div>
+                        <p class="mt-4 text-gray-600">正在生成宣传内容...</p>
+                        <p class="text-sm text-gray-500 mt-2">AI正在分析图片、提取关键信息</p>
+                    </div>
+                `;
+                
+                // 模拟加载延迟
                 setTimeout(() => {
-                    // 跳转到发布页面
-                    window.location.href = 'publish.html';
-                }, 1500);
-            });
+                    // 显示生成好的内容
+                    contentArea.innerHTML = `
+                        <div class="px-4 py-3">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-lg font-medium">预览宣传内容</h2>
+                                <div class="text-sm text-green-600">
+                                    <i class="fas fa-magic mr-1"></i>
+                                    AI生成
+                                </div>
+                            </div>
+                            
+                            <div class="preview-content p-4 bg-white rounded-xl shadow-sm">
+                                <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80" alt="有机红富士苹果" class="preview-image w-full h-48 object-cover rounded-lg mb-4">
+                                
+                                <div class="flex justify-between items-center mb-2">
+                                    <button class="text-gray-400 text-sm image-action" data-action="zoom">
+                                        <i class="fas fa-search-plus"></i>
+                                    </button>
+                                    <div class="flex space-x-2">
+                                        <button class="text-gray-400 text-sm image-action" data-action="replace">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </button>
+                                        <button class="text-gray-400 text-sm image-action" data-action="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="preview-title text-lg font-medium text-gray-800 mb-2">
+                                    <span contenteditable="true" class="focus:outline-none focus:bg-green-50 rounded px-1 -mx-1 edit-content-btn" data-type="title">有机红富士苹果 - 新鲜采摘直达您家</span>
+                                </h3>
+                                
+                                <p class="preview-desc text-sm text-gray-600 leading-relaxed">
+                                    <span contenteditable="true" class="focus:outline-none focus:bg-green-50 rounded px-1 -mx-1 edit-content-btn" data-type="desc">来自山东烟台的优质红富士苹果，果肉脆甜多汁，富含维生素和矿物质。我们坚持无农药种植，确保每一口都健康安心。现在下单，48小时内新鲜直达您家！</span>
+                                </p>
+                                
+                                <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
+                                    <div class="flex items-center text-gray-500">
+                                        <i class="far fa-heart mr-1"></i>
+                                        <span class="text-sm">238</span>
+                                        <i class="far fa-comment ml-3 mr-1"></i>
+                                        <span class="text-sm">42</span>
+                                    </div>
+                                    <div class="text-sm text-red-600" data-link="product_detail.html">
+                                        <i class="fas fa-tag mr-1"></i>
+                                        <span>¥15.8/斤</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h3 class="text-sm font-medium mb-2">选择模板风格</h3>
+                                <div class="grid grid-cols-4 gap-2">
+                                    <div class="template-option active p-2 border border-green-500 rounded-lg bg-green-50" data-style="minimal">
+                                        <div class="h-12 bg-white rounded-md flex items-center justify-center">
+                                            <span class="template-name text-xs text-gray-600">简约</span>
+                                        </div>
+                                    </div>
+                                    <div class="template-option p-2 border border-gray-200 rounded-lg" data-style="elegant">
+                                        <div class="h-12 bg-white rounded-md flex items-center justify-center">
+                                            <span class="template-name text-xs text-gray-600">典雅</span>
+                                        </div>
+                                    </div>
+                                    <div class="template-option p-2 border border-gray-200 rounded-lg" data-style="modern">
+                                        <div class="h-12 bg-gradient-to-br from-gray-50 to-gray-100 rounded-md flex items-center justify-center">
+                                            <span class="template-name text-xs text-gray-600">现代</span>
+                                        </div>
+                                    </div>
+                                    <div class="template-option p-2 border border-gray-200 rounded-lg" data-style="vibrant">
+                                        <div class="h-12 bg-gradient-to-r from-green-50 to-blue-50 rounded-md flex items-center justify-center">
+                                            <span class="template-name text-xs text-gray-600">活力</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6">
+                                <button class="publish-button w-full py-3 bg-green-500 text-white rounded-lg font-medium">
+                                    <i class="fas fa-paper-plane mr-1"></i>
+                                    发布宣传图文
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // 初始化事件监听
+                    initContentEvents();
+                }, 2000);
+            }
             
-            // 编辑内容按钮
-            document.querySelectorAll('.edit-content-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const contentType = this.getAttribute('data-type');
-                    let editMessage = '';
+            // 初始化内容编辑和交互事件
+            function initContentEvents() {
+                // 保存/发布按钮点击事件
+                document.querySelector('.publish-button').addEventListener('click', function() {
+                    showToast('准备发布...', 'loading');
                     
-                    switch(contentType) {
-                        case 'title':
-                            editMessage = '编辑标题';
-                            break;
-                        case 'desc':
-                            editMessage = '编辑描述';
-                            break;
-                        case 'content':
-                            editMessage = '编辑正文内容';
-                            break;
-                    }
-                    
-                    showToast(editMessage, 'info');
+                    // 模拟处理
+                    setTimeout(() => {
+                        // 跳转到发布页面
+                        window.location.href = 'publish.html';
+                    }, 1500);
                 });
-            });
-            
-            // 图片操作按钮
-            document.querySelectorAll('.image-action').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const action = this.getAttribute('data-action');
-                    
-                    switch(action) {
-                        case 'zoom':
-                            showToast('放大查看图片', 'info');
-                            break;
-                        case 'replace':
-                            showToast('替换图片', 'info');
-                            break;
-                        case 'remove':
-                            showToast('移除图片', 'warning');
-                            break;
-                    }
+                
+                // 编辑内容按钮
+                document.querySelectorAll('.edit-content-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const contentType = this.getAttribute('data-type');
+                        let editMessage = '';
+                        
+                        switch(contentType) {
+                            case 'title':
+                                editMessage = '编辑标题';
+                                break;
+                            case 'desc':
+                                editMessage = '编辑描述';
+                                break;
+                            case 'content':
+                                editMessage = '编辑正文内容';
+                                break;
+                        }
+                        
+                        showToast(editMessage, 'info');
+                    });
                 });
-            });
+                
+                // 图片操作按钮
+                document.querySelectorAll('.image-action').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const action = this.getAttribute('data-action');
+                        
+                        switch(action) {
+                            case 'zoom':
+                                showToast('放大查看图片', 'info');
+                                break;
+                            case 'replace':
+                                showToast('替换图片', 'info');
+                                break;
+                            case 'remove':
+                                showToast('移除图片', 'warning');
+                                break;
+                        }
+                    });
+                });
+            }
         });
     </script>
 </body>
