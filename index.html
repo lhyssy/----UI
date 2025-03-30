@@ -17,66 +17,135 @@
         }
         .prototype-frame {
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             background-color: white;
+            transition: all 0.3s ease;
+        }
+        .prototype-frame:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         .frame-title {
-            padding: 10px;
-            background-color: #4CAF50;
+            padding: 12px 16px;
+            background: linear-gradient(90deg, #07c160 0%, #0d9b77 100%);
             color: white;
             font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        .frame-title i {
+            margin-right: 8px;
         }
         iframe {
             border: none;
             width: 100%;
-            height: 600px;
+            height: 550px;
+        }
+        .page-header {
+            background: linear-gradient(135deg, #07c160 0%, #0d9b77 100%);
+            padding: 40px 20px;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .prototype-count {
+            display: inline-block;
+            background-color: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 14px;
+            margin-top: 8px;
         }
     </style>
 </head>
-<body class="p-4 md:p-8">
-    <header class="mb-8">
-        <h1 class="text-3xl font-bold text-center text-green-600 mb-2">助农宣传小程序原型</h1>
-        <p class="text-center text-gray-600">自动生成农产品宣传图文，一键发布到各大平台</p>
+<body>
+    <header class="page-header">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-4xl font-bold text-center text-white mb-2">助农宣传小程序原型</h1>
+            <p class="text-center text-white opacity-80 mb-3">自动生成农产品宣传图文，一键发布到各大平台</p>
+            <p class="text-center"><span class="prototype-count text-white">共 10 个页面</span></p>
+        </div>
     </header>
 
-    <div class="max-w-7xl mx-auto">
+    <div class="max-w-7xl mx-auto px-4 md:px-8">
         <div class="prototype-grid">
             <div class="prototype-frame">
-                <div class="frame-title">首页</div>
+                <div class="frame-title">
+                    <i class="fas fa-rocket"></i>启动页
+                </div>
+                <iframe src="splash.html" title="启动页"></iframe>
+            </div>
+            
+            <div class="prototype-frame">
+                <div class="frame-title">
+                    <i class="fas fa-home"></i>首页
+                </div>
                 <iframe src="home.html" title="首页"></iframe>
             </div>
             
             <div class="prototype-frame">
-                <div class="frame-title">上传照片</div>
+                <div class="frame-title">
+                    <i class="fas fa-upload"></i>上传照片
+                </div>
                 <iframe src="upload.html" title="上传照片"></iframe>
             </div>
             
             <div class="prototype-frame">
-                <div class="frame-title">图文预览</div>
+                <div class="frame-title">
+                    <i class="fas fa-eye"></i>图文预览
+                </div>
                 <iframe src="preview.html" title="图文预览"></iframe>
             </div>
             
             <div class="prototype-frame">
-                <div class="frame-title">发布平台</div>
+                <div class="frame-title">
+                    <i class="fas fa-share-alt"></i>发布平台
+                </div>
                 <iframe src="publish.html" title="发布平台"></iframe>
             </div>
             
             <div class="prototype-frame">
-                <div class="frame-title">教程中心</div>
+                <div class="frame-title">
+                    <i class="fas fa-book"></i>教程中心
+                </div>
                 <iframe src="tutorials.html" title="教程中心"></iframe>
             </div>
             
             <div class="prototype-frame">
-                <div class="frame-title">个人中心</div>
+                <div class="frame-title">
+                    <i class="fas fa-user"></i>个人中心
+                </div>
                 <iframe src="profile.html" title="个人中心"></iframe>
+            </div>
+            
+            <div class="prototype-frame">
+                <div class="frame-title">
+                    <i class="fas fa-chart-line"></i>数据分析
+                </div>
+                <iframe src="analytics.html" title="数据分析"></iframe>
+            </div>
+            
+            <div class="prototype-frame">
+                <div class="frame-title">
+                    <i class="fas fa-users"></i>社区互动
+                </div>
+                <iframe src="community.html" title="社区互动"></iframe>
+            </div>
+            
+            <div class="prototype-frame">
+                <div class="frame-title">
+                    <i class="fas fa-shopping-bag"></i>产品详情
+                </div>
+                <iframe src="product_detail.html" title="产品详情"></iframe>
             </div>
         </div>
     </div>
 
-    <footer class="mt-8 text-center text-gray-500 text-sm">
-        <p>助农宣传小程序 - 高保真原型设计</p>
+    <footer class="mt-16 mb-8 text-center text-gray-500 text-sm py-6">
+        <p class="mb-2">助农宣传小程序 - 高保真原型设计</p>
+        <p>© 2023 助农宣传平台 · 版权所有</p>
     </footer>
 </body>
 </html> 
