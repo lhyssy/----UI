@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>助农宣传 - 发布平台</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            background-color: #f7f8fa;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .safe-area {
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+        .nav-item.active {
+            color: #07c160;
+        }
+        .nav-item.active i {
+            color: #07c160;
+        }
+        .platform-card {
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        .platform-card:active {
+            transform: scale(0.98);
+        }
+        .platform-card.selected {
+            border-color: #10b981;
+            background-color: #f0fdfa;
+        }
+    </style>
+</head>
+<body class="safe-area">
+    <!-- 顶部导航 -->
+    <div class="bg-white p-4 flex items-center">
+        <a href="preview.html" class="text-gray-600 mr-4">
+            <i class="fas fa-arrow-left text-lg"></i>
+        </a>
+        <h1 class="text-lg font-bold flex-1 text-center">选择发布平台</h1>
+        <div class="w-5"></div> <!-- 占位，保持标题居中 -->
+    </div>
+    
+    <!-- 内容区域 -->
+    <div class="flex-1 overflow-y-auto px-4 py-4">
+        <!-- 图文预览提示 -->
+        <div class="bg-white p-4 rounded-xl mb-6 shadow-sm">
+            <div class="flex items-start">
+                <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="宣传图文" class="w-20 h-20 rounded-lg object-cover mr-3">
+                <div class="flex-1">
+                    <h3 class="font-bold">有机红富士苹果宣传图文</h3>
+                    <p class="text-sm text-gray-500 mt-1">4张图片 | 532个字 | 小红书风格</p>
+                    <div class="flex items-center mt-2">
+                        <span class="text-xs px-2 py-0.5 bg-green-100 text-green-800 rounded-full mr-2">已优化</span>
+                        <span class="text-xs text-gray-500">AI润色完成</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <h2 class="font-bold text-lg mb-3">平台选择</h2>
+        
+        <!-- 平台列表 -->
+        <div class="space-y-3 mb-6">
+            <!-- 小红书 -->
+            <div class="platform-card selected border rounded-xl bg-white p-4 flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center">
+                        <i class="fab fa-pinterest text-2xl text-red-600"></i>
+                    </div>
+                    <div class="ml-3">
+                        <div class="font-medium">小红书</div>
+                        <div class="text-xs text-gray-500 mt-0.5">最适合分享种草和美食内容</div>
+                    </div>
+                </div>
+                <div class="w-6 h-6 rounded-full border-2 border-green-500 flex items-center justify-center bg-green-500">
+                    <i class="fas fa-check text-white text-xs"></i>
+                </div>
+            </div>
+            
+            <!-- 微信公众号 -->
+            <div class="platform-card border rounded-xl bg-white p-4 flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
+                        <i class="fab fa-weixin text-2xl text-green-600"></i>
+                    </div>
+                    <div class="ml-3">
+                        <div class="font-medium">微信公众号</div>
+                        <div class="text-xs text-gray-500 mt-0.5">适合长文和深度内容</div>
+                    </div>
+                </div>
+                <div class="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center">
+                </div>
+            </div>
+            
+            <!-- 抖音 -->
+            <div class="platform-card border rounded-xl bg-white p-4 flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
+                        <i class="fab fa-tiktok text-2xl text-white"></i>
+                    </div>
+                    <div class="ml-3">
+                        <div class="font-medium">抖音</div>
+                        <div class="text-xs text-gray-500 mt-0.5">短视频平台，自动生成视频内容</div>
+                    </div>
+                </div>
+                <div class="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center">
+                </div>
+            </div>
+            
+            <!-- 微博 -->
+            <div class="platform-card border rounded-xl bg-white p-4 flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 rounded-xl bg-yellow-100 flex items-center justify-center">
+                        <i class="fab fa-weibo text-2xl text-yellow-600"></i>
+                    </div>
+                    <div class="ml-3">
+                        <div class="font-medium">微博</div>
+                        <div class="text-xs text-gray-500 mt-0.5">适合短文和热门话题</div>
+                    </div>
+                </div>
+                <div class="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center">
+                </div>
+            </div>
+        </div>
+        
+        <!-- 发布设置 -->
+        <h2 class="font-bold text-lg mb-3">发布设置</h2>
+        <div class="bg-white rounded-xl p-4 shadow-sm mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <i class="fas fa-clock text-gray-500 mr-2"></i>
+                    <span class="text-sm">定时发布</span>
+                </div>
+                <div class="relative inline-block w-12 h-6 rounded-full bg-gray-300">
+                    <span class="absolute left-1 top-1 w-4 h-4 rounded-full bg-white shadow-sm"></span>
+                </div>
+            </div>
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <i class="fas fa-location-dot text-gray-500 mr-2"></i>
+                    <span class="text-sm">添加位置信息</span>
+                </div>
+                <div class="relative inline-block w-12 h-6 rounded-full bg-green-500">
+                    <span class="absolute right-1 top-1 w-4 h-4 rounded-full bg-white shadow-sm"></span>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-bell text-gray-500 mr-2"></i>
+                    <span class="text-sm">发布后提醒</span>
+                </div>
+                <div class="relative inline-block w-12 h-6 rounded-full bg-green-500">
+                    <span class="absolute right-1 top-1 w-4 h-4 rounded-full bg-white shadow-sm"></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 平台账号 -->
+        <h2 class="font-bold text-lg mb-3">已绑定账号</h2>
+        <div class="bg-white rounded-xl p-4 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="用户头像" class="w-10 h-10 rounded-full object-cover">
+                    <div class="ml-3">
+                        <div class="font-medium">果蔬小店</div>
+                        <div class="text-xs text-gray-500 mt-0.5">小红书 @绿色农产品</div>
+                    </div>
+                </div>
+                <button class="text-sm text-gray-500">
+                    <i class="fas fa-ellipsis-vertical"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 底部操作栏 -->
+    <div class="bg-white p-4 shadow-md">
+        <button class="w-full bg-green-500 text-white py-3 rounded-lg font-medium">
+            <i class="fas fa-paper-plane mr-1"></i> 发布宣传图文
+        </button>
+        <div class="text-center text-xs text-gray-500 mt-2">发布后，系统将智能推送提高曝光</div>
+    </div>
+</body>
+</html> 

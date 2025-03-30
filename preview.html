@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>助农宣传 - 宣传图文预览</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            background-color: #f7f8fa;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .safe-area {
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+        .nav-item.active {
+            color: #07c160;
+        }
+        .nav-item.active i {
+            color: #07c160;
+        }
+        .template-option {
+            transition: all 0.2s;
+        }
+        .template-option.selected {
+            border-color: #10b981;
+            background-color: #f0fdfa;
+        }
+        .template-option:active {
+            transform: scale(0.98);
+        }
+        .template-preview {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="safe-area">
+    <!-- 顶部导航 -->
+    <div class="bg-white p-4 flex items-center">
+        <a href="upload.html" class="text-gray-600 mr-4">
+            <i class="fas fa-arrow-left text-lg"></i>
+        </a>
+        <h1 class="text-lg font-bold flex-1 text-center">宣传图文预览</h1>
+        <div class="w-5"></div> <!-- 占位，保持标题居中 -->
+    </div>
+    
+    <!-- 内容区域 -->
+    <div class="overflow-y-auto flex-1">
+        <!-- 图文预览 -->
+        <div class="px-4 py-4">
+            <div class="template-preview bg-white">
+                <!-- 头部信息 -->
+                <div class="p-4 border-b border-gray-100">
+                    <div class="flex items-center mb-2">
+                        <div class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-bold">农</div>
+                        <div class="ml-2">
+                            <div class="font-medium">果蔬小店</div>
+                            <div class="text-xs text-gray-500">小红书 · 发布于 2分钟前</div>
+                        </div>
+                    </div>
+                    <h2 class="text-lg font-bold mb-1">新鲜上市｜有机红富士苹果，产自高山果园</h2>
+                    <p class="text-sm text-gray-700">今天为大家推荐的是刚刚到货的红富士苹果，这批苹果来自高海拔山区，昼夜温差大，果肉特别甜脆，富含多种营养物质...</p>
+                </div>
+                
+                <!-- 图片区域 -->
+                <div class="grid grid-cols-2 gap-0.5">
+                    <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="苹果特写" class="w-full h-40 object-cover">
+                    <img src="https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="果园环境" class="w-full h-40 object-cover">
+                    <img src="https://images.unsplash.com/photo-1600423115367-87ea7661688f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80" alt="苹果特写" class="w-full h-40 object-cover">
+                    <img src="https://images.unsplash.com/photo-1579613832125-5d34a13ffe2a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="苹果切片" class="w-full h-40 object-cover">
+                </div>
+                
+                <!-- 文章内容 -->
+                <div class="p-4">
+                    <h3 class="font-bold mb-2">产品特点</h3>
+                    <p class="text-sm text-gray-700 mb-3">这款红富士苹果产自高海拔山区，生长环境优越，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。</p>
+                    
+                    <h3 class="font-bold mb-2">口感描述</h3>
+                    <p class="text-sm text-gray-700 mb-3">口感脆甜多汁，果肉细腻，香气怡人。咬一口，汁水四溢，甜度适中不腻口，是水果爱好者的不二之选。</p>
+                    
+                    <h3 class="font-bold mb-2">营养价值</h3>
+                    <p class="text-sm text-gray-700 mb-3">富含多种维生素和膳食纤维，有助于肠道健康，增强免疫力。每天一个苹果，医生远离我！</p>
+                    
+                    <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
+                        <div class="flex items-center text-gray-500">
+                            <i class="far fa-heart mr-1"></i>
+                            <span class="text-sm">238</span>
+                            <i class="far fa-comment ml-3 mr-1"></i>
+                            <span class="text-sm">42</span>
+                        </div>
+                        <div class="text-sm text-red-600">
+                            <i class="fas fa-tag mr-1"></i>
+                            <span>¥15.8/斤</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 模板选择 -->
+        <div class="px-4 py-3">
+            <h3 class="font-bold text-gray-700 mb-2">选择模板风格</h3>
+            <div class="flex overflow-x-auto pb-2 -mx-1">
+                <div class="template-option selected flex-shrink-0 w-24 h-24 border-2 rounded-lg overflow-hidden mx-1">
+                    <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="小红书风格" class="w-full h-full object-cover">
+                    <div class="bg-black/60 text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0">小红书风格</div>
+                </div>
+                <div class="template-option flex-shrink-0 w-24 h-24 border-2 border-gray-200 rounded-lg overflow-hidden mx-1 relative">
+                    <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="微信风格" class="w-full h-full object-cover">
+                    <div class="bg-black/60 text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0">微信风格</div>
+                </div>
+                <div class="template-option flex-shrink-0 w-24 h-24 border-2 border-gray-200 rounded-lg overflow-hidden mx-1 relative">
+                    <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="抖音风格" class="w-full h-full object-cover">
+                    <div class="bg-black/60 text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0">抖音风格</div>
+                </div>
+                <div class="template-option flex-shrink-0 w-24 h-24 border-2 border-gray-200 rounded-lg overflow-hidden mx-1 relative">
+                    <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="简约风格" class="w-full h-full object-cover">
+                    <div class="bg-black/60 text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0">简约风格</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI优化功能 -->
+        <div class="px-4 py-3">
+            <h3 class="font-bold text-gray-700 mb-2">AI内容优化</h3>
+            <div class="bg-white rounded-xl p-3 shadow-sm mb-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                            <i class="fas fa-magic text-purple-600"></i>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-medium">优化文案</div>
+                            <div class="text-xs text-gray-500">让文案更吸引人</div>
+                        </div>
+                    </div>
+                    <div class="relative inline-block w-12 h-6 rounded-full bg-green-500">
+                        <span class="absolute right-1 top-1 w-4 h-4 rounded-full bg-white shadow-sm"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-3 shadow-sm mb-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                            <i class="fas fa-palette text-blue-600"></i>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-medium">优化排版</div>
+                            <div class="text-xs text-gray-500">改善视觉布局</div>
+                        </div>
+                    </div>
+                    <div class="relative inline-block w-12 h-6 rounded-full bg-green-500">
+                        <span class="absolute right-1 top-1 w-4 h-4 rounded-full bg-white shadow-sm"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-3 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
+                            <i class="fas fa-tags text-yellow-600"></i>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-medium">添加热门话题</div>
+                            <div class="text-xs text-gray-500">提高曝光率</div>
+                        </div>
+                    </div>
+                    <div class="relative inline-block w-12 h-6 rounded-full bg-gray-300">
+                        <span class="absolute left-1 top-1 w-4 h-4 rounded-full bg-white shadow-sm"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 底部操作栏 -->
+    <div class="bg-white p-4 shadow-md">
+        <div class="flex space-x-3">
+            <a href="#" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-medium text-center">
+                <i class="fas fa-save mr-1"></i> 保存草稿
+            </a>
+            <a href="publish.html" class="flex-1 bg-green-500 text-white py-3 rounded-lg font-medium text-center">
+                <i class="fas fa-paper-plane mr-1"></i> 去发布
+            </a>
+        </div>
+    </div>
+</body>
+</html> 

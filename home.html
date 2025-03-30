@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>助农宣传 - 首页</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            background-color: #f7f8fa;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .safe-area {
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+        .function-card {
+            transition: transform 0.2s;
+        }
+        .function-card:active {
+            transform: scale(0.98);
+        }
+        .nav-item.active {
+            color: #07c160;
+        }
+        .nav-item.active i {
+            color: #07c160;
+        }
+    </style>
+</head>
+<body class="safe-area">
+    <!-- 顶部状态栏 -->
+    <div class="bg-white p-4 flex items-center justify-between">
+        <h1 class="text-xl font-bold">助农宣传</h1>
+        <div class="flex space-x-3">
+            <button class="text-gray-600"><i class="fas fa-search text-lg"></i></button>
+            <button class="text-gray-600"><i class="fas fa-bell text-lg"></i></button>
+        </div>
+    </div>
+    
+    <!-- 轮播图 -->
+    <div class="relative bg-green-100 h-48 mx-4 my-3 rounded-xl overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80" alt="农产品展示" class="w-full h-full object-cover">
+        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+            <h3 class="text-white font-bold">一键生成优质宣传图文</h3>
+            <p class="text-white text-sm">帮助农产品更好地推广销售</p>
+        </div>
+        <div class="absolute bottom-2 right-2 flex space-x-1">
+            <div class="w-2 h-2 bg-white rounded-full opacity-100"></div>
+            <div class="w-2 h-2 bg-white rounded-full opacity-50"></div>
+            <div class="w-2 h-2 bg-white rounded-full opacity-50"></div>
+        </div>
+    </div>
+    
+    <!-- 主要功能区 -->
+    <div class="grid grid-cols-2 gap-3 px-4 mt-2">
+        <a href="upload.html" class="function-card bg-white p-4 rounded-xl flex flex-col items-center shadow-sm">
+            <div class="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mb-2">
+                <i class="fas fa-camera text-green-600 text-xl"></i>
+            </div>
+            <span class="text-sm font-medium">上传图片</span>
+        </a>
+        <a href="preview.html" class="function-card bg-white p-4 rounded-xl flex flex-col items-center shadow-sm">
+            <div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center mb-2">
+                <i class="fas fa-images text-blue-600 text-xl"></i>
+            </div>
+            <span class="text-sm font-medium">宣传图文</span>
+        </a>
+        <a href="publish.html" class="function-card bg-white p-4 rounded-xl flex flex-col items-center shadow-sm">
+            <div class="w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center mb-2">
+                <i class="fas fa-share-alt text-purple-600 text-xl"></i>
+            </div>
+            <span class="text-sm font-medium">一键发布</span>
+        </a>
+        <a href="tutorials.html" class="function-card bg-white p-4 rounded-xl flex flex-col items-center shadow-sm">
+            <div class="w-14 h-14 rounded-full bg-orange-100 flex items-center justify-center mb-2">
+                <i class="fas fa-book text-orange-600 text-xl"></i>
+            </div>
+            <span class="text-sm font-medium">电商教程</span>
+        </a>
+    </div>
+    
+    <!-- 最近动态 -->
+    <div class="mt-4 px-4">
+        <h3 class="font-bold mb-2">最近动态</h3>
+        <div class="bg-white rounded-xl p-3 shadow-sm">
+            <div class="flex items-start mb-3 pb-3 border-b border-gray-100">
+                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="苹果" class="w-16 h-16 rounded-lg object-cover mr-3">
+                <div class="flex-1">
+                    <h4 class="font-medium text-sm">有机红富士苹果</h4>
+                    <p class="text-xs text-gray-500 mt-1">生成宣传图文已发布至小红书</p>
+                    <p class="text-xs text-green-600 mt-1">获得 128 次浏览</p>
+                </div>
+            </div>
+            <div class="flex items-start">
+                <img src="https://images.unsplash.com/photo-1603833665858-e61d17a86224?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2342&q=80" alt="草莓" class="w-16 h-16 rounded-lg object-cover mr-3">
+                <div class="flex-1">
+                    <h4 class="font-medium text-sm">新鲜草莓</h4>
+                    <p class="text-xs text-gray-500 mt-1">生成宣传图文已发布至微信</p>
+                    <p class="text-xs text-green-600 mt-1">获得 96 次浏览</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 底部导航 -->
+    <div class="mt-auto pt-2">
+        <div class="flex justify-around items-center bg-white py-2 border-t border-gray-200">
+            <a href="home.html" class="nav-item active flex flex-col items-center">
+                <i class="fas fa-home text-xl mb-1"></i>
+                <span class="text-xs">首页</span>
+            </a>
+            <a href="upload.html" class="nav-item text-gray-500 flex flex-col items-center">
+                <i class="fas fa-plus-circle text-xl mb-1"></i>
+                <span class="text-xs">创建</span>
+            </a>
+            <a href="tutorials.html" class="nav-item text-gray-500 flex flex-col items-center">
+                <i class="fas fa-book text-xl mb-1"></i>
+                <span class="text-xs">教程</span>
+            </a>
+            <a href="profile.html" class="nav-item text-gray-500 flex flex-col items-center">
+                <i class="fas fa-user text-xl mb-1"></i>
+                <span class="text-xs">我的</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html> 

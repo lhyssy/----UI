@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>助农宣传小程序 - 原型展示</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f0f2f5;
+        }
+        .prototype-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .prototype-frame {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+        .frame-title {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        iframe {
+            border: none;
+            width: 100%;
+            height: 600px;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <header class="mb-8">
+        <h1 class="text-3xl font-bold text-center text-green-600 mb-2">助农宣传小程序原型</h1>
+        <p class="text-center text-gray-600">自动生成农产品宣传图文，一键发布到各大平台</p>
+    </header>
+
+    <div class="max-w-7xl mx-auto">
+        <div class="prototype-grid">
+            <div class="prototype-frame">
+                <div class="frame-title">首页</div>
+                <iframe src="home.html" title="首页"></iframe>
+            </div>
+            
+            <div class="prototype-frame">
+                <div class="frame-title">上传照片</div>
+                <iframe src="upload.html" title="上传照片"></iframe>
+            </div>
+            
+            <div class="prototype-frame">
+                <div class="frame-title">图文预览</div>
+                <iframe src="preview.html" title="图文预览"></iframe>
+            </div>
+            
+            <div class="prototype-frame">
+                <div class="frame-title">发布平台</div>
+                <iframe src="publish.html" title="发布平台"></iframe>
+            </div>
+            
+            <div class="prototype-frame">
+                <div class="frame-title">教程中心</div>
+                <iframe src="tutorials.html" title="教程中心"></iframe>
+            </div>
+            
+            <div class="prototype-frame">
+                <div class="frame-title">个人中心</div>
+                <iframe src="profile.html" title="个人中心"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-8 text-center text-gray-500 text-sm">
+        <p>助农宣传小程序 - 高保真原型设计</p>
+    </footer>
+</body>
+</html> 

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>助农宣传 - 电商教程</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            background-color: #f7f8fa;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .safe-area {
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+        .nav-item.active {
+            color: #07c160;
+        }
+        .nav-item.active i {
+            color: #07c160;
+        }
+        .category-pill {
+            transition: all 0.2s;
+        }
+        .category-pill.active {
+            background-color: #10b981;
+            color: white;
+        }
+        .tutorial-card {
+            transition: all 0.2s;
+        }
+        .tutorial-card:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body class="safe-area">
+    <!-- 顶部导航 -->
+    <div class="bg-white p-4 flex items-center justify-between">
+        <h1 class="text-xl font-bold">电商教程</h1>
+        <div class="flex space-x-3">
+            <button class="text-gray-600"><i class="fas fa-search text-lg"></i></button>
+            <button class="text-gray-600"><i class="fas fa-bookmark text-lg"></i></button>
+        </div>
+    </div>
+    
+    <!-- 分类导航 -->
+    <div class="bg-white py-3 px-4 overflow-x-auto">
+        <div class="flex space-x-2 whitespace-nowrap">
+            <span class="category-pill active px-4 py-1.5 rounded-full text-sm font-medium">全部</span>
+            <span class="category-pill px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">新手入门</span>
+            <span class="category-pill px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">商品拍摄</span>
+            <span class="category-pill px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">文案撰写</span>
+            <span class="category-pill px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">引流技巧</span>
+            <span class="category-pill px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">客户维护</span>
+        </div>
+    </div>
+    
+    <!-- 内容区域 -->
+    <div class="flex-1 overflow-y-auto">
+        <!-- 推荐教程 -->
+        <div class="px-4 py-4">
+            <h2 class="font-bold text-lg mb-3">推荐教程</h2>
+            <div class="bg-white rounded-xl overflow-hidden shadow-sm mb-4">
+                <img src="https://images.unsplash.com/photo-1556155092-490a1ba16284?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80" alt="教程封面" class="w-full h-40 object-cover">
+                <div class="p-4">
+                    <div class="flex items-center mb-2">
+                        <span class="text-xs px-2 py-0.5 bg-green-100 text-green-800 rounded-full">新手入门</span>
+                        <span class="text-xs text-gray-500 ml-2">10分钟</span>
+                    </div>
+                    <h3 class="font-bold mb-1">农产品电商起步完全指南</h3>
+                    <p class="text-sm text-gray-600 mb-3">从零开始，手把手教你入驻各大电商平台，选品、定价、上架全流程解析。</p>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="讲师头像" class="w-6 h-6 rounded-full object-cover">
+                            <span class="text-xs text-gray-500 ml-2">李老师 · 电商顾问</span>
+                        </div>
+                        <button class="text-green-600 text-sm font-medium">
+                            开始学习
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 教程列表 -->
+        <div class="px-4 pb-4">
+            <h2 class="font-bold text-lg mb-3">全部教程</h2>
+            
+            <!-- 教程项 -->
+            <div class="tutorial-card bg-white rounded-xl p-4 mb-3 shadow-sm">
+                <div class="flex">
+                    <img src="https://images.unsplash.com/photo-1589254065909-b7086229d08c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="教程缩略图" class="w-20 h-20 rounded-lg object-cover">
+                    <div class="ml-3 flex-1">
+                        <div class="flex items-center mb-1">
+                            <span class="text-xs px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full">商品拍摄</span>
+                        </div>
+                        <h3 class="font-medium text-sm">农产品拍摄技巧：让你的产品更有吸引力</h3>
+                        <p class="text-xs text-gray-500 mt-1">15分钟 · 5.2万次播放</p>
+                        <div class="flex items-center justify-between mt-1">
+                            <span class="text-xs text-gray-500">王老师 · 摄影师</span>
+                            <button class="text-xs text-green-600 font-medium">查看</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tutorial-card bg-white rounded-xl p-4 mb-3 shadow-sm">
+                <div class="flex">
+                    <img src="https://images.unsplash.com/photo-1591696205602-2f950c417cb9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="教程缩略图" class="w-20 h-20 rounded-lg object-cover">
+                    <div class="ml-3 flex-1">
+                        <div class="flex items-center mb-1">
+                            <span class="text-xs px-2 py-0.5 bg-purple-100 text-purple-800 rounded-full">文案撰写</span>
+                        </div>
+                        <h3 class="font-medium text-sm">农产品文案创作技巧，让顾客爱上你的产品</h3>
+                        <p class="text-xs text-gray-500 mt-1">12分钟 · 3.8万次播放</p>
+                        <div class="flex items-center justify-between mt-1">
+                            <span class="text-xs text-gray-500">张老师 · 文案策划</span>
+                            <button class="text-xs text-green-600 font-medium">查看</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tutorial-card bg-white rounded-xl p-4 mb-3 shadow-sm">
+                <div class="flex">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="教程缩略图" class="w-20 h-20 rounded-lg object-cover">
+                    <div class="ml-3 flex-1">
+                        <div class="flex items-center mb-1">
+                            <span class="text-xs px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded-full">引流技巧</span>
+                        </div>
+                        <h3 class="font-medium text-sm">如何利用小红书引流，打造爆款农产品</h3>
+                        <p class="text-xs text-gray-500 mt-1">20分钟 · 8.1万次播放</p>
+                        <div class="flex items-center justify-between mt-1">
+                            <span class="text-xs text-gray-500">赵老师 · 运营专家</span>
+                            <button class="text-xs text-green-600 font-medium">查看</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tutorial-card bg-white rounded-xl p-4 mb-3 shadow-sm">
+                <div class="flex">
+                    <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="教程缩略图" class="w-20 h-20 rounded-lg object-cover">
+                    <div class="ml-3 flex-1">
+                        <div class="flex items-center mb-1">
+                            <span class="text-xs px-2 py-0.5 bg-red-100 text-red-800 rounded-full">客户维护</span>
+                        </div>
+                        <h3 class="font-medium text-sm">客户复购率提升秘诀，让顾客持续下单</h3>
+                        <p class="text-xs text-gray-500 mt-1">18分钟 · 4.5万次播放</p>
+                        <div class="flex items-center justify-between mt-1">
+                            <span class="text-xs text-gray-500">刘老师 · 客户关系专家</span>
+                            <button class="text-xs text-green-600 font-medium">查看</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tutorial-card bg-white rounded-xl p-4 shadow-sm">
+                <div class="flex">
+                    <img src="https://images.unsplash.com/photo-1533750516457-a7f992034fec?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="教程缩略图" class="w-20 h-20 rounded-lg object-cover">
+                    <div class="ml-3 flex-1">
+                        <div class="flex items-center mb-1">
+                            <span class="text-xs px-2 py-0.5 bg-green-100 text-green-800 rounded-full">新手入门</span>
+                        </div>
+                        <h3 class="font-medium text-sm">农产品包装与发货，提升用户体验</h3>
+                        <p class="text-xs text-gray-500 mt-1">16分钟 · 3.2万次播放</p>
+                        <div class="flex items-center justify-between mt-1">
+                            <span class="text-xs text-gray-500">孙老师 · 物流专家</span>
+                            <button class="text-xs text-green-600 font-medium">查看</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 底部导航 -->
+    <div class="mt-auto pt-2">
+        <div class="flex justify-around items-center bg-white py-2 border-t border-gray-200">
+            <a href="home.html" class="nav-item text-gray-500 flex flex-col items-center">
+                <i class="fas fa-home text-xl mb-1"></i>
+                <span class="text-xs">首页</span>
+            </a>
+            <a href="upload.html" class="nav-item text-gray-500 flex flex-col items-center">
+                <i class="fas fa-plus-circle text-xl mb-1"></i>
+                <span class="text-xs">创建</span>
+            </a>
+            <a href="tutorials.html" class="nav-item active flex flex-col items-center">
+                <i class="fas fa-book text-xl mb-1"></i>
+                <span class="text-xs">教程</span>
+            </a>
+            <a href="profile.html" class="nav-item text-gray-500 flex flex-col items-center">
+                <i class="fas fa-user text-xl mb-1"></i>
+                <span class="text-xs">我的</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html> 
