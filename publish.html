@@ -3,190 +3,374 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>助农宣传 - 发布平台</title>
+    <title>助农宣传 - 选择发布平台</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/animations.css">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-            background-color: #f7f8fa;
-            height: 100vh;
+            background-color: #f8f9fa;
+            color: #333;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        .header {
+            background: white;
+        }
+        .back-button {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.05);
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
-        .safe-area {
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        .content-card {
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
-        .nav-item.active {
+        .preview-image {
+            width: 64px;
+            height: 64px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .platform-option {
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 12px;
+        }
+        .platform-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .success-badge {
+            background-color: rgba(7, 193, 96, 0.1);
             color: #07c160;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 12px;
         }
-        .nav-item.active i {
-            color: #07c160;
+        .publish-button {
+            background: linear-gradient(135deg, #07c160 0%, #0d9b77 100%);
+            color: white;
+            border-radius: 24px;
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(7, 193, 96, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .platform-card {
-            transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        .publish-button:hover {
+            box-shadow: 0 6px 20px rgba(7, 193, 96, 0.3);
+            transform: translateY(-2px);
         }
-        .platform-card:active {
-            transform: scale(0.98);
+        .publish-button.disabled {
+            background: linear-gradient(135deg, #aaa 0%, #999 100%);
+            box-shadow: none;
         }
-        .platform-card.selected {
-            border-color: #10b981;
-            background-color: #f0fdfa;
+        .settings-section {
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
-<body class="safe-area">
+<body>
     <!-- 顶部导航 -->
-    <div class="bg-white p-4 flex items-center">
-        <a href="preview.html" class="text-gray-600 mr-4">
-            <i class="fas fa-arrow-left text-lg"></i>
-        </a>
-        <h1 class="text-lg font-bold flex-1 text-center">选择发布平台</h1>
-        <div class="w-5"></div> <!-- 占位，保持标题居中 -->
-    </div>
-    
-    <!-- 内容区域 -->
-    <div class="flex-1 overflow-y-auto px-4 py-4">
-        <!-- 图文预览提示 -->
-        <div class="bg-white p-4 rounded-xl mb-6 shadow-sm">
-            <div class="flex items-start">
-                <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="宣传图文" class="w-20 h-20 rounded-lg object-cover mr-3">
-                <div class="flex-1">
-                    <h3 class="font-bold">有机红富士苹果宣传图文</h3>
-                    <p class="text-sm text-gray-500 mt-1">4张图片 | 532个字 | 小红书风格</p>
-                    <div class="flex items-center mt-2">
-                        <span class="text-xs px-2 py-0.5 bg-green-100 text-green-800 rounded-full mr-2">已优化</span>
-                        <span class="text-xs text-gray-500">AI润色完成</span>
+    <header class="header py-4 px-5 flex items-center justify-center relative">
+        <button class="back-button slide-right absolute left-5" id="backButton">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <h1 class="text-xl font-semibold slide-down">选择发布平台</h1>
+    </header>
+
+    <div class="container mx-auto px-4 pb-24 mt-2">
+        <!-- 内容预览 -->
+        <div class="content-card bg-white p-4 mb-5 slide-up">
+            <div class="flex items-center">
+                <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80" alt="有机红富士苹果" class="preview-image">
+                <div class="ml-3">
+                    <h3 class="font-medium">有机红富士苹果宣传图文</h3>
+                    <p class="text-gray-500 text-sm flex items-center">
+                        <span>4张图片 | 532个字 | 小红书风格</span>
+                    </p>
+                    <div class="flex items-center mt-1">
+                        <span class="success-badge flex items-center">
+                            <i class="fas fa-check mr-1"></i>
+                            已优化
+                        </span>
+                        <span class="text-gray-400 text-xs ml-2">AI智能生成</span>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <h2 class="font-bold text-lg mb-3">平台选择</h2>
-        
-        <!-- 平台列表 -->
-        <div class="space-y-3 mb-6">
+
+        <!-- 平台选择 -->
+        <h3 class="font-medium mb-3 px-1 slide-up">平台选择</h3>
+        <div class="grid grid-cols-1 gap-0 mb-6">
             <!-- 小红书 -->
-            <div class="platform-card selected border rounded-xl bg-white p-4 flex items-center justify-between">
-                <div class="flex items-center">
-                    <div class="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center">
-                        <i class="fab fa-pinterest text-2xl text-red-600"></i>
-                    </div>
-                    <div class="ml-3">
-                        <div class="font-medium">小红书</div>
-                        <div class="text-xs text-gray-500 mt-0.5">最适合分享种草和美食内容</div>
-                    </div>
+            <div class="platform-option bg-white p-4 flex items-center stagger-item selected">
+                <div class="platform-icon bg-red-50 text-red-500 mr-3">
+                    <i class="fab fa-pinterest"></i>
                 </div>
-                <div class="w-6 h-6 rounded-full border-2 border-green-500 flex items-center justify-center bg-green-500">
-                    <i class="fas fa-check text-white text-xs"></i>
+                <div class="flex-1">
+                    <h4 class="font-medium">小红书</h4>
+                    <p class="text-gray-500 text-xs">最适合分享种草和美食内容</p>
+                </div>
+                <div class="check-icon">
+                    <i class="fas fa-check-circle text-green-500 text-xl"></i>
                 </div>
             </div>
             
             <!-- 微信公众号 -->
-            <div class="platform-card border rounded-xl bg-white p-4 flex items-center justify-between">
-                <div class="flex items-center">
-                    <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
-                        <i class="fab fa-weixin text-2xl text-green-600"></i>
-                    </div>
-                    <div class="ml-3">
-                        <div class="font-medium">微信公众号</div>
-                        <div class="text-xs text-gray-500 mt-0.5">适合长文和深度内容</div>
-                    </div>
+            <div class="platform-option bg-white p-4 flex items-center stagger-item">
+                <div class="platform-icon bg-green-50 text-green-500 mr-3">
+                    <i class="fab fa-weixin"></i>
                 </div>
-                <div class="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center">
+                <div class="flex-1">
+                    <h4 class="font-medium">微信公众号</h4>
+                    <p class="text-gray-500 text-xs">适合长文和深度内容</p>
+                </div>
+                <div class="check-icon">
+                    <i class="far fa-circle text-gray-300 text-xl"></i>
                 </div>
             </div>
             
             <!-- 抖音 -->
-            <div class="platform-card border rounded-xl bg-white p-4 flex items-center justify-between">
-                <div class="flex items-center">
-                    <div class="w-12 h-12 rounded-xl bg-black flex items-center justify-center">
-                        <i class="fab fa-tiktok text-2xl text-white"></i>
-                    </div>
-                    <div class="ml-3">
-                        <div class="font-medium">抖音</div>
-                        <div class="text-xs text-gray-500 mt-0.5">短视频平台，自动生成视频内容</div>
-                    </div>
+            <div class="platform-option bg-white p-4 flex items-center stagger-item">
+                <div class="platform-icon bg-gray-50 text-gray-500 mr-3">
+                    <i class="fab fa-tiktok"></i>
                 </div>
-                <div class="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center">
+                <div class="flex-1">
+                    <h4 class="font-medium">抖音</h4>
+                    <p class="text-gray-500 text-xs">短视频平台，自动生成视频内容</p>
+                </div>
+                <div class="check-icon">
+                    <i class="far fa-circle text-gray-300 text-xl"></i>
                 </div>
             </div>
             
             <!-- 微博 -->
-            <div class="platform-card border rounded-xl bg-white p-4 flex items-center justify-between">
-                <div class="flex items-center">
-                    <div class="w-12 h-12 rounded-xl bg-yellow-100 flex items-center justify-center">
-                        <i class="fab fa-weibo text-2xl text-yellow-600"></i>
-                    </div>
-                    <div class="ml-3">
-                        <div class="font-medium">微博</div>
-                        <div class="text-xs text-gray-500 mt-0.5">适合短文和热门话题</div>
-                    </div>
+            <div class="platform-option bg-white p-4 flex items-center stagger-item">
+                <div class="platform-icon bg-orange-50 text-orange-500 mr-3">
+                    <i class="fab fa-weibo"></i>
                 </div>
-                <div class="w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center">
+                <div class="flex-1">
+                    <h4 class="font-medium">微博</h4>
+                    <p class="text-gray-500 text-xs">适合短文和热门话题</p>
+                </div>
+                <div class="check-icon">
+                    <i class="far fa-circle text-gray-300 text-xl"></i>
                 </div>
             </div>
         </div>
-        
+
         <!-- 发布设置 -->
-        <h2 class="font-bold text-lg mb-3">发布设置</h2>
-        <div class="bg-white rounded-xl p-4 shadow-sm mb-6">
-            <div class="flex items-center justify-between mb-4">
+        <div class="settings-section pt-5 slide-up">
+            <h3 class="font-medium mb-3 px-1">发布设置</h3>
+            
+            <!-- 定时发布 -->
+            <div class="content-card bg-white p-4 mb-3 flex justify-between items-center">
                 <div class="flex items-center">
-                    <i class="fas fa-clock text-gray-500 mr-2"></i>
-                    <span class="text-sm">定时发布</span>
+                    <i class="fas fa-clock text-gray-500 mr-3"></i>
+                    <span>定时发布</span>
                 </div>
-                <div class="relative inline-block w-12 h-6 rounded-full bg-gray-300">
-                    <span class="absolute left-1 top-1 w-4 h-4 rounded-full bg-white shadow-sm"></span>
-                </div>
+                <label class="switch relative inline-block w-12 h-6">
+                    <input type="checkbox" class="opacity-0 w-0 h-0">
+                    <span class="slider bg-gray-300 absolute rounded-full top-0 right-0 bottom-0 left-0 transition-all duration-300 before:absolute before:content-[''] before:h-4 before:w-4 before:left-1 before:bottom-1 before:bg-white before:rounded-full before:transition-all before:duration-300"></span>
+                </label>
             </div>
-            <div class="flex items-center justify-between mb-4">
+            
+            <!-- 同步发布 -->
+            <div class="content-card bg-white p-4 mb-3 flex justify-between items-center">
                 <div class="flex items-center">
-                    <i class="fas fa-location-dot text-gray-500 mr-2"></i>
-                    <span class="text-sm">添加位置信息</span>
+                    <i class="fas fa-sync-alt text-gray-500 mr-3"></i>
+                    <span>同步到其他平台</span>
                 </div>
-                <div class="relative inline-block w-12 h-6 rounded-full bg-green-500">
-                    <span class="absolute right-1 top-1 w-4 h-4 rounded-full bg-white shadow-sm"></span>
-                </div>
-            </div>
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <i class="fas fa-bell text-gray-500 mr-2"></i>
-                    <span class="text-sm">发布后提醒</span>
-                </div>
-                <div class="relative inline-block w-12 h-6 rounded-full bg-green-500">
-                    <span class="absolute right-1 top-1 w-4 h-4 rounded-full bg-white shadow-sm"></span>
-                </div>
-            </div>
-        </div>
-        
-        <!-- 平台账号 -->
-        <h2 class="font-bold text-lg mb-3">已绑定账号</h2>
-        <div class="bg-white rounded-xl p-4 shadow-sm">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="用户头像" class="w-10 h-10 rounded-full object-cover">
-                    <div class="ml-3">
-                        <div class="font-medium">果蔬小店</div>
-                        <div class="text-xs text-gray-500 mt-0.5">小红书 @绿色农产品</div>
-                    </div>
-                </div>
-                <button class="text-sm text-gray-500">
-                    <i class="fas fa-ellipsis-vertical"></i>
-                </button>
+                <label class="switch relative inline-block w-12 h-6">
+                    <input type="checkbox" class="opacity-0 w-0 h-0">
+                    <span class="slider bg-gray-300 absolute rounded-full top-0 right-0 bottom-0 left-0 transition-all duration-300 before:absolute before:content-[''] before:h-4 before:w-4 before:left-1 before:bottom-1 before:bg-white before:rounded-full before:transition-all before:duration-300"></span>
+                </label>
             </div>
         </div>
     </div>
-    
-    <!-- 底部操作栏 -->
-    <div class="bg-white p-4 shadow-md">
-        <button class="w-full bg-green-500 text-white py-3 rounded-lg font-medium">
-            <i class="fas fa-paper-plane mr-1"></i> 发布宣传图文
+
+    <!-- 底部发布按钮 -->
+    <div class="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 shadow-md">
+        <button class="publish-button w-full" data-action="publish">
+            <i class="fas fa-paper-plane mr-2"></i>
+            发布宣传图文
         </button>
-        <div class="text-center text-xs text-gray-500 mt-2">发布后，系统将智能推送提高曝光</div>
+        <p class="text-center text-xs text-gray-500 mt-2">发布后，系统将智能推荐适合的受众</p>
     </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        // 页面特定脚本
+        document.addEventListener('DOMContentLoaded', function() {
+            // 切换开关
+            const switches = document.querySelectorAll('.switch input');
+            switches.forEach(input => {
+                input.addEventListener('change', function() {
+                    const slider = this.nextElementSibling;
+                    if (this.checked) {
+                        slider.classList.remove('bg-gray-300');
+                        slider.classList.add('bg-green-500');
+                        slider.style.setProperty('--before-transform', 'translateX(24px)');
+                    } else {
+                        slider.classList.remove('bg-green-500');
+                        slider.classList.add('bg-gray-300');
+                        slider.style.setProperty('--before-transform', 'translateX(0)');
+                    }
+                });
+            });
+            
+            // 平台选择
+            const platformOptions = document.querySelectorAll('.platform-option');
+            platformOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const checkIcon = this.querySelector('.check-icon i');
+                    if (checkIcon.classList.contains('fa-circle')) {
+                        checkIcon.classList.remove('far', 'fa-circle', 'text-gray-300');
+                        checkIcon.classList.add('fas', 'fa-check-circle', 'text-green-500');
+                        this.classList.add('selected');
+                    } else {
+                        checkIcon.classList.remove('fas', 'fa-check-circle', 'text-green-500');
+                        checkIcon.classList.add('far', 'fa-circle', 'text-gray-300');
+                        this.classList.remove('selected');
+                    }
+                    
+                    // 更新发布按钮状态
+                    updatePublishButtonState();
+                });
+            });
+            
+            // 更新发布按钮状态
+            function updatePublishButtonState() {
+                const selectedCount = document.querySelectorAll('.platform-option.selected').length;
+                const publishButton = document.querySelector('.publish-button');
+                
+                if (selectedCount === 0) {
+                    publishButton.classList.add('disabled');
+                    publishButton.setAttribute('disabled', 'disabled');
+                } else {
+                    publishButton.classList.remove('disabled');
+                    publishButton.removeAttribute('disabled');
+                }
+            }
+            
+            // 发布按钮点击事件
+            const publishButton = document.querySelector('.publish-button');
+            if (publishButton) {
+                publishButton.addEventListener('click', function() {
+                    const selectedCount = document.querySelectorAll('.platform-option.selected').length;
+                    
+                    if (selectedCount === 0) {
+                        showToast('请至少选择一个发布平台', 'warning');
+                        return;
+                    }
+                    
+                    // 显示发布中的状态
+                    const loadingToast = showToast('发布中...', 'loading');
+                    
+                    // 模拟发布过程
+                    setTimeout(() => {
+                        loadingToast.remove();
+                        showToast('发布成功！', 'success');
+                        
+                        // 2秒后跳转回首页
+                        setTimeout(() => {
+                            window.location.href = 'home.html';
+                        }, 2000);
+                    }, 2000);
+                });
+            }
+            
+            // 显示消息提示
+            function showToast(message, type = 'info') {
+                // 移除现有的toast
+                const existingToast = document.querySelector('.toast-container');
+                if (existingToast) {
+                    existingToast.remove();
+                }
+                
+                // 创建新的toast
+                const toast = document.createElement('div');
+                toast.className = `toast-container ${type}`;
+                
+                // 添加图标
+                let icon = '';
+                switch(type) {
+                    case 'success':
+                        icon = '<i class="fas fa-check-circle"></i>';
+                        break;
+                    case 'error':
+                        icon = '<i class="fas fa-exclamation-circle"></i>';
+                        break;
+                    case 'warning':
+                        icon = '<i class="fas fa-exclamation-triangle"></i>';
+                        break;
+                    case 'loading':
+                        icon = '<div class="loading-spinner-sm"></div>';
+                        break;
+                    default:
+                        icon = '<i class="fas fa-info-circle"></i>';
+                }
+                
+                toast.innerHTML = `
+                    <div class="toast-content">
+                        <div class="toast-icon">${icon}</div>
+                        <div class="toast-message">${message}</div>
+                    </div>
+                `;
+                
+                document.body.appendChild(toast);
+                
+                // 添加显示类（用于动画）
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 10);
+                
+                // 如果不是加载中，自动隐藏
+                if (type !== 'loading') {
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                        setTimeout(() => {
+                            toast.remove();
+                        }, 300);
+                    }, 3000);
+                }
+                
+                return toast;
+            }
+            
+            // 初始化开关状态
+            switches.forEach(input => {
+                const event = new Event('change');
+                input.dispatchEvent(event);
+            });
+            
+            // 初始化发布按钮状态
+            updatePublishButtonState();
+        });
+    </script>
+    <style>
+        /* 开关样式 */
+        .slider:before {
+            transform: var(--before-transform, translateX(0));
+        }
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+    </style>
 </body>
 </html> 

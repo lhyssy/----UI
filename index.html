@@ -3,368 +3,343 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>助农宣传小程序 - 原型展示</title>
+    <title>助农宣传 - 农产品推广助手</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/animations.css">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f8f9fc;
-            color: #1f2937;
+            background-color: #f8f9fa;
+            color: #333;
+            max-width: 100%;
+            overflow-x: hidden;
         }
-        .prototype-header {
-            background: linear-gradient(135deg, #07c160 0%, #0d9b77 100%);
-            padding: 30px 20px;
-            text-align: center;
-            color: white;
-            border-radius: 0 0 30px 30px;
-            box-shadow: 0 4px 20px rgba(7, 193, 96, 0.2);
-            margin-bottom: 30px;
-        }
-        .prototype-frame {
-            background: white;
+        .card {
+            transition: all 0.3s ease;
+            cursor: pointer;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.03);
-            width: 375px; /* 标准手机宽度 */
-            height: 812px; /* 标准手机高度 */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            position: relative;
+        }
+        .card-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+        }
+        .card-content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            padding: 15px;
+            color: white;
+        }
+        .card-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            background-color: rgba(7, 193, 96, 0.8);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        .floating-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #07c160 0%, #0d9b77 100%);
+            position: fixed;
+            right: 20px;
+            bottom: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 5px 20px rgba(7, 193, 96, 0.3);
             transition: all 0.3s ease;
-            margin: 0 auto 30px;
         }
-        .prototype-frame:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        .floating-btn:hover {
+            transform: scale(1.1);
         }
-        .frame-header {
-            padding: 12px 15px;
-            border-bottom: 1px solid #f3f4f6;
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: white;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 20px;
+            padding: 30px;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+        .btn-feature {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            background-color: #f8f9fa;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
         }
-        .frame-title {
-            font-weight: 600;
-            display: flex;
-            align-items: center;
+        .btn-feature:hover {
+            background-color: #f0fdf4;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(7, 193, 96, 0.1);
         }
-        .frame-icon {
-            width: 24px;
-            height: 24px;
-            background: rgba(7, 193, 96, 0.1);
-            border-radius: 8px;
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background-color: rgba(7, 193, 96, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             color: #07c160;
-            margin-right: 8px;
-        }
-        .frame-content {
-            height: calc(100% - 49px);
-            overflow: hidden;
-        }
-        .frame-content iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e5e7eb;
-            color: #1f2937;
-        }
-        .prototype-category {
-            margin-bottom: 40px;
-        }
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            background: rgba(7, 193, 96, 0.1);
-            color: #07c160;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            margin-left: 8px;
+            font-size: 24px;
+            margin-right: 15px;
         }
     </style>
 </head>
 <body>
-    <div class="prototype-header">
-        <h1 class="text-3xl font-bold mb-3">助农宣传小程序 - 原型展示</h1>
-        <p class="text-lg opacity-90 max-w-2xl mx-auto">
-            这是一个专为农产品宣传设计的移动应用原型，帮助农户高效创建精美的宣传内容并发布到各大平台
-        </p>
+    <!-- 页面标题 -->
+    <header class="py-6 px-5 text-center">
+        <h1 class="text-2xl font-bold text-gray-800 slide-down">
+            <i class="fas fa-leaf text-green-500 mr-2"></i>
+            助农宣传
+        </h1>
+        <p class="text-sm text-gray-500 mt-1 slide-up">智能生成精美宣传内容，助力农产品销售</p>
+    </header>
+
+    <!-- 主要内容 -->
+    <div class="container mx-auto px-4 pb-24">
+        <!-- 界面预览卡片 -->
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <!-- 首页卡片 -->
+            <div class="card stagger-item" onclick="window.location.href='home.html'">
+                <div class="card-header" style="background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                    <div class="card-content">
+                        <span class="card-tag">首页</span>
+                        <h3 class="font-medium text-white">特色功能入口</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 上传卡片 -->
+            <div class="card stagger-item" onclick="window.location.href='upload.html'">
+                <div class="card-header" style="background-image: url('https://images.unsplash.com/photo-1579447167432-ba8b796e727d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                    <div class="card-content">
+                        <span class="card-tag">上传</span>
+                        <h3 class="font-medium text-white">照片上传</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 预览卡片 -->
+            <div class="card stagger-item" onclick="window.location.href='preview.html'">
+                <div class="card-header" style="background-image: url('https://images.unsplash.com/photo-1611095971113-9f7e83e92e14?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                    <div class="card-content">
+                        <span class="card-tag">预览</span>
+                        <h3 class="font-medium text-white">内容预览</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 发布卡片 -->
+            <div class="card stagger-item" onclick="window.location.href='publish.html'">
+                <div class="card-header" style="background-image: url('https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                    <div class="card-content">
+                        <span class="card-tag">发布</span>
+                        <h3 class="font-medium text-white">平台选择</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 教程卡片 -->
+            <div class="card stagger-item" onclick="window.location.href='tutorials.html'">
+                <div class="card-header" style="background-image: url('https://images.unsplash.com/photo-1532619675605-1ede6c2ed2b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                    <div class="card-content">
+                        <span class="card-tag">教程</span>
+                        <h3 class="font-medium text-white">电商指南</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 个人中心卡片 -->
+            <div class="card stagger-item" onclick="window.location.href='profile.html'">
+                <div class="card-header" style="background-image: url('https://images.unsplash.com/photo-1608453162650-08e27f013e04?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                    <div class="card-content">
+                        <span class="card-tag">我的</span>
+                        <h3 class="font-medium text-white">个人中心</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 数据分析卡片 -->
+            <div class="card stagger-item" onclick="window.location.href='analytics.html'">
+                <div class="card-header" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                    <div class="card-content">
+                        <span class="card-tag">统计</span>
+                        <h3 class="font-medium text-white">数据分析</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 特色功能简介 -->
+        <div class="text-center mb-6 slide-up">
+            <h2 class="text-xl font-semibold text-gray-800">应用特色</h2>
+            <p class="text-sm text-gray-500 mt-1">智能科技助力农产品营销</p>
+        </div>
+        
+        <div class="grid grid-cols-1 gap-4 mb-8">
+            <div class="bg-white p-4 rounded-2xl shadow-sm stagger-item">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-500 mr-4">
+                        <i class="fas fa-magic text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium">AI智能生成</h3>
+                        <p class="text-sm text-gray-500 mt-1">一键生成专业宣传文案和图文排版</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white p-4 rounded-2xl shadow-sm stagger-item">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-500 mr-4">
+                        <i class="fas fa-share-alt text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium">多平台发布</h3>
+                        <p class="text-sm text-gray-500 mt-1">支持小红书、微信、抖音等多平台一键发布</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white p-4 rounded-2xl shadow-sm stagger-item">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-500 mr-4">
+                        <i class="fas fa-chart-line text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium">数据分析</h3>
+                        <p class="text-sm text-gray-500 mt-1">实时跟踪内容表现，提供优化建议</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 快速操作按钮 -->
+        <div class="floating-btn pulse" id="floatingBtn">
+            <i class="fas fa-plus text-2xl"></i>
+        </div>
     </div>
     
-    <div class="container mx-auto px-4 pb-10">
-        <!-- 主要界面 -->
-        <div class="prototype-category">
-            <h2 class="section-title">核心功能界面 <span class="badge"><i class="fas fa-layer-group mr-1"></i> 6个页面</span></h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
-                <!-- 首页 -->
-                <div class="prototype-frame">
-                    <div class="frame-header">
-                        <div class="frame-title">
-                            <div class="frame-icon">
-                                <i class="fas fa-home"></i>
-                            </div>
-                            <span>首页</span>
-                        </div>
-                        <div class="text-xs text-gray-500">home.html</div>
-                    </div>
-                    <div class="frame-content">
-                        <iframe src="home.html" title="首页"></iframe>
-                    </div>
+    <!-- 操作选择弹窗 -->
+    <div class="modal" id="actionModal">
+        <div class="modal-content">
+            <h3 class="text-xl font-bold mb-4 text-center">快速操作</h3>
+            
+            <a href="upload.html" class="btn-feature">
+                <div class="feature-icon">
+                    <i class="fas fa-camera"></i>
                 </div>
-                
-                <!-- 上传照片 -->
-                <div class="prototype-frame">
-                    <div class="frame-header">
-                        <div class="frame-title">
-                            <div class="frame-icon">
-                                <i class="fas fa-upload"></i>
-                            </div>
-                            <span>上传照片</span>
-                        </div>
-                        <div class="text-xs text-gray-500">upload.html</div>
-                    </div>
-                    <div class="frame-content">
-                        <iframe src="upload.html" title="上传照片"></iframe>
-                    </div>
+                <div>
+                    <h4 class="font-medium">创建宣传图文</h4>
+                    <p class="text-xs text-gray-500 mt-1">上传照片，智能生成宣传素材</p>
                 </div>
-                
-                <!-- 图文预览 -->
-                <div class="prototype-frame">
-                    <div class="frame-header">
-                        <div class="frame-title">
-                            <div class="frame-icon">
-                                <i class="fas fa-eye"></i>
-                            </div>
-                            <span>图文预览</span>
-                        </div>
-                        <div class="text-xs text-gray-500">preview.html</div>
-                    </div>
-                    <div class="frame-content">
-                        <iframe src="preview.html" title="图文预览"></iframe>
-                    </div>
+            </a>
+            
+            <a href="analytics.html" class="btn-feature">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-pie"></i>
                 </div>
-                
-                <!-- 发布平台 -->
-                <div class="prototype-frame">
-                    <div class="frame-header">
-                        <div class="frame-title">
-                            <div class="frame-icon">
-                                <i class="fas fa-paper-plane"></i>
-                            </div>
-                            <span>发布平台</span>
-                        </div>
-                        <div class="text-xs text-gray-500">publish.html</div>
-                    </div>
-                    <div class="frame-content">
-                        <iframe src="publish.html" title="发布平台"></iframe>
-                    </div>
+                <div>
+                    <h4 class="font-medium">效果分析</h4>
+                    <p class="text-xs text-gray-500 mt-1">查看宣传内容表现数据</p>
                 </div>
-                
-                <!-- 教程中心 -->
-                <div class="prototype-frame">
-                    <div class="frame-header">
-                        <div class="frame-title">
-                            <div class="frame-icon">
-                                <i class="fas fa-book"></i>
-                            </div>
-                            <span>教程中心</span>
-                        </div>
-                        <div class="text-xs text-gray-500">tutorials.html</div>
-                    </div>
-                    <div class="frame-content">
-                        <iframe src="tutorials.html" title="教程中心"></iframe>
-                    </div>
+            </a>
+            
+            <a href="tutorials.html" class="btn-feature">
+                <div class="feature-icon">
+                    <i class="fas fa-book-open"></i>
                 </div>
-                
-                <!-- 个人中心 -->
-                <div class="prototype-frame">
-                    <div class="frame-header">
-                        <div class="frame-title">
-                            <div class="frame-icon">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <span>个人中心</span>
-                        </div>
-                        <div class="text-xs text-gray-500">profile.html</div>
-                    </div>
-                    <div class="frame-content">
-                        <iframe src="profile.html" title="个人中心"></iframe>
-                    </div>
+                <div>
+                    <h4 class="font-medium">教程中心</h4>
+                    <p class="text-xs text-gray-500 mt-1">获取电商运营技巧</p>
                 </div>
-            </div>
-        </div>
-
-        <!-- 新增高级功能界面 -->
-        <div class="prototype-category">
-            <h2 class="section-title">高级功能界面 <span class="badge"><i class="fas fa-crown mr-1"></i> 4个页面</span></h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
-                <!-- 数据分析 -->
-                <div class="prototype-frame">
-                    <div class="frame-header">
-                        <div class="frame-title">
-                            <div class="frame-icon">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                            <span>数据分析</span>
-                        </div>
-                        <div class="text-xs text-gray-500">analytics.html</div>
-                    </div>
-                    <div class="frame-content">
-                        <iframe src="analytics.html" title="数据分析"></iframe>
-                    </div>
-                </div>
-                
-                <!-- 社区互动 -->
-                <div class="prototype-frame">
-                    <div class="frame-header">
-                        <div class="frame-title">
-                            <div class="frame-icon">
-                                <i class="fas fa-comments"></i>
-                            </div>
-                            <span>社区互动</span>
-                        </div>
-                        <div class="text-xs text-gray-500">community.html</div>
-                    </div>
-                    <div class="frame-content">
-                        <iframe src="community.html" title="社区互动"></iframe>
-                    </div>
-                </div>
-                
-                <!-- 产品详情 -->
-                <div class="prototype-frame">
-                    <div class="frame-header">
-                        <div class="frame-title">
-                            <div class="frame-icon">
-                                <i class="fas fa-apple-alt"></i>
-                            </div>
-                            <span>产品详情</span>
-                        </div>
-                        <div class="text-xs text-gray-500">product_detail.html</div>
-                    </div>
-                    <div class="frame-content">
-                        <iframe src="product_detail.html" title="产品详情"></iframe>
-                    </div>
-                </div>
-
-                <!-- 会员特权 -->
-                <div class="prototype-frame">
-                    <div class="frame-header">
-                        <div class="frame-title">
-                            <div class="frame-icon">
-                                <i class="fas fa-gem"></i>
-                            </div>
-                            <span>会员特权</span>
-                        </div>
-                        <div class="text-xs text-gray-500">membership.html</div>
-                    </div>
-                    <div class="frame-content">
-                        <iframe src="membership.html" title="会员特权"></iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 辅助功能界面 -->
-        <div class="prototype-category">
-            <h2 class="section-title">辅助功能界面 <span class="badge"><i class="fas fa-puzzle-piece mr-1"></i> 5个页面</span></h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
-                <!-- 启动页 -->
-                <div class="prototype-frame">
-                    <div class="frame-header">
-                        <div class="frame-title">
-                            <div class="frame-icon">
-                                <i class="fas fa-rocket"></i>
-                            </div>
-                            <span>启动页</span>
-                        </div>
-                        <div class="text-xs text-gray-500">splash.html</div>
-                    </div>
-                    <div class="frame-content">
-                        <iframe src="splash.html" title="启动页"></iframe>
-                    </div>
-                </div>
-
-                <!-- 我的钱包 -->
-                <div class="prototype-frame">
-                    <div class="frame-header">
-                        <div class="frame-title">
-                            <div class="frame-icon">
-                                <i class="fas fa-wallet"></i>
-                            </div>
-                            <span>我的钱包</span>
-                        </div>
-                        <div class="text-xs text-gray-500">wallet.html</div>
-                    </div>
-                    <div class="frame-content">
-                        <iframe src="wallet.html" title="我的钱包"></iframe>
-                    </div>
-                </div>
-
-                <!-- 消息通知 -->
-                <div class="prototype-frame">
-                    <div class="frame-header">
-                        <div class="frame-title">
-                            <div class="frame-icon">
-                                <i class="fas fa-bell"></i>
-                            </div>
-                            <span>消息通知</span>
-                        </div>
-                        <div class="text-xs text-gray-500">notifications.html</div>
-                    </div>
-                    <div class="frame-content">
-                        <iframe src="notifications.html" title="消息通知"></iframe>
-                    </div>
-                </div>
-
-                <!-- 搜索结果 -->
-                <div class="prototype-frame">
-                    <div class="frame-header">
-                        <div class="frame-title">
-                            <div class="frame-icon">
-                                <i class="fas fa-search"></i>
-                            </div>
-                            <span>搜索结果</span>
-                        </div>
-                        <div class="text-xs text-gray-500">search.html</div>
-                    </div>
-                    <div class="frame-content">
-                        <iframe src="search.html" title="搜索结果"></iframe>
-                    </div>
-                </div>
-
-                <!-- 产品录入 -->
-                <div class="prototype-frame">
-                    <div class="frame-header">
-                        <div class="frame-title">
-                            <div class="frame-icon">
-                                <i class="fas fa-edit"></i>
-                            </div>
-                            <span>产品录入</span>
-                        </div>
-                        <div class="text-xs text-gray-500">product_form.html</div>
-                    </div>
-                    <div class="frame-content">
-                        <iframe src="product_form.html" title="产品录入"></iframe>
-                    </div>
-                </div>
-            </div>
+            </a>
+            
+            <button class="w-full bg-gray-100 py-3 rounded-lg mt-3 text-gray-700" id="closeModalBtn">
+                取消
+            </button>
         </div>
     </div>
 
-    <footer class="bg-gray-100 py-6 text-center text-gray-600 mt-4">
-        <div class="container mx-auto px-4">
-            <p class="mb-2">助农宣传小程序 - 让农产品营销更简单、更高效、更专业</p>
-            <p class="text-sm text-gray-500">© 2023 农业科技有限公司 版权所有</p>
-        </div>
-    </footer>
+    <script src="js/common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 浮动按钮点击事件
+            const floatingBtn = document.getElementById('floatingBtn');
+            const actionModal = document.getElementById('actionModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            
+            floatingBtn.addEventListener('click', function() {
+                actionModal.classList.add('show');
+            });
+            
+            closeModalBtn.addEventListener('click', function() {
+                actionModal.classList.remove('show');
+            });
+            
+            // 点击模态框外部关闭
+            actionModal.addEventListener('click', function(e) {
+                if (e.target === actionModal) {
+                    actionModal.classList.remove('show');
+                }
+            });
+            
+            // 气泡背景效果
+            createBubbleEffect();
+        });
+    </script>
 </body>
 </html> 

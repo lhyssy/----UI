@@ -210,26 +210,92 @@
         </div>
     </div>
     
-    <!-- 底部导航 -->
-    <div class="mt-auto pt-2">
-        <div class="flex justify-around items-center bg-white py-2 border-t border-gray-200">
-            <a href="home.html" class="nav-item text-gray-500 flex flex-col items-center">
-                <i class="fas fa-home text-xl mb-1"></i>
-                <span class="text-xs">首页</span>
-            </a>
-            <a href="upload.html" class="nav-item text-gray-500 flex flex-col items-center">
-                <i class="fas fa-plus-circle text-xl mb-1"></i>
-                <span class="text-xs">创建</span>
-            </a>
-            <a href="tutorials.html" class="nav-item text-gray-500 flex flex-col items-center">
-                <i class="fas fa-book text-xl mb-1"></i>
-                <span class="text-xs">教程</span>
-            </a>
-            <a href="profile.html" class="nav-item active flex flex-col items-center">
-                <i class="fas fa-user text-xl mb-1"></i>
-                <span class="text-xs">我的</span>
-            </a>
+    <!-- 底部导航栏 -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white py-2 px-5 border-t border-gray-100">
+        <div class="flex justify-between">
+            <div class="bottom-nav-item flex flex-col items-center" data-link="home.html">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-xs mt-1">首页</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center" data-link="upload.html">
+                <i class="fas fa-plus-circle text-xl"></i>
+                <span class="text-xs mt-1">创建</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center" data-link="tutorials.html">
+                <i class="fas fa-book text-xl"></i>
+                <span class="text-xs mt-1">教程</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center active" data-link="profile.html">
+                <i class="fas fa-user text-xl"></i>
+                <span class="text-xs mt-1">我的</span>
+            </div>
         </div>
     </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 内容标签切换
+            const contentTabs = document.querySelectorAll('.content-tab');
+            const contentPanels = document.querySelectorAll('.content-panel');
+            
+            contentTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 移除所有标签的活动状态
+                    contentTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 隐藏所有内容面板
+                    contentPanels.forEach(panel => panel.classList.remove('active'));
+                    
+                    // 显示对应的内容面板
+                    const targetPanel = document.getElementById(this.getAttribute('data-target'));
+                    if (targetPanel) {
+                        targetPanel.classList.add('active');
+                    }
+                });
+            });
+            
+            // 菜单项点击事件
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const menuName = this.querySelector('.menu-text').textContent;
+                    showToast(`已选择: ${menuName}`, 'info');
+                    
+                    // 根据菜单类型执行不同操作
+                    const menuType = this.getAttribute('data-type');
+                    switch (menuType) {
+                        case 'wallet':
+                            window.location.href = 'wallet.html';
+                            break;
+                        case 'reviews':
+                            showToast('查看评价', 'info');
+                            break;
+                        case 'service':
+                            showToast('联系客服', 'info');
+                            break;
+                        case 'about':
+                            showToast('关于我们', 'info');
+                            break;
+                    }
+                });
+            });
+            
+            // 用户头像点击事件
+            document.querySelector('.user-avatar').addEventListener('click', function() {
+                showToast('编辑个人资料', 'info');
+            });
+            
+            // 会员信息点击事件
+            document.querySelector('.membership-card').addEventListener('click', function() {
+                window.location.href = 'membership.html';
+            });
+            
+            // 初始化显示第一个内容面板
+            if (contentTabs.length > 0 && contentPanels.length > 0) {
+                contentTabs[0].click();
+            }
+        });
+    </script>
 </body>
 </html> 

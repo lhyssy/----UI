@@ -6,128 +6,367 @@
     <title>助农宣传 - 首页</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/animations.css">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
             background-color: #f7f8fa;
-            height: 100vh;
+            color: #333;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .app-header {
+            background-color: #07c160;
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .search-bar {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 5px 15px;
+            flex: 1;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 14px;
+            width: 100%;
+            padding: 5px;
+        }
+        
+        .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .search-bar input:focus {
+            outline: none;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+        
+        .update-section {
+            background-color: white;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+        
+        .update-item {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .update-item:last-child {
+            border-bottom: none;
+        }
+        
+        .update-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            padding: 8px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 100;
+        }
+        
+        .bottom-nav-item {
+            flex: 1;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            padding: 6px 0;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        .safe-area {
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-        }
-        .function-card {
-            transition: transform 0.2s;
-        }
-        .function-card:active {
-            transform: scale(0.98);
-        }
-        .nav-item.active {
+        
+        .bottom-nav-item.active {
             color: #07c160;
         }
-        .nav-item.active i {
-            color: #07c160;
+        
+        .create-btn {
+            width: 50px;
+            height: 50px;
+            background-color: #07c160;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -20px;
+            box-shadow: 0 4px 15px rgba(7, 193, 96, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .create-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .feature-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 16px;
         }
     </style>
 </head>
-<body class="safe-area">
-    <!-- 顶部状态栏 -->
-    <div class="bg-white p-4 flex items-center justify-between">
-        <h1 class="text-xl font-bold">助农宣传</h1>
-        <div class="flex space-x-3">
-            <button class="text-gray-600"><i class="fas fa-search text-lg"></i></button>
-            <button class="text-gray-600"><i class="fas fa-bell text-lg"></i></button>
+<body>
+    <!-- 顶部导航 -->
+    <header class="app-header slide-down">
+        <h1 class="text-lg font-medium">助农宣传</h1>
+        <div class="search-bar">
+            <i class="fas fa-search text-white opacity-80 mr-2"></i>
+            <input type="text" placeholder="搜索教程和模板">
         </div>
-    </div>
-    
-    <!-- 轮播图 -->
-    <div class="relative bg-green-100 h-48 mx-4 my-3 rounded-xl overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80" alt="农产品展示" class="w-full h-full object-cover">
-        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
-            <h3 class="text-white font-bold">一键生成优质宣传图文</h3>
-            <p class="text-white text-sm">帮助农产品更好地推广销售</p>
+        <a href="profile.html" class="text-white">
+            <i class="fas fa-user"></i>
+        </a>
+    </header>
+
+    <div class="container mx-auto px-4 pb-24 pt-4">
+        <!-- 主要功能区 -->
+        <div class="grid grid-cols-2 gap-4 mb-6 slide-up">
+            <!-- 上传图片卡片 -->
+            <div class="feature-card stagger-item" data-link="upload.html">
+                <div class="feature-icon bg-green-50 text-green-500">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h3 class="font-medium">上传图片</h3>
+                <p class="text-xs text-gray-500 mt-1">上传农产品实拍照片</p>
+            </div>
+            
+            <!-- 宣传图文卡片 -->
+            <div class="feature-card stagger-item" data-link="preview.html">
+                <div class="feature-icon bg-blue-50 text-blue-500">
+                    <i class="fas fa-file-image"></i>
+                </div>
+                <h3 class="font-medium">宣传图文</h3>
+                <p class="text-xs text-gray-500 mt-1">生成精美图文内容</p>
+            </div>
+            
+            <!-- 一键发布卡片 -->
+            <div class="feature-card stagger-item" data-link="publish.html">
+                <div class="feature-icon bg-purple-50 text-purple-500">
+                    <i class="fas fa-share-alt"></i>
+                </div>
+                <h3 class="font-medium">一键发布</h3>
+                <p class="text-xs text-gray-500 mt-1">同步发布到多个平台</p>
+            </div>
+            
+            <!-- 电商教程卡片 -->
+            <div class="feature-card stagger-item" data-link="tutorials.html">
+                <div class="feature-icon bg-orange-50 text-orange-500">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3 class="font-medium">电商教程</h3>
+                <p class="text-xs text-gray-500 mt-1">获取电商运营指南</p>
+            </div>
         </div>
-        <div class="absolute bottom-2 right-2 flex space-x-1">
-            <div class="w-2 h-2 bg-white rounded-full opacity-100"></div>
-            <div class="w-2 h-2 bg-white rounded-full opacity-50"></div>
-            <div class="w-2 h-2 bg-white rounded-full opacity-50"></div>
-        </div>
-    </div>
-    
-    <!-- 主要功能区 -->
-    <div class="grid grid-cols-2 gap-3 px-4 mt-2">
-        <a href="upload.html" class="function-card bg-white p-4 rounded-xl flex flex-col items-center shadow-sm">
-            <div class="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mb-2">
-                <i class="fas fa-camera text-green-600 text-xl"></i>
+        
+        <!-- 最近动态区域 -->
+        <div class="mb-4 slide-up">
+            <div class="flex items-center justify-between">
+                <h2 class="text-base font-medium flex items-center">
+                    <i class="fas fa-history text-green-500 mr-2"></i>
+                    最近动态
+                </h2>
+                <a href="#" class="text-xs text-green-500">查看全部</a>
             </div>
-            <span class="text-sm font-medium">上传图片</span>
-        </a>
-        <a href="preview.html" class="function-card bg-white p-4 rounded-xl flex flex-col items-center shadow-sm">
-            <div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center mb-2">
-                <i class="fas fa-images text-blue-600 text-xl"></i>
-            </div>
-            <span class="text-sm font-medium">宣传图文</span>
-        </a>
-        <a href="publish.html" class="function-card bg-white p-4 rounded-xl flex flex-col items-center shadow-sm">
-            <div class="w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center mb-2">
-                <i class="fas fa-share-alt text-purple-600 text-xl"></i>
-            </div>
-            <span class="text-sm font-medium">一键发布</span>
-        </a>
-        <a href="tutorials.html" class="function-card bg-white p-4 rounded-xl flex flex-col items-center shadow-sm">
-            <div class="w-14 h-14 rounded-full bg-orange-100 flex items-center justify-center mb-2">
-                <i class="fas fa-book text-orange-600 text-xl"></i>
-            </div>
-            <span class="text-sm font-medium">电商教程</span>
-        </a>
-    </div>
-    
-    <!-- 最近动态 -->
-    <div class="mt-4 px-4">
-        <h3 class="font-bold mb-2">最近动态</h3>
-        <div class="bg-white rounded-xl p-3 shadow-sm">
-            <div class="flex items-start mb-3 pb-3 border-b border-gray-100">
-                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="苹果" class="w-16 h-16 rounded-lg object-cover mr-3">
-                <div class="flex-1">
-                    <h4 class="font-medium text-sm">有机红富士苹果</h4>
-                    <p class="text-xs text-gray-500 mt-1">生成宣传图文已发布至小红书</p>
-                    <p class="text-xs text-green-600 mt-1">获得 128 次浏览</p>
+            
+            <div class="update-section mt-2 overflow-hidden">
+                <div class="recent-updates">
+                    <!-- 红富士苹果动态 -->
+                    <div class="update-item stagger-item">
+                        <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80" alt="有机红富士苹果" class="update-image">
+                        <div class="ml-3 flex-1">
+                            <h3 class="font-medium">有机红富士苹果</h3>
+                            <p class="text-xs text-gray-500 mt-1">生成宣传图文发布到小红书</p>
+                            <div class="flex items-center mt-2">
+                                <span class="bg-green-50 text-green-500 text-xs px-2 py-1 rounded-full flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    128次浏览
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 新鲜草莓动态 -->
+                    <div class="update-item stagger-item">
+                        <img src="https://images.unsplash.com/photo-1550258987-190a2d41a8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80" alt="新鲜草莓" class="update-image">
+                        <div class="ml-3 flex-1">
+                            <h3 class="font-medium">新鲜草莓</h3>
+                            <p class="text-xs text-gray-500 mt-1">生成宣传图文发布到微信店铺</p>
+                            <div class="flex items-center mt-2">
+                                <span class="bg-green-50 text-green-500 text-xs px-2 py-1 rounded-full flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    96次浏览
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 有机蓝莓动态 -->
+                    <div class="update-item stagger-item">
+                        <img src="https://images.unsplash.com/photo-1598170845053-a6bb1f55da36?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150&q=80" alt="有机蓝莓" class="update-image">
+                        <div class="ml-3 flex-1">
+                            <h3 class="font-medium">有机蓝莓</h3>
+                            <p class="text-xs text-gray-500 mt-1">生成宣传图文发布到朋友圈</p>
+                            <div class="flex items-center mt-2">
+                                <span class="bg-green-50 text-green-500 text-xs px-2 py-1 rounded-full flex items-center">
+                                    <i class="fas fa-eye mr-1"></i>
+                                    74次浏览
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="flex items-start">
-                <img src="https://images.unsplash.com/photo-1601002941992-bf8724f7063e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80" alt="草莓" class="w-16 h-16 rounded-lg object-cover mr-3">
-                <div class="flex-1">
-                    <h4 class="font-medium text-sm">新鲜草莓</h4>
-                    <p class="text-xs text-gray-500 mt-1">生成宣传图文已发布至微信</p>
-                    <p class="text-xs text-green-600 mt-1">获得 96 次浏览</p>
+        </div>
+        
+        <!-- 数据统计区域 -->
+        <div class="slide-up">
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-base font-medium flex items-center">
+                    <i class="fas fa-chart-line text-green-500 mr-2"></i>
+                    数据统计
+                </h2>
+                <a href="analytics.html" class="text-xs text-green-500">详细分析</a>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-white p-3 rounded-xl shadow-sm stagger-item">
+                    <div class="text-xs text-gray-500">总浏览量</div>
+                    <div class="text-xl font-bold mt-1">12,483</div>
+                    <div class="text-xs text-green-500 flex items-center mt-1">
+                        <i class="fas fa-arrow-up mr-1"></i>
+                        较上周增长32%
+                    </div>
+                </div>
+                
+                <div class="bg-white p-3 rounded-xl shadow-sm stagger-item">
+                    <div class="text-xs text-gray-500">内容转化率</div>
+                    <div class="text-xl font-bold mt-1">12.8%</div>
+                    <div class="text-xs text-green-500 flex items-center mt-1">
+                        <i class="fas fa-arrow-up mr-1"></i>
+                        较上周增长5%
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- 底部导航 -->
-    <div class="mt-auto pt-2">
-        <div class="flex justify-around items-center bg-white py-2 border-t border-gray-200">
-            <a href="home.html" class="nav-item active flex flex-col items-center">
-                <i class="fas fa-home text-xl mb-1"></i>
-                <span class="text-xs">首页</span>
-            </a>
-            <a href="upload.html" class="nav-item text-gray-500 flex flex-col items-center">
-                <i class="fas fa-plus-circle text-xl mb-1"></i>
-                <span class="text-xs">创建</span>
-            </a>
-            <a href="tutorials.html" class="nav-item text-gray-500 flex flex-col items-center">
-                <i class="fas fa-book text-xl mb-1"></i>
-                <span class="text-xs">教程</span>
-            </a>
-            <a href="profile.html" class="nav-item text-gray-500 flex flex-col items-center">
-                <i class="fas fa-user text-xl mb-1"></i>
-                <span class="text-xs">我的</span>
-            </a>
+    <!-- 底部导航栏 -->
+    <div class="bottom-nav">
+        <div class="bottom-nav-item active" data-link="home.html">
+            <i class="fas fa-home text-xl"></i>
+            <span class="text-xs mt-1">首页</span>
+        </div>
+        <div class="bottom-nav-item" data-link="upload.html">
+            <div class="create-btn text-white pulse">
+                <i class="fas fa-plus"></i>
+            </div>
+            <span class="text-xs mt-1">创建</span>
+        </div>
+        <div class="bottom-nav-item" data-link="tutorials.html">
+            <i class="fas fa-book text-xl"></i>
+            <span class="text-xs mt-1">教程</span>
+        </div>
+        <div class="bottom-nav-item" data-link="profile.html">
+            <i class="fas fa-user text-xl"></i>
+            <span class="text-xs mt-1">我的</span>
         </div>
     </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 功能卡片点击事件
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const link = this.getAttribute('data-link');
+                    if (link) {
+                        window.location.href = link;
+                    }
+                });
+            });
+            
+            // 创建气泡背景
+            createBubbleEffect();
+            
+            // 最近动态滚动效果
+            const recentUpdates = document.querySelector('.recent-updates');
+            if (recentUpdates) {
+                const updateItems = recentUpdates.querySelectorAll('.update-item');
+                if (updateItems.length > 1) {
+                    let currentPos = 0;
+                    let scrollDistance = 0;
+                    
+                    setInterval(() => {
+                        if (scrollDistance >= updateItems[0].offsetHeight) {
+                            scrollDistance = 0;
+                            recentUpdates.appendChild(updateItems[0]);
+                            recentUpdates.style.transform = 'translateY(0)';
+                        } else {
+                            scrollDistance += 1;
+                            recentUpdates.style.transform = `translateY(-${scrollDistance}px)`;
+                        }
+                    }, 50);
+                }
+            }
+            
+            // 搜索框点击事件
+            const searchBar = document.querySelector('.search-bar');
+            if (searchBar) {
+                searchBar.addEventListener('click', function() {
+                    showToast('搜索功能已启用', 'info');
+                });
+            }
+        });
+    </script>
 </body>
 </html> 

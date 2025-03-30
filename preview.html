@@ -193,5 +193,105 @@
             </a>
         </div>
     </div>
+
+    <!-- 底部导航栏 -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white py-2 px-5 border-t border-gray-100">
+        <div class="flex justify-between">
+            <div class="bottom-nav-item flex flex-col items-center" data-link="home.html">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-xs mt-1">首页</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center" data-link="upload.html">
+                <i class="fas fa-plus-circle text-xl"></i>
+                <span class="text-xs mt-1">创建</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center" data-link="tutorials.html">
+                <i class="fas fa-book text-xl"></i>
+                <span class="text-xs mt-1">教程</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center" data-link="profile.html">
+                <i class="fas fa-user text-xl"></i>
+                <span class="text-xs mt-1">我的</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 模板切换
+            const templateOptions = document.querySelectorAll('.template-option');
+            const previewContent = document.querySelector('.preview-content');
+            
+            templateOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    templateOptions.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 切换模板时的动画效果
+                    previewContent.classList.add('template-change');
+                    setTimeout(() => {
+                        // 这里可以根据选择的模板更改预览内容
+                        previewContent.classList.remove('template-change');
+                    }, 300);
+                    
+                    // 显示选中模板的提示
+                    showToast(`已切换到${this.querySelector('.template-name').textContent}`, 'success');
+                });
+            });
+            
+            // 保存/发布按钮点击事件
+            document.querySelector('.publish-button').addEventListener('click', function() {
+                showToast('准备发布...', 'loading');
+                
+                // 模拟处理
+                setTimeout(() => {
+                    // 跳转到发布页面
+                    window.location.href = 'publish.html';
+                }, 1500);
+            });
+            
+            // 编辑内容按钮
+            document.querySelectorAll('.edit-content-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const contentType = this.getAttribute('data-type');
+                    let editMessage = '';
+                    
+                    switch(contentType) {
+                        case 'title':
+                            editMessage = '编辑标题';
+                            break;
+                        case 'desc':
+                            editMessage = '编辑描述';
+                            break;
+                        case 'content':
+                            editMessage = '编辑正文内容';
+                            break;
+                    }
+                    
+                    showToast(editMessage, 'info');
+                });
+            });
+            
+            // 图片操作按钮
+            document.querySelectorAll('.image-action').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const action = this.getAttribute('data-action');
+                    
+                    switch(action) {
+                        case 'zoom':
+                            showToast('放大查看图片', 'info');
+                            break;
+                        case 'replace':
+                            showToast('替换图片', 'info');
+                            break;
+                        case 'remove':
+                            showToast('移除图片', 'warning');
+                            break;
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html> 

@@ -6,258 +6,181 @@
     <title>助农宣传 - 启动页</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/animations.css">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-            background-color: #f8f9fc;
-            min-height: 100vh;
+            background: linear-gradient(135deg, #07c160 0%, #0d9b77 100%);
+            color: white;
             overflow: hidden;
+            height: 100vh;
+            width: 100vw;
         }
-        .safe-area {
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-        }
-        .splash-bg {
-            background: linear-gradient(135deg, #07c160 0%, #0d9b77 50%, #05724e 100%);
+        .logo-container {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: -1;
-        }
-        .wave {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg"><path fill="white" fill-opacity="1" d="M0,192L60,192C120,192,240,192,360,176C480,160,600,128,720,128C840,128,960,160,1080,176C1200,192,1320,192,1380,192L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>');
-            background-size: cover;
-            background-repeat: no-repeat;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 2;
         }
         .logo {
-            max-width: 120px;
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-            100% {
-                transform: translateY(0px);
-            }
-        }
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.3);
-            animation: float-particle 15s infinite linear;
-        }
-        @keyframes float-particle {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-1000px) rotate(720deg);
-                opacity: 0;
-            }
-        }
-        .btn-start {
-            background: linear-gradient(90deg, #ffffff 0%, #f5f7fa 100%);
-            color: #07c160;
-            padding: 14px 32px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 30px;
-            font-weight: 600;
-            font-size: 18px;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        .btn-start:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
-        }
-        .progress-bar {
-            height: 4px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-        }
-        .progress-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            background-color: white;
-            animation: loading 2s ease-in-out forwards;
-            border-radius: 4px;
-            transform-origin: left;
-        }
-        @keyframes loading {
-            0% {
-                transform: scaleX(0);
-            }
-            100% {
-                transform: scaleX(1);
-            }
-        }
-        .feature-icon {
-            width: 50px;
-            height: 50px;
-            background-color: rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 15px;
-            margin-bottom: 12px;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s infinite;
         }
-        .fade-in {
-            animation: fadeIn 0.8s ease-in-out forwards;
+        .logo i {
+            font-size: 64px;
+            color: white;
+        }
+        .app-name {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+        .slogan {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        .loading-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        .loading-progress {
+            height: 100%;
+            width: 0%;
+            background: white;
+            border-radius: 2px;
+            transition: width 3s ease;
+        }
+        
+        /* 气泡动画 */
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float-up linear infinite;
+        }
+        
+        /* 波纹特效 */
+        .ripple {
+            position: absolute;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: ripple 6s linear infinite;
             opacity: 0;
         }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .delay-1 {
-            animation-delay: 0.3s;
-        }
-        .delay-2 {
-            animation-delay: 0.6s;
-        }
-        .delay-3 {
-            animation-delay: 0.9s;
-        }
-        .delay-4 {
-            animation-delay: 1.2s;
-        }
-        .loader-ring {
-            display: inline-block;
-            width: 80px;
-            height: 80px;
-        }
-        .loader-ring:after {
-            content: " ";
-            display: block;
-            width: 64px;
-            height: 64px;
-            margin: 8px;
-            border-radius: 50%;
-            border: 6px solid #fff;
-            border-color: #fff transparent #fff transparent;
-            animation: loader-ring 1.2s linear infinite;
-        }
-        @keyframes loader-ring {
+        
+        @keyframes ripple {
             0% {
-                transform: rotate(0deg);
+                width: 0px;
+                height: 0px;
+                opacity: 0.5;
             }
             100% {
-                transform: rotate(360deg);
+                width: 500px;
+                height: 500px;
+                opacity: 0;
+            }
+        }
+        
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0.1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-20vh) scale(1);
+                opacity: 0;
             }
         }
     </style>
 </head>
-<body class="safe-area flex flex-col justify-between items-center">
-    <div class="splash-bg"></div>
+<body>
+    <!-- 主要内容 -->
+    <div class="logo-container">
+        <div class="logo">
+            <i class="fas fa-seedling"></i>
+        </div>
+        <h1 class="app-name">助农宣传</h1>
+        <p class="slogan">让农产品营销更简单、更高效</p>
+        <div class="loading-bar">
+            <div class="loading-progress" id="loadingProgress"></div>
+        </div>
+    </div>
     
-    <!-- 粒子效果 -->
+    <!-- 波纹特效 -->
+    <div class="ripple" style="bottom: 20%; left: 50%"></div>
+    <div class="ripple" style="bottom: 20%; left: 50%; animation-delay: 2s"></div>
+    <div class="ripple" style="bottom: 20%; left: 50%; animation-delay: 4s"></div>
+    
+    <!-- 版本信息 -->
+    <div class="absolute bottom-8 w-full text-center text-white text-opacity-70 text-sm">
+        版本 1.0.0
+    </div>
+    
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 添加粒子效果
-            const body = document.querySelector('body');
-            const particleCount = 15;
+        // 生成随机气泡
+        function createBubbles() {
+            const bubbleCount = 20;
             
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
                 
-                // 随机大小、位置和延迟
-                const size = Math.random() * 30 + 5;
-                const left = Math.random() * 100;
-                const delay = Math.random() * 5;
-                const duration = Math.random() * 10 + 5;
+                // 随机尺寸 (10-50px)
+                const size = Math.floor(Math.random() * 40) + 10;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
                 
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${left}%`;
-                particle.style.bottom = `-${size}px`;
-                particle.style.animationDuration = `${duration}s`;
-                particle.style.animationDelay = `${delay}s`;
+                // 随机位置
+                bubble.style.left = `${Math.floor(Math.random() * 100)}%`;
                 
-                body.appendChild(particle);
+                // 随机透明度
+                bubble.style.opacity = (Math.random() * 0.3 + 0.1).toString();
+                
+                // 随机动画持续时间 (3-8s)
+                const duration = Math.random() * 5 + 3;
+                bubble.style.animationDuration = `${duration}s`;
+                
+                // 随机延迟 (0-5s)
+                bubble.style.animationDelay = `${Math.random() * 5}s`;
+                
+                document.body.appendChild(bubble);
             }
+        }
+        
+        // 启动页倒计时
+        function startTimer() {
+            const progressBar = document.getElementById('loadingProgress');
+            progressBar.style.width = '100%';
             
-            // 2秒后自动跳转到主页
+            // 3秒后跳转到首页
             setTimeout(() => {
-                window.location.href = 'index.html';
+                window.location.href = 'home.html';
             }, 3000);
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            createBubbles();
+            startTimer();
         });
     </script>
-    
-    <div class="wave"></div>
-    
-    <!-- 主内容 -->
-    <div class="flex-1 flex flex-col items-center justify-center text-white px-6 text-center z-10 fade-in">
-        <img src="https://images.unsplash.com/photo-1595351475754-e7bd89966d23?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="助农宣传标志" class="logo mb-6 rounded-xl">
-        
-        <h1 class="text-3xl font-bold mb-3">助农宣传平台</h1>
-        <p class="text-lg opacity-80 mb-10 max-w-md">连接城乡，赋能农产品，让每一位农户都能轻松推广自己的产品</p>
-        
-        <div class="loader-ring mb-6"></div>
-        
-        <div class="w-full max-w-xs mb-10">
-            <div class="progress-bar"></div>
-            <p class="text-sm opacity-70 mt-2">正在加载应用资源...</p>
-        </div>
-    </div>
-    
-    <!-- 底部特性介绍 -->
-    <div class="w-full px-6 mb-8 z-10">
-        <div class="grid grid-cols-3 gap-3">
-            <div class="text-white text-center fade-in delay-1">
-                <div class="feature-icon mx-auto">
-                    <i class="fas fa-image text-xl"></i>
-                </div>
-                <p class="text-xs">精美模板</p>
-            </div>
-            <div class="text-white text-center fade-in delay-2">
-                <div class="feature-icon mx-auto">
-                    <i class="fas fa-chart-line text-xl"></i>
-                </div>
-                <p class="text-xs">数据分析</p>
-            </div>
-            <div class="text-white text-center fade-in delay-3">
-                <div class="feature-icon mx-auto">
-                    <i class="fas fa-users text-xl"></i>
-                </div>
-                <p class="text-xs">社区互动</p>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 版权信息 -->
-    <div class="text-white text-xs opacity-60 mb-4 z-10 fade-in delay-4">
-        © 2023 助农宣传平台 · 版权所有
-    </div>
 </body>
 </html> 

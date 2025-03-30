@@ -181,26 +181,93 @@
         </div>
     </div>
     
-    <!-- 底部导航 -->
-    <div class="mt-auto pt-2">
-        <div class="flex justify-around items-center bg-white py-2 border-t border-gray-200">
-            <a href="home.html" class="nav-item text-gray-500 flex flex-col items-center">
-                <i class="fas fa-home text-xl mb-1"></i>
-                <span class="text-xs">首页</span>
-            </a>
-            <a href="upload.html" class="nav-item text-gray-500 flex flex-col items-center">
-                <i class="fas fa-plus-circle text-xl mb-1"></i>
-                <span class="text-xs">创建</span>
-            </a>
-            <a href="tutorials.html" class="nav-item active flex flex-col items-center">
-                <i class="fas fa-book text-xl mb-1"></i>
-                <span class="text-xs">教程</span>
-            </a>
-            <a href="profile.html" class="nav-item text-gray-500 flex flex-col items-center">
-                <i class="fas fa-user text-xl mb-1"></i>
-                <span class="text-xs">我的</span>
-            </a>
+    <!-- 底部导航栏 -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white py-2 px-5 border-t border-gray-100">
+        <div class="flex justify-between">
+            <div class="bottom-nav-item flex flex-col items-center" data-link="home.html">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-xs mt-1">首页</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center" data-link="upload.html">
+                <i class="fas fa-plus-circle text-xl"></i>
+                <span class="text-xs mt-1">创建</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center active" data-link="tutorials.html">
+                <i class="fas fa-book text-xl"></i>
+                <span class="text-xs mt-1">教程</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center" data-link="profile.html">
+                <i class="fas fa-user text-xl"></i>
+                <span class="text-xs mt-1">我的</span>
+            </div>
         </div>
     </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 教程点击事件
+            document.querySelectorAll('.tutorial-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const tutorialTitle = this.querySelector('h3').textContent;
+                    showToast(`正在加载: ${tutorialTitle}`, 'loading');
+                    
+                    // 模拟加载教程内容
+                    setTimeout(() => {
+                        // 这里可以实现跳转到具体教程内容页面
+                        showToast(`教程《${tutorialTitle}》已加载`, 'success');
+                    }, 1500);
+                });
+            });
+            
+            // 过滤分类点击事件
+            document.querySelectorAll('.category-filter').forEach(filter => {
+                filter.addEventListener('click', function() {
+                    document.querySelectorAll('.category-filter').forEach(f => {
+                        f.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    const category = this.textContent.trim();
+                    showToast(`已筛选: ${category}`, 'info');
+                });
+            });
+            
+            // 搜索框事件
+            const searchInput = document.querySelector('.search-input');
+            if (searchInput) {
+                searchInput.addEventListener('keyup', function(e) {
+                    if (e.key === 'Enter') {
+                        const searchTerm = this.value.trim();
+                        if (searchTerm) {
+                            showToast(`正在搜索: ${searchTerm}`, 'info');
+                        }
+                    }
+                });
+            }
+            
+            // 收藏按钮点击事件
+            document.querySelectorAll('.favorite-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 防止触发教程项目的点击事件
+                    
+                    const isFavorite = this.classList.contains('text-yellow-500');
+                    const tutorialTitle = this.closest('.tutorial-item').querySelector('h3').textContent;
+                    
+                    if (isFavorite) {
+                        // 取消收藏
+                        this.classList.remove('text-yellow-500');
+                        this.classList.add('text-gray-300');
+                        showToast(`已取消收藏: ${tutorialTitle}`, 'info');
+                    } else {
+                        // 添加收藏
+                        this.classList.remove('text-gray-300');
+                        this.classList.add('text-yellow-500');
+                        showToast(`已收藏: ${tutorialTitle}`, 'success');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html> 

@@ -3,158 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>助农宣传 - 上传照片</title>
+    <title>助农宣传 - 上传产品照片</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/animations.css">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-            background-color: #f7f8fa;
-            height: 100vh;
+            background-color: #f8f9fa;
+            color: #333;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        .header {
+            background: white;
+        }
+        .back-button {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.05);
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
-        .safe-area {
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        .upload-area {
+            border: 2px dashed rgba(7, 193, 96, 0.4);
+            border-radius: 16px;
+            background-color: rgba(7, 193, 96, 0.02);
+            min-height: 200px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        .nav-item.active {
+        .upload-area:hover {
+            border-color: rgba(7, 193, 96, 0.8);
+            background-color: rgba(7, 193, 96, 0.05);
+        }
+        .upload-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(7, 193, 96, 0.1);
             color: #07c160;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin: 0 auto;
         }
-        .nav-item.active i {
+        .info-card {
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .primary-button {
+            background: linear-gradient(135deg, #07c160 0%, #0d9b77 100%);
+            color: white;
+            border-radius: 24px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(7, 193, 96, 0.2);
+        }
+        .primary-button:hover {
+            box-shadow: 0 6px 15px rgba(7, 193, 96, 0.3);
+            transform: translateY(-2px);
+        }
+        .bottom-nav {
+            background: white;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+        .bottom-nav-item {
+            font-size: 12px;
+        }
+        .bottom-nav-item i {
+            font-size: 22px;
+            margin-bottom: 2px;
+            transition: all 0.3s ease;
+        }
+        .bottom-nav-item.active {
             color: #07c160;
-        }
-        .upload-box {
-            border: 2px dashed #d1d5db;
-            transition: all 0.3s;
-        }
-        .upload-box:hover {
-            border-color: #10b981;
-        }
-        .tag {
-            transition: all 0.2s;
-        }
-        .tag:active {
-            transform: scale(0.95);
         }
     </style>
 </head>
-<body class="safe-area">
+<body>
     <!-- 顶部导航 -->
-    <div class="bg-white p-4 flex items-center">
-        <a href="home.html" class="text-gray-600 mr-4">
-            <i class="fas fa-arrow-left text-lg"></i>
-        </a>
-        <h1 class="text-lg font-bold flex-1 text-center">上传产品照片</h1>
-        <div class="w-5"></div> <!-- 占位，保持标题居中 -->
-    </div>
-    
-    <!-- 上传区域 -->
-    <div class="px-4 py-6">
-        <div class="upload-box bg-white rounded-xl h-64 flex flex-col items-center justify-center mb-4">
-            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
-            <p class="text-gray-600 mb-3">点击或拖拽图片到此处上传</p>
-            <button class="bg-green-500 text-white px-4 py-2 rounded-lg font-medium">
-                <i class="fas fa-plus mr-1"></i> 选择图片
+    <header class="header py-4 px-5 flex items-center justify-between">
+        <button class="back-button slide-right" id="backButton">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <h1 class="text-xl font-semibold slide-down">上传产品照片</h1>
+        <div class="w-8"></div> <!-- 占位 -->
+    </header>
+
+    <div class="container mx-auto px-4 pb-16 mt-4">
+        <!-- 上传区域 -->
+        <div class="upload-area flex flex-col items-center justify-center p-6 fade-in stagger-item">
+            <div class="upload-icon pulse mb-4">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <h3 class="font-medium text-lg mb-2">点击或拖拽上传图片</h3>
+            <p class="text-gray-500 text-sm text-center mb-4">上传高清的农产品照片，效果更佳</p>
+            <button class="bg-green-50 text-green-600 px-4 py-2 rounded-full text-sm btn-special">
+                <i class="fas fa-image mr-1"></i> 选择图片
             </button>
         </div>
-        
-        <!-- 上传提示 -->
-        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
-            <div class="flex items-start">
-                <i class="fas fa-info-circle text-blue-500 mt-0.5 mr-2"></i>
+
+        <!-- 上传指南 -->
+        <div class="info-card bg-white p-4 mt-6 slide-up stagger-item">
+            <h3 class="font-medium flex items-center mb-3">
+                <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                上传指南
+            </h3>
+            <ul class="text-gray-600 text-sm space-y-2">
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <span>上传清晰的农产品照片，建议分辨率不低于1000x1000</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <span>多角度拍摄可以获得更好的宣传效果</span>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                    <span>尽量使用自然光线，突出产品的真实色彩和质感</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 产品信息 -->
+        <div class="info-card bg-white p-4 mt-5 slide-up stagger-item">
+            <h3 class="font-medium flex items-center mb-3">
+                <i class="fas fa-apple-alt text-red-500 mr-2"></i>
+                产品信息
+            </h3>
+            <div class="space-y-4">
                 <div>
-                    <p class="text-sm text-blue-800">上传指南</p>
-                    <ul class="text-xs text-blue-600 mt-1 list-disc list-inside">
-                        <li>上传清晰的农产品照片，确保光线充足</li>
-                        <li>多角度拍摄可以获得更好的宣传效果</li>
-                        <li>图片分辨率建议大于 1000x1000</li>
-                    </ul>
+                    <label class="block text-sm text-gray-600 mb-1">产品名称</label>
+                    <input type="text" placeholder="请输入农产品名称" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-1">产地</label>
+                    <input type="text" placeholder="请输入产地" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
                 </div>
             </div>
         </div>
-        
-        <!-- 产品信息填写 -->
-        <div class="bg-white rounded-xl p-4">
-            <h3 class="font-bold mb-3">产品信息</h3>
-            
-            <div class="mb-3">
-                <label class="block text-sm font-medium text-gray-700 mb-1">产品名称</label>
-                <input type="text" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="例如：有机红富士苹果">
-            </div>
-            
-            <div class="mb-3">
-                <label class="block text-sm font-medium text-gray-700 mb-1">产品描述</label>
-                <textarea class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent h-20" placeholder="描述产品的特点、用途等"></textarea>
-            </div>
-            
-            <div class="mb-3">
-                <label class="block text-sm font-medium text-gray-700 mb-1">产品分类</label>
-                <div class="flex flex-wrap gap-2 mt-1">
-                    <span class="tag bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs">水果</span>
-                    <span class="tag bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs">蔬菜</span>
-                    <span class="tag bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs">肉禽</span>
-                    <span class="tag bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs">水产</span>
-                    <span class="tag bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs">干货</span>
-                    <span class="tag bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs">调味品</span>
-                    <span class="tag bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs">其他</span>
-                </div>
-            </div>
-            
-            <div class="mb-3">
-                <label class="block text-sm font-medium text-gray-700 mb-1">产品特色</label>
-                <div class="flex flex-wrap gap-2 mt-1">
-                    <span class="tag bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs">有机</span>
-                    <span class="tag bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs">无添加</span>
-                    <span class="tag bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs">绿色</span>
-                    <span class="tag bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs">原生态</span>
-                    <span class="tag bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs">地理标志</span>
-                </div>
-            </div>
-            
-            <div class="mb-3">
-                <label class="block text-sm font-medium text-gray-700 mb-1">价格信息</label>
-                <div class="flex items-center">
-                    <span class="mr-1">¥</span>
-                    <input type="text" class="w-24 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="单价">
-                    <span class="mx-2">单位</span>
-                    <select class="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent">
-                        <option>斤</option>
-                        <option>公斤</option>
-                        <option>箱</option>
-                        <option>包</option>
-                        <option>个</option>
-                    </select>
-                </div>
-            </div>
-            
-            <button class="w-full bg-green-500 text-white py-3 rounded-lg font-medium mt-4">
-                <i class="fas fa-magic mr-1"></i> 生成宣传图文
+
+        <!-- 下一步按钮 -->
+        <div class="mt-8 text-center">
+            <button class="primary-button w-full max-w-xs mx-auto slide-up" id="nextButton">
+                <span class="flex items-center justify-center">
+                    下一步
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </span>
             </button>
         </div>
     </div>
-    
-    <!-- 底部导航 -->
-    <div class="mt-auto pt-2">
-        <div class="flex justify-around items-center bg-white py-2 border-t border-gray-200">
-            <a href="home.html" class="nav-item text-gray-500 flex flex-col items-center">
-                <i class="fas fa-home text-xl mb-1"></i>
-                <span class="text-xs">首页</span>
-            </a>
-            <a href="upload.html" class="nav-item active flex flex-col items-center">
-                <i class="fas fa-plus-circle text-xl mb-1"></i>
-                <span class="text-xs">创建</span>
-            </a>
-            <a href="tutorials.html" class="nav-item text-gray-500 flex flex-col items-center">
-                <i class="fas fa-book text-xl mb-1"></i>
-                <span class="text-xs">教程</span>
-            </a>
-            <a href="profile.html" class="nav-item text-gray-500 flex flex-col items-center">
-                <i class="fas fa-user text-xl mb-1"></i>
-                <span class="text-xs">我的</span>
-            </a>
+
+    <!-- 底部导航栏 -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white py-2 px-5 border-t border-gray-100">
+        <div class="flex justify-between">
+            <div class="bottom-nav-item flex flex-col items-center" data-link="home.html">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-xs mt-1">首页</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center active" data-link="upload.html">
+                <i class="fas fa-plus-circle text-xl"></i>
+                <span class="text-xs mt-1">创建</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center" data-link="tutorials.html">
+                <i class="fas fa-book text-xl"></i>
+                <span class="text-xs mt-1">教程</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center" data-link="profile.html">
+                <i class="fas fa-user text-xl"></i>
+                <span class="text-xs mt-1">我的</span>
+            </div>
         </div>
     </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 上传按钮点击事件
+            document.querySelector('.upload-button').addEventListener('click', function() {
+                const uploadArea = document.querySelector('.upload-area');
+                
+                // 显示加载状态
+                uploadArea.innerHTML = `
+                    <div class="loading-spinner"></div>
+                    <p class="text-gray-500 mt-3">正在处理您的图片...</p>
+                `;
+                
+                // 模拟上传过程
+                setTimeout(() => {
+                    uploadArea.innerHTML = `
+                        <div class="upload-success">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <p class="text-green-500 font-medium">上传成功！</p>
+                        <p class="text-gray-500 mt-1">正在跳转到预览页面...</p>
+                    `;
+                    
+                    // 跳转到预览页面
+                    setTimeout(() => {
+                        window.location.href = 'preview.html';
+                    }, 1500);
+                }, 2000);
+            });
+            
+            // 拖放上传功能
+            const dropArea = document.querySelector('.drop-area');
+            
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropArea.classList.add('bg-green-50', 'border-green-300');
+            }
+            
+            function unhighlight() {
+                dropArea.classList.remove('bg-green-50', 'border-green-300');
+            }
+            
+            dropArea.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files.length > 0) {
+                    // 显示上传成功效果
+                    const uploadArea = document.querySelector('.upload-area');
+                    uploadArea.innerHTML = `
+                        <div class="loading-spinner"></div>
+                        <p class="text-gray-500 mt-3">正在处理您的图片...</p>
+                    `;
+                    
+                    setTimeout(() => {
+                        uploadArea.innerHTML = `
+                            <div class="upload-success">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <p class="text-green-500 font-medium">上传成功！</p>
+                            <p class="text-gray-500 mt-1">正在跳转到预览页面...</p>
+                        `;
+                        
+                        // 跳转到预览页面
+                        setTimeout(() => {
+                            window.location.href = 'preview.html';
+                        }, 1500);
+                    }, 2000);
+                }
+            }
+            
+            // 点击产品类型标签
+            const productTags = document.querySelectorAll('.product-tag');
+            productTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    productTags.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 显示选中的产品类型提示
+                    showToast(`已选择: ${this.textContent.trim()}`, 'success');
+                });
+            });
+        });
+    </script>
 </body>
 </html> 
