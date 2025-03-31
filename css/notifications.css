@@ -1,0 +1,312 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    background-color: #f8f9fc;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.safe-area {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.nav-item.active {
+    color: #07c160;
+}
+
+.nav-item.active i {
+    color: #07c160;
+}
+
+.message-tab {
+    position: relative;
+    padding: 12px 0;
+    font-weight: 500;
+    color: #6b7280;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.message-tab.active {
+    color: #07c160;
+    border-bottom-color: #07c160;
+}
+
+.message-tab-badge {
+    position: absolute;
+    top: 8px;
+    right: 20px;
+    background-color: #ef4444;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-item {
+    background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    border: 1px solid rgba(0,0,0,0.03);
+    position: relative;
+    border-left: 3px solid transparent;
+}
+
+.notification-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.notification-item::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 4px 0 0 4px;
+}
+
+.notification-item.unread::after {
+    background-color: #07c160;
+}
+
+.notification-item.system::after {
+    background-color: #3b82f6;
+}
+
+.notification-item.promotion::after {
+    background-color: #f59e0b;
+}
+
+.notification-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: white;
+    margin-right: 16px;
+}
+
+.icon-system {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.icon-activity {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.icon-comment {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.icon-order {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+}
+
+.notification-time {
+    font-size: 12px;
+    color: #9ca3af;
+    margin-top: 4px;
+}
+
+.btn-clear {
+    background: linear-gradient(90deg, #07c160 0%, #0d9b77 100%);
+    color: white;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-weight: 500;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(7, 193, 96, 0.2);
+    transition: all 0.3s ease;
+}
+
+.btn-clear:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(7, 193, 96, 0.3);
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 0;
+    color: #9ca3af;
+}
+
+.empty-icon {
+    width: 80px;
+    height: 80px;
+    background-color: #f3f4f6;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: #d1d5db;
+    margin-bottom: 16px;
+}
+
+.search-bar {
+    background-color: #f3f4f6;
+    border-radius: 20px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.search-bar:focus-within {
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.search-input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    width: 100%;
+    padding: 4px 0;
+    margin-left: 8px;
+}
+
+.notification-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.notification-item.expanded .notification-detail {
+    max-height: 200px;
+    margin-top: 12px;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 40px;
+    right: 8px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    overflow: hidden;
+    width: 160px;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: all 0.2s ease-out;
+    z-index: 10;
+}
+
+.dropdown-menu.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.dropdown-item {
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.dropdown-item:hover {
+    background-color: #f9fafb;
+}
+
+.dropdown-item i {
+    width: 20px;
+    margin-right: 8px;
+    color: #6b7280;
+}
+
+.notification-item.unread {
+    border-left-color: #10b981;
+    background-color: rgba(16, 185, 129, 0.05);
+}
+
+.notification-item:active {
+    background-color: #f3f4f6;
+}
+
+.notification-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #10b981;
+}
+
+.tab-item {
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.tab-item.active {
+    color: #10b981;
+    font-weight: 500;
+}
+
+.tab-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #10b981;
+}
+
+.badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    background-color: #ef4444;
+    color: white;
+}
+
+.empty-state {
+    padding: 40px 0;
+    text-align: center;
+    display: none;
+}
+
+.swipe-action {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    transform: translateX(70px);
+    transition: transform 0.3s ease;
+}
+
+.swipe-delete {
+    background-color: #ef4444;
+}
+
+.swipe-mark {
+    background-color: #10b981;
+    right: 70px;
+    width: 70px;
+} 

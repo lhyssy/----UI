@@ -6,41 +6,8 @@
     <title>助农宣传 - 宣传图文预览</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-            background-color: #f7f8fa;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .safe-area {
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-        }
-        .nav-item.active {
-            color: #07c160;
-        }
-        .nav-item.active i {
-            color: #07c160;
-        }
-        .template-option {
-            transition: all 0.2s;
-        }
-        .template-option.selected {
-            border-color: #10b981;
-            background-color: #f0fdfa;
-        }
-        .template-option:active {
-            transform: scale(0.98);
-        }
-        .template-preview {
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
-        }
-    </style>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/preview.css">
 </head>
 <body class="safe-area">
     <!-- 顶部导航 -->
@@ -71,11 +38,19 @@
                 </div>
                 
                 <!-- 图片区域 -->
-                <div class="grid grid-cols-2 gap-0.5">
-                    <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="苹果特写" class="w-full h-40 object-cover">
-                    <img src="https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="果园环境" class="w-full h-40 object-cover">
-                    <img src="https://images.unsplash.com/photo-1600423115367-87ea7661688f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80" alt="苹果特写" class="w-full h-40 object-cover">
-                    <img src="https://images.unsplash.com/photo-1579613832125-5d34a13ffe2a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="苹果切片" class="w-full h-40 object-cover">
+                <div class="image-carousel">
+                    <div class="grid grid-cols-1">
+                        <img id="carouselImage" src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="农产品图片" class="w-full h-64 object-cover">
+                    </div>
+                    <div class="image-carousel-indicators" id="carouselIndicators">
+                        <!-- 指示器将动态添加 -->
+                    </div>
+                    <button class="image-carousel-btn image-carousel-prev" id="prevImageBtn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="image-carousel-btn image-carousel-next" id="nextImageBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
                 
                 <!-- 文章内容 -->
@@ -131,6 +106,32 @@
         <!-- AI优化功能 -->
         <div class="px-4 py-3">
             <h3 class="font-bold text-gray-700 mb-2">AI内容优化</h3>
+            
+            <!-- AI文案生成按钮 -->
+            <div class="bg-white rounded-xl p-4 shadow-sm mb-4">
+                <div class="mb-3">
+                    <h4 class="font-medium mb-1">生成产品文案</h4>
+                    <p class="text-xs text-gray-500">使用 SiliconFlow deepseek-V3 模型智能生成优质文案</p>
+                </div>
+                
+                <button id="generateCopyBtn" class="ai-generate-btn w-full py-3 px-4 rounded-lg font-medium flex items-center justify-center">
+                    <i class="fas fa-robot mr-2"></i>
+                    <span>AI生成优质文案</span>
+                </button>
+                
+                <!-- 生成状态 -->
+                <div id="aiGeneratingContainer" class="hidden mt-4 text-center">
+                    <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-cog fa-spin text-indigo-600"></i>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-1">AI正在生成文案</p>
+                    <p class="text-xs text-gray-500 loading-text">分析图片内容中<span>.</span><span>.</span><span>.</span></p>
+                    <div class="h-1 bg-gray-100 rounded-full mt-3 overflow-hidden">
+                        <div id="aiProgressBar" class="h-full bg-indigo-500" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="bg-white rounded-xl p-3 shadow-sm mb-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
@@ -147,6 +148,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="bg-white rounded-xl p-3 shadow-sm mb-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
@@ -163,6 +165,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="bg-white rounded-xl p-3 shadow-sm">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
@@ -179,6 +182,30 @@
                     </div>
                 </div>
             </div>
+        </div>
+        
+        <!-- 在内容区域添加AI分析标签 -->
+        <div class="mt-4 mb-2">
+            <div class="flex flex-wrap gap-2">
+                <span class="ai-analysis-tag">
+                    <i class="fas fa-chart-line"></i>
+                    热度预测: 较高
+                </span>
+                <span class="ai-analysis-tag">
+                    <i class="fas fa-users"></i>
+                    目标人群: 健康生活爱好者
+                </span>
+                <span class="ai-analysis-tag">
+                    <i class="fas fa-bullseye"></i>
+                    最佳发布时间: 12:00-14:00
+                </span>
+            </div>
+        </div>
+        
+        <!-- 添加AI优化建议 -->
+        <div class="ai-suggestion">
+            <i class="fas fa-lightbulb text-green-600 mr-2"></i>
+            AI建议：根据图片分析，建议突出产品的有机种植特点和新鲜度，可以吸引更多注重健康的消费者。
         </div>
     </div>
     
@@ -217,235 +244,7 @@
     </div>
 
     <script src="js/common.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 模拟内容生成效果
-            simulateContentGeneration();
-            
-            // 模板切换
-            const templateOptions = document.querySelectorAll('.template-option');
-            const previewContent = document.querySelector('.preview-content');
-            
-            templateOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    templateOptions.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // 切换模板时的动画效果
-                    previewContent.classList.add('template-change');
-                    
-                    // 更新模板样式
-                    const templateStyle = this.getAttribute('data-style');
-                    setTimeout(() => {
-                        updateTemplateStyle(templateStyle);
-                        previewContent.classList.remove('template-change');
-                    }, 300);
-                    
-                    // 显示选中模板的提示
-                    showToast(`已切换到${this.querySelector('.template-name').textContent}`, 'success');
-                });
-            });
-            
-            // 根据模板类型更新样式
-            function updateTemplateStyle(style) {
-                const contentWrapper = document.querySelector('.preview-content');
-                const titleElement = document.querySelector('.preview-title');
-                const descElement = document.querySelector('.preview-desc');
-                const imageElement = document.querySelector('.preview-image');
-                
-                // 移除所有样式类
-                contentWrapper.className = 'preview-content p-4';
-                
-                // 应用新样式
-                switch(style) {
-                    case 'elegant':
-                        contentWrapper.classList.add('bg-white', 'rounded-xl', 'shadow-sm');
-                        titleElement.className = 'preview-title text-xl font-serif font-bold text-gray-800 mb-2';
-                        descElement.className = 'preview-desc text-sm text-gray-600 leading-relaxed';
-                        imageElement.className = 'preview-image w-full h-48 object-cover rounded-lg mb-4';
-                        break;
-                    case 'modern':
-                        contentWrapper.classList.add('bg-gradient-to-br', 'from-gray-50', 'to-gray-100', 'rounded-xl', 'shadow-sm');
-                        titleElement.className = 'preview-title text-lg font-bold text-gray-800 mb-2';
-                        descElement.className = 'preview-desc text-sm text-gray-600 leading-relaxed';
-                        imageElement.className = 'preview-image w-full h-48 object-cover rounded-xl mb-4 shadow-sm';
-                        break;
-                    case 'vibrant':
-                        contentWrapper.classList.add('bg-gradient-to-r', 'from-green-50', 'to-blue-50', 'rounded-xl', 'shadow-sm');
-                        titleElement.className = 'preview-title text-xl font-bold text-green-600 mb-2';
-                        descElement.className = 'preview-desc text-sm text-gray-700 leading-relaxed';
-                        imageElement.className = 'preview-image w-full h-48 object-cover rounded-lg mb-4 shadow-sm';
-                        break;
-                    case 'minimal':
-                    default:
-                        contentWrapper.classList.add('bg-white', 'rounded-xl', 'shadow-sm');
-                        titleElement.className = 'preview-title text-lg font-medium text-gray-800 mb-2';
-                        descElement.className = 'preview-desc text-sm text-gray-600 leading-relaxed';
-                        imageElement.className = 'preview-image w-full h-48 object-cover rounded-lg mb-4';
-                        break;
-                }
-            }
-            
-            // 模拟内容生成
-            function simulateContentGeneration() {
-                const contentArea = document.querySelector('.content-area');
-                
-                // 显示加载状态
-                contentArea.innerHTML = `
-                    <div class="text-center py-16">
-                        <div class="loading-spinner mx-auto"></div>
-                        <p class="mt-4 text-gray-600">正在生成宣传内容...</p>
-                        <p class="text-sm text-gray-500 mt-2">AI正在分析图片、提取关键信息</p>
-                    </div>
-                `;
-                
-                // 模拟加载延迟
-                setTimeout(() => {
-                    // 显示生成好的内容
-                    contentArea.innerHTML = `
-                        <div class="px-4 py-3">
-                            <div class="flex justify-between items-center mb-4">
-                                <h2 class="text-lg font-medium">预览宣传内容</h2>
-                                <div class="text-sm text-green-600">
-                                    <i class="fas fa-magic mr-1"></i>
-                                    AI生成
-                                </div>
-                            </div>
-                            
-                            <div class="preview-content p-4 bg-white rounded-xl shadow-sm">
-                                <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80" alt="有机红富士苹果" class="preview-image w-full h-48 object-cover rounded-lg mb-4">
-                                
-                                <div class="flex justify-between items-center mb-2">
-                                    <button class="text-gray-400 text-sm image-action" data-action="zoom">
-                                        <i class="fas fa-search-plus"></i>
-                                    </button>
-                                    <div class="flex space-x-2">
-                                        <button class="text-gray-400 text-sm image-action" data-action="replace">
-                                            <i class="fas fa-sync-alt"></i>
-                                        </button>
-                                        <button class="text-gray-400 text-sm image-action" data-action="remove">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <h3 class="preview-title text-lg font-medium text-gray-800 mb-2">
-                                    <span contenteditable="true" class="focus:outline-none focus:bg-green-50 rounded px-1 -mx-1 edit-content-btn" data-type="title">有机红富士苹果 - 新鲜采摘直达您家</span>
-                                </h3>
-                                
-                                <p class="preview-desc text-sm text-gray-600 leading-relaxed">
-                                    <span contenteditable="true" class="focus:outline-none focus:bg-green-50 rounded px-1 -mx-1 edit-content-btn" data-type="desc">来自山东烟台的优质红富士苹果，果肉脆甜多汁，富含维生素和矿物质。我们坚持无农药种植，确保每一口都健康安心。现在下单，48小时内新鲜直达您家！</span>
-                                </p>
-                                
-                                <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
-                                    <div class="flex items-center text-gray-500">
-                                        <i class="far fa-heart mr-1"></i>
-                                        <span class="text-sm">238</span>
-                                        <i class="far fa-comment ml-3 mr-1"></i>
-                                        <span class="text-sm">42</span>
-                                    </div>
-                                    <div class="text-sm text-red-600" data-link="product_detail.html">
-                                        <i class="fas fa-tag mr-1"></i>
-                                        <span>¥15.8/斤</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="mt-4">
-                                <h3 class="text-sm font-medium mb-2">选择模板风格</h3>
-                                <div class="grid grid-cols-4 gap-2">
-                                    <div class="template-option active p-2 border border-green-500 rounded-lg bg-green-50" data-style="minimal">
-                                        <div class="h-12 bg-white rounded-md flex items-center justify-center">
-                                            <span class="template-name text-xs text-gray-600">简约</span>
-                                        </div>
-                                    </div>
-                                    <div class="template-option p-2 border border-gray-200 rounded-lg" data-style="elegant">
-                                        <div class="h-12 bg-white rounded-md flex items-center justify-center">
-                                            <span class="template-name text-xs text-gray-600">典雅</span>
-                                        </div>
-                                    </div>
-                                    <div class="template-option p-2 border border-gray-200 rounded-lg" data-style="modern">
-                                        <div class="h-12 bg-gradient-to-br from-gray-50 to-gray-100 rounded-md flex items-center justify-center">
-                                            <span class="template-name text-xs text-gray-600">现代</span>
-                                        </div>
-                                    </div>
-                                    <div class="template-option p-2 border border-gray-200 rounded-lg" data-style="vibrant">
-                                        <div class="h-12 bg-gradient-to-r from-green-50 to-blue-50 rounded-md flex items-center justify-center">
-                                            <span class="template-name text-xs text-gray-600">活力</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="mt-6">
-                                <button class="publish-button w-full py-3 bg-green-500 text-white rounded-lg font-medium">
-                                    <i class="fas fa-paper-plane mr-1"></i>
-                                    发布宣传图文
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    
-                    // 初始化事件监听
-                    initContentEvents();
-                }, 2000);
-            }
-            
-            // 初始化内容编辑和交互事件
-            function initContentEvents() {
-                // 保存/发布按钮点击事件
-                document.querySelector('.publish-button').addEventListener('click', function() {
-                    showToast('准备发布...', 'loading');
-                    
-                    // 模拟处理
-                    setTimeout(() => {
-                        // 跳转到发布页面
-                        window.location.href = 'publish.html';
-                    }, 1500);
-                });
-                
-                // 编辑内容按钮
-                document.querySelectorAll('.edit-content-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const contentType = this.getAttribute('data-type');
-                        let editMessage = '';
-                        
-                        switch(contentType) {
-                            case 'title':
-                                editMessage = '编辑标题';
-                                break;
-                            case 'desc':
-                                editMessage = '编辑描述';
-                                break;
-                            case 'content':
-                                editMessage = '编辑正文内容';
-                                break;
-                        }
-                        
-                        showToast(editMessage, 'info');
-                    });
-                });
-                
-                // 图片操作按钮
-                document.querySelectorAll('.image-action').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const action = this.getAttribute('data-action');
-                        
-                        switch(action) {
-                            case 'zoom':
-                                showToast('放大查看图片', 'info');
-                                break;
-                            case 'replace':
-                                showToast('替换图片', 'info');
-                                break;
-                            case 'remove':
-                                showToast('移除图片', 'warning');
-                                break;
-                        }
-                    });
-                });
-            }
-        });
-    </script>
+    <script src="js/utils.js"></script>
+    <script src="js/preview.js"></script>
 </body>
 </html> 

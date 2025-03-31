@@ -6,539 +6,206 @@
     <title>助农宣传 - 消息通知</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-            background-color: #f8f9fc;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .safe-area {
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-        }
-        .nav-item.active {
-            color: #07c160;
-        }
-        .nav-item.active i {
-            color: #07c160;
-        }
-        .message-tab {
-            position: relative;
-            padding: 12px 0;
-            font-weight: 500;
-            color: #6b7280;
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s;
-        }
-        .message-tab.active {
-            color: #07c160;
-            border-bottom-color: #07c160;
-        }
-        .message-tab-badge {
-            position: absolute;
-            top: 8px;
-            right: 20px;
-            background-color: #ef4444;
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .notification-item {
-            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 12px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-            border: 1px solid rgba(0,0,0,0.03);
-            position: relative;
-        }
-        .notification-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        .notification-item::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            border-radius: 4px 0 0 4px;
-        }
-        .notification-item.unread::after {
-            background-color: #07c160;
-        }
-        .notification-item.system::after {
-            background-color: #3b82f6;
-        }
-        .notification-item.promotion::after {
-            background-color: #f59e0b;
-        }
-        .notification-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: white;
-            margin-right: 16px;
-        }
-        .icon-system {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-        }
-        .icon-activity {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-        }
-        .icon-comment {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        }
-        .icon-order {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-        }
-        .notification-time {
-            font-size: 12px;
-            color: #9ca3af;
-            margin-top: 4px;
-        }
-        .btn-clear {
-            background: linear-gradient(90deg, #07c160 0%, #0d9b77 100%);
-            color: white;
-            border-radius: 30px;
-            padding: 10px 20px;
-            font-weight: 500;
-            font-size: 14px;
-            box-shadow: 0 4px 12px rgba(7, 193, 96, 0.2);
-            transition: all 0.3s ease;
-        }
-        .btn-clear:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(7, 193, 96, 0.3);
-        }
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 48px 0;
-            color: #9ca3af;
-        }
-        .empty-icon {
-            width: 80px;
-            height: 80px;
-            background-color: #f3f4f6;
-            border-radius: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            color: #d1d5db;
-            margin-bottom: 16px;
-        }
-        .search-bar {
-            background-color: #f3f4f6;
-            border-radius: 20px;
-            padding: 8px 16px;
-            display: flex;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-        .search-bar:focus-within {
-            background-color: white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-        .search-input {
-            background-color: transparent;
-            border: none;
-            outline: none;
-            font-size: 14px;
-            width: 100%;
-            padding: 4px 0;
-            margin-left: 8px;
-        }
-        .notification-detail {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-        }
-        .notification-item.expanded .notification-detail {
-            max-height: 200px;
-            margin-top: 12px;
-        }
-        .dropdown-menu {
-            position: absolute;
-            top: 40px;
-            right: 8px;
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            overflow: hidden;
-            width: 160px;
-            opacity: 0;
-            transform: translateY(-10px);
-            pointer-events: none;
-            transition: all 0.2s ease-out;
-            z-index: 10;
-        }
-        .dropdown-menu.open {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-        .dropdown-item {
-            padding: 12px 16px;
-            font-size: 14px;
-            color: #4b5563;
-            display: flex;
-            align-items: center;
-            transition: all 0.2s;
-        }
-        .dropdown-item:hover {
-            background-color: #f9fafb;
-        }
-        .dropdown-item i {
-            width: 20px;
-            margin-right: 8px;
-            color: #6b7280;
-        }
-    </style>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/notifications.css">
 </head>
 <body class="safe-area">
     <!-- 顶部导航 -->
-    <div class="bg-white p-4 flex items-center justify-between shadow-sm">
-        <div class="flex items-center">
-            <a href="profile.html" class="text-gray-600 mr-3">
-                <i class="fas fa-arrow-left text-lg"></i>
-            </a>
-            <h1 class="text-xl font-bold">消息通知</h1>
-        </div>
-        <div class="flex space-x-3 relative">
-            <button id="menuBtn" class="text-gray-600">
-                <i class="fas fa-ellipsis-v text-lg"></i>
-            </button>
-            <div id="dropdownMenu" class="dropdown-menu">
-                <div class="dropdown-item">
-                    <i class="fas fa-check-double"></i>
-                    <span>全部已读</span>
-                </div>
-                <div class="dropdown-item">
-                    <i class="fas fa-trash-alt"></i>
-                    <span>清空消息</span>
-                </div>
-                <div class="dropdown-item">
-                    <i class="fas fa-cog"></i>
-                    <span>通知设置</span>
-                </div>
-            </div>
-        </div>
+    <div class="bg-white p-4 flex items-center sticky top-0 z-10 shadow-sm">
+        <a href="profile.html" class="text-gray-600 mr-4">
+            <i class="fas fa-arrow-left text-lg"></i>
+        </a>
+        <h1 class="text-lg font-bold flex-1 text-center">消息通知</h1>
+        <button id="clearAllBtn" class="text-gray-500 text-sm">
+            清空
+        </button>
     </div>
     
-    <!-- 搜索栏 -->
-    <div class="mx-4 my-3">
-        <div class="search-bar">
-            <i class="fas fa-search text-gray-400"></i>
-            <input type="text" placeholder="搜索消息" class="search-input">
-        </div>
-    </div>
-    
-    <!-- 消息分类 -->
-    <div class="bg-white shadow-sm mb-4">
-        <div class="flex border-b">
-            <div class="message-tab active flex-1 text-center">
-                全部消息
-                <span class="message-tab-badge">12</span>
+    <!-- 分类标签 -->
+    <div class="bg-white sticky top-16 z-10 shadow-sm">
+        <div class="flex justify-around px-4 py-3 border-b border-gray-100">
+            <div class="tab-item active" data-tab="all">
+                全部 <span class="badge ml-1">3</span>
             </div>
-            <div class="message-tab flex-1 text-center">
+            <div class="tab-item" data-tab="system">
                 系统通知
-                <span class="message-tab-badge">5</span>
             </div>
-            <div class="message-tab flex-1 text-center">
-                互动消息
-                <span class="message-tab-badge">7</span>
+            <div class="tab-item" data-tab="activity">
+                活动提醒
+            </div>
+            <div class="tab-item" data-tab="marketing">
+                营销通知
             </div>
         </div>
     </div>
     
     <!-- 消息列表 -->
-    <div class="flex-1 overflow-y-auto px-4">
-        <!-- 今日消息 -->
-        <div class="mb-4">
-            <div class="flex justify-between items-center mb-3">
-                <h3 class="text-sm font-medium text-gray-500">今日</h3>
+    <div class="notification-list pb-20">
+        <!-- 今天 -->
+        <div class="px-4 py-2 bg-gray-50">
+            <h3 class="text-xs text-gray-500">今天</h3>
+        </div>
+        
+        <!-- 未读消息 -->
+        <div class="notification-item unread relative overflow-hidden" data-type="system">
+            <div class="p-4 flex">
+                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3 flex-shrink-0">
+                    <i class="fas fa-bell text-blue-500"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-medium">系统通知</h3>
+                        <div class="flex items-center">
+                            <div class="notification-dot mr-2"></div>
+                            <span class="text-xs text-gray-500">10:30</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">您的"有机红富士苹果"宣传内容已顺利发布到微信公众号和小红书平台。</p>
+                </div>
             </div>
-            
-            <div class="space-y-3">
-                <div class="notification-item unread" onclick="toggleExpand(this)">
-                    <div class="flex">
-                        <div class="notification-icon icon-system">
-                            <i class="fas fa-bell"></i>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex justify-between">
-                                <div class="font-medium">系统通知</div>
-                                <div class="text-xs bg-red-50 text-red-600 px-2 py-0.5 rounded">未读</div>
-                            </div>
-                            <div class="text-sm text-gray-600 mt-1">您的会员服务即将到期，请及时续费以享受更多特权。</div>
-                            <div class="notification-time">10:30</div>
-                            
-                            <div class="notification-detail border-t border-gray-100 pt-3">
-                                <p class="text-sm text-gray-600 leading-relaxed">
-                                    尊敬的用户，您的标准会员服务将于2023年12月31日到期。为了不影响您的使用体验，请及时续费。续费后可继续享受高级模板、AI文案等多项特权。
-                                </p>
-                                <div class="mt-3">
-                                    <button class="bg-green-500 text-white px-4 py-1.5 rounded-full text-sm">立即续费</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="notification-item unread" onclick="toggleExpand(this)">
-                    <div class="flex">
-                        <div class="notification-icon icon-comment">
-                            <i class="fas fa-comment-dots"></i>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex justify-between">
-                                <div class="font-medium">评论回复</div>
-                                <div class="text-xs bg-red-50 text-red-600 px-2 py-0.5 rounded">未读</div>
-                            </div>
-                            <div class="text-sm text-gray-600 mt-1">云南草莓农户回复了您的评论："谢谢分享，非常有用的经验！"</div>
-                            <div class="notification-time">09:15</div>
-                            
-                            <div class="notification-detail border-t border-gray-100 pt-3">
-                                <div class="bg-gray-50 p-3 rounded-lg">
-                                    <p class="text-sm text-gray-600">您的评论：这个草莓品种口感怎么样？适合我们北方种植吗？</p>
-                                </div>
-                                <div class="mt-3">
-                                    <p class="text-sm text-gray-600">云南草莓农户的回复：这个品种酸甜适中，在北方大棚种植是可以的，但需要注意温度控制，可以私信我了解更多种植技巧。</p>
-                                </div>
-                                <div class="mt-3">
-                                    <button class="bg-green-500 text-white px-4 py-1.5 rounded-full text-sm">去回复</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="notification-item" onclick="toggleExpand(this)">
-                    <div class="flex">
-                        <div class="notification-icon icon-activity">
-                            <i class="fas fa-award"></i>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex justify-between">
-                                <div class="font-medium">活动通知</div>
-                            </div>
-                            <div class="text-sm text-gray-600 mt-1">恭喜您获得"优质农产品推广达人"称号！</div>
-                            <div class="notification-time">08:45</div>
-                            
-                            <div class="notification-detail border-t border-gray-100 pt-3">
-                                <p class="text-sm text-gray-600 leading-relaxed">
-                                    根据您过去30天的优质推广内容，平台特授予您"优质农产品推广达人"称号并奖励50积分。该称号将在您的个人主页展示30天，同时享受内容曝光量提升20%的特权。
-                                </p>
-                                <div class="mt-3">
-                                    <button class="bg-green-500 text-white px-4 py-1.5 rounded-full text-sm">查看详情</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="swipe-action swipe-mark">
+                <i class="fas fa-check mr-1"></i> 已读
+            </div>
+            <div class="swipe-action swipe-delete">
+                <i class="fas fa-trash-alt"></i>
             </div>
         </div>
         
-        <!-- 昨日消息 -->
-        <div class="mb-4">
-            <div class="flex justify-between items-center mb-3">
-                <h3 class="text-sm font-medium text-gray-500">昨日</h3>
+        <div class="notification-item unread relative overflow-hidden" data-type="activity">
+            <div class="p-4 flex">
+                <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3 flex-shrink-0">
+                    <i class="fas fa-calendar-alt text-purple-500"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-medium">活动提醒</h3>
+                        <div class="flex items-center">
+                            <div class="notification-dot mr-2"></div>
+                            <span class="text-xs text-gray-500">08:45</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">本周末将举办"秋季农产品线上推广技巧"培训活动，点击查看详情。</p>
+                </div>
             </div>
-            
-            <div class="space-y-3">
-                <div class="notification-item" onclick="toggleExpand(this)">
-                    <div class="flex">
-                        <div class="notification-icon icon-order">
-                            <i class="fas fa-shopping-bag"></i>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex justify-between">
-                                <div class="font-medium">订单通知</div>
-                            </div>
-                            <div class="text-sm text-gray-600 mt-1">您的宣传模板购买已完成，可以立即使用。</div>
-                            <div class="notification-time">昨天 16:30</div>
-                            
-                            <div class="notification-detail border-t border-gray-100 pt-3">
-                                <p class="text-sm text-gray-600 leading-relaxed">
-                                    您购买的"高级水果宣传模板套装"已到账，包含10套高级模板，可在创建宣传页面时使用。感谢您的购买！
-                                </p>
-                                <div class="mt-3">
-                                    <button class="bg-green-500 text-white px-4 py-1.5 rounded-full text-sm">立即使用</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="notification-item system" onclick="toggleExpand(this)">
-                    <div class="flex">
-                        <div class="notification-icon icon-system">
-                            <i class="fas fa-bell"></i>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex justify-between">
-                                <div class="font-medium">系统更新</div>
-                            </div>
-                            <div class="text-sm text-gray-600 mt-1">助农宣传平台V2.0版本已更新，新增多项实用功能。</div>
-                            <div class="notification-time">昨天 10:20</div>
-                            
-                            <div class="notification-detail border-t border-gray-100 pt-3">
-                                <p class="text-sm text-gray-600 leading-relaxed">
-                                    新版本亮点：<br>
-                                    1. 新增社区互动功能，农友间可直接交流<br>
-                                    2. 升级AI文案系统，更符合营销需求<br>
-                                    3. 优化数据分析功能，提供更全面的推广效果报告<br>
-                                    4. 新增10套精美模板
-                                </p>
-                                <div class="mt-3">
-                                    <button class="bg-green-500 text-white px-4 py-1.5 rounded-full text-sm">了解详情</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="swipe-action swipe-mark">
+                <i class="fas fa-check mr-1"></i> 已读
+            </div>
+            <div class="swipe-action swipe-delete">
+                <i class="fas fa-trash-alt"></i>
             </div>
         </div>
         
-        <!-- 更早消息 -->
-        <div class="mb-4">
-            <div class="flex justify-between items-center mb-3">
-                <h3 class="text-sm font-medium text-gray-500">更早</h3>
+        <!-- 昨天 -->
+        <div class="px-4 py-2 bg-gray-50">
+            <h3 class="text-xs text-gray-500">昨天</h3>
+        </div>
+        
+        <div class="notification-item relative overflow-hidden" data-type="marketing">
+            <div class="p-4 flex">
+                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3 flex-shrink-0">
+                    <i class="fas fa-chart-line text-green-500"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-medium">营销通知</h3>
+                        <span class="text-xs text-gray-500">昨天 16:20</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">您的"新鲜草莓"宣传内容获得了102次点赞，比同类内容高30%。</p>
+                </div>
             </div>
-            
-            <div class="space-y-3">
-                <div class="notification-item promotion" onclick="toggleExpand(this)">
-                    <div class="flex">
-                        <div class="notification-icon icon-activity">
-                            <i class="fas fa-gift"></i>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex justify-between">
-                                <div class="font-medium">促销活动</div>
-                            </div>
-                            <div class="text-sm text-gray-600 mt-1">限时优惠：会员年费7折，仅限3天！</div>
-                            <div class="notification-time">10-12</div>
-                            
-                            <div class="notification-detail border-t border-gray-100 pt-3">
-                                <p class="text-sm text-gray-600 leading-relaxed">
-                                    国庆特惠：<br>
-                                    会员年费限时7折，原价￥198，现价仅需￥138.6<br>
-                                    活动时间：10月1日-10月3日<br>
-                                    另送价值￥100的高级模板礼包一份
-                                </p>
-                                <div class="mt-3">
-                                    <button class="bg-green-500 text-white px-4 py-1.5 rounded-full text-sm">立即抢购</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="notification-item system" onclick="toggleExpand(this)">
-                    <div class="flex">
-                        <div class="notification-icon icon-system">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex justify-between">
-                                <div class="font-medium">账号安全</div>
-                            </div>
-                            <div class="text-sm text-gray-600 mt-1">您的账号在新设备上登录，请确认是否为本人操作。</div>
-                            <div class="notification-time">10-10</div>
-                            
-                            <div class="notification-detail border-t border-gray-100 pt-3">
-                                <p class="text-sm text-gray-600 leading-relaxed">
-                                    您的账号于10月10日08:15在一台新的iPhone设备上登录。登录地点：北京市。<br>
-                                    如非本人操作，请立即修改密码并联系客服。
-                                </p>
-                                <div class="mt-3 flex space-x-3">
-                                    <button class="bg-green-500 text-white px-4 py-1.5 rounded-full text-sm">是我登录的</button>
-                                    <button class="bg-red-500 text-white px-4 py-1.5 rounded-full text-sm">修改密码</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="swipe-action swipe-mark" style="background-color: #6b7280;">
+                <i class="fas fa-redo mr-1"></i> 未读
+            </div>
+            <div class="swipe-action swipe-delete">
+                <i class="fas fa-trash-alt"></i>
             </div>
         </div>
         
-        <!-- 清空按钮 -->
-        <div class="text-center my-6">
-            <button class="btn-clear">
-                <i class="fas fa-trash-alt mr-2"></i> 清空消息
-            </button>
+        <div class="notification-item relative overflow-hidden" data-type="system">
+            <div class="p-4 flex">
+                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3 flex-shrink-0">
+                    <i class="fas fa-bell text-blue-500"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-medium">系统通知</h3>
+                        <span class="text-xs text-gray-500">昨天 13:05</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">系统已更新，新增了"图像优化"功能，可以一键美化农产品照片。</p>
+                </div>
+            </div>
+            <div class="swipe-action swipe-mark" style="background-color: #6b7280;">
+                <i class="fas fa-redo mr-1"></i> 未读
+            </div>
+            <div class="swipe-action swipe-delete">
+                <i class="fas fa-trash-alt"></i>
+            </div>
+        </div>
+        
+        <!-- 更早 -->
+        <div class="px-4 py-2 bg-gray-50">
+            <h3 class="text-xs text-gray-500">更早</h3>
+        </div>
+        
+        <div class="notification-item unread relative overflow-hidden" data-type="marketing">
+            <div class="p-4 flex">
+                <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center mr-3 flex-shrink-0">
+                    <i class="fas fa-gift text-yellow-500"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-medium">营销活动</h3>
+                        <div class="flex items-center">
+                            <div class="notification-dot mr-2"></div>
+                            <span class="text-xs text-gray-500">10-25</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">双十一营销活动攻略已发布，点击查看如何提高农产品曝光度。</p>
+                </div>
+            </div>
+            <div class="swipe-action swipe-mark">
+                <i class="fas fa-check mr-1"></i> 已读
+            </div>
+            <div class="swipe-action swipe-delete">
+                <i class="fas fa-trash-alt"></i>
+            </div>
         </div>
     </div>
     
-    <!-- 底部导航 -->
-    <div class="pt-2">
-        <div class="flex justify-around items-center bg-white py-2 border-t border-gray-200">
-            <a href="home.html" class="nav-item text-gray-500 flex flex-col items-center">
-                <i class="fas fa-home text-xl mb-1"></i>
-                <span class="text-xs">首页</span>
-            </a>
-            <a href="upload.html" class="nav-item text-gray-500 flex flex-col items-center">
-                <i class="fas fa-plus-circle text-xl mb-1"></i>
-                <span class="text-xs">创建</span>
-            </a>
-            <a href="tutorials.html" class="nav-item text-gray-500 flex flex-col items-center">
-                <i class="fas fa-book text-xl mb-1"></i>
-                <span class="text-xs">教程</span>
-            </a>
-            <a href="profile.html" class="nav-item active flex flex-col items-center">
-                <i class="fas fa-user text-xl mb-1"></i>
-                <span class="text-xs">我的</span>
-            </a>
+    <!-- 空状态 -->
+    <div id="emptyState" class="empty-state">
+        <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
+            <i class="fas fa-bell-slash text-3xl text-gray-400"></i>
+        </div>
+        <h3 class="font-medium text-gray-600 mb-2">暂无通知</h3>
+        <p class="text-sm text-gray-500">当您收到新的消息时，会显示在这里</p>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white py-2 px-5 border-t border-gray-100">
+        <div class="flex justify-between">
+            <div class="bottom-nav-item flex flex-col items-center" data-link="home.html">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-xs mt-1">首页</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center" data-link="upload.html">
+                <i class="fas fa-plus-circle text-xl"></i>
+                <span class="text-xs mt-1">创建</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center" data-link="tutorials.html">
+                <i class="fas fa-book text-xl"></i>
+                <span class="text-xs mt-1">教程</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center active" data-link="profile.html">
+                <i class="fas fa-user text-xl"></i>
+                <span class="text-xs mt-1">我的</span>
+            </div>
         </div>
     </div>
-    
-    <script>
-        // 消息展开/收起
-        function toggleExpand(element) {
-            if (element.classList.contains('expanded')) {
-                element.classList.remove('expanded');
-            } else {
-                const expandedItems = document.querySelectorAll('.notification-item.expanded');
-                expandedItems.forEach(item => {
-                    item.classList.remove('expanded');
-                });
-                element.classList.add('expanded');
-            }
-        }
-        
-        // 下拉菜单
-        document.getElementById('menuBtn').addEventListener('click', function(e) {
-            e.stopPropagation();
-            document.getElementById('dropdownMenu').classList.toggle('open');
-        });
-        
-        document.addEventListener('click', function() {
-            document.getElementById('dropdownMenu').classList.remove('open');
-        });
-        
-        // 阻止下拉菜单点击事件冒泡
-        document.getElementById('dropdownMenu').addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-    </script>
+
+    <script src="js/utils.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/notificationsHandler.js"></script>
 </body>
 </html> 

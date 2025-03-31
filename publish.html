@@ -75,6 +75,39 @@
             width: 0;
             transition: width 0.5s ease;
         }
+
+        .platform-card {
+            position: relative;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .platform-card.selected {
+            border-color: #10b981;
+            background-color: #f0fdf4;
+        }
+
+        .platform-card .check-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #10b981;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .platform-card.selected .check-icon {
+            opacity: 1;
+        }
+
+        /* 移除原有的选中样式 */
+        .platform-card .selected-icon {
+            display: none;
+        }
     </style>
 </head>
 <body class="safe-area">
@@ -133,7 +166,7 @@
             
             <div class="space-y-3">
                 <!-- 微信公众号 -->
-                <div class="platform-option p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="wechat">
+                <div class="platform-card p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="wechat">
                     <div class="flex items-center">
                         <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center mr-3">
                             <i class="fab fa-weixin text-green-600 text-2xl"></i>
@@ -143,13 +176,13 @@
                             <p class="text-xs text-gray-500 mt-0.5">被动接受、高信任度平台</p>
                         </div>
                     </div>
-                    <div class="platform-check">
+                    <div class="check-icon">
                         <i class="fas fa-check"></i>
                     </div>
                 </div>
                 
                 <!-- 小红书 -->
-                <div class="platform-option p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="xiaohongshu">
+                <div class="platform-card p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="xiaohongshu">
                     <div class="flex items-center">
                         <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center mr-3">
                             <i class="fas fa-book text-red-500 text-2xl"></i>
@@ -159,13 +192,13 @@
                             <p class="text-xs text-gray-500 mt-0.5">高参与度、种草效果好</p>
                         </div>
                     </div>
-                    <div class="platform-check">
+                    <div class="check-icon">
                         <i class="fas fa-check"></i>
                     </div>
                 </div>
                 
                 <!-- 知乎 -->
-                <div class="platform-option p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="zhihu">
+                <div class="platform-card p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="zhihu">
                     <div class="flex items-center">
                         <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mr-3">
                             <i class="fas fa-box text-blue-500 text-2xl"></i>
@@ -175,13 +208,13 @@
                             <p class="text-xs text-gray-500 mt-0.5">专业深度分析受众</p>
                         </div>
                     </div>
-                    <div class="platform-check">
+                    <div class="check-icon">
                         <i class="fas fa-check"></i>
                     </div>
                 </div>
                 
                 <!-- 微博 -->
-                <div class="platform-option p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="weibo">
+                <div class="platform-card p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="weibo">
                     <div class="flex items-center">
                         <div class="w-12 h-12 rounded-xl bg-pink-50 flex items-center justify-center mr-3">
                             <i class="fab fa-weibo text-pink-500 text-2xl"></i>
@@ -191,7 +224,7 @@
                             <p class="text-xs text-gray-500 mt-0.5">大众传播、话题互动</p>
                         </div>
                     </div>
-                    <div class="platform-check">
+                    <div class="check-icon">
                         <i class="fas fa-check"></i>
                     </div>
                 </div>
@@ -362,7 +395,7 @@
     <script src="js/main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const platformOptions = document.querySelectorAll('.platform-option');
+            const platformCards = document.querySelectorAll('.platform-card');
             const publishButton = document.getElementById('publishButton');
             const selectedCountElement = document.getElementById('selectedCount');
             const timedPublishToggle = document.getElementById('timedPublish');
@@ -377,28 +410,27 @@
             let selectedPlatforms = [];
             
             // 平台选择事件
-            platformOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    const platformName = this.getAttribute('data-platform');
+            platformCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // 移除所有卡片的选中状态
+                    platformCards.forEach(c => {
+                        c.classList.remove('selected');
+                        // 确保移除所有可能的选中标记
+                        const checkIcons = c.querySelectorAll('.check-icon, .selected-icon');
+                        checkIcons.forEach(icon => icon.style.opacity = '0');
+                    });
                     
-                    if (this.classList.contains('selected')) {
-                        // 取消选择
-                        this.classList.remove('selected');
-                        const index = selectedPlatforms.indexOf(platformName);
-                        if (index > -1) {
-                            selectedPlatforms.splice(index, 1);
-                        }
-                        // 确保移除选中状态时不显示对勾
-                        this.querySelector('.platform-check').style.color = 'transparent';
-                        showToast(`已取消选择: ${this.querySelector('h4').textContent}`, 'info');
-                    } else {
-                        // 选择平台
-                        this.classList.add('selected');
-                        // 确保选中状态时显示对勾
-                        this.querySelector('.platform-check').style.color = 'white';
-                        selectedPlatforms.push(platformName);
-                        showToast(`已选择: ${this.querySelector('h4').textContent}`, 'success');
+                    // 添加当前卡片的选中状态
+                    this.classList.add('selected');
+                    // 只显示一个对钩图标
+                    const checkIcon = this.querySelector('.check-icon');
+                    if (checkIcon) {
+                        checkIcon.style.opacity = '1';
                     }
+                    
+                    const platformName = this.getAttribute('data-platform');
+                    selectedPlatforms.push(platformName);
+                    showToast(`已选择: ${this.querySelector('h4').textContent}`, 'success');
                     
                     // 更新选择计数
                     selectedCountElement.textContent = selectedPlatforms.length;

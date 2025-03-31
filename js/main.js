@@ -1,200 +1,161 @@
 /**
- * 助农宣传 - 主JavaScript文件
- * 包含通用UI功能和交互逻辑
+ * 应用主入口
+ * 负责应用全局状态初始化与页面导航控制
  */
 
-// 页面加载完成后执行
-document.addEventListener('DOMContentLoaded', function() {
-    // 初始化导航栏
-    initNavigation();
+// 应用全局状态对象
+const appState = {
+    // 用户认证状态
+    auth: {
+        isLoggedIn: false,
+        userInfo: null
+    },
     
-    // 初始化通用UI组件
-    initUIComponents();
+    // 当前页面状态
+    currentPage: null,
     
-    // 注册事件监听
-    registerEventListeners();
+    // 全局配置
+    config: {
+        apiBaseUrl: 'https://api.example.com/v1', // 实际项目中需替换为真实API地址
+        maxUploadSize: 5 * 1024 * 1024, // 5MB
+        supportFileTypes: ['image/jpeg', 'image/png', 'image/gif'],
+        defaultPageSize: 10
+    }
+};
+
+// 页面初始化
+document.addEventListener('DOMContentLoaded', () => {
+    // 识别当前页面
+    const currentPath = window.location.pathname;
+    const pageName = currentPath.split('/').pop() || 'index.html';
+    appState.currentPage = pageName.replace('.html', '');
+    
+    // 初始化底部导航
+    initBottomNav();
+    
+    // 检查用户认证状态
+    checkAuthStatus();
+    
+    console.log(`应用初始化完成: 当前页面 ${appState.currentPage}`);
 });
 
 /**
- * 初始化导航栏
+ * 初始化底部导航
  */
-function initNavigation() {
-    // 底部导航栏项目点击事件
-    const navItems = document.querySelectorAll('.bottom-nav-item');
-    navItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const link = this.getAttribute('data-link');
-            if (link) {
-                window.location.href = link;
-            }
-        });
-    });
+function initBottomNav() {
+    const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
     
-    // 返回按钮
-    const backButton = document.getElementById('backButton');
-    if (backButton) {
-        backButton.addEventListener('click', function() {
-            window.history.back();
-        });
-    }
-}
-
-/**
- * 初始化UI组件
- */
-function initUIComponents() {
-    // 添加波纹效果
-    const buttons = document.querySelectorAll('button');
-    buttons.forEach(button => {
-        button.addEventListener('click', createRippleEffect);
-    });
-    
-    // 初始化下拉菜单
-    const dropdowns = document.querySelectorAll('.dropdown-toggle');
-    dropdowns.forEach(dropdown => {
-        dropdown.addEventListener('click', function() {
-            const content = this.nextElementSibling;
-            content.classList.toggle('hidden');
-        });
-    });
-}
-
-/**
- * 创建波纹效果
- * @param {Event} e - 点击事件
- */
-function createRippleEffect(e) {
-    const button = e.currentTarget;
-    
-    // 创建波纹元素
-    const ripple = document.createElement('span');
-    button.appendChild(ripple);
-    
-    // 计算尺寸
-    const diameter = Math.max(button.clientWidth, button.clientHeight);
-    ripple.style.width = ripple.style.height = `${diameter}px`;
-    
-    // 计算位置
-    const rect = button.getBoundingClientRect();
-    ripple.style.left = `${e.clientX - rect.left - diameter / 2}px`;
-    ripple.style.top = `${e.clientY - rect.top - diameter / 2}px`;
-    
-    // 添加波纹类
-    ripple.classList.add('ripple');
-    
-    // 移除波纹
-    setTimeout(() => {
-        ripple.remove();
-    }, 600);
-}
-
-/**
- * 显示提示消息
- * @param {string} message - 提示内容
- * @param {string} type - 提示类型 (success, error, info, warning, loading)
- * @param {number} duration - 持续时间(毫秒)
- */
-function showToast(message, type = 'info', duration = 2000) {
-    // 移除现有的Toast
-    const existingToast = document.querySelector('.toast');
-    if (existingToast) {
-        existingToast.remove();
-    }
-    
-    // 创建新的Toast元素
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    
-    // 设置不同类型的图标和样式
-    let icon = '';
-    let bgClass = '';
-    
-    switch(type) {
-        case 'success':
-            icon = '<i class="fas fa-check-circle mr-2"></i>';
-            bgClass = 'bg-green-500';
-            break;
-        case 'error':
-            icon = '<i class="fas fa-times-circle mr-2"></i>';
-            bgClass = 'bg-red-500';
-            break;
-        case 'warning':
-            icon = '<i class="fas fa-exclamation-circle mr-2"></i>';
-            bgClass = 'bg-yellow-500';
-            break;
-        case 'loading':
-            icon = '<div class="spinner-small mr-2"></div>';
-            bgClass = 'bg-blue-500';
-            break;
-        case 'info':
-        default:
-            icon = '<i class="fas fa-info-circle mr-2"></i>';
-            bgClass = 'bg-blue-500';
-    }
-    
-    // 设置Toast内容
-    toast.innerHTML = `
-        <div class="${bgClass} text-white px-4 py-3 rounded-lg shadow-lg flex items-center">
-            ${icon}
-            <span>${message}</span>
-        </div>
-    `;
-    
-    // 添加CSS样式
-    toast.style.position = 'fixed';
-    toast.style.top = '20px';
-    toast.style.left = '50%';
-    toast.style.transform = 'translateX(-50%) translateY(-20px)';
-    toast.style.zIndex = '9999';
-    toast.style.opacity = '0';
-    toast.style.transition = 'opacity 0.3s, transform 0.3s';
-    
-    // 添加到文档中
-    document.body.appendChild(toast);
-    
-    // 淡入显示
-    setTimeout(() => {
-        toast.style.opacity = '1';
-        toast.style.transform = 'translateX(-50%) translateY(0)';
-    }, 10);
-    
-    // 自动淡出
-    if (type !== 'loading') {
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            toast.style.transform = 'translateX(-50%) translateY(-20px)';
-            
-            // 移除元素
-            setTimeout(() => {
-                toast.remove();
-            }, 300);
-        }, duration);
-    }
-    
-    // 返回Toast元素，便于外部控制
-    return toast;
-}
-
-/**
- * 注册全局事件监听
- */
-function registerEventListeners() {
-    // 监听网络状态变化
-    window.addEventListener('online', () => {
-        showToast('网络已连接', 'success');
-    });
-    
-    window.addEventListener('offline', () => {
-        showToast('网络已断开', 'error');
-    });
-    
-    // 页面可见性变化
-    document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') {
-            // 页面变为可见时执行的操作
+    // 高亮当前页面对应的导航项
+    bottomNavItems.forEach(item => {
+        const link = item.getAttribute('data-link');
+        if (link && link.includes(appState.currentPage)) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
         }
+        
+        // 添加导航点击事件
+        item.addEventListener('click', handleNavigation);
     });
 }
 
-// 导出公共函数
-window.showToast = showToast; 
+/**
+ * 处理页面导航
+ * @param {Event} event - 导航点击事件
+ */
+function handleNavigation(event) {
+    const link = this.getAttribute('data-link');
+    
+    if (!link) return;
+    
+    // 如果是同一页面，不做跳转
+    if (link.includes(appState.currentPage)) {
+        event.preventDefault();
+        return;
+    }
+    
+    // 检查特定页面的导航权限
+    if (needsAuth(link) && !appState.auth.isLoggedIn) {
+        event.preventDefault();
+        showToast('请先登录后再访问该页面', 'error');
+        setTimeout(() => {
+            window.location.href = 'login.html'; 
+        }, 1000);
+        return;
+    }
+    
+    // 显示页面加载提示
+    showToast('页面加载中...', 'info');
+}
+
+/**
+ * 检查页面是否需要认证
+ * @param {string} pageUrl - 页面URL
+ * @returns {boolean} - 是否需要认证
+ */
+function needsAuth(pageUrl) {
+    const authPages = ['profile.html', 'publish.html'];
+    return authPages.some(page => pageUrl.includes(page));
+}
+
+/**
+ * 检查用户认证状态
+ */
+function checkAuthStatus() {
+    // 从本地存储获取认证信息
+    const authToken = localStorage.getItem('authToken');
+    const userInfo = localStorage.getItem('userInfo');
+    
+    if (authToken && userInfo) {
+        try {
+            appState.auth.isLoggedIn = true;
+            appState.auth.userInfo = JSON.parse(userInfo);
+            
+            // 可以在这里添加token验证逻辑
+            
+            console.log('用户已登录', appState.auth.userInfo);
+        } catch (error) {
+            console.error('解析用户信息失败', error);
+            clearAuthData();
+        }
+    } else {
+        appState.auth.isLoggedIn = false;
+        appState.auth.userInfo = null;
+    }
+    
+    // 触发认证状态更新事件
+    document.dispatchEvent(new CustomEvent('authStateChanged', {
+        detail: { ...appState.auth }
+    }));
+}
+
+/**
+ * 清除认证数据
+ */
+function clearAuthData() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userInfo');
+    appState.auth.isLoggedIn = false;
+    appState.auth.userInfo = null;
+}
+
+/**
+ * 显示Toast消息
+ * @param {string} message - 消息内容
+ * @param {string} type - 消息类型
+ */
+function showToast(message, type = 'info') {
+    if (window.utils && typeof window.utils.showToast === 'function') {
+        window.utils.showToast(message, type);
+    } else {
+        console.log(message);
+    }
+}
+
+// 导出全局应用状态和方法
+window.app = {
+    state: appState,
+    showToast,
+    clearAuthData,
+    checkAuthStatus
+}; 

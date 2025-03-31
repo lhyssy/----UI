@@ -1,0 +1,239 @@
+/**
+ * 搜索页面样式
+ * 包含搜索框、过滤器、搜索结果等样式
+ */
+
+/* 基础样式 */
+body {
+    font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* 搜索栏样式 */
+.search-bar {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.search-input {
+    border: 1px solid #e5e7eb;
+    border-radius: 50px;
+    padding: 10px 45px;
+    width: 100%;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background-color: #f9fafb;
+}
+
+.search-input:focus {
+    border-color: #4CAF50;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    outline: none;
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    color: #9ca3af;
+}
+
+.clear-icon {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    cursor: pointer;
+    display: none;
+}
+
+.search-input:not(:placeholder-shown) + .clear-icon {
+    display: block;
+}
+
+/* 筛选标签样式 */
+.filter-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 13px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+    border: 1px solid #e5e7eb;
+    color: #4b5563;
+    background-color: white;
+    cursor: pointer;
+}
+
+.filter-tag.active {
+    background-color: rgba(76, 175, 80, 0.1);
+    border-color: transparent;
+    color: #4CAF50;
+}
+
+.filter-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: rgba(76, 175, 80, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4CAF50;
+    margin-right: 6px;
+}
+
+/* 搜索结果样式 */
+.search-result-item {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    border: 1px solid #e5e7eb;
+    background-color: white;
+    cursor: pointer;
+}
+
+.search-result-item:active {
+    background-color: #f9fafb;
+}
+
+.search-result-item .product-image {
+    position: relative;
+    width: 100%;
+    height: 200px;
+}
+
+.search-result-item .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.search-result-item .tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: white;
+}
+
+.search-result-item .tag.product {
+    background-color: #4CAF50;
+}
+
+.search-result-item .tag.tutorial {
+    background-color: #2196F3;
+}
+
+.search-result-item .tag.template {
+    background-color: #FFC107;
+}
+
+.search-result-item .tag.article {
+    background-color: #9C27B0;
+}
+
+.search-result-item .tag.video {
+    background-color: #F44336;
+}
+
+/* 空状态样式 */
+.empty-state {
+    padding: 40px 0;
+    text-align: center;
+}
+
+/* 最近搜索项样式 */
+.recent-search-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+}
+
+.recent-search-item:last-child {
+    border-bottom: none;
+}
+
+.recent-search-item:hover {
+    background-color: #f9fafb;
+}
+
+.recent-search-item .delete-btn {
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.recent-search-item .delete-btn:hover {
+    color: #f44336;
+}
+
+/* 排序按钮样式 */
+.sort-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #4b5563;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    cursor: pointer;
+}
+
+.sort-btn.active {
+    color: #4CAF50;
+    border-color: rgba(76, 175, 80, 0.3);
+    background-color: rgba(76, 175, 80, 0.05);
+}
+
+/* 热门搜索标签样式 */
+.hot-search-tag {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    background-color: #f3f4f6;
+    color: #4b5563;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.hot-search-tag:hover {
+    background-color: #e5e7eb;
+}
+
+/* 滚动条隐藏 */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* 响应式样式 */
+@media (max-width: 640px) {
+    .search-result-item .product-image {
+        height: 160px;
+    }
+} 
