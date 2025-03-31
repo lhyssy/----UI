@@ -1,0 +1,238 @@
+/* 基础样式 */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f7f8fa;
+    color: #333;
+    max-width: 100%;
+    overflow-x: hidden;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.safe-area {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* 导航栏样式 */
+.app-header {
+    background-color: #07c160;
+    color: white;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.search-bar {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 5px 15px;
+    flex: 1;
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+}
+
+.search-bar input {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 14px;
+    width: 100%;
+    padding: 5px;
+}
+
+.search-bar input::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.search-bar input:focus {
+    outline: none;
+}
+
+/* 卡片样式 */
+.feature-card {
+    background-color: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 16px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.feature-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+/* 底部导航 */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    display: flex;
+    padding: 8px 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    z-index: 100;
+}
+
+.bottom-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 0;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bottom-nav-item.active {
+    color: #07c160;
+}
+
+/* AI组件样式 */
+.ai-container {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 16px;
+    padding: 16px;
+    color: white;
+    box-shadow: 0 8px 30px rgba(107, 70, 193, 0.2);
+}
+
+.ai-badge {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 10px;
+    color: white;
+    display: inline-block;
+}
+
+.ai-suggestion {
+    background-color: rgba(99, 102, 241, 0.1);
+    border-left: 3px solid #6366f1;
+    padding: 12px;
+    margin: 12px 0;
+    border-radius: 0 8px 8px 0;
+}
+
+/* 加载动画 */
+.loading-spinner {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 3px solid rgba(99, 102, 241, 0.1);
+    border-top-color: #6366f1;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 开关样式 */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #07c160;
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+/* 响应式调整 */
+@media (max-width: 640px) {
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    
+    .feature-card {
+        padding: 16px;
+    }
+    
+    .feature-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+}
+
+/* 暗色模式 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #121212;
+        --card-bg: #1e1e1e;
+        --text-color: #e0e0e0;
+        --text-secondary: #a0a0a0;
+        --border-color: #2c2c2c;
+    }
+    
+    /* 暗色模式下的样式覆盖 */
+    body.dark-mode {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+    }
+    
+    body.dark-mode .feature-card {
+        background-color: var(--card-bg);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    body.dark-mode .bottom-nav {
+        background-color: var(--card-bg);
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+    }
+} 
