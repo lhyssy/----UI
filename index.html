@@ -316,6 +316,11 @@
 
     <script src="js/common.js"></script>
     <script>
+        // 进入网站时清除登录状态
+        window.onload = function () {
+            localStorage.removeItem('userLoggedIn'); // 清除登录状态
+        };
+
         document.addEventListener('DOMContentLoaded', function() {
             // 浮动按钮点击事件
             const floatingBtn = document.getElementById('floatingBtn');
