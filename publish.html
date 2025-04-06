@@ -197,31 +197,15 @@
                     </div>
                 </div>
                 
-                <!-- 知乎 -->
-                <div class="platform-card p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="zhihu">
+                <!-- 抖音 -->
+                <div class="platform-card p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="douyin">
                     <div class="flex items-center">
                         <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mr-3">
-                            <i class="fas fa-box text-blue-500 text-2xl"></i>
+                            <i class="fas fa-music text-blue-500 text-2xl"></i>
                         </div>
                         <div>
-                            <h4 class="font-medium">知乎</h4>
-                            <p class="text-xs text-gray-500 mt-0.5">专业深度分析受众</p>
-                        </div>
-                    </div>
-                    <div class="check-icon">
-                        <i class="fas fa-check"></i>
-                    </div>
-                </div>
-                
-                <!-- 微博 -->
-                <div class="platform-card p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="weibo">
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-xl bg-pink-50 flex items-center justify-center mr-3">
-                            <i class="fab fa-weibo text-pink-500 text-2xl"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-medium">微博</h4>
-                            <p class="text-xs text-gray-500 mt-0.5">大众传播、话题互动</p>
+                            <h4 class="font-medium">抖音</h4>
+                            <p class="text-xs text-gray-500 mt-0.5">短视频传播、互动性强</p>
                         </div>
                     </div>
                     <div class="check-icon">
@@ -407,44 +391,28 @@
             const publishProcessing = document.getElementById('publishProcessing');
             const publishSuccess = document.getElementById('publishSuccess');
             
-            let selectedPlatforms = [];
+            // 存储已选择的平台
+            let selectedPlatforms = new Set();
             
-            // 平台选择事件
+            // 初始化平台选择
             platformCards.forEach(card => {
                 card.addEventListener('click', function() {
-                    // 移除所有卡片的选中状态
-                    platformCards.forEach(c => {
-                        c.classList.remove('selected');
-                        // 确保移除所有可能的选中标记
-                        const checkIcons = c.querySelectorAll('.check-icon, .selected-icon');
-                        checkIcons.forEach(icon => icon.style.opacity = '0');
-                    });
+                    const platform = this.dataset.platform;
                     
-                    // 添加当前卡片的选中状态
-                    this.classList.add('selected');
-                    // 只显示一个对钩图标
-                    const checkIcon = this.querySelector('.check-icon');
-                    if (checkIcon) {
-                        checkIcon.style.opacity = '1';
+                    // 切换选中状态
+                    if (selectedPlatforms.has(platform)) {
+                        selectedPlatforms.delete(platform);
+                        this.classList.remove('selected');
+                    } else {
+                        selectedPlatforms.add(platform);
+                        this.classList.add('selected');
                     }
                     
-                    const platformName = this.getAttribute('data-platform');
-                    selectedPlatforms.push(platformName);
-                    showToast(`已选择: ${this.querySelector('h4').textContent}`, 'success');
-                    
-                    // 更新选择计数
-                    selectedCountElement.textContent = selectedPlatforms.length;
+                    // 更新选中数量
+                    selectedCountElement.textContent = selectedPlatforms.size;
                     
                     // 更新发布按钮状态
-                    if (selectedPlatforms.length > 0) {
-                        publishButton.removeAttribute('disabled');
-                        publishButton.classList.add('pulse');
-                        setTimeout(() => {
-                            publishButton.classList.remove('pulse');
-                        }, 1000);
-                    } else {
-                        publishButton.setAttribute('disabled', 'disabled');
-                    }
+                    publishButton.disabled = selectedPlatforms.size === 0;
                 });
             });
             
@@ -494,7 +462,7 @@
             
             // 发布按钮点击事件
             publishButton.addEventListener('click', function() {
-                if (selectedPlatforms.length === 0) {
+                if (selectedPlatforms.size === 0) {
                     showToast('请至少选择一个平台', 'warning');
                     return;
                 }
@@ -514,7 +482,7 @@
                     if (progress <= 30) {
                         publishStatus.textContent = `正在准备内容...`;
                     } else if (progress <= 60) {
-                        publishStatus.textContent = `正在发布到 ${selectedPlatforms.join(', ')}...`;
+                        publishStatus.textContent = `正在发布到 ${Array.from(selectedPlatforms).join(', ')}...`;
                     } else if (progress <= 90) {
                         publishStatus.textContent = `正在完成发布...`;
                     } else {

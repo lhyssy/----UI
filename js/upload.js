@@ -13,16 +13,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const imageCount = document.getElementById('imageCount');
     const uploadingMask = document.getElementById('uploadingMask');
     const uploadProgress = document.getElementById('uploadProgress');
+    const aiEnhanceSwitch = document.getElementById('aiEnhanceSwitch');
     
     // 状态变量
     let uploadedImages = [];
     const MAX_IMAGES = 9;
+    let isAIEnhanceEnabled = true; // AI增强开关状态
     
     // 初始化拖放上传
     initDragAndDrop();
     
     // 初始化按钮事件
     initButtonEvents();
+    
+    // 初始化AI增强开关
+    initAIEnhanceSwitch();
     
     // 从本地存储加载之前上传的图片
     loadImagesFromStorage();
@@ -118,6 +123,60 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 跳转到下一个页面
                 window.location.href = 'preview.html';
             }
+        });
+    }
+    
+    /**
+     * 初始化AI增强开关
+     */
+    function initAIEnhanceSwitch() {
+        // 检查开关元素是否存在
+        if (!aiEnhanceSwitch) {
+            console.error('未找到AI增强开关元素');
+            return;
+        }
+        
+        // 获取开关的父元素标签
+        const switchLabel = aiEnhanceSwitch.closest('label');
+        // 获取开关的背景元素
+        const switchBackground = switchLabel ? switchLabel.querySelector('div') : null;
+        
+        // 从本地存储加载开关状态
+        const savedState = localStorage.getItem('aiEnhanceEnabled');
+        if (savedState !== null) {
+            isAIEnhanceEnabled = savedState === 'true';
+            aiEnhanceSwitch.checked = isAIEnhanceEnabled;
+            
+            // 更新开关样式
+            if (switchBackground) {
+                if (isAIEnhanceEnabled) {
+                    switchBackground.classList.remove('bg-gray-200');
+                    switchBackground.classList.add('bg-green-500');
+                } else {
+                    switchBackground.classList.add('bg-gray-200');
+                    switchBackground.classList.remove('bg-green-500');
+                }
+            }
+        }
+        
+        // 添加开关事件监听
+        aiEnhanceSwitch.addEventListener('change', function() {
+            isAIEnhanceEnabled = this.checked;
+            localStorage.setItem('aiEnhanceEnabled', isAIEnhanceEnabled);
+            
+            // 更新开关样式
+            if (switchBackground) {
+                if (isAIEnhanceEnabled) {
+                    switchBackground.classList.remove('bg-gray-200');
+                    switchBackground.classList.add('bg-green-500');
+                } else {
+                    switchBackground.classList.add('bg-gray-200');
+                    switchBackground.classList.remove('bg-green-500');
+                }
+            }
+            
+            // 显示提示信息
+            showToast(isAIEnhanceEnabled ? '已开启AI图像增强' : '已关闭AI图像增强', 'info');
         });
     }
     
