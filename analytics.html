@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,25 +16,30 @@
             max-width: 100%;
             overflow-x: hidden;
         }
+
         .header {
             background: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
+
         .data-card {
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             overflow: hidden;
         }
+
         .chart-container {
             height: 180px;
             position: relative;
         }
+
         .bar-chart {
             display: flex;
             height: 150px;
             align-items: flex-end;
             padding-bottom: 20px;
         }
+
         .bar {
             flex: 1;
             margin: 0 2px;
@@ -44,9 +50,11 @@
             min-height: 4px;
             transition: height 1s ease;
         }
+
         .bar.highlight {
             background: linear-gradient(to top, #0d9b77, #07c160);
         }
+
         .bar::after {
             content: attr(data-value);
             position: absolute;
@@ -56,6 +64,7 @@
             font-size: 10px;
             color: #666;
         }
+
         .chart-label {
             position: absolute;
             bottom: 0;
@@ -65,6 +74,7 @@
             justify-content: space-between;
             padding: 0 10px;
         }
+
         .chart-label span {
             font-size: 10px;
             color: #999;
@@ -73,10 +83,12 @@
             position: relative;
             top: 20px;
         }
+
         .time-tabs {
             display: flex;
             margin-bottom: 20px;
         }
+
         .time-tab {
             flex: 1;
             text-align: center;
@@ -85,22 +97,27 @@
             color: #666;
             border-bottom: 2px solid transparent;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
+
         .time-tab.active {
             color: #07c160;
             font-weight: 500;
             border-bottom-color: #07c160;
         }
+
         .progress-container {
             display: flex;
             padding: 20px 0;
         }
+
         .progress-ring {
             position: relative;
             width: 60px;
             height: 60px;
             margin: 0 auto;
         }
+
         .progress-ring circle {
             fill: transparent;
             stroke-width: 4px;
@@ -109,12 +126,15 @@
             transform-origin: 50% 50%;
             transition: stroke-dashoffset 1s ease;
         }
+
         .progress-ring circle.bg {
             stroke: #e6e6e6;
         }
+
         .progress-ring circle.progress {
             stroke: #07c160;
         }
+
         .percent-text {
             position: absolute;
             top: 50%;
@@ -123,6 +143,7 @@
             font-size: 12px;
             font-weight: 500;
         }
+
         .funnel-step {
             height: 50px;
             display: flex;
@@ -130,6 +151,7 @@
             margin-bottom: 10px;
             position: relative;
         }
+
         .funnel-bar {
             height: 100%;
             background: linear-gradient(to right, #07c160, #33d685);
@@ -142,25 +164,30 @@
             font-weight: 500;
             min-width: 40px;
         }
+
         .funnel-value {
             position: absolute;
             right: 15px;
             font-weight: 500;
         }
+
         .popular-item {
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
         }
+
         .popular-item:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
+
         .popular-image {
             height: 120px;
             object-fit: cover;
         }
+
         .tag {
             background-color: rgba(7, 193, 96, 0.1);
             color: #07c160;
@@ -171,6 +198,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- 顶部导航 -->
     <header class="header py-4 px-5 flex items-center justify-between">
@@ -189,227 +217,81 @@
     <div class="container mx-auto px-4 pb-24 mt-2">
         <!-- 时间Tab -->
         <div class="time-tabs bg-white rounded-lg mb-5 slide-up">
-            <div class="time-tab active">今日</div>
-            <div class="time-tab">本周</div>
-            <div class="time-tab">本月</div>
-            <div class="time-tab">全部</div>
+            <div class="time-tab active" data-range="today">今日</div>
+            <div class="time-tab" data-range="week">本周</div>
+            <div class="time-tab" data-range="month">本月</div>
+            <div class="time-tab" data-range="all">全部</div>
         </div>
-        
+
         <!-- 数据概览 -->
         <div class="grid grid-cols-1 gap-4 mb-6">
             <!-- 总浏览量 -->
             <div class="data-card bg-white p-4 slide-up stagger-item">
                 <div class="flex items-center justify-between mb-3">
                     <h3 class="font-medium">总浏览量</h3>
-                    <span class="text-green-500 text-sm flex items-center">
+                    <span class="text-green-500 text-sm flex items-center" id="viewsGrowth">
                         <i class="fas fa-arrow-up mr-1"></i>32.5%
                     </span>
                 </div>
                 <div class="flex justify-between items-end">
                     <div>
-                        <div class="text-3xl font-bold">12,483</div>
-                        <div class="text-gray-400 text-sm mt-1">较上周增加4,152</div>
+                        <div class="text-3xl font-bold" id="totalViews">12,483</div>
+                        <div class="text-gray-400 text-sm mt-1" id="viewsIncrease">较上周增加4,152</div>
                     </div>
                     <div class="chart-container flex-1 ml-5">
-                        <div class="bar-chart">
-                            <div class="bar" style="height: 30%" data-value="152"></div>
-                            <div class="bar" style="height: 45%" data-value="228"></div>
-                            <div class="bar" style="height: 60%" data-value="305"></div>
-                            <div class="bar" style="height: 38%" data-value="192"></div>
-                            <div class="bar" style="height: 52%" data-value="264"></div>
-                            <div class="bar highlight" style="height: 80%" data-value="415"></div>
-                            <div class="bar highlight" style="height: 95%" data-value="486"></div>
-                        </div>
-                        <div class="chart-label">
-                            <span>周一</span>
-                            <span>周二</span>
-                            <span>周三</span>
-                            <span>周四</span>
-                            <span>周五</span>
-                            <span>周六</span>
-                            <span>周日</span>
-                        </div>
+                        <div class="bar-chart" id="viewsChart"></div>
+                        <div class="chart-label" id="viewsLabels"></div>
                     </div>
                 </div>
             </div>
-            
+
             <!-- 互动量 -->
             <div class="data-card bg-white p-4 slide-up stagger-item">
                 <div class="flex items-center justify-between mb-3">
                     <h3 class="font-medium">互动量</h3>
-                    <span class="text-green-500 text-sm flex items-center">
+                    <span class="text-green-500 text-sm flex items-center" id="interactionGrowth">
                         <i class="fas fa-arrow-up mr-1"></i>18.7%
                     </span>
                 </div>
                 <div class="flex justify-between items-end">
                     <div>
-                        <div class="text-3xl font-bold">3,124</div>
+                        <div class="text-3xl font-bold" id="totalInteractions">3,124</div>
                         <div class="text-gray-400 text-sm mt-1">包含点赞、评论、收藏</div>
                     </div>
                     <div class="chart-container flex-1 ml-5">
-                        <div class="bar-chart">
-                            <div class="bar" style="height: 25%" data-value="42"></div>
-                            <div class="bar" style="height: 35%" data-value="58"></div>
-                            <div class="bar" style="height: 45%" data-value="76"></div>
-                            <div class="bar" style="height: 30%" data-value="52"></div>
-                            <div class="bar" style="height: 40%" data-value="65"></div>
-                            <div class="bar highlight" style="height: 65%" data-value="105"></div>
-                            <div class="bar highlight" style="height: 75%" data-value="125"></div>
-                        </div>
-                        <div class="chart-label">
-                            <span>周一</span>
-                            <span>周二</span>
-                            <span>周三</span>
-                            <span>周四</span>
-                            <span>周五</span>
-                            <span>周六</span>
-                            <span>周日</span>
-                        </div>
+                        <div class="bar-chart" id="interactionChart"></div>
+                        <div class="chart-label" id="interactionLabels"></div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <!-- 转化漏斗 -->
         <div class="data-card bg-white p-4 mb-6 slide-up">
             <h3 class="font-medium mb-4">转化漏斗分析</h3>
-            <div class="space-y-4">
-                <div class="funnel-step">
-                    <div class="funnel-bar" style="width: 100%">浏览量</div>
-                    <div class="funnel-value text-gray-500">12,483</div>
-                </div>
-                <div class="funnel-step">
-                    <div class="funnel-bar" style="width: 78%">点击互动</div>
-                    <div class="funnel-value text-gray-500">9,736</div>
-                </div>
-                <div class="funnel-step">
-                    <div class="funnel-bar" style="width: 45%">详情查看</div>
-                    <div class="funnel-value text-gray-500">5,617</div>
-                </div>
-                <div class="funnel-step">
-                    <div class="funnel-bar" style="width: 26%">加购/收藏</div>
-                    <div class="funnel-value text-gray-500">3,245</div>
-                </div>
-                <div class="funnel-step">
-                    <div class="funnel-bar" style="width: 12%">下单转化</div>
-                    <div class="funnel-value text-gray-500">1,498</div>
-                </div>
+            <div class="space-y-4" id="funnelSteps">
+                <!-- 漏斗步骤将通过JavaScript动态填充 -->
             </div>
             <div class="text-center text-sm text-gray-500 mt-3">
-                最终转化率: 12.0%
+                最终转化率: <span id="finalConversionRate">12.0%</span>
             </div>
         </div>
-        
+
         <!-- 平台分布 -->
         <div class="data-card bg-white p-4 mb-6 slide-up">
             <h3 class="font-medium mb-4">平台分布</h3>
-            <div class="progress-container">
-                <div class="flex-1 flex flex-col items-center">
-                    <div class="progress-ring">
-                        <svg width="60" height="60" viewBox="0 0 60 60">
-                            <circle class="bg" cx="30" cy="30" r="24" />
-                            <circle class="progress" cx="30" cy="30" r="24" style="stroke-dasharray: 150.8; stroke-dashoffset: 45.24;" />
-                        </svg>
-                        <div class="percent-text">70%</div>
-                    </div>
-                    <p class="text-sm mt-2">小红书</p>
-                </div>
-                <div class="flex-1 flex flex-col items-center">
-                    <div class="progress-ring">
-                        <svg width="60" height="60" viewBox="0 0 60 60">
-                            <circle class="bg" cx="30" cy="30" r="24" />
-                            <circle class="progress" cx="30" cy="30" r="24" style="stroke-dasharray: 150.8; stroke-dashoffset: 75.4;" />
-                        </svg>
-                        <div class="percent-text">50%</div>
-                    </div>
-                    <p class="text-sm mt-2">微信</p>
-                </div>
-                <div class="flex-1 flex flex-col items-center">
-                    <div class="progress-ring">
-                        <svg width="60" height="60" viewBox="0 0 60 60">
-                            <circle class="bg" cx="30" cy="30" r="24" />
-                            <circle class="progress" cx="30" cy="30" r="24" style="stroke-dasharray: 150.8; stroke-dashoffset: 105.56;" />
-                        </svg>
-                        <div class="percent-text">30%</div>
-                    </div>
-                    <p class="text-sm mt-2">抖音</p>
-                </div>
-                <div class="flex-1 flex flex-col items-center">
-                    <div class="progress-ring">
-                        <svg width="60" height="60" viewBox="0 0 60 60">
-                            <circle class="bg" cx="30" cy="30" r="24" />
-                            <circle class="progress" cx="30" cy="30" r="24" style="stroke-dasharray: 150.8; stroke-dashoffset: 120.64;" />
-                        </svg>
-                        <div class="percent-text">20%</div>
-                    </div>
-                    <p class="text-sm mt-2">微博</p>
-                </div>
+            <div class="progress-container" id="platformDistribution">
+                <!-- 平台分布将通过JavaScript动态填充 -->
             </div>
         </div>
-        
+
         <!-- 热门宣传内容 -->
         <h3 class="font-medium mb-3 px-1 slide-up">热门宣传内容</h3>
-        <div class="grid grid-cols-1 gap-4 mb-6">
-            <div class="popular-item bg-white stagger-item">
-                <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80" alt="有机红富士苹果" class="popular-image w-full">
-                <div class="p-4">
-                    <h4 class="font-medium">有机红富士苹果宣传图文</h4>
-                    <div class="flex items-center mt-2">
-                        <span class="tag">小红书</span>
-                        <span class="tag">热门</span>
-                    </div>
-                    <div class="flex justify-between mt-3 text-sm text-gray-500">
-                        <div class="flex items-center">
-                            <i class="far fa-eye mr-1"></i>
-                            <span>3,245</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="far fa-comment mr-1"></i>
-                            <span>124</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="far fa-heart mr-1"></i>
-                            <span>532</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-share-alt mr-1"></i>
-                            <span>78</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="popular-item bg-white stagger-item">
-                <img src="https://images.unsplash.com/photo-1550258987-190a2d41a8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80" alt="新鲜草莓" class="popular-image w-full">
-                <div class="p-4">
-                    <h4 class="font-medium">新鲜草莓包装设计方案</h4>
-                    <div class="flex items-center mt-2">
-                        <span class="tag">微信</span>
-                        <span class="tag">推荐</span>
-                    </div>
-                    <div class="flex justify-between mt-3 text-sm text-gray-500">
-                        <div class="flex items-center">
-                            <i class="far fa-eye mr-1"></i>
-                            <span>2,876</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="far fa-comment mr-1"></i>
-                            <span>95</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="far fa-heart mr-1"></i>
-                            <span>405</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-share-alt mr-1"></i>
-                            <span>62</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="grid grid-cols-1 gap-4 mb-6" id="popularContent">
+            <!-- 热门内容将通过JavaScript动态填充 -->
         </div>
     </div>
-    
+
     <!-- 底部导航栏 -->
     <div class="fixed bottom-0 left-0 right-0 bg-white py-2 px-5 border-t border-gray-100">
         <div class="flex justify-between">
@@ -432,93 +314,7 @@
         </div>
     </div>
 
-    <script src="js/common.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 时间Tab切换
-            const timeTabs = document.querySelectorAll('.time-tab');
-            timeTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    timeTabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // 显示加载效果
-                    showToast(`正在加载${this.textContent}数据...`, 'loading');
-                    
-                    // 动画效果
-                    setTimeout(() => {
-                        refreshCharts();
-                        // 更新完成后移除加载状态
-                        document.querySelectorAll('.toast-container').forEach(t => t.remove());
-                        showToast(`${this.textContent}数据已更新`, 'success');
-                    }, 800);
-                });
-            });
-            
-            // 刷新图表动画
-            function refreshCharts() {
-                // 柱状图动画
-                const bars = document.querySelectorAll('.bar');
-                bars.forEach(bar => {
-                    const originalHeight = bar.style.height;
-                    bar.style.height = '0%';
-                    setTimeout(() => {
-                        bar.style.height = originalHeight;
-                    }, 100);
-                });
-                
-                // 漏斗图动画
-                const funnelBars = document.querySelectorAll('.funnel-bar');
-                funnelBars.forEach(bar => {
-                    const originalWidth = bar.style.width;
-                    bar.style.width = '0%';
-                    setTimeout(() => {
-                        bar.style.width = originalWidth;
-                    }, 100);
-                });
-                
-                // 进度环动画
-                const progressRings = document.querySelectorAll('.progress-ring circle.progress');
-                progressRings.forEach(ring => {
-                    const originalOffset = ring.style.strokeDashoffset;
-                    ring.style.strokeDashoffset = '150.8'; // 环的周长
-                    setTimeout(() => {
-                        ring.style.strokeDashoffset = originalOffset;
-                    }, 100);
-                });
-            }
-            
-            // 初始动画
-            setTimeout(() => {
-                refreshCharts();
-            }, 500);
-            
-            // 导出按钮点击事件
-            document.querySelector('button[class*="bg-gray-100"]').addEventListener('click', function() {
-                showToast('数据报告已导出', 'success');
-            });
-            
-            // 热门宣传内容点击事件
-            document.querySelectorAll('.popular-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const title = this.querySelector('h4').textContent;
-                    showToast(`查看详情: ${title}`, 'info');
-                });
-            });
-            
-            // 为图表柱状图添加交互效果
-            document.querySelectorAll('.bar').forEach(bar => {
-                bar.addEventListener('mouseenter', function() {
-                    this.style.opacity = '0.8';
-                    const value = this.getAttribute('data-value');
-                    showToast(`数值: ${value}`, 'info', 1000);
-                });
-                
-                bar.addEventListener('mouseleave', function() {
-                    this.style.opacity = '1';
-                });
-            });
-        });
-    </script>
+    <script src="js/analytics.js"></script>
 </body>
-</html> 
+
+</html>

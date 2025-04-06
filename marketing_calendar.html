@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,84 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/calendar.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            background: white;
+            border-radius: 8px;
+            padding: 8px;
+            position: relative;
+        }
+
+        .calendar-day.today {
+            background: #e6f7f0;
+            border: 2px solid #07c160;
+        }
+
+        .calendar-day.has-event {
+            background: #f0f9f4;
+        }
+
+        .event-dot {
+            width: 6px;
+            height: 6px;
+            background: #07c160;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .event-item {
+            border-left: 3px solid #07c160;
+            padding: 8px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 4px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+    </style>
 </head>
+
 <body class="pb-24">
     <!-- 顶部导航 -->
     <div class="sticky top-0 z-10 bg-white shadow-sm">
@@ -17,7 +95,7 @@
                 <i class="fas fa-arrow-left text-lg"></i>
             </button>
             <h1 class="text-lg font-medium">营销日历</h1>
-            <button class="text-gray-700">
+            <button class="text-gray-700" id="addEventBtn">
                 <i class="fas fa-plus text-xl"></i>
             </button>
         </div>
@@ -27,7 +105,7 @@
         <!-- 日历标题和月份选择器 -->
         <div class="flex justify-between items-center mb-4">
             <div class="flex items-center">
-                <div class="font-semibold text-xl text-gray-800">2023年7月</div>
+                <div class="font-semibold text-xl text-gray-800" id="currentMonth">2023年7月</div>
                 <div class="calendar-switch" data-active="month">
                     <span class="month">月</span>
                     <span class="week">周</span>
@@ -35,10 +113,10 @@
                 </div>
             </div>
             <div class="flex space-x-3">
-                <button class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center">
+                <button class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center" id="prevMonth">
                     <i class="fas fa-chevron-left text-gray-600"></i>
                 </button>
-                <button class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center">
+                <button class="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center" id="nextMonth">
                     <i class="fas fa-chevron-right text-gray-600"></i>
                 </button>
             </div>
@@ -56,165 +134,10 @@
                 <div class="text-sm font-medium">五</div>
                 <div class="text-sm font-medium">六</div>
             </div>
-            
+
             <!-- 日历格子 -->
-            <div class="grid grid-cols-7 divide-x divide-y divide-gray-100">
-                <!-- 第一行 -->
-                <div class="calendar-day inactive px-1 py-1">
-                    <div class="day-number text-right mb-1">25</div>
-                </div>
-                <div class="calendar-day inactive px-1 py-1">
-                    <div class="day-number text-right mb-1">26</div>
-                </div>
-                <div class="calendar-day inactive px-1 py-1">
-                    <div class="day-number text-right mb-1">27</div>
-                </div>
-                <div class="calendar-day inactive px-1 py-1">
-                    <div class="day-number text-right mb-1">28</div>
-                </div>
-                <div class="calendar-day inactive px-1 py-1">
-                    <div class="day-number text-right mb-1">29</div>
-                </div>
-                <div class="calendar-day inactive px-1 py-1">
-                    <div class="day-number text-right mb-1">30</div>
-                </div>
-                <div class="calendar-day px-1 py-1">
-                    <div class="day-number text-right mb-1">1</div>
-                </div>
-                
-                <!-- 第二行 -->
-                <div class="calendar-day px-1 py-1">
-                    <div class="day-number text-right mb-1">2</div>
-                </div>
-                <div class="calendar-day px-1 py-1">
-                    <div class="day-number text-right mb-1">3</div>
-                </div>
-                <div class="calendar-day px-1 py-1">
-                    <div class="day-number text-right mb-1">4</div>
-                </div>
-                <div class="calendar-day px-1 py-1">
-                    <div class="day-number text-right mb-1">5</div>
-                </div>
-                <div class="calendar-day px-1 py-1">
-                    <div class="day-number text-right mb-1">6</div>
-                </div>
-                <div class="calendar-day px-1 py-1">
-                    <div class="day-number text-right mb-1">7</div>
-                </div>
-                <div class="calendar-day px-1 py-1">
-                    <div class="day-number text-right mb-1">8</div>
-                </div>
-                
-                <!-- 第三行 -->
-                <div class="calendar-day px-1 py-1">
-                    <div class="day-number text-right mb-1">9</div>
-                </div>
-                <div class="calendar-day px-1 py-1 has-event">
-                    <div class="day-number text-right mb-1">10</div>
-                    <div class="calendar-event event-harvest">草莓采摘季</div>
-                </div>
-                <div class="calendar-day px-1 py-1 has-event">
-                    <div class="day-number text-right mb-1">11</div>
-                    <div class="calendar-event event-harvest">草莓采摘季</div>
-                </div>
-                <div class="calendar-day px-1 py-1 has-event">
-                    <div class="day-number text-right mb-1">12</div>
-                    <div class="calendar-event event-harvest">草莓采摘季</div>
-                    <div class="calendar-event event-promotional">草莓节直播</div>
-                </div>
-                <div class="calendar-day px-1 py-1 has-event">
-                    <div class="day-number text-right mb-1">13</div>
-                    <div class="calendar-event event-harvest">草莓采摘季</div>
-                </div>
-                <div class="calendar-day px-1 py-1 has-event">
-                    <div class="day-number text-right mb-1">14</div>
-                    <div class="calendar-event event-harvest">草莓采摘季</div>
-                </div>
-                <div class="calendar-day px-1 py-1">
-                    <div class="day-number text-right mb-1">15</div>
-                </div>
-                
-                <!-- 第四行 -->
-                <div class="calendar-day px-1 py-1">
-                    <div class="day-number text-right mb-1">16</div>
-                </div>
-                <div class="calendar-day px-1 py-1 has-event">
-                    <div class="day-number text-right mb-1">17</div>
-                    <div class="calendar-event event-planting">种植苹果树</div>
-                </div>
-                <div class="calendar-day px-1 py-1 has-event">
-                    <div class="day-number text-right mb-1">18</div>
-                    <div class="calendar-event event-planting">种植苹果树</div>
-                </div>
-                <div class="calendar-day px-1 py-1 has-event">
-                    <div class="day-number text-right mb-1">19</div>
-                    <div class="calendar-event event-planting">种植苹果树</div>
-                </div>
-                <div class="calendar-day px-1 py-1 today">
-                    <div class="day-number text-right mb-1 mx-auto">20</div>
-                    <div class="calendar-event event-market">农贸市场推广</div>
-                    <div class="calendar-event event-promotional">夏季水果推广</div>
-                    <div class="more-events">+2</div>
-                </div>
-                <div class="calendar-day px-1 py-1">
-                    <div class="day-number text-right mb-1">21</div>
-                </div>
-                <div class="calendar-day px-1 py-1">
-                    <div class="day-number text-right mb-1">22</div>
-                </div>
-                
-                <!-- 第五行 -->
-                <div class="calendar-day px-1 py-1">
-                    <div class="day-number text-right mb-1">23</div>
-                </div>
-                <div class="calendar-day px-1 py-1">
-                    <div class="day-number text-right mb-1">24</div>
-                </div>
-                <div class="calendar-day px-1 py-1 has-event">
-                    <div class="day-number text-right mb-1">25</div>
-                    <div class="calendar-event event-promotional">夏季水果推广</div>
-                </div>
-                <div class="calendar-day px-1 py-1 has-event">
-                    <div class="day-number text-right mb-1">26</div>
-                    <div class="calendar-event event-promotional">夏季水果推广</div>
-                </div>
-                <div class="calendar-day px-1 py-1 has-event">
-                    <div class="day-number text-right mb-1">27</div>
-                    <div class="calendar-event event-promotional">夏季水果推广</div>
-                </div>
-                <div class="calendar-day px-1 py-1 has-event">
-                    <div class="day-number text-right mb-1">28</div>
-                    <div class="calendar-event event-promotional">夏季水果推广</div>
-                </div>
-                <div class="calendar-day px-1 py-1 has-event">
-                    <div class="day-number text-right mb-1">29</div>
-                    <div class="calendar-event event-promotional">夏季水果推广</div>
-                </div>
-                
-                <!-- 第六行 -->
-                <div class="calendar-day px-1 py-1 has-event">
-                    <div class="day-number text-right mb-1">30</div>
-                    <div class="calendar-event event-promotional">夏季水果推广</div>
-                </div>
-                <div class="calendar-day px-1 py-1 has-event">
-                    <div class="day-number text-right mb-1">31</div>
-                    <div class="calendar-event event-promotional">夏季水果推广</div>
-                </div>
-                <div class="calendar-day inactive px-1 py-1">
-                    <div class="day-number text-right mb-1">1</div>
-                </div>
-                <div class="calendar-day inactive px-1 py-1">
-                    <div class="day-number text-right mb-1">2</div>
-                </div>
-                <div class="calendar-day inactive px-1 py-1">
-                    <div class="day-number text-right mb-1">3</div>
-                </div>
-                <div class="calendar-day inactive px-1 py-1">
-                    <div class="day-number text-right mb-1">4</div>
-                </div>
-                <div class="calendar-day inactive px-1 py-1">
-                    <div class="day-number text-right mb-1">5</div>
-                </div>
+            <div class="grid grid-cols-7 divide-x divide-y divide-gray-100" id="calendarGrid">
+                <!-- 日历日期将通过JavaScript动态填充 -->
             </div>
         </div>
 
@@ -243,184 +166,61 @@
 
         <!-- 今日活动 -->
         <div>
-            <h2 class="text-lg font-medium mb-3">今日活动</h2>
-            <div class="bg-white rounded-xl shadow-sm divide-y divide-gray-100">
-                <div class="p-4">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-medium">农贸市场推广</h3>
-                            <p class="text-sm text-gray-500 mt-1">农贸市场新鲜水果促销活动</p>
-                            <div class="flex items-center mt-2">
-                                <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">市场活动</span>
-                                <span class="text-xs text-gray-500 ml-2">上午 9:00 - 下午 5:00</span>
-                            </div>
-                        </div>
-                        <div class="flex space-x-2">
-                            <button class="text-gray-500">
-                                <i class="far fa-edit"></i>
-                            </button>
-                            <button class="text-gray-500">
-                                <i class="far fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="p-4">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-medium">夏季水果推广</h3>
-                            <p class="text-sm text-gray-500 mt-1">各大电商平台夏季水果促销活动</p>
-                            <div class="flex items-center mt-2">
-                                <span class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full">促销宣传</span>
-                                <span class="text-xs text-gray-500 ml-2">全天</span>
-                            </div>
-                        </div>
-                        <div class="flex space-x-2">
-                            <button class="text-gray-500">
-                                <i class="far fa-edit"></i>
-                            </button>
-                            <button class="text-gray-500">
-                                <i class="far fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="p-4">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-medium">抖音直播活动</h3>
-                            <p class="text-sm text-gray-500 mt-1">夏季水果抖音直播带货活动</p>
-                            <div class="flex items-center mt-2">
-                                <span class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full">促销宣传</span>
-                                <span class="text-xs text-gray-500 ml-2">晚上 7:30 - 9:30</span>
-                            </div>
-                        </div>
-                        <div class="flex space-x-2">
-                            <button class="text-gray-500">
-                                <i class="far fa-edit"></i>
-                            </button>
-                            <button class="text-gray-500">
-                                <i class="far fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="p-4">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="font-medium">微信社群活动</h3>
-                            <p class="text-sm text-gray-500 mt-1">微信果农社群互动抽奖活动</p>
-                            <div class="flex items-center mt-2">
-                                <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">市场活动</span>
-                                <span class="text-xs text-gray-500 ml-2">晚上 8:00</span>
-                            </div>
-                        </div>
-                        <div class="flex space-x-2">
-                            <button class="text-gray-500">
-                                <i class="far fa-edit"></i>
-                            </button>
-                            <button class="text-gray-500">
-                                <i class="far fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            <h2 class="text-lg font-medium mb-3" id="selectedDateTitle">今日活动</h2>
+            <div id="eventList" class="bg-white rounded-xl shadow-sm divide-y divide-gray-100">
+                <!-- 活动列表将通过JavaScript动态填充 -->
             </div>
         </div>
     </div>
 
-    <!-- 添加活动底部弹出框 -->
-    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden" id="addEventModal">
-        <div class="absolute bottom-0 left-0 right-0 bg-white bottom-sheet p-5" style="max-height: 90vh; overflow-y: auto;">
-            <div class="flex justify-between items-center mb-5">
-                <h2 class="text-lg font-medium">添加营销活动</h2>
-                <button class="text-gray-500" id="closeAddEventModal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div class="mb-5">
-                <label class="block text-sm text-gray-600 mb-2">活动标题</label>
-                <input type="text" class="w-full border border-gray-300 rounded-lg p-3" placeholder="请输入活动标题">
-            </div>
-            
-            <div class="mb-5">
-                <label class="block text-sm text-gray-600 mb-2">活动类型</label>
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="event-type-selector rounded-lg p-3 flex items-center bg-white">
-                        <div class="event-badge bg-red-500"></div>
-                        <span class="text-sm">促销宣传</span>
-                    </div>
-                    <div class="event-type-selector rounded-lg p-3 flex items-center bg-white">
-                        <div class="event-badge bg-yellow-500"></div>
-                        <span class="text-sm">收获季节</span>
-                    </div>
-                    <div class="event-type-selector rounded-lg p-3 flex items-center bg-white">
-                        <div class="event-badge bg-green-500"></div>
-                        <span class="text-sm">种植计划</span>
-                    </div>
-                    <div class="event-type-selector rounded-lg p-3 flex items-center bg-white">
-                        <div class="event-badge bg-blue-500"></div>
-                        <span class="text-sm">市场活动</span>
+    <!-- 添加活动模态框 -->
+    <div class="modal" id="addEventModal">
+        <div class="modal-content">
+            <h3 class="text-lg font-medium mb-4">添加营销活动</h3>
+            <form id="eventForm">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">活动名称</label>
+                    <input type="text" class="w-full px-3 py-2 border rounded-lg" id="eventName" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">活动日期</label>
+                    <input type="date" class="w-full px-3 py-2 border rounded-lg" id="eventDate" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">活动类型</label>
+                    <select class="w-full px-3 py-2 border rounded-lg" id="eventType" required>
+                        <option value="promotional">促销宣传</option>
+                        <option value="harvest">收获季节</option>
+                        <option value="planting">种植计划</option>
+                        <option value="market">市场活动</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">营销平台</label>
+                    <div class="flex flex-wrap gap-2">
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" name="platform" value="douyin" class="rounded text-green-500">
+                            <span>抖音</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" name="platform" value="xiaohongshu" class="rounded text-green-500">
+                            <span>小红书</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" name="platform" value="wechat" class="rounded text-green-500">
+                            <span>微信公众号</span>
+                        </label>
                     </div>
                 </div>
-            </div>
-            
-            <div class="mb-5">
-                <label class="block text-sm text-gray-600 mb-2">日期范围</label>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs text-gray-500 mb-1">开始日期</label>
-                        <input type="date" class="w-full border border-gray-300 rounded-lg p-3">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-500 mb-1">结束日期</label>
-                        <input type="date" class="w-full border border-gray-300 rounded-lg p-3">
-                    </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">活动描述</label>
+                    <textarea class="w-full px-3 py-2 border rounded-lg" id="eventDescription" rows="3"></textarea>
                 </div>
-            </div>
-            
-            <div class="mb-5">
-                <label class="block text-sm text-gray-600 mb-2">时间详情</label>
-                <div class="flex items-center space-x-2 mb-3">
-                    <input type="checkbox" id="allDayEvent">
-                    <label for="allDayEvent" class="text-sm">全天活动</label>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" class="px-4 py-2 bg-gray-100 rounded-lg" id="cancelEvent">取消</button>
+                    <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg">保存</button>
                 </div>
-                <div class="grid grid-cols-2 gap-3" id="timeInputs">
-                    <div>
-                        <label class="block text-xs text-gray-500 mb-1">开始时间</label>
-                        <input type="time" class="w-full border border-gray-300 rounded-lg p-3">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-gray-500 mb-1">结束时间</label>
-                        <input type="time" class="w-full border border-gray-300 rounded-lg p-3">
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mb-5">
-                <label class="block text-sm text-gray-600 mb-2">活动描述</label>
-                <textarea class="w-full border border-gray-300 rounded-lg p-3 h-24" placeholder="请输入活动详情描述"></textarea>
-            </div>
-            
-            <div class="mb-5">
-                <label class="block text-sm text-gray-600 mb-2">提醒设置</label>
-                <select class="w-full border border-gray-300 rounded-lg p-3">
-                    <option>不设置提醒</option>
-                    <option>活动开始时</option>
-                    <option>活动前15分钟</option>
-                    <option>活动前30分钟</option>
-                    <option>活动前1小时</option>
-                    <option>活动前1天</option>
-                </select>
-            </div>
-            
-            <button class="w-full bg-green-500 text-white rounded-lg p-3 font-medium">
-                保存活动
-            </button>
+            </form>
         </div>
     </div>
 
@@ -433,7 +233,7 @@
             </div>
             <div class="bottom-nav-item flex flex-col items-center" data-link="upload.html">
                 <i class="fas fa-plus-circle text-xl"></i>
-                <span class="text-xs mt-1">创建</span>
+                <span class="text-xs mt-1">上传</span>
             </div>
             <div class="bottom-nav-item flex flex-col items-center" data-link="tutorials.html">
                 <i class="fas fa-book text-xl"></i>
@@ -446,8 +246,7 @@
         </div>
     </div>
 
-    <script src="js/common.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/calendar.js"></script>
+    <script src="js/marketing_calendar.js"></script>
 </body>
-</html> 
+
+</html>
