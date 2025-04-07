@@ -9,6 +9,15 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/animations.css">
     <style>
+        body {
+            padding-bottom: 140px; /* 增加底部填充，确保内容不被底部固定元素遮挡 */
+        }
+        
+        .content-wrapper {
+            min-height: calc(100vh - 140px); /* 确保内容区域最小高度不被底部导航栏遮挡 */
+            overflow-y: auto; /* 确保内容可滚动 */
+        }
+        
         .platform-option {
             border: 2px solid transparent;
             border-radius: 16px;
@@ -108,6 +117,32 @@
         .platform-card .selected-icon {
             display: none;
         }
+        
+        /* 固定底部操作区，设置高度确保与导航栏不重叠 */
+        .bottom-actions {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            border-top: 1px solid #e5e7eb;
+            padding: 1rem;
+            z-index: 20;
+            height: 80px; /* 固定高度 */
+        }
+        
+        /* 确保底部导航栏在操作区之上 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            padding: 0.5rem 1.25rem;
+            border-top: 1px solid #e5e7eb;
+            z-index: 10;
+            margin-top: 80px; /* 添加顶部边距，确保不遮挡操作区 */
+        }
     </style>
 </head>
 <body class="safe-area">
@@ -120,174 +155,180 @@
         <div class="w-5"></div> <!-- 占位，保持标题居中 -->
     </div>
     
-    <!-- AI助手提示 -->
-    <div class="px-4 py-3">
-        <div class="ai-container mb-4 flex items-start">
-            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mr-3 flex-shrink-0">
-                <i class="fas fa-lightbulb text-white"></i>
+    <!-- 可滚动内容区域 -->
+    <div class="content-wrapper">
+        <!-- AI助手提示 -->
+        <div class="px-4 py-3">
+            <div class="ai-container mb-4 flex items-start">
+                <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mr-3 flex-shrink-0">
+                    <i class="fas fa-lightbulb text-white"></i>
+                </div>
+                <div>
+                    <div class="flex items-center">
+                        <span class="ai-badge mr-2">AI助手</span>
+                        <h3 class="font-medium text-white">智能发布建议</h3>
+                    </div>
+                    <p class="text-xs text-white/80 mt-1">根据农产品特性和目标受众，我们推荐发布到微信公众号、小红书平台，这些平台对农产品宣传效果最佳</p>
+                </div>
             </div>
-            <div>
+        </div>
+        
+        <!-- 发布流程 -->
+        <div class="px-4 mb-3">
+            <div class="flex items-center justify-between mb-2">
                 <div class="flex items-center">
-                    <span class="ai-badge mr-2">AI助手</span>
-                    <h3 class="font-medium text-white">智能发布建议</h3>
+                    <div class="w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center text-xs font-medium">1</div>
+                    <div class="ml-2 text-sm font-medium">上传照片</div>
                 </div>
-                <p class="text-xs text-white/80 mt-1">根据农产品特性和目标受众，我们推荐发布到微信公众号、小红书平台，这些平台对农产品宣传效果最佳</p>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 发布流程 -->
-    <div class="px-4 mb-3">
-        <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center">
-                <div class="w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center text-xs font-medium">1</div>
-                <div class="ml-2 text-sm font-medium">上传照片</div>
-            </div>
-            <div class="w-16 h-0.5 bg-green-200"></div>
-            <div class="flex items-center">
-                <div class="w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center text-xs font-medium">2</div>
-                <div class="ml-2 text-sm font-medium">预览内容</div>
-            </div>
-            <div class="w-16 h-0.5 bg-green-200"></div>
-            <div class="flex items-center">
-                <div class="w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center text-xs font-medium">3</div>
-                <div class="ml-2 text-sm font-medium">选择平台</div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 平台选择区域 -->
-    <div class="p-4">
-        <h3 class="font-bold text-gray-700 mb-3">选择发布平台</h3>
-        
-        <!-- 社交平台 -->
-        <div class="mb-5">
-            <h4 class="text-sm font-medium text-gray-500 mb-2">社交平台</h4>
-            
-            <div class="space-y-3">
-                <!-- 微信公众号 -->
-                <div class="platform-card p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="wechat">
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center mr-3">
-                            <i class="fab fa-weixin text-green-600 text-2xl"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-medium">微信公众号</h4>
-                            <p class="text-xs text-gray-500 mt-0.5">被动接受、高信任度平台</p>
-                        </div>
-                    </div>
-                    <div class="check-icon">
-                        <i class="fas fa-check"></i>
-                    </div>
+                <div class="w-16 h-0.5 bg-green-200"></div>
+                <div class="flex items-center">
+                    <div class="w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center text-xs font-medium">2</div>
+                    <div class="ml-2 text-sm font-medium">预览内容</div>
                 </div>
-                
-                <!-- 小红书 -->
-                <div class="platform-card p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="xiaohongshu">
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center mr-3">
-                            <i class="fas fa-book text-red-500 text-2xl"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-medium">小红书</h4>
-                            <p class="text-xs text-gray-500 mt-0.5">高参与度、种草效果好</p>
-                        </div>
-                    </div>
-                    <div class="check-icon">
-                        <i class="fas fa-check"></i>
-                    </div>
-                </div>
-                
-                <!-- 抖音 -->
-                <div class="platform-card p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="douyin">
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mr-3">
-                            <i class="fas fa-music text-blue-500 text-2xl"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-medium">抖音</h4>
-                            <p class="text-xs text-gray-500 mt-0.5">短视频传播、互动性强</p>
-                        </div>
-                    </div>
-                    <div class="check-icon">
-                        <i class="fas fa-check"></i>
-                    </div>
+                <div class="w-16 h-0.5 bg-green-200"></div>
+                <div class="flex items-center">
+                    <div class="w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center text-xs font-medium">3</div>
+                    <div class="ml-2 text-sm font-medium">选择平台</div>
                 </div>
             </div>
         </div>
         
-        <!-- 发布设置 -->
-        <div class="mb-4">
-            <h3 class="font-bold text-gray-700 mb-3">发布设置</h3>
+        <!-- 平台选择区域 -->
+        <div class="p-4">
+            <h3 class="font-bold text-gray-700 mb-3">选择发布平台</h3>
             
-            <div class="space-y-3">
-                <div class="p-4 flex items-center justify-between bg-white rounded-xl shadow-sm">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-                            <i class="fas fa-clock text-purple-500"></i>
-                        </div>
-                        <div class="ml-3">
-                            <span class="font-medium">定时发布</span>
-                            <p class="text-xs text-gray-500 mt-0.5">设置发布时间</p>
-                        </div>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox" id="timedPublish">
-                        <span class="slider"></span>
-                    </label>
-                </div>
+            <!-- 社交平台 -->
+            <div class="mb-5">
+                <h4 class="text-sm font-medium text-gray-500 mb-2">社交平台</h4>
                 
-                <div class="p-4 flex items-center justify-between bg-white rounded-xl shadow-sm" id="timeSelector" style="display: none;">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
-                            <i class="fas fa-calendar-alt text-indigo-500"></i>
+                <div class="space-y-3">
+                    <!-- 微信公众号 -->
+                    <div class="platform-card p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="wechat">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center mr-3">
+                                <i class="fab fa-weixin text-green-600 text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">微信公众号</h4>
+                                <p class="text-xs text-gray-500 mt-0.5">被动接受、高信任度平台</p>
+                            </div>
                         </div>
-                        <div class="ml-3">
-                            <span class="font-medium">发布时间</span>
-                            <p class="text-xs text-gray-500 mt-0.5" id="selectedTime">选择发布时间</p>
-                        </div>
-                    </div>
-                    <button class="text-blue-500 text-sm" id="selectTimeBtn">
-                        选择
-                    </button>
-                </div>
-                
-                <div class="p-4 flex items-center justify-between bg-white rounded-xl shadow-sm">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
-                            <i class="fas fa-sync-alt text-green-500"></i>
-                        </div>
-                        <div class="ml-3">
-                            <span class="font-medium">同步发布</span>
-                            <p class="text-xs text-gray-500 mt-0.5">同时发布到所有平台</p>
+                        <div class="check-icon">
+                            <i class="fas fa-check"></i>
                         </div>
                     </div>
-                    <label class="switch">
-                        <input type="checkbox" id="syncPublish" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                
-                <div class="p-4 flex items-center justify-between bg-white rounded-xl shadow-sm">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-lg bg-yellow-100 flex items-center justify-center">
-                            <i class="fas fa-bell text-yellow-500"></i>
+                    
+                    <!-- 小红书 -->
+                    <div class="platform-card p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="xiaohongshu">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center mr-3">
+                                <i class="fas fa-book text-red-500 text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">小红书</h4>
+                                <p class="text-xs text-gray-500 mt-0.5">高参与度、种草效果好</p>
+                            </div>
                         </div>
-                        <div class="ml-3">
-                            <span class="font-medium">发布提醒</span>
-                            <p class="text-xs text-gray-500 mt-0.5">发布完成后通知我</p>
+                        <div class="check-icon">
+                            <i class="fas fa-check"></i>
                         </div>
                     </div>
-                    <label class="switch">
-                        <input type="checkbox" id="publishNotification" checked>
-                        <span class="slider"></span>
-                    </label>
+                    
+                    <!-- 抖音 -->
+                    <div class="platform-card p-4 bg-white rounded-xl shadow-sm flex justify-between items-center" data-platform="douyin">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mr-3">
+                                <i class="fas fa-music text-blue-500 text-2xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">抖音</h4>
+                                <p class="text-xs text-gray-500 mt-0.5">短视频传播、互动性强</p>
+                            </div>
+                        </div>
+                        <div class="check-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
+            
+            <!-- 发布设置 -->
+            <div class="mb-4">
+                <h3 class="font-bold text-gray-700 mb-3">发布设置</h3>
+                
+                <div class="space-y-3">
+                    <div class="p-4 flex items-center justify-between bg-white rounded-xl shadow-sm">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
+                                <i class="fas fa-clock text-purple-500"></i>
+                            </div>
+                            <div class="ml-3">
+                                <span class="font-medium">定时发布</span>
+                                <p class="text-xs text-gray-500 mt-0.5">设置发布时间</p>
+                            </div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="timedPublish">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="p-4 flex items-center justify-between bg-white rounded-xl shadow-sm" id="timeSelector" style="display: none;">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
+                                <i class="fas fa-calendar-alt text-indigo-500"></i>
+                            </div>
+                            <div class="ml-3">
+                                <span class="font-medium">发布时间</span>
+                                <p class="text-xs text-gray-500 mt-0.5" id="selectedTime">选择发布时间</p>
+                            </div>
+                        </div>
+                        <button class="text-blue-500 text-sm" id="selectTimeBtn">
+                            选择
+                        </button>
+                    </div>
+                    
+                    <div class="p-4 flex items-center justify-between bg-white rounded-xl shadow-sm">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
+                                <i class="fas fa-sync-alt text-green-500"></i>
+                            </div>
+                            <div class="ml-3">
+                                <span class="font-medium">同步发布</span>
+                                <p class="text-xs text-gray-500 mt-0.5">同时发布到所有平台</p>
+                            </div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="syncPublish" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="p-4 flex items-center justify-between bg-white rounded-xl shadow-sm">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-lg bg-yellow-100 flex items-center justify-center">
+                                <i class="fas fa-bell text-yellow-500"></i>
+                            </div>
+                            <div class="ml-3">
+                                <span class="font-medium">发布提醒</span>
+                                <p class="text-xs text-gray-500 mt-0.5">发布完成后通知我</p>
+                            </div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="publishNotification" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部空白区域提供滚动空间，避免内容被底部悬浮区域遮挡 -->
+            <div style="height: 60px;"></div>
         </div>
     </div>
     
-    <!-- 底部发布按钮 -->
-    <div class="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 shadow-md pb-24">
+    <!-- 底部发布按钮 - 修改为固定高度 -->
+    <div class="bottom-actions">
         <button class="publish-button" data-action="publish" id="publishButton" disabled>
             <i class="fas fa-paper-plane mr-2"></i>
             发布宣传图文
@@ -354,8 +395,8 @@
         </div>
     </div>
 
-    <!-- 底部导航栏 -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white py-2 px-5 border-t border-gray-100">
+    <!-- 底部导航栏 - 修改为在底部之上 -->
+    <div class="bottom-nav">
         <div class="flex justify-between">
             <div class="bottom-nav-item flex flex-col items-center" data-link="home.html">
                 <i class="fas fa-home text-xl"></i>

@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const generateCopyBtn = document.getElementById('generateCopyBtn');
     const aiGeneratingContainer = document.getElementById('aiGeneratingContainer');
     const aiProgressBar = document.getElementById('aiProgressBar');
-    const previewTitle = document.querySelector('.text-lg.font-bold.mb-1');
-    const previewDesc = document.querySelector('.text-sm.text-gray-700');
-    const contentSections = document.querySelectorAll('.font-bold.mb-2 + .text-sm.text-gray-700');
+    const previewTitle = document.querySelector('.text-lg.font-bold.mb-2');
+    const previewDesc = document.querySelector('.p-4.border-b.border-gray-100 .text-sm.text-gray-700.leading-relaxed');
+    const contentSections = document.querySelectorAll('.border-l-4 .text-sm.text-gray-700.mb-3.leading-relaxed');
     
     // 开关状态
     let isCopyOptimized = true;
@@ -25,6 +25,45 @@ document.addEventListener('DOMContentLoaded', function() {
     initAIGeneration();
     initTemplateSelectors();
     initOptimizationSwitches();
+    
+    // 设置初始基础文案
+    setupInitialContent();
+    
+    /**
+     * 设置初始基础文案
+     */
+    function setupInitialContent() {
+        // 这些是初始的基础文案，用户可以编辑修改
+        if (previewTitle) {
+            previewTitle.textContent = "高山果园红富士苹果 | 有机种植 · 自然成熟 · 脆甜多汁";
+        }
+        
+        if (previewDesc) {
+            previewDesc.innerHTML = "✨ 来自高海拔山区的红富士苹果，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。每一口都能感受到新鲜与甜脆，是您日常水果的理想选择。";
+        }
+        
+        if (contentSections && contentSections.length > 0) {
+            // 设置产品特点
+            if (contentSections[0]) {
+                contentSections[0].textContent = "这款红富士苹果产自高海拔山区，生长环境优越，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。果实成熟度高，颜色红润，外观光亮诱人。";
+            }
+            
+            // 设置口感体验
+            if (contentSections[1]) {
+                contentSections[1].textContent = "口感脆甜多汁，果肉细腻，香气怡人。咬一口，汁水四溢，甜度适中不腻口，是水果爱好者的不二之选。冷藏后食用，口感更佳。";
+            }
+            
+            // 设置营养价值
+            if (contentSections[2]) {
+                contentSections[2].textContent = "富含多种维生素和膳食纤维，有助于肠道健康，增强免疫力。每天一个苹果，医生远离我！特别适合注重健康生活的现代人。";
+            }
+            
+            // 设置食用建议
+            if (contentSections[3]) {
+                contentSections[3].textContent = "建议冷藏后食用，口感更佳。可以直接作为水果享用，也可切片加入沙拉或搭配酸奶食用。适合送礼或自用，一年四季皆宜。";
+            }
+        }
+    }
     
     /**
      * 初始化优化开关
@@ -230,11 +269,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     // 更新状态文本
                     if (progressStatus) {
                         if (progress < 30) {
-                            progressStatus.innerHTML = '分析图片内容中<span>.</span><span>.</span><span>.</span>';
+                            progressStatus.innerHTML = '分析原文内容中<span>.</span><span>.</span><span>.</span>';
                         } else if (progress < 60) {
-                            progressStatus.innerHTML = '生成营销文案中<span>.</span><span>.</span><span>.</span>';
+                            progressStatus.innerHTML = '优化文案表达中<span>.</span><span>.</span><span>.</span>';
                         } else if (progress < 90) {
-                            progressStatus.innerHTML = '优化内容格式中<span>.</span><span>.</span><span>.</span>';
+                            progressStatus.innerHTML = '提升内容质量中<span>.</span><span>.</span><span>.</span>';
                         }
                     }
                     
@@ -268,14 +307,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         applyGeneratedContent(result);
                         
                         // 显示成功提示
-                        showToast('AI文案生成成功', 'success');
+                        showToast('AI优化文案成功', 'success');
                         
                         // 平滑滚动到内容区域
                         if (previewTitle) {
                             previewTitle.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         }
                     } else {
-                        showToast('生成文案失败，请重试', 'error');
+                        showToast('优化文案失败，请重试', 'error');
                     }
                 }, 500);
             }).catch(error => {
@@ -351,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 应用详细内容
         if (result.sections && result.sections.length > 0 && contentSections) {
             result.sections.forEach((section, index) => {
-                if (section.content) {
+                if (section.content && contentSections[index]) {
                     applyWithAnimation(contentSections[index], section.content);
                 }
             });
@@ -366,20 +405,24 @@ document.addEventListener('DOMContentLoaded', function() {
         await new Promise(resolve => setTimeout(resolve, 2000));
         
         return {
-            title: "【限时特惠】高山果园红富士苹果，一口咬下去全是甜蜜！",
-            description: "🌟 今天给大家带来的是来自高海拔山区的红富士苹果，每一颗都经过精心挑选，保证品质！\n\n🌿 生长环境：\n- 海拔2000米以上，昼夜温差大\n- 采用有机种植，不使用农药\n- 山泉水灌溉，自然生长\n\n🍎 产品特点：\n- 果肉细腻，口感脆甜\n- 汁水丰富，香气怡人\n- 富含维生素和膳食纤维\n\n💝 食用建议：\n- 建议冷藏后食用，口感更佳\n- 可以搭配酸奶或沙拉\n- 适合送礼或自用\n\n🎁 限时特惠：\n- 原价：¥19.8/斤\n- 特惠价：¥15.8/斤\n- 满3斤包邮\n\n⏰ 活动时间：即日起至本周日\n\n#有机水果 #红富士苹果 #健康生活 #限时特惠",
+            title: "【今日优选】高山生态红富士苹果 | 自然有机种植 · 果香浓郁 · 营养丰富",
+            description: "🌟 精选自海拔2000米以上的山地果园，阳光充足，昼夜温差大，自然生长周期长，造就了这款口感绝佳的红富士苹果。每一颗都经过精挑细选，保证新鲜送达您的餐桌，带来原生态的健康美味体验。",
             sections: [
                 {
                     title: "产品特点",
-                    content: "这款红富士苹果产自高海拔山区，生长环境优越，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。果肉细腻，口感脆甜，每一口都能感受到大自然的馈赠。"
+                    content: "高海拔阳光充足，昼夜温差大，果实生长缓慢，营养更加丰富。采用有机种植方式，不使用化学农药和化肥，坚持生态友好理念，保证果实天然纯净。每一颗苹果都经过严格的筛选，确保品质卓越。土壤富含矿物质，灌溉用水来自山泉，品质远超普通果园。"
                 },
                 {
-                    title: "口感描述",
-                    content: "咬一口，汁水四溢，甜度适中不腻口。果肉细腻，香气怡人，是水果爱好者的不二之选。冷藏后食用，口感更佳，是夏日解暑的绝佳选择。"
+                    title: "口感体验",
+                    content: "轻咬一口，清脆的声音伴随着果汁四溢，甜度适中且回甘持久，不会过分甜腻。果肉细腻多汁，香气浓郁怡人，带有独特的花蜜香调。冰镇后食用，口感更加清爽提神，是夏日解暑的绝佳选择。经冷藏处理后，脆甜感更加明显，细嚼慢咽，甘甜回味无穷。"
                 },
                 {
                     title: "营养价值",
-                    content: "富含多种维生素和膳食纤维，有助于肠道健康，增强免疫力。每天一个苹果，医生远离我！特别适合注重健康生活的现代人。"
+                    content: "富含多种维生素、矿物质和膳食纤维，苹果多酚有助于抗氧化，促进肠道健康，增强免疫力。适合各年龄段人群食用，是健康饮食的理想选择。常言道：每天一个苹果，医生远离我，科学研究表明，苹果确实有助于维持心血管健康，降低氧化应激，对于现代人的健康生活方式具有重要价值。"
+                },
+                {
+                    title: "食用建议",
+                    content: "建议冷藏后食用，口感更佳。可以直接作为水果享用，也可切片加入沙拉、搭配酸奶或制作苹果派。苹果还能制作成鲜榨果汁，搭配其他水果制作特色饮品，带来清新健康的口感体验。秋冬季节可以做成热苹果茶，加入肉桂和少量蜂蜜，既暖身又健康。"
                 }
             ]
         };

@@ -29,8 +29,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // 初始化AI增强开关
     initAIEnhanceSwitch();
     
-    // 从本地存储加载之前上传的图片
-    loadImagesFromStorage();
+    // 不再从本地存储加载之前上传的图片
+    // loadImagesFromStorage();
+    // 确保UI状态正确
+    updateImageGrid();
     
     /**
      * 初始化拖放上传功能
@@ -136,44 +138,21 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // 获取开关的父元素标签
-        const switchLabel = aiEnhanceSwitch.closest('label');
-        // 获取开关的背景元素
-        const switchBackground = switchLabel ? switchLabel.querySelector('div') : null;
-        
         // 从本地存储加载开关状态
         const savedState = localStorage.getItem('aiEnhanceEnabled');
         if (savedState !== null) {
             isAIEnhanceEnabled = savedState === 'true';
-            aiEnhanceSwitch.checked = isAIEnhanceEnabled;
-            
-            // 更新开关样式
-            if (switchBackground) {
-                if (isAIEnhanceEnabled) {
-                    switchBackground.classList.remove('bg-gray-200');
-                    switchBackground.classList.add('bg-green-500');
-                } else {
-                    switchBackground.classList.add('bg-gray-200');
-                    switchBackground.classList.remove('bg-green-500');
-                }
-            }
+        } else {
+            isAIEnhanceEnabled = true; // 默认为开启状态
         }
+        
+        // 设置开关状态
+        aiEnhanceSwitch.checked = isAIEnhanceEnabled;
         
         // 添加开关事件监听
         aiEnhanceSwitch.addEventListener('change', function() {
             isAIEnhanceEnabled = this.checked;
             localStorage.setItem('aiEnhanceEnabled', isAIEnhanceEnabled);
-            
-            // 更新开关样式
-            if (switchBackground) {
-                if (isAIEnhanceEnabled) {
-                    switchBackground.classList.remove('bg-gray-200');
-                    switchBackground.classList.add('bg-green-500');
-                } else {
-                    switchBackground.classList.add('bg-gray-200');
-                    switchBackground.classList.remove('bg-green-500');
-                }
-            }
             
             // 显示提示信息
             showToast(isAIEnhanceEnabled ? '已开启AI图像增强' : '已关闭AI图像增强', 'info');
@@ -209,6 +188,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // 显示上传中遮罩
         uploadingMask.classList.remove('hidden');
         uploadingMask.style.display = 'flex';
+        
+        // 确保emptyState隐藏，预先显示imageGrid
+        if (files.length > 0) {
+            emptyState.classList.add('hidden');
+            imageGrid.classList.remove('hidden');
+        }
         
         const filesToProcess = Array.from(files);
         let processedCount = 0;
@@ -497,15 +482,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     /**
-     * 从本地存储加载图片
+     * 从本地存储加载图片 - 此功能已禁用
+     * 我们希望每次进入上传页面时都是全新的状态
      */
     function loadImagesFromStorage() {
+        // 清除之前上传的图片记录
+        localStorage.removeItem('uploadedImages');
+        uploadedImages = [];
+        updateImageGrid();
+        
+        // 原代码已禁用
+        /*
         const storedImages = localStorage.getItem('uploadedImages');
         
         if (storedImages) {
             uploadedImages = JSON.parse(storedImages);
             updateImageGrid();
         }
+        */
     }
     
     /**
