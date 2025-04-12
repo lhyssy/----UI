@@ -12,8 +12,13 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
-            background-color: #f8f9fc;
-            height: 100vh;
+            background-color: #f7f8fa;
+            background-image: url('https://i.imgur.com/jkGICQT.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding-bottom: 60px;
             display: flex;
             flex-direction: column;
         }
@@ -124,6 +129,11 @@
         .content-panel.active {
             display: block;
         }
+
+        /* 增加内容块背景半透明效果 */
+        .bg-white {
+            background-color: rgba(255, 255, 255, 0.9) !important;
+        }
     </style>
 </head>
 
@@ -151,11 +161,11 @@
 </div>
 
 <!-- 内容区域 -->
-<div class="flex-1 overflow-y-auto p-4 space-y-4">
+<div class="flex-1 overflow-y-auto p-4 space-y-6">
     <!-- 推荐内容 -->
     <div class="content-panel active" id="recommended-panel">
         <!-- 置顶帖子 -->
-        <div class="post-card p-4 border-l-4 border-green-500">
+        <div class="post-card p-4 border-l-4 border-green-500 mb-6">
             <div class="flex items-center mb-3">
                 <span class="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded mr-2">置顶</span>
                 <h3 class="font-bold text-base flex-1">欢迎加入助农宣传社区</h3>
@@ -183,7 +193,7 @@
         </div>
 
         <!-- 普通帖子 -->
-        <div class="post-card p-4">
+        <div class="post-card p-4 mb-6">
             <div class="flex items-center mb-3">
                 <div class="avatar"
                      style="background-image: url('https://plus.unsplash.com/premium_photo-1661411325413-98a5ff88e8e4?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
@@ -244,7 +254,7 @@
             </div>
         </div>
 
-        <div class="post-card p-4">
+        <div class="post-card p-4 mb-6">
             <div class="flex items-center mb-3">
                 <div class="avatar"
                      style="background-image: url('https://plus.unsplash.com/premium_photo-1661722653096-cc1a251de5db?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
@@ -304,7 +314,7 @@
             </div>
         </div>
 
-        <div class="post-card p-4">
+        <div class="post-card p-4 mb-6">
             <div class="flex items-center mb-3">
                 <div class="avatar"
                      style="background-image: url('https://plus.unsplash.com/premium_photo-1663045211868-2c38d223d54b?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
@@ -374,7 +384,7 @@
 
     <!-- 种植经验内容 -->
     <div class="content-panel hidden" id="planting-panel">
-        <div class="post-card p-4">
+        <div class="post-card p-4 mb-6">
             <div class="flex items-center mb-3">
                 <div class="avatar"
                      style="background-image: url('https://images.unsplash.com/photo-1589254065909-b7086229d08c?ixlib=rb-4.0.3')">
@@ -426,7 +436,7 @@
             </div>
         </div>
 
-        <div class="post-card p-4">
+        <div class="post-card p-4 mb-6">
             <div class="flex items-center mb-3">
                 <div class="avatar"
                      style="background-image: url('https://images.unsplash.com/photo-1592878940526-0214b0f374f6?ixlib=rb-4.0.3')">
@@ -480,7 +490,7 @@
 
     <!-- 销售技巧内容 -->
     <div class="content-panel hidden" id="sales-panel">
-        <div class="post-card p-4">
+        <div class="post-card p-4 mb-6">
             <div class="flex items-center mb-3">
                 <div class="avatar"
                      style="background-image: url('https://images.unsplash.com/photo-1591696205602-2f950c417cb9?ixlib=rb-4.0.3')">
@@ -529,7 +539,7 @@
             </div>
         </div>
 
-        <div class="post-card p-4">
+        <div class="post-card p-4 mb-6">
             <div class="flex items-center mb-3">
                 <div class="avatar"
                      style="background-image: url('https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3')">
@@ -584,7 +594,7 @@
 
     <!-- 政策解读内容 -->
     <div class="content-panel hidden" id="policy-panel">
-        <div class="post-card p-4 border-l-4 border-blue-500">
+        <div class="post-card p-4 mb-6">
             <div class="flex items-center mb-3">
                 <span class="bg-blue-100 text-blue-600 text-xs px-2 py-0.5 rounded mr-2">最新政策</span>
                 <h3 class="font-bold text-base flex-1">2024年农业补贴政策要点解读</h3>
@@ -613,7 +623,7 @@
             </div>
         </div>
 
-        <div class="post-card p-4">
+        <div class="post-card p-4 mb-6">
             <div class="flex items-center mb-3">
                 <div class="avatar"
                      style="background-image: url('https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixlib=rb-4.0.3')">
