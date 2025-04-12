@@ -1,197 +1,193 @@
 // 模拟数据
 const mockData = {
   today: {
-    views: [120, 85, 150, 200, 180, 220, 160],
-    interactions: [42, 58, 76, 52, 65, 105, 125],
+    views: [20, 15, 25, 30, 28, 35, 25],
+    interactions: [12, 18, 26, 22, 25, 35, 45],
     labels: ['8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'],
-    totalViews: 1115,
-    totalInteractions: 623,
-    viewsGrowth: 32.5,
-    interactionGrowth: 18.7,
-    viewsIncrease: 152,
+    totalViews: 178,
+    totalInteractions: 183,
+    viewsGrowth: 5.5,
+    interactionGrowth: 3.7,
+    viewsIncrease: 12,
     funnel: {
-      views: 1115,
-      clicks: 868,
-      details: 489,
-      cart: 278,
-      orders: 134
+      views: 178,
+      clicks: 138,
+      details: 89,
+      cart: 48,
+      orders: 23
     },
     platforms: [
-      { name: '小红书', percentage: 70 },
-      { name: '微信', percentage: 50 },
-      { name: '抖音', percentage: 30 },
-      { name: '微博', percentage: 20 }
+      { name: '小红书', percentage: 41 },
+      { name: '微信', percentage: 33 },
+      { name: '抖音', percentage: 26 }
     ],
     popularContent: [
       {
-        title: '有机红富士苹果宣传图文',
-        image: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+        title: '🍓救命！这草莓是灌了蜜吧？！甜到跺脚，现摘现发，实现草莓自由就趁现在～',
+        image: 'https://images.unsplash.com/photo-1587393855524-087f83d95bc9?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         platform: '小红书',
         tags: ['小红书', '热门'],
         stats: {
-          views: 1845,
-          comments: 54,
-          likes: 132,
-          shares: 38
+          views: 84,
+          comments: 14,
+          likes: 22,
+          shares: 8
         }
       },
       {
-        title: '新鲜草莓包装设计方案',
+        title: '紧急通知：你的夏日 “菠萝补给站” 已上线！新鲜直采，甜爽暴击，速来查收',
         image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
         platform: '微信',
         tags: ['微信', '推荐'],
         stats: {
-          views: 1576,
-          comments: 42,
-          likes: 85,
-          shares: 32
+          views: 76,
+          comments: 12,
+          likes: 15,
+          shares: 5
         }
       }
     ]
   },
   week: {
-    views: [800, 950, 1200, 1100, 1300, 1400, 1500],
-    interactions: [280, 320, 380, 340, 400, 420, 450],
+    views: [80, 95, 120, 110, 130, 140, 150],
+    interactions: [40, 52, 68, 54, 60, 70, 80],
     labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-    totalViews: 8250,
-    totalInteractions: 2590,
-    viewsGrowth: 28.3,
-    interactionGrowth: 15.2,
-    viewsIncrease: 4152,
+    totalViews: 825,
+    totalInteractions: 424,
+    viewsGrowth: 4.3,
+    interactionGrowth: 2.2,
+    viewsIncrease: 42,
     funnel: {
-      views: 8250,
-      clicks: 6435,
-      details: 3625,
-      cart: 2065,
-      orders: 995
+      views: 825,
+      clicks: 643,
+      details: 362,
+      cart: 206,
+      orders: 99
     },
     platforms: [
-      { name: '小红书', percentage: 65 },
-      { name: '微信', percentage: 55 },
-      { name: '抖音', percentage: 35 },
-      { name: '微博', percentage: 25 }
+      { name: '小红书', percentage: 28 },
+      { name: '微信', percentage: 39 },
+      { name: '抖音', percentage: 35 }
     ],
     popularContent: [
       {
-        title: '有机红富士苹果宣传图文',
-        image: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+        title: '🍓救命！这草莓是灌了蜜吧？！甜到跺脚，现摘现发，实现草莓自由就趁现在～',
+        image: 'https://images.unsplash.com/photo-1587393855524-087f83d95bc9?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         platform: '小红书',
         tags: ['小红书', '热门'],
         stats: {
-          views: 5245,
-          comments: 124,
-          likes: 432,
-          shares: 78
+          views: 145,
+          comments: 24,
+          likes: 32,
+          shares: 18
         }
       },
       {
-        title: '新鲜草莓包装设计方案',
+        title: '紧急通知：你的夏日 “菠萝补给站” 已上线！新鲜直采，甜爽暴击，速来查收',
         image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
         platform: '微信',
         tags: ['微信', '推荐'],
         stats: {
-          views: 4876,
-          comments: 95,
-          likes: 405,
-          shares: 62
+          views: 116,
+          comments: 15,
+          likes: 25,
+          shares: 12
         }
       }
     ]
   },
   month: {
-    views: [3500, 3800, 4200, 4000, 4500, 4800, 5000],
-    interactions: [980, 1020, 1180, 1140, 1300, 1420, 1500],
+    views: [200, 220, 240, 230, 250, 260, 270],
+    interactions: [80, 92, 108, 94, 100, 110, 120],
     labels: ['第一周', '第二周', '第三周', '第四周', '第五周', '第六周', '第七周'],
-    totalViews: 30800,
-    totalInteractions: 8540,
-    viewsGrowth: 25.6,
-    interactionGrowth: 12.8,
-    viewsIncrease: 15200,
+    totalViews: 1670,
+    totalInteractions: 704,
+    viewsGrowth: 3.6,
+    interactionGrowth: 1.8,
+    viewsIncrease: 70,
     funnel: {
-      views: 30800,
-      clicks: 24024,
-      details: 13530,
-      cart: 7700,
-      orders: 3696
+      views: 1670,
+      clicks: 1302,
+      details: 733,
+      cart: 417,
+      orders: 200
     },
     platforms: [
-      { name: '小红书', percentage: 60 },
-      { name: '微信', percentage: 60 },
-      { name: '抖音', percentage: 40 },
-      { name: '微博', percentage: 30 }
+      { name: '小红书', percentage: 27 },
+      { name: '微信', percentage: 42 },
+      { name: '抖音', percentage: 31 }
     ],
     popularContent: [
       {
-        title: '有机红富士苹果宣传图文',
-        image: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+        title: '🍓救命！这草莓是灌了蜜吧？！甜到跺脚，现摘现发，实现草莓自由就趁现在～',
+        image: 'https://images.unsplash.com/photo-1587393855524-087f83d95bc9?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         platform: '小红书',
         tags: ['小红书', '热门'],
         stats: {
-          views: 15245,
-          comments: 324,
-          likes: 832,
-          shares: 278
+          views: 245,
+          comments: 34,
+          likes: 42,
+          shares: 28
         }
       },
       {
-        title: '新鲜草莓包装设计方案',
+        title: '紧急通知：你的夏日 “菠萝补给站” 已上线！新鲜直采，甜爽暴击，速来查收',
         image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
         platform: '微信',
         tags: ['微信', '推荐'],
         stats: {
-          views: 8876,
-          comments: 295,
-          likes: 605,
-          shares: 212
+          views: 216,
+          comments: 25,
+          likes: 35,
+          shares: 22
         }
       }
     ]
   },
   all: {
-    views: [15000, 18000, 22000, 25000, 28000, 30000, 32000],
-    interactions: [4500, 5200, 5800, 6400, 7000, 7500, 8000],
+    views: [200, 220, 240, 230, 250, 260, 270],
+    interactions: [80, 92, 108, 94, 100, 110, 120],
     labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月'],
-    totalViews: 170000,
-    totalInteractions: 45400,
-    viewsGrowth: 22.4,
-    interactionGrowth: 10.5,
-    viewsIncrease: 52000,
+    totalViews: 1670,
+    totalInteractions: 704,
+    viewsGrowth: 3.6,
+    interactionGrowth: 1.8,
+    viewsIncrease: 70,
     funnel: {
-      views: 170000,
-      clicks: 132600,
-      details: 74625,
-      cart: 42500,
-      orders: 20400
+      views: 1670,
+      clicks: 1302,
+      details: 733,
+      cart: 417,
+      orders: 200
     },
     platforms: [
-      { name: '小红书', percentage: 55 },
-      { name: '微信', percentage: 65 },
-      { name: '抖音', percentage: 45 },
-      { name: '微博', percentage: 35 }
+      { name: '小红书', percentage: 27 },
+      { name: '微信', percentage: 42 },
+      { name: '抖音', percentage: 31 }
     ],
     popularContent: [
       {
-        title: '有机红富士苹果宣传图文',
-        image: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
+        title: '🍓救命！这草莓是灌了蜜吧？！甜到跺脚，现摘现发，实现草莓自由就趁现在～',
+        image: 'https://images.unsplash.com/photo-1587393855524-087f83d95bc9?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         platform: '小红书',
         tags: ['小红书', '热门'],
         stats: {
-          views: 19245,
-          comments: 354,
-          likes: 912,
-          shares: 298
+          views: 245,
+          comments: 34,
+          likes: 42,
+          shares: 28
         }
       },
       {
-        title: '新鲜草莓包装设计方案',
+        title: '紧急通知：你的夏日 “菠萝补给站” 已上线！新鲜直采，甜爽暴击，速来查收',
         image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
         platform: '微信',
         tags: ['微信', '推荐'],
         stats: {
-          views: 9016,
-          comments: 2895,
-          likes: 645,
-          shares: 255
+          views: 216,
+          comments: 25,
+          likes: 35,
+          shares: 22
         }
       }
     ]
@@ -205,7 +201,7 @@ function updateCharts(timeRange) {
   // 更新浏览量数据
   document.getElementById('totalViews').textContent = data.totalViews.toLocaleString();
   document.getElementById('viewsGrowth').innerHTML = `<i class="fas fa-arrow-up mr-1"></i>${data.viewsGrowth}%`;
-  document.getElementById('viewsIncrease').textContent = `较上周增加${data.viewsIncrease}`;
+  document.getElementById('viewsIncrease').textContent = `较前次统计增加${data.viewsIncrease}`;
 
   // 更新互动量数据
   document.getElementById('totalInteractions').textContent = data.totalInteractions.toLocaleString();
@@ -214,12 +210,14 @@ function updateCharts(timeRange) {
   // 更新浏览量图表
   const viewsChart = document.getElementById('viewsChart');
   viewsChart.innerHTML = '';
+  const maxViews = Math.max(...data.views);
   data.views.forEach((value, index) => {
-    const maxValue = Math.max(...data.views);
-    const height = (value / maxValue) * 100;
+    const height = (value / maxViews) * 100;
+    const opacity = 0.3 + (value / maxViews) * 0.7; // 透明度从0.3到1.0
     const bar = document.createElement('div');
     bar.className = 'bar' + (index >= data.views.length - 2 ? ' highlight' : '');
     bar.style.height = `${height}%`;
+    bar.style.opacity = opacity;
     bar.setAttribute('data-value', value);
     viewsChart.appendChild(bar);
   });
@@ -227,12 +225,14 @@ function updateCharts(timeRange) {
   // 更新互动量图表
   const interactionChart = document.getElementById('interactionChart');
   interactionChart.innerHTML = '';
+  const maxInteractions = Math.max(...data.interactions);
   data.interactions.forEach((value, index) => {
-    const maxValue = Math.max(...data.interactions);
-    const height = (value / maxValue) * 100;
+    const height = (value / maxInteractions) * 100;
+    const opacity = 0.3 + (value / maxInteractions) * 0.7; // 透明度从0.3到1.0
     const bar = document.createElement('div');
     bar.className = 'bar' + (index >= data.interactions.length - 2 ? ' highlight' : '');
     bar.style.height = `${height}%`;
+    bar.style.opacity = opacity;
     bar.setAttribute('data-value', value);
     interactionChart.appendChild(bar);
   });
@@ -256,8 +256,7 @@ function updateCharts(timeRange) {
     { label: '浏览量', value: data.funnel.views, width: 100 },
     { label: '点击互动', value: data.funnel.clicks, width: 78 },
     { label: '详情查看', value: data.funnel.details, width: 45 },
-    { label: '加购/收藏', value: data.funnel.cart, width: 26 },
-    { label: '下单转化', value: data.funnel.orders, width: 12 }
+    { label: '收藏', value: data.funnel.cart, width: 26 }
   ];
 
   funnelData.forEach(step => {
@@ -373,5 +372,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // 导出按钮点击事件
   document.querySelector('button[class*="bg-gray-100"]').addEventListener('click', function () {
     showToast('数据报告已导出', 'success');
+  });
+
+  // 返回按钮
+  document.getElementById('backButton').addEventListener('click', () => {
+    window.location.href = 'home.html';
+  });
+
+  // 底部导航栏交互
+  document.querySelectorAll('.bottom-nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const link = item.getAttribute('data-link');
+      if (link) {
+        window.location.href = link;
+      }
+    });
   });
 }); 
