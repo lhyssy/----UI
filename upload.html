@@ -94,7 +94,7 @@
                 <span id="imageCount" class="ml-2 text-sm text-gray-500">(0/9)</span>
             </h3>
             
-            <!-- 空状态 -->
+            <!-- 空状态 - 确保默认显示 -->
             <div id="emptyState" class="border border-gray-200 rounded-xl bg-white p-8 text-center">
                 <div class="empty-icon bg-gray-50 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-3">
                     <i class="fas fa-image text-gray-300 text-2xl"></i>
@@ -115,9 +115,9 @@
                     <i class="fas fa-magic text-purple-500 mr-2"></i>
                     AI图像增强
                 </h3>
-                <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" class="sr-only peer" checked>
-                    <div class="w-10 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-500"></div>
+                <label class="switch">
+                    <input type="checkbox" id="aiEnhanceSwitch">
+                    <span class="slider round"></span>
                 </label>
             </div>
             <p class="text-xs text-gray-500 mb-2">上传后自动应用AI增强，改善图片质量</p>

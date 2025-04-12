@@ -13,10 +13,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const imageCount = document.getElementById('imageCount');
     const uploadingMask = document.getElementById('uploadingMask');
     const uploadProgress = document.getElementById('uploadProgress');
+    const aiEnhanceSwitch = document.getElementById('aiEnhanceSwitch');
     
     // 状态变量
     let uploadedImages = [];
     const MAX_IMAGES = 9;
+    let isAIEnhanceEnabled = true; // AI增强开关状态
     
     // 初始化拖放上传
     initDragAndDrop();
@@ -24,8 +26,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // 初始化按钮事件
     initButtonEvents();
     
-    // 从本地存储加载之前上传的图片
-    loadImagesFromStorage();
+    // 初始化AI增强开关
+    initAIEnhanceSwitch();
+    
+    // 不再从本地存储加载之前上传的图片
+    // loadImagesFromStorage();
+    // 确保UI状态正确
+    updateImageGrid();
     
     /**
      * 初始化拖放上传功能
@@ -122,6 +129,37 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     /**
+     * 初始化AI增强开关
+     */
+    function initAIEnhanceSwitch() {
+        // 检查开关元素是否存在
+        if (!aiEnhanceSwitch) {
+            console.error('未找到AI增强开关元素');
+            return;
+        }
+        
+        // 从本地存储加载开关状态
+        const savedState = localStorage.getItem('aiEnhanceEnabled');
+        if (savedState !== null) {
+            isAIEnhanceEnabled = savedState === 'true';
+        } else {
+            isAIEnhanceEnabled = true; // 默认为开启状态
+        }
+        
+        // 设置开关状态
+        aiEnhanceSwitch.checked = isAIEnhanceEnabled;
+        
+        // 添加开关事件监听
+        aiEnhanceSwitch.addEventListener('change', function() {
+            isAIEnhanceEnabled = this.checked;
+            localStorage.setItem('aiEnhanceEnabled', isAIEnhanceEnabled);
+            
+            // 显示提示信息
+            showToast(isAIEnhanceEnabled ? '已开启AI图像增强' : '已关闭AI图像增强', 'info');
+        });
+    }
+    
+    /**
      * 处理选择的文件
      */
     function handleFiles(files) {
@@ -150,6 +188,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // 显示上传中遮罩
         uploadingMask.classList.remove('hidden');
         uploadingMask.style.display = 'flex';
+        
+        // 确保emptyState隐藏，预先显示imageGrid
+        if (files.length > 0) {
+            emptyState.classList.add('hidden');
+            imageGrid.classList.remove('hidden');
+        }
         
         const filesToProcess = Array.from(files);
         let processedCount = 0;
@@ -438,15 +482,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     /**
-     * 从本地存储加载图片
+     * 从本地存储加载图片 - 此功能已禁用
+     * 我们希望每次进入上传页面时都是全新的状态
      */
     function loadImagesFromStorage() {
+        // 清除之前上传的图片记录
+        localStorage.removeItem('uploadedImages');
+        uploadedImages = [];
+        updateImageGrid();
+        
+        // 原代码已禁用
+        /*
         const storedImages = localStorage.getItem('uploadedImages');
         
         if (storedImages) {
             uploadedImages = JSON.parse(storedImages);
             updateImageGrid();
         }
+        */
     }
     
     /**
