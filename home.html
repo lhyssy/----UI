@@ -214,6 +214,118 @@
         .text-farm-yellow {
             color: #f1c40f;
         }
+
+        /* 优化的卡片样式 */
+        .ai-card {
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            background-color: white;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .ai-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(59, 90, 65, 0.15);
+            border-color: rgba(59, 90, 65, 0.3);
+        }
+
+        .ai-card:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(59, 90, 65, 0.05), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .ai-card:hover:after {
+            opacity: 1;
+        }
+
+        .ai-card .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(59, 90, 65, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 8px rgba(59, 90, 65, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 90, 65, 0);
+            }
+        }
+
+        /* 按钮悬停效果 */
+        .action-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s;
+        }
+
+        .action-btn:hover:before {
+            left: 100%;
+        }
+
+        .stat-bubble {
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-bubble:before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: rgba(59, 90, 65, 0.05);
+            border-radius: 50%;
+            z-index: -1;
+            transform: scale(0);
+            transition: transform 0.3s ease;
+        }
+
+        .ai-card:hover .stat-bubble:before {
+            transform: scale(1);
+        }
+
+        /* 图标动画效果 */
+        .ai-card:hover .icon-container {
+            animation: slight-bounce 1s ease;
+        }
+
+        @keyframes slight-bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-3px);
+            }
+        }
     </style>
 </head>
 
@@ -235,41 +347,84 @@
         <div class="mb-6 slide-up">
             <div class="flex items-center justify-between mb-3">
                 <h2 class="text-base font-medium flex items-center">
-                    <i class="fas fa-robot text-farm-green mr-2"></i>
+                    <i class="fas fa-seedling text-farm-green mr-2"></i>
                     农业智能助手
                 </h2>
-                <a href="#" class="text-xs text-farm-green">更多功能</a>
+                <a href="#" class="text-xs text-farm-green flex items-center">
+                    更多功能
+                    <i class="fas fa-chevron-right text-xs ml-1"></i>
+                </a>
             </div>
 
-            <div class="bg-gradient-to-r from-[#537a5a] to-[#7d9c81] rounded-xl p-4 text-white shadow-lg">
-                <div class="flex items-start">
-                    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                        <i class="fas fa-brain text-white"></i>
-                    </div>
-                    <div class="ml-3 flex-1">
-                        <h3 class="font-bold text-white">智能宣传助手</h3>
-                        <p class="text-xs text-green-100 mt-1">使用AI技术帮助您优化农产品宣传内容</p>
+            <!-- 农业智能助手卡片 - Linear风格增强版 -->
+            <a href="upload.html" class="block">
+                <div class="ai-card rounded-xl shadow-sm">
+                    <!-- 卡片顶部 - 渐变装饰 -->
+                    <div class="h-2 bg-gradient-to-r from-[#3b5a41] to-[#7d9c81]"></div>
 
-                        <div class="mt-3 flex flex-wrap gap-2">
-                            <a href="upload.html"
-                                class="bg-white/20 hover:bg-white/30 transition-colors text-white text-xs px-3 py-2 rounded-lg flex items-center">
-                                <i class="fas fa-image mr-1"></i>
-                                拍照识别
-                            </a>
-                            <a href="preview.html"
-                                class="bg-white/20 hover:bg-white/30 transition-colors text-white text-xs px-3 py-2 rounded-lg flex items-center">
-                                <i class="fas fa-magic mr-1"></i>
-                                生成宣传
-                            </a>
-                            <a href="publish.html"
-                                class="bg-white/20 hover:bg-white/30 transition-colors text-white text-xs px-3 py-2 rounded-lg flex items-center">
-                                <i class="fas fa-paper-plane mr-1"></i>
-                                发布内容
+                    <!-- 卡片内容 -->
+                    <div class="p-6">
+                        <div class="flex items-start">
+                            <div
+                                class="icon-container w-12 h-12 rounded-xl bg-[#e8f3e9] flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-robot text-[#3b5a41] text-lg"></i>
+                            </div>
+                            <div class="ml-4 flex-1">
+                                <h3 class="font-bold text-gray-800">农产品宣传智能助手</h3>
+                                <p class="text-sm text-gray-500 mt-1">上传农产品照片，AI自动生成专业宣传文案，一键多平台发布</p>
+                            </div>
+                        </div>
+
+                        <!-- 创建按钮 -->
+                        <div class="mt-5 mb-2">
+                            <div
+                                class="action-btn bg-[#3b5a41] hover:bg-[#2e4733] text-white text-sm py-3 rounded-lg flex items-center justify-center transition-colors duration-300 shadow-sm">
+                                <i class="fas fa-camera-retro mr-2"></i>
+                                点击开始创建
+                            </div>
+                        </div>
+
+                        <!-- 功能指标 -->
+                        <div class="mt-5 pt-4 border-t border-gray-100 grid grid-cols-3 gap-2">
+                            <div class="text-center">
+                                <div class="text-xs text-gray-500">支持平台</div>
+                                <div
+                                    class="font-medium text-gray-800 mt-1 flex items-center justify-center stat-bubble">
+                                    <i class="fas fa-circle-check text-[#3b5a41] mr-1 text-xs"></i>
+                                    5+
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-xs text-gray-500">识别精度</div>
+                                <div
+                                    class="font-medium text-gray-800 mt-1 flex items-center justify-center stat-bubble">
+                                    <i class="fas fa-circle-check text-[#3b5a41] mr-1 text-xs"></i>
+                                    98%
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-xs text-gray-500">生成速度</div>
+                                <div
+                                    class="font-medium text-gray-800 mt-1 flex items-center justify-center stat-bubble">
+                                    <i class="fas fa-circle-check text-[#3b5a41] mr-1 text-xs"></i>
+                                    3秒
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 底部链接 -->
+                        <div class="mt-3 text-right">
+                            <a href="tutorials.html"
+                                class="inline-flex items-center text-[#3b5a41] text-sm hover:underline group">
+                                <i class="fas fa-play-circle mr-1 group-hover:animate-pulse"></i>
+                                查看教程
+                                <i class="fas fa-chevron-right text-xs ml-1 opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1"
+                                    style="font-size: 0.7rem;"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- 主要功能区 -->

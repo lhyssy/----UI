@@ -269,7 +269,32 @@ document.addEventListener('DOMContentLoaded', function () {
      * 设置初始基础文案
      */
     function setupInitialContent() {
-        // 这些是初始的基础文案，用户可以编辑修改
+        // 尝试从localStorage加载用户输入的文案
+        const savedCopy = localStorage.getItem('productCopy');
+        let userCopy = null;
+
+        if (savedCopy) {
+            try {
+                userCopy = JSON.parse(savedCopy);
+                console.log('已加载用户输入的文案信息', userCopy);
+
+                // 存储原始用户输入，以便后续可以恢复
+                window.originalUserCopy = { ...userCopy };
+
+                // 显示用户输入的文案
+                if (userCopy.isUserGenerated) {
+                    displayUserContent(userCopy);
+                    return; // 如果成功加载并显示了用户输入的文案，则返回
+                }
+            } catch (e) {
+                console.error('解析用户文案失败:', e);
+            }
+        }
+
+        // 如果没有用户输入的文案或解析失败，使用默认内容
+        console.log('使用默认文案内容');
+
+        // 这些是初始的基础文案，用户可以在预览页面修改
         if (previewTitle) {
             previewTitle.textContent = "高山果园红富士苹果 | 有机种植 · 自然成熟 · 脆甜多汁";
         }
@@ -296,7 +321,53 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // 设置食用建议
             if (contentSections[3]) {
-                contentSections[3].textContent = "建议冷藏后食用，口感更佳。可以直接作为水果享用，也可切片加入沙拉或搭配酸奶食用。适合送礼或自用，一年四季皆宜。";
+                contentSections[3].textContent = "建议冷藏后食用，口感更佳。可以直接作为水果享用，也可切片加入沙拉、搭配酸奶或制作苹果派。苹果还能制作成鲜榨果汁，搭配其他水果制作特色饮品，带来清新健康的口感体验。";
+            }
+        }
+
+        // 将默认内容保存为原始内容
+        window.originalUserCopy = {
+            title: previewTitle ? previewTitle.textContent : "",
+            description: previewDesc ? previewDesc.textContent : "",
+            features: contentSections && contentSections[0] ? contentSections[0].textContent : "",
+            taste: contentSections && contentSections[1] ? contentSections[1].textContent : "",
+            nutrition: contentSections && contentSections[2] ? contentSections[2].textContent : "",
+            suggestion: contentSections && contentSections[3] ? contentSections[3].textContent : "",
+            isUserGenerated: false
+        };
+    }
+
+    /**
+     * 显示用户输入的文案
+     */
+    function displayUserContent(userCopy) {
+        if (previewTitle && userCopy.title) {
+            previewTitle.textContent = userCopy.title;
+        }
+
+        if (previewDesc && userCopy.description) {
+            previewDesc.innerHTML = userCopy.description;
+        }
+
+        if (contentSections && contentSections.length > 0) {
+            // 设置产品特点
+            if (contentSections[0] && userCopy.features) {
+                contentSections[0].textContent = userCopy.features;
+            }
+
+            // 设置口感体验
+            if (contentSections[1] && userCopy.taste) {
+                contentSections[1].textContent = userCopy.taste;
+            }
+
+            // 设置营养价值
+            if (contentSections[2] && userCopy.nutrition) {
+                contentSections[2].textContent = userCopy.nutrition;
+            }
+
+            // 设置食用建议
+            if (contentSections[3] && userCopy.suggestion) {
+                contentSections[3].textContent = userCopy.suggestion;
             }
         }
     }
@@ -391,6 +462,9 @@ document.addEventListener('DOMContentLoaded', function () {
                             // 生成文案
                             const result = generateSampleContent();
 
+                            // 保存AI生成的文案到localStorage
+                            localStorage.setItem('aiGeneratedCopy', JSON.stringify(result));
+
                             // 应用生成的文案
                             applyGeneratedContent(result);
 
@@ -399,6 +473,9 @@ document.addEventListener('DOMContentLoaded', function () {
                                 aiGeneratingContainer.classList.add('hidden');
                             }
                             generateCopyBtn.disabled = false;
+
+                            // 添加恢复原始文案的按钮
+                            addRestoreButton();
 
                             // 显示完成提示
                             showToast('文案生成完成', 'success');
@@ -416,20 +493,50 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         });
+    }
 
-        /**
-         * 生成示例内容（真实项目中应调用API）
-         */
-        function generateSampleContent() {
-            return {
-                title: "有机山地红富士苹果 | 鲜脆多汁 · 自然生长 · 营养丰富",
-                description: "🌟 精选自海拔1200米以上的山地果园，每一颗红富士苹果都经过严格的有机种植标准，不使用化学农药和肥料，保留了水果的原始风味和营养价值。果肉脆嫩，汁水丰富，自然甜度适中，是您日常健康饮食的理想选择！",
-                features: "产自高海拔山地果园，采用纯有机种植工艺，严格按照欧盟有机认证标准管理。果实个头均匀，表皮光滑，通体红润，自然光泽诱人。每一颗都是经过精心挑选，确保品质如一。",
-                taste: "咬一口，清脆的口感伴随着丰富的果汁在口中迸发，自然甜度不腻口，带有淡淡的果香，余味中还有一丝清爽的酸，平衡了整体风味，让人忍不住再吃一口。",
-                nutrition: "富含多种维生素、膳食纤维和抗氧化物质，有助于提升免疫力、促进肠道健康、减缓衰老。相比普通苹果，有机种植的富士苹果多酚含量更高，营养价值更为丰富。每100克仅含52大卡热量，是减肥期的理想零食。",
-                suggestion: "最佳食用温度为4-8℃，建议冷藏后食用口感更佳。可直接享用，也可切片加入沙拉、搭配酸奶或制作苹果派。果皮中含有丰富的营养物质，建议连皮一起食用。适合全家人日常食用，尤其推荐给需要补充维生素的儿童和老人。"
-            };
+    /**
+     * 添加恢复原始文案的按钮
+     */
+    function addRestoreButton() {
+        // 检查是否已经有恢复按钮
+        if (document.getElementById('restoreOriginalBtn')) {
+            return;
         }
+
+        // 创建恢复按钮
+        const restoreBtn = document.createElement('button');
+        restoreBtn.id = 'restoreOriginalBtn';
+        restoreBtn.className = 'ml-3 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm px-4 py-2 rounded-lg flex items-center justify-center transition-colors';
+        restoreBtn.innerHTML = '<i class="fas fa-undo mr-2"></i>恢复原文案';
+
+        // 添加点击事件
+        restoreBtn.addEventListener('click', function () {
+            if (window.originalUserCopy) {
+                displayUserContent(window.originalUserCopy);
+                showToast('已恢复原始文案', 'info');
+            }
+        });
+
+        // 将按钮添加到生成按钮旁边
+        const container = generateCopyBtn.parentElement;
+        if (container) {
+            container.appendChild(restoreBtn);
+        }
+    }
+
+    /**
+     * 生成示例内容（真实项目中应调用API）
+     */
+    function generateSampleContent() {
+        return {
+            title: "有机山地红富士苹果 | 鲜脆多汁 · 自然生长 · 营养丰富",
+            description: "🌟 精选自海拔1200米以上的山地果园，每一颗红富士苹果都经过严格的有机种植标准，不使用化学农药和肥料，保留了水果的原始风味和营养价值。果肉脆嫩，汁水丰富，自然甜度适中，是您日常健康饮食的理想选择！",
+            features: "产自高海拔山地果园，采用纯有机种植工艺，严格按照欧盟有机认证标准管理。果实个头均匀，表皮光滑，通体红润，自然光泽诱人。每一颗都是经过精心挑选，确保品质如一。",
+            taste: "咬一口，清脆的口感伴随着丰富的果汁在口中迸发，自然甜度不腻口，带有淡淡的果香，余味中还有一丝清爽的酸，平衡了整体风味，让人忍不住再吃一口。",
+            nutrition: "富含多种维生素、膳食纤维和抗氧化物质，有助于提升免疫力、促进肠道健康、减缓衰老。相比普通苹果，有机种植的富士苹果多酚含量更高，营养价值更为丰富。每100克仅含52大卡热量，是减肥期的理想零食。",
+            suggestion: "最佳食用温度为4-8℃，建议冷藏后食用口感更佳。可直接享用，也可切片加入沙拉、搭配酸奶或制作苹果派。果皮中含有丰富的营养物质，建议连皮一起食用。适合全家人日常食用，尤其推荐给需要补充维生素的儿童和老人。"
+        };
     }
 
     /**

@@ -149,7 +149,7 @@
     <!-- 顶部导航栏 -->
     <div class="header-nav p-4 flex items-center justify-between">
         <a href="home.html" class="flex items-center">
-                <i class="fas fa-arrow-left text-lg"></i>
+            <i class="fas fa-arrow-left text-lg"></i>
         </a>
         <h1 class="text-lg font-bold flex-1 text-center">上传农产品图片</h1>
         <div class="w-5"></div> <!-- 占位元素，保持标题居中 -->
@@ -180,14 +180,14 @@
             </div>
             <div class="step-name text-xs text-center">选择平台</div>
         </div>
-                </div>
-                
+    </div>
+
     <!-- AI助手提示 -->
     <div class="ai-assistant p-4 mx-4 mb-5 shadow-sm">
         <div class="flex items-start">
             <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mr-3">
                 <i class="fas fa-robot text-white text-sm"></i>
-                </div>
+            </div>
             <div>
                 <p class="text-sm font-medium mb-1">AI助手提示</p>
                 <p class="text-sm text-gray-600">
@@ -195,7 +195,7 @@
                 </p>
             </div>
         </div>
-                </div>
+    </div>
 
     <!-- 上传区域 -->
     <div class="px-4 mb-5">
@@ -210,8 +210,8 @@
                 <input type="file" id="file-upload" accept="image/*" multiple class="hidden">
             </label>
         </div>
-            </div>
-            
+    </div>
+
     <!-- 已上传图片预览区域 -->
     <div id="preview-area" class="px-4 mb-6" style="display: none;">
         <h3 class="font-medium mb-3">已上传图片 (<span id="image-count">0</span>)</h3>
@@ -219,8 +219,8 @@
         <div id="image-previews" class="grid grid-cols-2 gap-3">
             <!-- 图片预览将通过JS动态添加 -->
         </div>
-        </div>
-        
+    </div>
+
     <!-- 模板：图片预览项 -->
     <template id="image-preview-template">
         <div class="image-preview relative">
@@ -237,6 +237,68 @@
             </div>
         </div>
     </template>
+
+    <!-- 文案信息收集表单 -->
+    <div id="copy-info-form" class="px-4 mb-6">
+        <div class="flex items-center justify-between mb-3">
+            <h3 class="font-medium">产品文案信息</h3>
+            <div class="text-xs text-gray-500">填写基础信息，AI将据此优化</div>
+        </div>
+
+        <div class="card p-4 mb-4">
+            <!-- 产品标题 -->
+            <div class="mb-4">
+                <label for="product-title" class="block text-sm font-medium text-gray-700 mb-1">产品标题</label>
+                <input type="text" id="product-title" placeholder="例：高山有机红富士苹果"
+                    class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500">
+            </div>
+
+            <!-- 产品简介 -->
+            <div class="mb-4">
+                <label for="product-intro" class="block text-sm font-medium text-gray-700 mb-1">产品简介</label>
+                <textarea id="product-intro" rows="2" placeholder="简单介绍产品的主要卖点"
+                    class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 resize-none"></textarea>
+            </div>
+
+            <!-- 产品特点 -->
+            <div class="mb-4">
+                <label for="product-features" class="block text-sm font-medium text-gray-700 mb-1">产品特点</label>
+                <textarea id="product-features" rows="2" placeholder="产品的特点、产地、种植方式等"
+                    class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 resize-none"></textarea>
+            </div>
+
+            <!-- 口感体验 -->
+            <div class="mb-4">
+                <label for="product-taste" class="block text-sm font-medium text-gray-700 mb-1">口感体验</label>
+                <textarea id="product-taste" rows="2" placeholder="描述产品的口感、风味等"
+                    class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 resize-none"></textarea>
+            </div>
+
+            <!-- 营养价值 -->
+            <div class="mb-4">
+                <label for="product-nutrition" class="block text-sm font-medium text-gray-700 mb-1">营养价值</label>
+                <textarea id="product-nutrition" rows="2" placeholder="产品的营养成分和健康价值"
+                    class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 resize-none"></textarea>
+            </div>
+
+            <!-- 食用建议 -->
+            <div>
+                <label for="product-suggestion" class="block text-sm font-medium text-gray-700 mb-1">食用建议</label>
+                <textarea id="product-suggestion" rows="2" placeholder="如何食用，配菜建议等"
+                    class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 resize-none"></textarea>
+            </div>
+        </div>
+
+        <!-- 表单提示 -->
+        <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 flex mb-4">
+            <div class="text-blue-500 mr-3">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="text-sm text-gray-600">
+                <p>以上信息填写后将显示在预览页面，您可以在预览页面使用AI助手进一步优化文案。</p>
+            </div>
+        </div>
+    </div>
 
     <!-- 底部操作按钮 -->
     <div class="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-md">
@@ -450,4 +512,4 @@
     </script>
 </body>
 
-</html> 
+</html>

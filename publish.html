@@ -131,7 +131,7 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             transition: all 0.2s ease;
         }
-
+        
         .platform-card.selected .w-10.h-10.rounded-full {
             transform: scale(1.05);
         }
@@ -180,7 +180,7 @@
             transform: none;
             cursor: not-allowed;
         }
-
+        
         .btn-secondary {
             background-color: #f3f4f6;
             color: var(--text-secondary);
@@ -213,8 +213,8 @@
 
             100% {
                 transform: scale(1);
-                opacity: 1;
-            }
+            opacity: 1;
+        }
         }
     </style>
 </head>
@@ -228,16 +228,16 @@
         <h1 class="text-lg font-bold flex-1 text-center">选择发布平台</h1>
         <div class="w-5"></div> <!-- 占位，保持标题居中 -->
     </div>
-
+    
     <!-- 内容区域 -->
     <div class="content-wrapper">
-        <!-- AI助手提示 -->
+    <!-- AI助手提示 -->
         <div class="ai-assistant p-4 mx-4 mt-4 mb-5 rounded-lg shadow-sm">
             <div class="flex items-start">
                 <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mr-3">
                     <i class="fas fa-robot text-white text-sm"></i>
-                </div>
-                <div>
+            </div>
+            <div>
                     <p class="text-sm font-medium mb-1">AI助手推荐</p>
                     <p class="text-sm text-gray-600">
                         根据您的农产品特点，建议发布到 小红书、抖音和微信视频号，这些平台对农产品展示效果最佳，用户群体也更匹配。
@@ -252,7 +252,7 @@
                 <div
                     class="step-number w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center text-xs mb-1">
                     <i class="fas fa-check"></i>
-                </div>
+    </div>
                 <div class="step-name text-xs text-center">上传照片</div>
             </div>
             <div class="connector flex-1 h-1 bg-green-500 mt-3 mx-2"></div>
@@ -270,9 +270,9 @@
                     3
                 </div>
                 <div class="step-name text-xs text-center">选择平台</div>
-            </div>
         </div>
-
+    </div>
+    
         <!-- 平台选择 -->
         <div class="platform-selection px-4">
             <h2 class="text-base font-bold mb-3">请选择您要发布的平台</h2>
@@ -296,7 +296,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- 抖音 -->
                 <div class="platform-card p-3 flex items-center justify-between">
                     <div class="flex items-center">
@@ -312,9 +312,9 @@
                         <div
                             class="checkmark w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center">
                         </div>
-                    </div>
-                </div>
-
+            </div>
+        </div>
+        
                 <!-- 微信视频号 -->
                 <div class="platform-card p-3 flex items-center justify-between">
                     <div class="flex items-center">
@@ -332,7 +332,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- 微信公众号 -->
                 <div class="platform-card p-3 flex items-center justify-between">
                     <div class="flex items-center">
@@ -350,7 +350,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- 更多平台 -->
                 <div class="platform-card p-3 flex items-center justify-between">
                     <div class="flex items-center">
@@ -363,22 +363,22 @@
                         </div>
                     </div>
                     <i class="fas fa-chevron-right text-gray-300"></i>
-                </div>
             </div>
         </div>
-
+    </div>
+    
         <!-- 底部操作栏 -->
         <div class="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-md">
             <div class="flex space-x-3">
                 <button id="cancelPublishBtn" class="flex-1 btn-secondary py-3 rounded-lg font-medium text-center">
                     暂不发布
-                </button>
+        </button>
                 <button id="publishBtn" class="flex-1 btn-primary py-3 rounded-lg font-medium text-center">
                     立即发布
                 </button>
-            </div>
         </div>
-
+    </div>
+    
         <!-- 发布成功模态框 -->
         <div id="publishSuccessModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
             <div class="absolute inset-0 bg-black bg-opacity-50" id="modalOverlay"></div>
@@ -407,4 +407,4 @@
         <script src="js/publish.js"></script>
 </body>
 
-</html>
+</html> 

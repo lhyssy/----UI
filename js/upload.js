@@ -127,8 +127,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     localStorage.setItem('uploadedImages', JSON.stringify(uploadedImages));
                 }
 
+                // 收集用户输入的文案信息
+                const productCopy = {
+                    title: document.getElementById('product-title').value || '',
+                    description: document.getElementById('product-intro').value || '',
+                    features: document.getElementById('product-features').value || '',
+                    taste: document.getElementById('product-taste').value || '',
+                    nutrition: document.getElementById('product-nutrition').value || '',
+                    suggestion: document.getElementById('product-suggestion').value || '',
+                    isUserGenerated: true // 标记为用户生成的内容，非AI生成
+                };
+
+                // 保存文案信息到localStorage
+                localStorage.setItem('productCopy', JSON.stringify(productCopy));
+
                 // 跳转到下一个页面
                 window.location.href = 'preview.html';
+            } else {
+                showToast('请至少上传一张产品图片', 'warning');
             }
         });
     }
