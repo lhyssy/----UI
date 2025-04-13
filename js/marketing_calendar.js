@@ -30,7 +30,7 @@ function generateCalendar() {
   for (let i = firstDay - 1; i >= 0; i--) {
     const day = document.createElement('div');
     day.className = 'calendar-day inactive px-1 py-1';
-    day.innerHTML = `<div class="day-number text-right mb-1">${daysInLastMonth - i}</div>`;
+    day.innerHTML = `<div class="day-number">${daysInLastMonth - i}</div>`;
     calendarGrid.appendChild(day);
   }
 
@@ -49,7 +49,7 @@ function generateCalendar() {
     const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
     const dayEvents = events.filter(event => event.date === dateStr);
 
-    let dayContent = `<div class="day-number text-right mb-1">${i}</div>`;
+    let dayContent = `<div class="day-number">${i}</div>`;
 
     if (dayEvents.length > 0) {
       day.classList.add('has-event');
@@ -74,7 +74,7 @@ function generateCalendar() {
   for (let i = 1; i <= remainingDays; i++) {
     const day = document.createElement('div');
     day.className = 'calendar-day inactive px-1 py-1';
-    day.innerHTML = `<div class="day-number text-right mb-1">${i}</div>`;
+    day.innerHTML = `<div class="day-number">${i}</div>`;
     calendarGrid.appendChild(day);
   }
 }
@@ -114,41 +114,61 @@ function showEventsForDate(dateStr) {
   }
 
   selectedEvents.forEach(event => {
-    const eventItem = document.createElement('div');
-    eventItem.className = 'p-4';
-
-    // 生成平台标签
-    let platformTags = '';
-    if (event.platforms && event.platforms.length > 0) {
-      platformTags = event.platforms.map(platform => {
-        const platformName = {
-          'douyin': '抖音',
-          'xiaohongshu': '小红书',
-          'wechat': '微信公众号'
-        }[platform];
-        return `<span class="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded-full mr-2">${platformName}</span>`;
-      }).join('');
-    }
-
-    eventItem.innerHTML = `
-        <div class="flex justify-between items-start">
-            <div>
-                <h3 class="font-medium">${event.name}</h3>
-                <p class="text-sm text-gray-500 mt-1">${event.description}</p>
-                <div class="flex items-center mt-2">
-                    <span class="text-xs px-2 py-1 ${getEventBadgeClass(event.type)} rounded-full">${getEventTypeName(event.type)}</span>
-                    ${platformTags}
-                </div>
-            </div>
-            <div class="flex space-x-2">
-                <button class="text-gray-500 delete-event" data-id="${event.id}">
-                    <i class="far fa-trash-alt"></i>
-                </button>
-            </div>
-        </div>
-    `;
+    const eventItem = createEventItem(event);
     eventList.appendChild(eventItem);
   });
+}
+
+function createEventItem(event) {
+  const eventItem = document.createElement('div');
+  eventItem.className = 'event-item';
+
+  const title = document.createElement('div');
+  title.className = 'event-title';
+  title.textContent = event.name;
+
+  const type = document.createElement('span');
+  type.className = `event-type ${event.type}`;
+  type.textContent = getEventTypeText(event.type);
+
+  const platforms = document.createElement('div');
+  platforms.className = 'platform-tags';
+  event.platforms.forEach(platform => {
+    const platformTag = document.createElement('span');
+    platformTag.className = 'platform-tag';
+    platformTag.textContent = getPlatformText(platform);
+    platforms.appendChild(platformTag);
+  });
+
+  const description = document.createElement('div');
+  description.className = 'event-description';
+  description.textContent = event.description || '';
+
+  eventItem.appendChild(title);
+  eventItem.appendChild(type);
+  eventItem.appendChild(platforms);
+  eventItem.appendChild(description);
+
+  return eventItem;
+}
+
+function getEventTypeText(type) {
+  const types = {
+    'promotional': '促销宣传',
+    'harvest': '收获季节',
+    'planting': '种植计划',
+    'market': '市场活动'
+  };
+  return types[type] || type;
+}
+
+function getPlatformText(platform) {
+  const platforms = {
+    'douyin': '抖音',
+    'xiaohongshu': '小红书',
+    'wechat': '微信公众号'
+  };
+  return platforms[platform] || platform;
 }
 
 // 获取活动类型名称
@@ -278,6 +298,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 返回按钮
   document.getElementById('backButton').addEventListener('click', () => {
-    window.history.back();
+    window.location.href = 'home.html';
+  });
+
+  // 底部导航栏交互
+  document.querySelectorAll('.bottom-nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const link = item.getAttribute('data-link');
+      if (link) {
+        window.location.href = link;
+      }
+    });
   });
 }); 

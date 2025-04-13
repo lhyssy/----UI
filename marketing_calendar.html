@@ -10,16 +10,24 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/calendar.css">
     <style>
+        .sticky {
+            background-color: rgba(154, 163, 56, 1);
+        }
+
+        .fixed {
+            background-color: rgba(154, 163, 56, 1);
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            background-color: rgba(205, 210, 171, 0.2);
+            color: rgba(15, 45, 73, 1);
             max-width: 100%;
             overflow-x: hidden;
         }
 
         .header {
-            background: white;
+            background: rgba(154, 163, 56, 1);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
@@ -35,21 +43,67 @@
             border-radius: 8px;
             padding: 8px;
             position: relative;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calendar-day .day-number {
+            font-size: 14px;
+            color: rgba(15, 45, 73, 0.8);
+            margin-bottom: 4px;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .calendar-day .calendar-event {
+            font-size: 10px;
+            padding: 2px 4px;
+            margin-bottom: 2px;
+            border-radius: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background: rgba(154, 163, 56, 0.1);
+            color: rgba(15, 45, 73, 0.8);
+        }
+
+        .calendar-day .more-events {
+            font-size: 10px;
+            color: rgba(15, 45, 73, 0.6);
+            text-align: center;
+            margin-top: 2px;
+        }
+
+        @media (max-width: 640px) {
+            .calendar-day {
+                min-height: 100px;
+                padding: 10px;
+            }
+
+            .calendar-day .day-number {
+                font-size: 16px;
+            }
+
+            .calendar-day .calendar-event {
+                font-size: 12px;
+                padding: 3px 6px;
+            }
         }
 
         .calendar-day.today {
-            background: #e6f7f0;
-            border: 2px solid #07c160;
+            background: rgba(154, 163, 56, 0.1);
+            border: 2px solid rgba(154, 163, 56, 1);
         }
 
         .calendar-day.has-event {
-            background: #f0f9f4;
+            background: rgba(154, 163, 56, 0.05);
         }
 
         .event-dot {
             width: 6px;
             height: 6px;
-            background: #07c160;
+            background: rgba(154, 163, 56, 1);
             border-radius: 50%;
             position: absolute;
             bottom: 8px;
@@ -58,11 +112,68 @@
         }
 
         .event-item {
-            border-left: 3px solid #07c160;
+            border-left: 3px solid rgba(154, 163, 56, 1);
             padding: 8px;
             margin-bottom: 8px;
             background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .event-item .event-title {
+            font-weight: 500;
+            color: rgba(15, 45, 73, 1);
+            margin-bottom: 4px;
+        }
+
+        .event-item .event-type {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
             border-radius: 4px;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .event-item .event-type.promotional {
+            background-color: rgba(33, 74, 113, 0.2);
+            color: rgba(15, 45, 73, 0.8);
+        }
+
+        .event-item .event-type.harvest {
+            background-color: rgba(154, 163, 56, 0.1);
+            color: rgba(154, 163, 56, 0.9);
+        }
+
+        .event-item .event-type.planting {
+            background-color: rgba(33, 74, 113, 0.2);
+            color: rgba(15, 45, 73, 0.6);
+        }
+
+        .event-item .event-type.market {
+            background-color: rgba(154, 163, 56, 0.1);
+            color: rgba(154, 163, 56, 0.7);
+        }
+
+        .event-item .platform-tags {
+            display: inline-flex;
+            gap: 5px;
+            margin-left: 10px;
+        }
+
+        .event-item .platform-tag {
+            font-size: 12px;
+            color: rgba(15, 45, 73, 0.6);
+            background-color: rgba(15, 45, 73, 0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .event-item .event-description {
+            margin-top: 8px;
+            color: rgba(15, 45, 73, 0.7);
+            font-size: 13px;
+            line-height: 1.4;
         }
 
         .modal {
@@ -84,22 +195,73 @@
             margin: 20px auto;
             padding: 20px;
         }
+
+        .event-type-selector.selected {
+            border: 2px solid rgba(154, 163, 56, 1);
+        }
+
+        .event-badge {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .event-badge.bg-red-500 {
+            background-color: rgba(15, 45, 73, 0.7);
+        }
+
+        .event-badge.bg-yellow-500 {
+            background-color: rgba(154, 163, 56, 0.7);
+        }
+
+        .event-badge.bg-green-500 {
+            background-color: rgba(15, 45, 73, 0.3);
+        }
+
+        .event-badge.bg-blue-500 {
+            background-color: rgba(154, 163, 56, 0.5);
+        }
+
+        .text-green-500 {
+            color: rgba(154, 163, 56, 1) !important;
+        }
+
+        /* .bg-green-500 {
+            background-color: rgba(154, 163, 56, 1) !important;
+        } */
+
+        .bottom-nav-item {
+            color: rgba(15, 45, 73, 1);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .bottom-nav-item i {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .bottom-nav-item span {
+            font-size: 12px;
+        }
     </style>
 </head>
 
 <body class="pb-24">
     <!-- 顶部导航 -->
-    <div class="sticky top-0 z-10 bg-white shadow-sm">
-        <div class="flex justify-between items-center px-4 py-3">
-            <button id="backButton" class="text-gray-700">
-                <i class="fas fa-arrow-left text-lg"></i>
-            </button>
-            <h1 class="text-lg font-medium">营销日历</h1>
-            <button class="text-gray-700" id="addEventBtn">
-                <i class="fas fa-plus text-xl"></i>
-            </button>
+    <header class="header py-3 px-5 flex items-center justify-between fixed top-0 left-0 right-0 z-50">
+        <div class="flex items-center w-full">
+            <a href="home.html" class="back-button mr-3 slide-right">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1 class="text-lg font-semibold slide-down flex-1 text-center">营销日历</h1>
+            <div class="w-8"></div> <!-- 用于平衡布局 -->
         </div>
-    </div>
+    </header>
 
     <div class="px-4 py-3">
         <!-- 日历标题和月份选择器 -->
