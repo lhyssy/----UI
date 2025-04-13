@@ -60,14 +60,14 @@ body::before {
 
 /* 毛玻璃效果导航栏 */
 .glass-nav {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
 }
 
 /* 毛玻璃效果底部导航 */
@@ -79,75 +79,56 @@ body::before {
     box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
 }
 
-/* 毛玻璃卡片效果 */
+/* 毛玻璃效果卡片 */
 .glass-card {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
 
 .glass-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* 主要按钮样式 */
 .btn-nature {
     background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
     color: white;
+    border: none;
+    padding: 0.625rem 1.25rem;
+    border-radius: 6px;
+    font-weight: 500;
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(var(--primary-color-rgb), 0.3);
-}
-
-.btn-nature::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(to bottom right,
-            rgba(255, 255, 255, 0.2) 0%,
-            rgba(255, 255, 255, 0) 100%);
-    transform: rotate(30deg);
-    transition: transform 0.5s ease;
-    opacity: 0;
-}
-
-.btn-nature:hover::before {
-    opacity: 1;
-    transform: rotate(30deg) translate(10%, 10%);
+    box-shadow: 0 2px 4px rgba(var(--primary-dark-rgb), 0.3);
 }
 
 .btn-nature:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(var(--primary-color-rgb), 0.4);
-}
-
-.btn-nature:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 6px rgba(var(--primary-color-rgb), 0.2);
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(var(--primary-dark-rgb), 0.4);
 }
 
 /* 辅助按钮样式 */
 .btn-earth {
     background: linear-gradient(135deg, var(--secondary-color), var(--rich-soil));
     color: white;
+    border: none;
+    padding: 0.625rem 1.25rem;
+    border-radius: 6px;
+    font-weight: 500;
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(var(--secondary-color-rgb), 0.3);
+    box-shadow: 0 2px 4px rgba(var(--secondary-color-rgb), 0.3);
 }
 
 .btn-earth:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(var(--secondary-color-rgb), 0.4);
+    background: linear-gradient(135deg, var(--rich-soil), var(--secondary-color));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(var(--secondary-color-rgb), 0.4);
 }
 
 /* 微妙的动画效果 */
@@ -345,22 +326,18 @@ body {
     border-radius: 0 8px 8px 0;
 }
 
-/* 加载动画 */
+/* 全局加载动画 */
 .loading-spinner {
     width: 30px;
     height: 30px;
+    border: 3px solid rgba(var(--primary-light-rgb), 0.3);
     border-radius: 50%;
-    border: 3px solid rgba(99, 102, 241, 0.1);
-    border-top-color: #6366f1;
+    border-top-color: var(--primary-color);
     animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
+    to {
         transform: rotate(360deg);
     }
 }
@@ -461,4 +438,57 @@ input:checked+.slider:before {
         background-color: var(--card-bg);
         box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
     }
+}
+
+:root {
+    --primary-color: #538d22;
+    /* 青草绿 */
+    --primary-dark: #2d6a4f;
+    /* 深森林绿 */
+    --primary-light: #e8f3e9;
+    /* 浅草绿 */
+    --secondary-color: #d4a373;
+    /* 土地棕色 */
+    --secondary-light: #f8edd0;
+    /* 浅土地色 */
+    --accent-color: #d06b24;
+    /* 收获橙 */
+    --accent-light: #fce1d0;
+    /* 浅橙色 */
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --light-green: #b6c199;
+    /* 嫩绿 */
+    --pale-yellow: #f8f0e3;
+    /* 麦秆黄 */
+    --rich-soil: #7f4f24;
+    /* 肥沃土壤色 */
+    --sky-blue: #90e0ef;
+    /* 清空蓝 */
+    --dew-green: #cbdfbd;
+    /* 露珠绿 */
+    --harvest-gold: #ffc93c;
+    /* 丰收金 */
+
+    /* RGB值，用于透明度调整 */
+    --primary-color-rgb: 83, 141, 34;
+    --primary-dark-rgb: 45, 106, 79;
+    --primary-light-rgb: 232, 243, 233;
+    --secondary-color-rgb: 212, 163, 115;
+    --secondary-light-rgb: 248, 237, 208;
+    --accent-color-rgb: 208, 107, 36;
+    --accent-light-rgb: 252, 225, 208;
+
+    /* 同义词变量，用于兼容不同页面的命名习惯 */
+    --green-100: var(--primary-light);
+    --green-500: var(--primary-color);
+    --green-600: var(--primary-dark);
+    --red-100: var(--accent-light);
+    --red-500: var(--accent-color);
+    --blue-100: var(--sky-blue);
+    --yellow-100: var(--pale-yellow);
+    --indigo-500: var(--primary-color);
+    --indigo-600: var(--primary-dark);
+    --purple-100: var(--secondary-light);
+    --purple-600: var(--secondary-color);
 }
