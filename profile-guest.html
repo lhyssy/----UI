@@ -93,7 +93,8 @@
 <body>
 <div class="page-container">
     <!-- 顶部导航 -->
-    <div class="bg-white p-4 flex items-center justify-between" style="background-color: rgba(154,163,56, 1)">
+    <div class="fixed top-0 left-0 right-0 p-4 flex items-center justify-center z-50"
+         style="background-color: rgba(154,163,56, 1)">
         <h1 class="text-xl font-bold">个人中心</h1>
     </div>
 
@@ -118,22 +119,21 @@
 <div class="fixed bottom-0 left-0 right-0 py-2 px-5 border-t border-gray-100"
      style="background-color: rgba(154,163,56, 1)">
     <div class="flex justify-between">
-        <div class="bottom-nav-item flex flex-col items-center text-gray-500" data-link="home.html">
-            <i class="fas fa-home text-xl"></i>
-            <span class="text-xs mt-1">首页</span>
+        <div class="bottom-nav-item flex flex-col items-center" data-link="home.html">
+            <i class="fas fa-home text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">首页</span>
         </div>
-        <div class="bottom-nav-item flex flex-col items-center text-gray-500" data-link="upload.html">
-            <i class="fas fa-plus-circle text-xl"></i>
-            <span class="text-xs mt-1">创建</span>
+        <div class="bottom-nav-item flex flex-col items-center" data-link="upload.html">
+            <i class="fas fa-plus-circle text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">创建</span>
         </div>
-        <div class="bottom-nav-item flex flex-col items-center text-gray-500" data-link="tutorials.html">
-            <i class="fas fa-book text-xl"></i>
-            <span class="text-xs mt-1">教程</span>
+        <div class="bottom-nav-item flex flex-col items-center" data-link="tutorials.html">
+            <i class="fas fa-book text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">教程</span>
         </div>
-        <div class="bottom-nav-item flex flex-col items-center active" data-link="profile.html"
-             style="color: rgba(15,45,73,1)">
+        <div class="bottom-nav-item flex flex-col items-center" data-link="profile.html">
             <i class="fas fa-user text-xl" style="color: rgba(15,45,73,1)"></i>
-            <span class="text-xs mt-1">我的</span>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">我的</span>
         </div>
     </div>
 </div>
