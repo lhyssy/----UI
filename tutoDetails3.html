@@ -29,15 +29,28 @@
           background: linear-gradient(135deg, #ffffff, #f8fafc);
           border: 1px solid #e2e8f0;
       }
-      .bg-olive{
-            background: rgba(154, 163, 56, 1)
+      
+      .bg-olive-0{
+        background-color: #f3f4ec;
         }
-        .bg-olive-shallow{
-            background-color: rgba(205, 210, 171, 0.9);
+        .bg-olive-10{
+        background-color: #ced29f;
+        }
+        .bg-olive-20{
+        background-color: #bec381;
+        }
+        .bg-olive-30{
+        background-color: #a9b056;
+        }
+        .bg-olive-40{
+        background-color: rgba(154, 163, 56, 1)
+        }
+        .text-navy{
+        color: rgba(15, 45, 73, 1);
         }
   </style>
 </head>
-<body class="bg-olive-shallow">
+<body class="bg-olive-0">
   <!-- 标题图片区 -->
   <div class="relative h-64 md:h-96 mb-8">
       <img src="https://pic1.zhimg.com/v2-ca547f6646ef48702c1dd73ddcb6729c_1440w.jpg" 
@@ -164,27 +177,27 @@
       <div class="bg-white rounded-xl p-6 shadow-lg">
           <h2 class="text-xl font-bold mb-4">避坑指南</h2>
           <div class="space-y-3">
-              <div class="p-4 bg-red-50 rounded-lg">
-                  <p class="text-red-700">• 避免过度营销，保持内容真实性</p>
+              <div class="p-4 bg-olive-10 rounded-lg">
+                  <p class="text-black">• 避免过度营销，保持内容真实性</p>
               </div>
-              <div class="p-4 bg-yellow-50 rounded-lg">
-                  <p class="text-yellow-700">• 不要频繁更换账号定位和风格</p>
+              <div class="p-4 bg-olive-10 rounded-lg">
+                  <p class="text-black">• 不要频繁更换账号定位和风格</p>
               </div>
-              <div class="p-4 bg-blue-50 rounded-lg">
-                  <p class="text-blue-700">• 谨慎使用热门话题，确保相关性</p>
+              <div class="p-4 bg-olive-10 rounded-lg">
+                  <p class="text-black">• 谨慎使用热门话题，确保相关性</p>
               </div>
           </div>
       </div>
   </div>
 
   <!-- 固定操作栏 -->
-  <div class="sticky bottom-0 bg-olive border-t py-4 shadow-lg">
+  <div class="sticky bottom-0 bg-olive-40 border-t py-4 shadow-lg">
       <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
           <div class="flex space-x-4">
-              <button class="p-2 text-gray-100 hover:text-green-600 transition-colors">
+              <button class="p-2 text-navy hover:text-green-600 transition-colors">
                   <i class="far fa-star text-xl"></i>
               </button>
-              <button class="p-2 text-gray-100 hover:text-green-600 transition-colors">
+              <button class="p-2 text-navy hover:text-green-600 transition-colors">
                   <i class="fas fa-share-alt text-xl"></i>
               </button>
           </div>

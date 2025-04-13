@@ -29,15 +29,28 @@
           color: var(--primary-color);
           font-weight: 500;
       }
-      .bg-olive{
-        background: rgba(154, 163, 56, 1)
-    }
-    .bg-olive-shallow{
-        background-color: rgba(205, 210, 171, 0.9);
-    }
+      
+        .bg-olive-0{
+        background-color: #f3f4ec;
+        }
+        .bg-olive-10{
+        background-color: #ced29f;
+        }
+        .bg-olive-20{
+        background-color: #bec381;
+        }
+        .bg-olive-30{
+        background-color: #a9b056;
+        }
+        .bg-olive-40{
+        background-color: rgba(154, 163, 56, 1)
+        }
+        .text-navy{
+        color: rgba(15, 45, 73, 1);
+        }
   </style>
 </head>
-<body class="bg-olive-shallow">
+<body class="bg-olive-0">
   <!-- 标题图片区 -->
   <div class="relative h-64 md:h-96 mb-8">
       <img src="https://images.unsplash.com/photo-1595475207225-428b62bda831?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
@@ -180,27 +193,27 @@
       <div class="bg-white rounded-xl p-6 shadow-lg">
           <h2 class="text-xl font-bold mb-4">注意事项</h2>
           <div class="space-y-3">
-              <div class="p-4 bg-red-50 rounded-lg">
-                  <p class="text-red-700">• 避免虚假夸大宣传，确保描述真实可信</p>
+              <div class="p-4 bg-olive-10 rounded-lg">
+                  <p class="text-black">• 避免虚假夸大宣传，确保描述真实可信</p>
               </div>
-              <div class="p-4 bg-yellow-50 rounded-lg">
-                  <p class="text-yellow-700">• 注意产品功效描述的合规性</p>
+              <div class="p-4 bg-olive-10 rounded-lg">
+                  <p class="text-black">• 注意产品功效描述的合规性</p>
               </div>
-              <div class="p-4 bg-blue-50 rounded-lg">
-                  <p class="text-blue-700">• 及时更新季节性内容，保持文案时效性</p>
+              <div class="p-4 bg-olive-10 rounded-lg">
+                  <p class="text-black">• 及时更新季节性内容，保持文案时效性</p>
               </div>
           </div>
       </div>
   </div>
 
   <!-- 固定操作栏 -->
-  <div class="sticky bottom-0 bg-olive border-t py-4 shadow-lg">
+  <div class="sticky bottom-0 bg-olive-40 border-t py-4 shadow-lg">
       <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
           <div class="flex space-x-4">
-              <button class="p-2 text-gray-100 hover:text-green-600 transition-colors">
+              <button class="p-2 text-navy hover:text-green-600 transition-colors">
                   <i class="far fa-star text-xl"></i>
               </button>
-              <button class="p-2 text-gray-100 hover:text-green-600 transition-colors">
+              <button class="p-2 text-navy hover:text-green-600 transition-colors">
                   <i class="fas fa-share-alt text-xl"></i>
               </button>
           </div>

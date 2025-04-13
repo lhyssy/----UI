@@ -25,15 +25,28 @@
           background: linear-gradient(45deg, #f0fff4, #f7fee7);
           border-radius: 12px;
       }
-      .bg-olive{
-            background: rgba(154, 163, 56, 1)
+      
+      .bg-olive-0{
+        background-color: #f3f4ec;
         }
-        .bg-olive-shallow{
-            background-color: rgba(205, 210, 171, 0.9);
+        .bg-olive-10{
+        background-color: #ced29f;
+        }
+        .bg-olive-20{
+        background-color: #bec381;
+        }
+        .bg-olive-30{
+        background-color: #a9b056;
+        }
+        .bg-olive-40{
+        background-color: rgba(154, 163, 56, 1)
+        }
+        .text-navy{
+        color: rgba(15, 45, 73, 1);
         }
   </style>
 </head>
-<body class="bg-olive-shallow">
+<body class="bg-olive-0">
   <!-- 标题图片区 -->
   <div class="relative h-64 md:h-96 mb-8">
       <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
@@ -162,7 +175,7 @@
       <div class="bg-white rounded-xl p-6 shadow-lg">
           <h2 class="text-xl font-bold mb-6">数据分析与优化</h2>
           <div class="space-y-4">
-              <div class="p-4 bg-blue-50 rounded-lg">
+              <div class="p-4 bg-olive-10 rounded-lg">
                   <h3 class="font-medium mb-3">关键指标监控</h3>
                   <ul class="space-y-2 text-gray-700">
                       <li>• 客单价变化趋势</li>
@@ -187,27 +200,27 @@
       <div class="bg-white rounded-xl p-6 shadow-lg">
           <h2 class="text-xl font-bold mb-4">常见误区提醒</h2>
           <div class="space-y-3">
-              <div class="p-4 bg-red-50 rounded-lg">
-                  <p class="text-red-700">• 过度依赖价格促销，忽视产品和服务价值</p>
+              <div class="p-4 bg-olive-10 rounded-lg">
+                  <p class="text-black">• 过度依赖价格促销，忽视产品和服务价值</p>
               </div>
-              <div class="p-4 bg-yellow-50 rounded-lg">
-                  <p class="text-yellow-700">• 忽视老客户需求，过分追求新客获取</p>
+              <div class="p-4 bg-olive-10 rounded-lg">
+                  <p class="text-black">• 忽视老客户需求，过分追求新客获取</p>
               </div>
-              <div class="p-4 bg-blue-50 rounded-lg">
-                  <p class="text-blue-700">• 缺乏持续性运营，活动过于随意</p>
+              <div class="p-4 bg-olive-10 rounded-lg">
+                  <p class="text-black">• 缺乏持续性运营，活动过于随意</p>
               </div>
           </div>
       </div>
   </div>
 
   <!-- 固定操作栏 -->
-  <div class="sticky bottom-0 bg-olive border-t py-4 shadow-lg">
+  <div class="sticky bottom-0 bg-olive-40 border-t py-4 shadow-lg">
       <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
           <div class="flex space-x-4">
-              <button class="p-2 text-gray-100 hover:text-green-600 transition-colors">
+              <button class="p-2 text-navy hover:text-green-600 transition-colors">
                   <i class="far fa-star text-xl"></i>
               </button>
-              <button class="p-2 text-gray-100 hover:text-green-600 transition-colors">
+              <button class="p-2 text-navy hover:text-green-600 transition-colors">
                   <i class="fas fa-share-alt text-xl"></i>
               </button>
           </div>
