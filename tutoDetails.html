@@ -39,15 +39,28 @@
           transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       }
-      .bg-olive{
-        background: rgba(154, 163, 56, 1)
-      }
-      .bg-olive-shallow{
-        background-color: rgba(205, 210, 171, 0.9);
-      }
+      
+      .bg-olive-0{
+        background-color: #f3f4ec;
+        }
+        .bg-olive-10{
+        background-color: #ced29f;
+        }
+        .bg-olive-20{
+        background-color: #bec381;
+        }
+        .bg-olive-30{
+        background-color: #a9b056;
+        }
+        .bg-olive-40{
+        background-color: rgba(154, 163, 56, 1)
+        }
+        .text-navy{
+        color: rgba(15, 45, 73, 1);
+        }
   </style>
 </head>
-<body class="bg-olive-shallow">
+<body class="bg-olive-0">
   <!-- 标题图片区 -->
   <div class="relative h-64 d:h-96 mb-8">
       <img src="https://images.unsplash.com/photo-1556155092-490a1ba16284?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
@@ -193,13 +206,13 @@
   </div>
 
   <!-- 固定操作栏 -->
-  <div class="sticky bottom-0 bg-olive border-t py-4 shadow-lg">
+  <div class="sticky bottom-0 bg-olive-40 border-t py-4 shadow-lg">
     <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
         <div class="flex space-x-4">
-            <button class="p-2 text-gray-100 hover:text-green-600 transition-colors">
+            <button class="p-2 text-navy hover:text-green-600 transition-colors">
                 <i class="far fa-star text-xl"></i>
             </button>
-            <button class="p-2 text-gray-100 hover:text-green-600 transition-colors">
+            <button class="p-2 text-navy hover:text-green-600 transition-colors">
                 <i class="fas fa-share-alt text-xl"></i>
             </button>
         </div>
