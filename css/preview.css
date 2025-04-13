@@ -33,10 +33,29 @@ body {
 
 /* 顶部导航栏 */
 .nav-header {
-    background-color: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-primary);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+.nav-header a {
+    color: var(--primary-dark);
+    transition: color 0.3s ease;
+}
+
+.nav-header a:hover {
+    color: var(--primary-color);
+}
+
+.nav-header h1 {
+    color: var(--primary-dark);
+    font-weight: 600;
 }
 
 /* 边框颜色 */
@@ -109,20 +128,44 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    background: white;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
     z-index: 10;
+}
+
+.bottom-nav-item {
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    position: relative;
 }
 
 .bottom-nav-item.active {
     color: var(--primary-color);
 }
 
+.bottom-nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 5px;
+    height: 5px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+}
+
+.bottom-nav-item:hover {
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
 .my-content {
     padding-top: 70px;
-    /* 为顶部导航栏留出空间 */
     padding-bottom: 120px;
-    /* 为底部导航栏留出空间 */
 }
 
 .content-container {
@@ -147,9 +190,19 @@ body {
 }
 
 .template-preview {
-    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.template-preview:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
 /* 轮播图样式 */
@@ -157,10 +210,11 @@ body {
     position: relative;
     max-height: 320px;
     overflow: hidden;
-    border-radius: 8px;
+    border-radius: 12px;
     margin-top: 16px;
     min-height: 200px;
-    background-color: #f5f5f5;
+    background: linear-gradient(135deg, #f5f7fa, #e4e7eb);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 .image-container.loading {
@@ -277,17 +331,38 @@ body {
 
 /* AI生成文案样式 */
 .ai-generate-btn {
-    position: relative;
     background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
     color: white;
+    box-shadow: 0 6px 15px rgba(var(--primary-color-rgb), 0.3);
+    position: relative;
     overflow: hidden;
     z-index: 1;
-    transition: all 0.2s ease;
+}
+
+.ai-generate-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(to bottom right,
+            rgba(255, 255, 255, 0.2) 0%,
+            rgba(255, 255, 255, 0) 100%);
+    transform: rotate(30deg);
+    transition: transform 0.5s ease;
+    z-index: -1;
+    opacity: 0;
+}
+
+.ai-generate-btn:hover::before {
+    opacity: 1;
+    transform: rotate(30deg) translate(10%, 10%);
 }
 
 .ai-generate-btn:hover {
-    background: var(--primary-dark);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(var(--primary-color-rgb), 0.4);
 }
 
 .bg-indigo-100 {
@@ -331,40 +406,60 @@ body {
 
 /* AI元素样式 */
 .ai-suggestion {
+    background: rgba(var(--primary-color-rgb), 0.07);
     border-left: 3px solid var(--primary-color);
-    background-color: var(--primary-light);
+    color: var(--primary-dark);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     padding: 0.75rem;
     margin: 0.5rem 0;
     border-radius: 0.5rem;
     font-size: 0.875rem;
-    color: #065f46;
 }
 
 .ai-analysis-tag {
-    background-color: var(--primary-light);
-    color: var(--primary-color);
-    border-radius: 6px;
-    padding: 4px 8px;
+    background: rgba(var(--primary-color-rgb), 0.1);
+    color: var(--primary-dark);
+    padding: 5px 10px;
+    border-radius: 15px;
     font-size: 12px;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    margin-bottom: 5px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid rgba(var(--primary-color-rgb), 0.2);
 }
 
 .ai-analysis-tag i {
-    margin-right: 0.25rem;
+    margin-right: 5px;
+    color: var(--primary-color);
 }
 
 /* 步骤指示器 */
 .step-indicator {
-    margin: 20px 0;
+    padding: 0.5rem 2rem;
+    margin-top: 70px;
 }
 
-.step .step-number {
+.step-number {
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    background: linear-gradient(145deg, var(--light-green), var(--primary-color));
 }
 
-.step.active .step-name {
+.step-indicator .connector {
+    height: 3px;
+    border-radius: 1.5px;
+    background: linear-gradient(to right, var(--light-green), var(--primary-color));
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.step-indicator .connector.bg-gray-200 {
+    background: #e5e7eb;
+}
+
+.step .step-name {
     color: var(--primary-color);
     font-weight: 500;
 }
@@ -427,4 +522,79 @@ textarea:focus {
 
 .nav-item.active i {
     color: #07c160;
+}
+
+/* 内容区域样式增强 */
+.border-l-4 {
+    position: relative;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.border-l-4::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: inherit;
+    opacity: 0.7;
+    border-radius: 0 2px 2px 0;
+}
+
+.border-l-4:hover {
+    transform: translateX(3px);
+}
+
+/* 图片引导提示 */
+.image-guide {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    opacity: 0.8;
+    animation: fade-out 5s forwards;
+    pointer-events: none;
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 0.8;
+    }
+
+    70% {
+        opacity: 0.8;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* 微妙的动画 */
+@keyframes ping-slow {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(2);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.animate-ping-slow {
+    animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
