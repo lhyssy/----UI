@@ -1,275 +1,225 @@
-/* 自然农业主题配色方案 */
-:root {
-    --primary-color: #538d22;
-    /* 青草绿 */
-    --primary-dark: #2d6a4f;
-    /* 深森林绿 */
-    --primary-light: #e8f3e9;
-    /* 浅草绿 */
-    --secondary-color: #d4a373;
-    /* 土地棕色 */
-    --accent-color: #d06b24;
-    /* 收获橙 */
-    --text-primary: #333333;
-    --text-secondary: #666666;
-    --light-green: #b6c199;
-    /* 嫩绿 */
-    --pale-yellow: #f8f0e3;
-    /* 麦秆黄 */
-    --rich-soil: #7f4f24;
-    /* 肥沃土壤色 */
-    --sky-blue: #90e0ef;
-    /* 清空蓝 */
-    --dew-green: #cbdfbd;
-    /* 露珠绿 */
-    --harvest-gold: #ffc93c;
-    /* 丰收金 */
+/**
+ * 禾语智宣 - 主页样式
+ * 使用colors.css中定义的橄榄色系配色方案
+ */
 
-    /* RGB值，用于透明度调整 */
-    --primary-color-rgb: 83, 141, 34;
-    --primary-dark-rgb: 45, 106, 79;
-    --secondary-color-rgb: 212, 163, 115;
-    --accent-color-rgb: 208, 107, 36;
-}
-
-body {
-    background: linear-gradient(120deg, var(--pale-yellow), #ffffff);
-    background-attachment: fixed;
-    color: var(--text-primary);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    position: relative;
-    overflow-x: hidden;
-}
-
-/* 为所有页面添加粒子背景装饰 */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: -1;
-    background-image:
-        radial-gradient(circle at 10% 20%, rgba(var(--primary-color-rgb), 0.05) 0%, transparent 8%),
-        radial-gradient(circle at 80% 40%, rgba(var(--accent-color-rgb), 0.04) 0%, transparent 6%),
-        radial-gradient(circle at 30% 70%, rgba(var(--secondary-color-rgb), 0.03) 0%, transparent 5%),
-        radial-gradient(circle at 90% 90%, rgba(var(--primary-dark-rgb), 0.04) 0%, transparent 7%);
-}
-
-/* 毛玻璃效果导航栏 */
-.glass-nav {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-/* 毛玻璃效果底部导航 */
-.glass-bottom-nav {
-    background: rgba(255, 255, 255, 0.15) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
-}
-
-/* 毛玻璃效果卡片 */
-.glass-card {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-.glass-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* 主要按钮样式 */
-.btn-nature {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-    color: white;
-    border: none;
-    padding: 0.625rem 1.25rem;
-    border-radius: 6px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(var(--primary-dark-rgb), 0.3);
-}
-
-.btn-nature:hover {
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(var(--primary-dark-rgb), 0.4);
-}
-
-/* 辅助按钮样式 */
-.btn-earth {
-    background: linear-gradient(135deg, var(--secondary-color), var(--rich-soil));
-    color: white;
-    border: none;
-    padding: 0.625rem 1.25rem;
-    border-radius: 6px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(var(--secondary-color-rgb), 0.3);
-}
-
-.btn-earth:hover {
-    background: linear-gradient(135deg, var(--rich-soil), var(--secondary-color));
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(var(--secondary-color-rgb), 0.4);
-}
-
-/* 微妙的动画效果 */
-@keyframes float {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-@keyframes pulse {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.7;
-    }
-}
-
-/* 通用动画类 */
-.float {
-    animation: float 6s ease-in-out infinite;
-}
-
-.pulse {
-    animation: pulse 3s ease-in-out infinite;
-}
-
-/* 响应式调整 */
-@media (max-width: 768px) {
-    .glass-card {
-        border-radius: 8px;
-    }
-}
-
-/* 农作物生长状态指示器 */
-.growth-indicator {
-    background: linear-gradient(to right, var(--primary-light), var(--dew-green));
-    height: 6px;
-    border-radius: 3px;
-    overflow: hidden;
-    position: relative;
-}
-
-.growth-indicator::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: var(--growth);
-    background: linear-gradient(to right, var(--primary-color), var(--primary-dark));
-    border-radius: 3px;
-    box-shadow: 0 0 5px rgba(var(--primary-color-rgb), 0.5);
-}
+@import 'colors.css';
 
 /* 基础样式 */
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f7f8fa;
-    color: #333;
-    max-width: 100%;
-    overflow-x: hidden;
-    touch-action: manipulation;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
 }
 
-.safe-area {
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.5;
+    overflow-x: hidden;
 }
 
-/* 导航栏样式 */
-.app-header {
-    background-color: #07c160;
-    color: white;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.search-bar {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    padding: 5px 15px;
-    flex: 1;
-    margin: 0 10px;
-    display: flex;
-    align-items: center;
-}
-
-.search-bar input {
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 14px;
-    width: 100%;
-    padding: 5px;
-}
-
-.search-bar input::placeholder {
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.search-bar input:focus {
-    outline: none;
-}
-
-/* 卡片样式 */
-.feature-card {
-    background-color: white;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    margin-bottom: 16px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.feature-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.feature-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
+/* 导航头部 */
+.nav-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    background: var(--gradient-primary);
+    color: var(--text-on-primary);
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
+}
+
+.nav-title {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.nav-back {
+    position: absolute;
+    left: 15px;
+    font-size: 18px;
+}
+
+/* 内容容器 */
+.content-wrapper {
+    padding: 70px 16px 100px;
+    min-height: 100vh;
+}
+
+/* 主页欢迎区 */
+.welcome-card {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-card::after {
+    content: '';
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background: var(--primary-alpha-10);
+    border-radius: 50%;
+    right: -40px;
+    bottom: -40px;
+    z-index: 1;
+}
+
+.welcome-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.welcome-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+/* 功能卡片 */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.feature-card {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 160px;
+}
+
+.feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
     margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 50%;
+    background: var(--primary-alpha-10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.feature-icon img {
+    width: 32px;
+    height: 32px;
+}
+
+.feature-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.feature-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* 最近创建区域 */
+.recent-section {
+    margin-bottom: 32px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+}
+
+.section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 18px;
+    background: var(--primary-color);
+    margin-right: 8px;
+    border-radius: 2px;
+}
+
+.recent-list {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.recent-item {
+    padding: 16px;
+    display: flex;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.recent-item:last-child {
+    border-bottom: none;
+}
+
+.recent-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 12px;
+    background: var(--bg-tertiary);
+}
+
+.recent-info {
+    flex: 1;
+}
+
+.recent-name {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: var(--text-primary);
+}
+
+.recent-date {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+}
+
+.recent-tag {
+    display: inline-block;
+    font-size: 12px;
+    background: var(--primary-alpha-10);
+    color: var(--primary-dark);
+    padding: 2px 8px;
+    border-radius: 4px;
 }
 
 /* 底部导航 */
@@ -278,217 +228,87 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: white;
+    height: 60px;
+    background: var(--bg-secondary);
     display: flex;
-    padding: 8px 0;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    border-top: 1px solid var(--border-color);
     z-index: 100;
 }
 
-.bottom-nav-item {
+.nav-item {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 6px 0;
-    color: #666;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    justify-content: center;
+    color: var(--text-tertiary);
+    font-size: 12px;
 }
 
-.bottom-nav-item.active {
-    color: #07c160;
+.nav-item.active {
+    color: var(--primary-color);
 }
 
-/* AI组件样式 */
-.ai-container {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    border-radius: 16px;
-    padding: 16px;
-    color: white;
-    box-shadow: 0 8px 30px rgba(107, 70, 193, 0.2);
+.nav-icon {
+    font-size: 24px;
+    margin-bottom: 4px;
 }
 
-.ai-badge {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    padding: 2px 10px;
-    font-size: 10px;
-    color: white;
-    display: inline-block;
-}
-
-.ai-suggestion {
-    background-color: rgba(99, 102, 241, 0.1);
-    border-left: 3px solid #6366f1;
-    padding: 12px;
-    margin: 12px 0;
-    border-radius: 0 8px 8px 0;
-}
-
-/* 全局加载动画 */
-.loading-spinner {
-    width: 30px;
-    height: 30px;
-    border: 3px solid rgba(var(--primary-light-rgb), 0.3);
+/* 创建按钮 */
+.create-button {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    border-top-color: var(--primary-color);
-    animation: spin 1s linear infinite;
+    background: var(--gradient-accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: var(--shadow-md);
+    z-index: 50;
+    animation: pulse 2s infinite;
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
+/* 动画 */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 154, 60, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 154, 60, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 154, 60, 0);
     }
 }
 
-/* 开关样式 */
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 48px;
-    height: 24px;
-}
-
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-}
-
-/* 添加圆形样式 */
-.slider.round {
-    border-radius: 24px;
-}
-
-.slider.round:before {
-    border-radius: 50%;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: .4s;
-}
-
-input:checked+.slider {
-    background-color: #07c160;
-}
-
-input:checked+.slider:before {
-    transform: translateX(24px);
-}
-
-/* 响应式调整 */
-@media (max-width: 640px) {
-    .container {
-        padding-left: 12px;
-        padding-right: 12px;
+/* 媒体查询 */
+@media (max-width: 360px) {
+    .feature-grid {
+        grid-template-columns: 1fr;
     }
 
-    .feature-card {
-        padding: 16px;
+    .nav-header {
+        height: 50px;
     }
 
-    .feature-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
-    }
-}
-
-/* 暗色模式 */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg-color: #121212;
-        --card-bg: #1e1e1e;
-        --text-color: #e0e0e0;
-        --text-secondary: #a0a0a0;
-        --border-color: #2c2c2c;
+    .content-wrapper {
+        padding: 60px 12px 90px;
     }
 
-    /* 暗色模式下的样式覆盖 */
-    body.dark-mode {
-        background-color: var(--bg-color);
-        color: var(--text-color);
+    .bottom-nav {
+        height: 50px;
     }
 
-    body.dark-mode .feature-card {
-        background-color: var(--card-bg);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    .create-button {
+        width: 50px;
+        height: 50px;
+        bottom: 70px;
     }
-
-    body.dark-mode .bottom-nav {
-        background-color: var(--card-bg);
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
-    }
-}
-
-:root {
-    --primary-color: #538d22;
-    /* 青草绿 */
-    --primary-dark: #2d6a4f;
-    /* 深森林绿 */
-    --primary-light: #e8f3e9;
-    /* 浅草绿 */
-    --secondary-color: #d4a373;
-    /* 土地棕色 */
-    --secondary-light: #f8edd0;
-    /* 浅土地色 */
-    --accent-color: #d06b24;
-    /* 收获橙 */
-    --accent-light: #fce1d0;
-    /* 浅橙色 */
-    --text-primary: #333333;
-    --text-secondary: #666666;
-    --light-green: #b6c199;
-    /* 嫩绿 */
-    --pale-yellow: #f8f0e3;
-    /* 麦秆黄 */
-    --rich-soil: #7f4f24;
-    /* 肥沃土壤色 */
-    --sky-blue: #90e0ef;
-    /* 清空蓝 */
-    --dew-green: #cbdfbd;
-    /* 露珠绿 */
-    --harvest-gold: #ffc93c;
-    /* 丰收金 */
-
-    /* RGB值，用于透明度调整 */
-    --primary-color-rgb: 83, 141, 34;
-    --primary-dark-rgb: 45, 106, 79;
-    --primary-light-rgb: 232, 243, 233;
-    --secondary-color-rgb: 212, 163, 115;
-    --secondary-light-rgb: 248, 237, 208;
-    --accent-color-rgb: 208, 107, 36;
-    --accent-light-rgb: 252, 225, 208;
-
-    /* 同义词变量，用于兼容不同页面的命名习惯 */
-    --green-100: var(--primary-light);
-    --green-500: var(--primary-color);
-    --green-600: var(--primary-dark);
-    --red-100: var(--accent-light);
-    --red-500: var(--accent-color);
-    --blue-100: var(--sky-blue);
-    --yellow-100: var(--pale-yellow);
-    --indigo-500: var(--primary-color);
-    --indigo-600: var(--primary-dark);
-    --purple-100: var(--secondary-light);
-    --purple-600: var(--secondary-color);
 }

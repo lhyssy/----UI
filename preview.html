@@ -9,14 +9,45 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/preview.css">
+    <link rel="stylesheet" href="css/colors.css">
     <style>
+        :root {
+            --primary-color: rgba(154, 163, 56, 1);
+            --primary-light: #ced29f;
+            --primary-dark: #a9b056;
+            --accent-color: #e67e22;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --bg-primary: rgba(205, 210, 171, 0.9);
+            --bg-secondary: #ffffff;
+            --border-color: #e5e7eb;
+
+            /* 新增渐变配色 */
+            --gradient-primary: linear-gradient(135deg, rgba(154, 163, 56, 1) 0%, #a9b056 100%);
+            --gradient-secondary: linear-gradient(135deg, #bec381 0%, #ced29f 100%);
+            --gradient-accent: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+            --gradient-product: linear-gradient(135deg, #9aa338 0%, #bec381 100%);
+            --gradient-taste: linear-gradient(135deg, #e67e22 0%, #f5b041 100%);
+            --gradient-nutrition: linear-gradient(135deg, #3498db 0%, #5dade2 100%);
+            --gradient-suggest: linear-gradient(135deg, #9b59b6 0%, #bb8fce 100%);
+            --gradient-ai: linear-gradient(135deg, #4a69bd 0%, #6a89cc 100%);
+        }
+
+        /* 顶部导航样式增强 */
+        .nav-header {
+            background: var(--gradient-primary);
+            box-shadow: 0 4px 12px rgba(154, 163, 56, 0.2);
+        }
+
         /* 图片轮播样式优化 */
         .image-container {
             position: relative;
             max-height: 320px;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
             margin-top: 16px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(154, 163, 56, 0.2);
         }
 
         .image-container img {
@@ -24,6 +55,11 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .image-container:hover img {
+            transform: scale(1.03);
         }
 
         .indicator-container {
@@ -44,12 +80,14 @@
             background-color: rgba(255, 255, 255, 0.5);
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
         }
 
         .indicator.active {
             background-color: white;
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
         }
 
         .prev-btn,
@@ -57,25 +95,28 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.4);
             color: white;
-            width: 32px;
-            height: 32px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            font-size: 16px;
+            font-size: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 5;
             cursor: pointer;
             border: none;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .prev-btn:hover,
         .next-btn:hover {
             opacity: 1;
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .prev-btn {
@@ -126,24 +167,24 @@
             }
         }
 
-        /* AI生成按钮优化 */
+        /* AI生成按钮优化，使用更明显的渐变 */
         .ai-generate-btn {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, #4a69bd 0%, #7f8ff3 100%);
             color: white;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
             position: relative;
             overflow: hidden;
         }
 
         .ai-generate-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(var(--primary-color-rgb), 0.4);
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
         }
 
         .ai-generate-btn:active {
             transform: translateY(0);
-            box-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.3);
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
         }
 
         .ai-generate-btn::before {
@@ -179,7 +220,7 @@
 
         /* 底部导航栏优化 */
         .bottom-nav {
-            background: rgba(255, 255, 255, 0.95);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.98));
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border-top: 1px solid rgba(229, 231, 235, 0.7);
@@ -267,302 +308,56 @@
         .animate-ping-slow {
             animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
         }
-
-        /* 图文内容样式 */
-        .image-container {
-            max-height: 320px;
-            overflow: hidden;
-            position: relative;
-            margin-bottom: 16px;
-            border-radius: 8px;
-            margin-top: 16px;
-        }
-
-        #carouselIndicators {
-            position: absolute;
-            bottom: 10px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-        }
-
-        .indicator.active {
-            background-color: var(--nature-green);
-            width: 20px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .prev-btn,
-        .next-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            z-index: 10;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .prev-btn:hover,
-        .next-btn:hover {
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .prev-btn {
-            left: 10px;
-        }
-
-        .next-btn {
-            right: 10px;
-        }
-
-        .image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .ai-optimize-section {
-            margin-top: 12px;
-            margin-bottom: 20px;
-        }
-
-        .ai-generate-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, var(--nature-green), var(--earth-brown));
-            color: white;
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .ai-generate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .ai-generate-btn:active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .ai-generate-btn::after {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(to right,
-                    rgba(255, 255, 255, 0) 0%,
-                    rgba(255, 255, 255, 0.3) 50%,
-                    rgba(255, 255, 255, 0) 100%);
-            transform: rotate(30deg);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% {
-                transform: rotate(30deg) translateX(-100%);
-            }
-
-            100% {
-                transform: rotate(30deg) translateX(100%);
-            }
-        }
-
-        .product-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: var(--text-primary);
-        }
-
-        .my-content {
-            padding-top: 70px;
-            padding-bottom: 120px;
-        }
-
-        .section-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-            position: relative;
-            padding-left: 12px;
-        }
-
-        .section-title::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 4px;
-            height: 16px;
-            width: 4px;
-            background-color: var(--nature-green);
-            border-radius: 2px;
-        }
-
-        .section-content {
-            font-size: 0.875rem;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-            color: var(--text-secondary);
-        }
-
-        .card {
-            background-color: white;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .tag {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            margin-right: 6px;
-            margin-bottom: 6px;
-            background-color: var(--tag-bg);
-            color: var(--tag-text);
-        }
-
-        .tag-feature {
-            background-color: rgba(var(--nature-green-rgb), 0.1);
-            color: var(--nature-green);
-        }
-
-        .tag-taste {
-            background-color: rgba(var(--harvest-orange-rgb), 0.1);
-            color: var(--harvest-orange);
-        }
-
-        .tag-nutrition {
-            background-color: rgba(var(--grass-green-rgb), 0.1);
-            color: var(--grass-green);
-        }
-
-        .ai-loading {
-            display: none;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(var(--nature-green-rgb), 0.3);
-            border-radius: 50%;
-            border-top-color: var(--nature-green);
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .loading-text {
-            margin-top: 10px;
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .glass-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background-color: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 1px 10px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
     </style>
 </head>
 
-<body class="bg-gray-50">
-    <!-- 顶部导航栏 -->
-    <header class="glass-nav w-full px-4 py-3 flex justify-between items-center z-50">
-        <div class="flex items-center">
-            <button onclick="history.back()" class="mr-3">
-                <i class="fas fa-arrow-left text-gray-600"></i>
-            </button>
-            <h1 class="text-lg font-medium">宣传图文预览</h1>
-        </div>
-        <div>
-            <button class="px-3 py-1 rounded-full bg-green-100 text-green-800 text-sm">保存草稿</button>
-        </div>
-    </header>
+<body>
+    <!-- 顶部导航 -->
+    <div class="nav-header p-4 flex items-center">
+        <a href="upload.html" class="text-white mr-4"><i class="fas fa-arrow-left text-lg"></i></a>
+        <h1 class="text-lg font-bold flex-1 text-center text-white">宣传图文预览</h1>
+        <div class="w-5"></div>
+    </div>
 
     <!-- 步骤指示器 -->
-    <div class="pt-16 pb-4 px-4">
-        <div class="flex justify-between items-center">
-            <div class="flex flex-col items-center">
-                <div class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white">
-                    <i class="fas fa-check"></i>
-                </div>
-                <span class="text-xs mt-1 text-green-600">上传图片</span>
+    <div class="step-indicator flex justify-between px-8 mb-6">
+        <div class="step flex flex-col items-center">
+            <div class="step-number w-7 h-7 rounded-full flex items-center justify-center text-xs mb-1 text-white"
+                style="background: linear-gradient(135deg, #9aa338, #bec381); box-shadow: 0 2px 8px rgba(154, 163, 56, 0.3);">
+                <i class="fas fa-check"></i>
             </div>
-            <div class="h-1 flex-1 bg-gray-200 mx-2 relative">
-                <div class="absolute inset-0 bg-green-600" style="width: 100%;"></div>
-            </div>
-            <div class="flex flex-col items-center">
-                <div class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white">
-                    <i class="fas fa-eye"></i>
-                </div>
-                <span class="text-xs mt-1 text-green-600">预览修改</span>
-            </div>
-            <div class="h-1 flex-1 bg-gray-200 mx-2"></div>
-            <div class="flex flex-col items-center">
-                <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white">
-                    <span>3</span>
-                </div>
-                <span class="text-xs mt-1 text-gray-500">选择平台</span>
-            </div>
+            <div class="step-name text-xs text-center">上传照片</div>
+        </div>
+        <div class="connector flex-1 h-1 mt-3 mx-2" style="background: linear-gradient(to right, #9aa338, #bec381);">
+        </div>
+        <div class="step active flex flex-col items-center">
+            <div class="step-number w-7 h-7 rounded-full flex items-center justify-center text-xs mb-1 text-white"
+                style="background: linear-gradient(135deg, #9aa338, #bec381); box-shadow: 0 2px 8px rgba(154, 163, 56, 0.3);">
+                2</div>
+            <div class="step-name text-xs text-center font-medium" style="color: #9aa338;">预览图文</div>
+        </div>
+        <div class="connector flex-1 h-1 bg-gray-200 mt-3 mx-2"></div>
+        <div class="step flex flex-col items-center">
+            <div
+                class="step-number w-7 h-7 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs mb-1">
+                3</div>
+            <div class="step-name text-xs text-center">选择平台</div>
         </div>
     </div>
 
     <!-- 内容区域 -->
-    <div class="my-content pb-32">
+    <div class="overflow-y-auto flex-1 my-content">
         <!-- 图文预览 -->
         <div class="px-4 py-4">
             <div class="template-preview bg-white rounded-xl shadow-sm">
                 <!-- 头部信息 -->
-                <div class="p-4 border-b border-gray-100">
+                <div class="p-4 border-b border-gray-100"
+                    style="background: linear-gradient(to right, rgba(154, 163, 56, 0.05), transparent);">
                     <div class="mb-2 flex items-center">
-                        <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded mr-2">限时特惠</span>
-                        <span class="bg-green-100 text-green-600 text-xs font-bold px-2 py-1 rounded">有机认证</span>
+                        <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded mr-2"
+                            style="background: linear-gradient(135deg, #ffcdd2, #ef9a9a); color: #c62828;">限时特惠</span>
+                        <span class="bg-green-100 text-green-600 text-xs font-bold px-2 py-1 rounded"
+                            style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #2e7d32;">有机认证</span>
                     </div>
                     <h2 class="text-lg font-bold mb-2">高山果园红富士苹果 | 有机种植 · 自然成熟 · 脆甜多汁</h2>
                     <p class="text-sm text-gray-700 leading-relaxed">✨
@@ -579,45 +374,69 @@
                     <div class="image-guide">
                         <span>← 左右滑动查看更多图片 →</span>
                     </div>
+                    <!-- 添加图片信息覆盖层 -->
+                    <div class="absolute top-0 left-0 right-0 p-3"
+                        style="background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.3), transparent);">
+                        <div class="flex items-center">
+                            <span class="px-2 py-1 rounded text-xs text-white bg-red-500 mr-2"
+                                style="background: linear-gradient(135deg, #f44336, #d32f2f);">高清实拍</span>
+                            <span class="text-white text-xs">共4张图片</span>
+                        </div>
+                    </div>
+                    <!-- 添加图片底部信息 -->
+                    <div class="absolute bottom-0 left-0 right-0 p-3 pt-10"
+                        style="background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.3), transparent);">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-camera text-white mr-2"></i>
+                                <span class="text-white text-xs">山区果园实景</span>
+                            </div>
+                            <span class="text-white text-xs opacity-70">拍摄于2023.10.15</span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 文章内容 -->
                 <div class="p-4">
                     <!-- 添加产品标签 -->
                     <div class="flex flex-wrap gap-2 mb-4">
-                        <span
-                            class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">有机认证</span>
-                        <span
-                            class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full font-medium">特级品质</span>
-                        <span
-                            class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">高山种植</span>
-                        <span
-                            class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full font-medium">产地直发</span>
+                        <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+                            style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #1b5e20;">有机认证</span>
+                        <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+                            style="background: linear-gradient(135deg, #ffcdd2, #ef9a9a); color: #b71c1c;">特级品质</span>
+                        <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+                            style="background: linear-gradient(135deg, #bbdefb, #90caf9); color: #0d47a1;">高山种植</span>
+                        <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+                            style="background: linear-gradient(135deg, #fff9c4, #fff59d); color: #f57f17;">产地直发</span>
                     </div>
 
                     <!-- 产品特点 -->
-                    <div class="mb-5 border-l-4 border-green-500 pl-3">
-                        <h3 class="font-bold mb-2 text-green-700">🍎 产品特点</h3>
+                    <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+                        style="border-color: #9aa338; background: linear-gradient(to right, rgba(154, 163, 56, 0.15), rgba(154, 163, 56, 0.05), transparent);">
+                        <h3 class="font-bold mb-2 text-[#9aa338]">🍎 产品特点</h3>
                         <p class="text-sm text-gray-700 mb-3 leading-relaxed">
                             这款红富士苹果产自高海拔山区，生长环境优越，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。果实成熟度高，颜色红润，外观光亮诱人。 </p>
                     </div>
 
                     <!-- 口感描述 -->
-                    <div class="mb-5 border-l-4 border-orange-500 pl-3">
+                    <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+                        style="border-color: #e67e22; background: linear-gradient(to right, rgba(230, 126, 34, 0.15), rgba(230, 126, 34, 0.05), transparent);">
                         <h3 class="font-bold mb-2 text-orange-700">👅 口感体验</h3>
                         <p class="text-sm text-gray-700 mb-3 leading-relaxed">
                             口感脆甜多汁，果肉细腻，香气怡人。咬一口，汁水四溢，甜度适中不腻口，是水果爱好者的不二之选。冷藏后食用，口感更佳。 </p>
                     </div>
 
                     <!-- 营养价值 -->
-                    <div class="mb-5 border-l-4 border-blue-500 pl-3">
+                    <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+                        style="border-color: #3498db; background: linear-gradient(to right, rgba(52, 152, 219, 0.15), rgba(52, 152, 219, 0.05), transparent);">
                         <h3 class="font-bold mb-2 text-blue-700">💪 营养价值</h3>
                         <p class="text-sm text-gray-700 mb-3 leading-relaxed">
                             富含多种维生素和膳食纤维，有助于肠道健康，增强免疫力。每天一个苹果，医生远离我！特别适合注重健康生活的现代人。 </p>
                     </div>
 
                     <!-- 食用建议 -->
-                    <div class="mb-5 border-l-4 border-purple-500 pl-3">
+                    <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+                        style="border-color: #9b59b6; background: linear-gradient(to right, rgba(155, 89, 182, 0.15), rgba(155, 89, 182, 0.05), transparent);">
                         <h3 class="font-bold mb-2 text-purple-700">🍽️ 食用建议</h3>
                         <p class="text-sm text-gray-700 mb-3 leading-relaxed">
                             建议冷藏后食用，口感更佳。可以直接作为水果享用，也可切片加入沙拉、搭配酸奶或制作苹果派。苹果还能制作成鲜榨果汁，搭配其他水果制作特色饮品，带来清新健康的口感体验。 </p>
@@ -629,45 +448,50 @@
         </div>
 
         <!-- 模板选择 -->
-        <div class="px-4 py-3">
+        <div class="px-4 py-3 bg-gradient-to-r from-gray-50 to-white rounded-lg mx-2 my-3 shadow-sm">
             <h3 class="font-bold text-gray-700 mb-2">选择模板风格</h3>
             <div class="flex overflow-x-auto pb-2 -mx-1">
-                <div
-                    class="template-option selected flex-shrink-0 w-24 h-24 border-2 rounded-lg overflow-hidden mx-1 relative">
+                <div class="template-option selected flex-shrink-0 w-24 h-24 border-2 rounded-lg overflow-hidden mx-1 relative"
+                    style="border-color: #9aa338; box-shadow: 0 4px 12px rgba(154, 163, 56, 0.2);">
                     <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
                         alt="小红书风格" class="w-full h-full object-cover">
-                    <div class="bg-black/60 text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0">小红书风格
+                    <div class="text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0"
+                        style="background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4), transparent);">
+                        小红书风格
                     </div>
                 </div>
                 <div
                     class="template-option flex-shrink-0 w-24 h-24 border-2 border-gray-200 rounded-lg overflow-hidden mx-1 relative">
                     <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
                         alt="微信风格" class="w-full h-full object-cover">
-                    <div class="bg-black/60 text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0">微信风格
+                    <div class="text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0"
+                        style="background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4), transparent);">微信风格
                     </div>
                 </div>
                 <div
                     class="template-option flex-shrink-0 w-24 h-24 border-2 border-gray-200 rounded-lg overflow-hidden mx-1 relative">
                     <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
                         alt="抖音风格" class="w-full h-full object-cover">
-                    <div class="bg-black/60 text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0">抖音风格
+                    <div class="text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0"
+                        style="background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4), transparent);">抖音风格
                     </div>
                 </div>
                 <div
                     class="template-option flex-shrink-0 w-24 h-24 border-2 border-gray-200 rounded-lg overflow-hidden mx-1 relative">
                     <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
                         alt="简约风格" class="w-full h-full object-cover">
-                    <div class="bg-black/60 text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0">简约风格
+                    <div class="text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0"
+                        style="background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4), transparent);">简约风格
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- AI优化功能 -->
-        <div class="px-4 py-3">
+        <div class="px-4 py-3 bg-gradient-to-r from-indigo-50 to-white rounded-lg mx-2 my-3 shadow-sm">
             <h3 class="font-bold text-gray-700 mb-2">AI内容优化</h3>
             <!-- AI文案生成按钮 -->
-            <div class="glass-card p-4 shadow-sm mb-4">
+            <div class="bg-white rounded-xl p-4 shadow-sm mb-4">
                 <div class="mb-3">
                     <h4 class="font-medium mb-1">生成产品文案</h4>
                     <p class="text-xs text-gray-500">使用 SiliconFlow deepseek-R1 模型智能生成优质文案</p>
@@ -678,31 +502,34 @@
 
                 <!-- AI操作提示 -->
                 <div class="mt-2 text-center">
-                    <span class="text-xs text-primary inline-flex items-center">
+                    <span class="text-xs text-indigo-600 inline-flex items-center">
                         <i class="fas fa-info-circle mr-1"></i>
                         点击按钮，AI将根据图片和产品特点优化全部文案内容
                         <span
-                            class="relative ml-1 inline-block animate-ping-slow w-1.5 h-1.5 bg-primary rounded-full"></span>
+                            class="relative ml-1 inline-block animate-ping-slow w-1.5 h-1.5 bg-indigo-500 rounded-full"></span>
                     </span>
                 </div>
 
                 <!-- 生成状态 -->
                 <div id="aiGeneratingContainer" class="hidden mt-4 text-center">
-                    <div class="w-10 h-10 rounded-full bg-primary-light flex items-center justify-center mx-auto mb-2">
-                        <i class="fas fa-cog fa-spin text-primary"></i>
+                    <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-cog fa-spin text-indigo-600"></i>
                     </div>
                     <p class="text-sm text-gray-600 mb-1">AI正在优化文案</p>
                     <p class="text-xs text-gray-500 loading-text">分析原文内容中<span>.</span><span>.</span><span>.</span></p>
                     <div class="h-1 bg-gray-100 rounded-full mt-3 overflow-hidden">
-                        <div id="aiProgressBar" class="h-full bg-primary" style="width: 0%"></div>
+                        <div id="aiProgressBar" class="h-full bg-indigo-500" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
-            <div class="bg-white rounded-xl p-3 shadow-sm mb-3">
+            <div class="bg-white rounded-xl p-3 shadow-sm mb-3"
+                style="background: linear-gradient(to right, #e8eaf6, white);">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center"><i
-                                class="fas fa-magic text-purple-600"></i></div>
+                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center"
+                            style="background: linear-gradient(135deg, #d1c4e9, #b39ddb);">
+                            <i class="fas fa-magic text-purple-600"></i>
+                        </div>
                         <div class="ml-3">
                             <div class="font-medium">优化文案</div>
                             <div class="text-xs text-gray-500">让文案更吸引人</div>
@@ -712,25 +539,14 @@
                             class="absolute right-1 top-1 w-4 h-4 rounded-full bg-white shadow-sm"></span></div>
                 </div>
             </div>
-            <div class="glass-card p-3 shadow-sm mb-3">
+            <div class="bg-white rounded-xl p-3 shadow-sm mb-3"
+                style="background: linear-gradient(to right, #e3f2fd, white);">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-primary-light flex items-center justify-center"><i
-                                class="fas fa-magic text-primary"></i></div>
-                        <div class="ml-3">
-                            <div class="font-medium">优化文案</div>
-                            <div class="text-xs text-gray-500">让文案更吸引人</div>
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center"
+                            style="background: linear-gradient(135deg, #bbdefb, #90caf9);">
+                            <i class="fas fa-palette text-blue-600"></i>
                         </div>
-                    </div>
-                    <div class="relative inline-block w-12 h-6 rounded-full bg-primary"><span
-                            class="absolute right-1 top-1 w-4 h-4 rounded-full bg-white shadow-sm"></span></div>
-                </div>
-            </div>
-            <div class="bg-white rounded-xl p-3 shadow-sm mb-3">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center"><i
-                                class="fas fa-palette text-blue-600"></i></div>
                         <div class="ml-3">
                             <div class="font-medium">优化排版</div>
                             <div class="text-xs text-gray-500">改善视觉布局</div>
@@ -740,39 +556,14 @@
                             class="absolute right-1 top-1 w-4 h-4 rounded-full bg-white shadow-sm"></span></div>
                 </div>
             </div>
-            <div class="glass-card p-3 shadow-sm mb-3">
+            <div class="bg-white rounded-xl p-3 shadow-sm"
+                style="background: linear-gradient(to right, #fff8e1, white);">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-secondary-light flex items-center justify-center"><i
-                                class="fas fa-palette text-secondary"></i></div>
-                        <div class="ml-3">
-                            <div class="font-medium">优化排版</div>
-                            <div class="text-xs text-gray-500">改善视觉布局</div>
+                        <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center"
+                            style="background: linear-gradient(135deg, #ffecb3, #ffe082);">
+                            <i class="fas fa-tags text-yellow-600"></i>
                         </div>
-                    </div>
-                    <div class="relative inline-block w-12 h-6 rounded-full bg-primary"><span
-                            class="absolute right-1 top-1 w-4 h-4 rounded-full bg-white shadow-sm"></span></div>
-                </div>
-            </div>
-            <div class="bg-white rounded-xl p-3 shadow-sm">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center"><i
-                                class="fas fa-tags text-yellow-600"></i></div>
-                        <div class="ml-3">
-                            <div class="font-medium">添加热门话题</div>
-                            <div class="text-xs text-gray-500">提高曝光率</div>
-                        </div>
-                    </div>
-                    <div class="relative inline-block w-12 h-6 rounded-full bg-gray-300"><span
-                            class="absolute left-1 top-1 w-4 h-4 rounded-full bg-white shadow-sm"></span></div>
-                </div>
-            </div>
-            <div class="glass-card p-3 shadow-sm">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-accent-light flex items-center justify-center"><i
-                                class="fas fa-tags text-accent"></i></div>
                         <div class="ml-3">
                             <div class="font-medium">添加热门话题</div>
                             <div class="text-xs text-gray-500">提高曝光率</div>
@@ -785,29 +576,103 @@
         </div>
         <!-- 在内容区域添加AI分析标签 -->
         <div class="mt-4 mb-2 px-4">
-            <div class="flex flex-wrap gap-2"><span class="ai-analysis-tag"><i class="fas fa-chart-line"></i>热度预测:
-                    较高 </span> <span class="ai-analysis-tag"> <i class="fas fa-users"></i> 目标人群: 健康生活爱好者 </span>
-                <span class="ai-analysis-tag"> <i class="fas fa-bullseye"></i> 最佳发布时间: 12:00-14:00 </span>
+            <div class="flex flex-wrap gap-2">
+                <span class="ai-analysis-tag px-3 py-1 rounded-full text-xs text-white"
+                    style="background: linear-gradient(135deg, #ff9800, #f57c00);">
+                    <i class="fas fa-chart-line mr-1"></i>热度预测: 较高
+                </span>
+                <span class="ai-analysis-tag px-3 py-1 rounded-full text-xs text-white"
+                    style="background: linear-gradient(135deg, #4caf50, #388e3c);">
+                    <i class="fas fa-users mr-1"></i>目标人群: 健康生活爱好者
+                </span>
+                <span class="ai-analysis-tag px-3 py-1 rounded-full text-xs text-white"
+                    style="background: linear-gradient(135deg, #2196f3, #1976d2);">
+                    <i class="fas fa-bullseye mr-1"></i>最佳发布时间: 12:00-14:00
+                </span>
             </div>
         </div>
         <!-- 添加AI优化建议 -->
-        <div class="ai-suggestion mx-4 mb-6 p-3 rounded-lg"> <i class="fas fa-lightbulb text-green-600 mr-2"></i>
+        <div class="ai-suggestion mx-4 mb-6 p-3 rounded-lg"
+            style="background: linear-gradient(to right, rgba(154, 163, 56, 0.1), rgba(154, 163, 56, 0.05));">
+            <i class="fas fa-lightbulb text-green-600 mr-2"></i>
             AI建议：根据图片分析，建议突出产品的有机种植特点和新鲜度，可以吸引更多注重健康的消费者。
         </div>
     </div>
+    <!-- 底部操作栏 -->
+    <div class="fixed bottom-0 left-0 right-0 p-4 shadow-md border-t border-gray-100"
+        style="background: linear-gradient(to bottom, #ffffff, #f9fafb); z-index: 50;">
+        <div class="flex space-x-3">
+            <a href="#" class="flex-1 py-3 rounded-lg font-medium text-center text-gray-700"
+                style="background: linear-gradient(135deg, #f7f8fa, #e5e7eb); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);">
+                <i class="fas fa-save mr-1"></i> 保存草稿
+            </a>
+            <a href="publish.html" class="flex-1 py-3 rounded-lg font-medium text-center publish-button text-white"
+                style="background: linear-gradient(135deg, #9aa338, #a9b056); box-shadow: 0 2px 6px rgba(154, 163, 56, 0.3);">
+                <i class="fas fa-paper-plane mr-1"></i> 去发布
+            </a>
+        </div>
+    </div>
     <!-- 底部导航栏 -->
-    <div class="fixed bottom-0 left-0 right-0 glass-nav py-3 px-4 flex justify-between z-50">
-        <button class="btn-earth flex items-center justify-center">
-            <i class="fas fa-arrow-left mr-2"></i>
-            上一步
-        </button>
-        <button class="btn-nature flex items-center justify-center">
-            下一步
-            <i class="fas fa-arrow-right ml-2"></i>
-        </button>
+    <div class="bottom-nav fixed bottom-0 left-0 right-0 py-2 px-5 border-t border-gray-100"
+        style="background: linear-gradient(180deg, #a9b056, rgba(154, 163, 56, 1)); transform: translateY(70px); z-index: 40;">
+        <div class="flex justify-between">
+            <div class="bottom-nav-item flex flex-col items-center text-white" data-link="home.html">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-xs mt-1">首页</span>
+            </div>
+            <div class="bottom-nav-item active flex flex-col items-center text-white" data-link="upload.html">
+                <i class="fas fa-plus-circle text-xl"></i>
+                <span class="text-xs mt-1">创建</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center text-white" data-link="tutorials.html">
+                <i class="fas fa-book text-xl"></i>
+                <span class="text-xs mt-1">教程</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center text-white" data-link="profile.html">
+                <i class="fas fa-user text-xl"></i>
+                <span class="text-xs mt-1">我的</span>
+            </div>
+        </div>
     </div>
     <script src="js/common.js"></script>
     <script src="js/preview.js"></script>
+    <script>
+        // 底部导航展示动画
+        document.addEventListener('DOMContentLoaded', function () {
+            const bottomNav = document.querySelector('.bottom-nav');
+            const showNavBtn = document.createElement('button');
+            showNavBtn.classList.add('show-nav-btn');
+            showNavBtn.style.position = 'fixed';
+            showNavBtn.style.bottom = '20px';
+            showNavBtn.style.right = '20px';
+            showNavBtn.style.width = '40px';
+            showNavBtn.style.height = '40px';
+            showNavBtn.style.borderRadius = '50%';
+            showNavBtn.style.background = 'linear-gradient(135deg, rgba(154, 163, 56, 1), #a9b056)';
+            showNavBtn.style.color = 'white';
+            showNavBtn.style.display = 'flex';
+            showNavBtn.style.alignItems = 'center';
+            showNavBtn.style.justifyContent = 'center';
+            showNavBtn.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.2)';
+            showNavBtn.style.border = 'none';
+            showNavBtn.style.zIndex = '45';
+            showNavBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            document.body.appendChild(showNavBtn);
+
+            let navVisible = false;
+
+            showNavBtn.addEventListener('click', function () {
+                if (navVisible) {
+                    bottomNav.style.transform = 'translateY(70px)';
+                    showNavBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                } else {
+                    bottomNav.style.transform = 'translateY(0)';
+                    showNavBtn.innerHTML = '<i class="fas fa-times"></i>';
+                }
+                navVisible = !navVisible;
+            });
+        });
+    </script>
 </body>
 
 </html>

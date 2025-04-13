@@ -7,16 +7,17 @@
     <title>禾语智宣 - 上传农产品图片</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/colors.css">
     <style>
         :root {
-            --primary-color: #537a5a;
-            --primary-light: #e8f3e9;
-            --primary-dark: #3d5b43;
+            --primary-color: rgba(154, 163, 56, 1);
+            --primary-light: #ced29f;
+            --primary-dark: #a9b056;
             --accent-color: #e67e22;
             --accent-light: #fef0e6;
             --text-primary: #333333;
             --text-secondary: #666666;
-            --bg-primary: #f7f8fa;
+            --bg-primary: rgba(205, 210, 171, 0.9);
             --bg-secondary: #ffffff;
             --border-color: #e5e7eb;
         }
@@ -147,9 +148,9 @@
 
 <body class="safe-area">
     <!-- 顶部导航栏 -->
-    <div class="header-nav p-4 flex items-center justify-between">
+    <div class="header-nav p-4 flex items-center justify-between custom-nav-bg">
         <a href="home.html" class="flex items-center">
-                <i class="fas fa-arrow-left text-lg"></i>
+            <i class="fas fa-arrow-left text-lg"></i>
         </a>
         <h1 class="text-lg font-bold flex-1 text-center">上传农产品图片</h1>
         <div class="w-5"></div> <!-- 占位元素，保持标题居中 -->
@@ -159,7 +160,7 @@
     <div class="step-indicator flex justify-between px-8 mt-4 mb-6">
         <div class="step active flex flex-col items-center">
             <div
-                class="step-number w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center text-xs mb-1">
+                class="step-number w-7 h-7 rounded-full bg-[#9aa338] text-white flex items-center justify-center text-xs mb-1">
                 1
             </div>
             <div class="step-name text-xs text-center">上传照片</div>
@@ -180,14 +181,14 @@
             </div>
             <div class="step-name text-xs text-center">选择平台</div>
         </div>
-                </div>
-                
+    </div>
+
     <!-- AI助手提示 -->
     <div class="ai-assistant p-4 mx-4 mb-5 shadow-sm">
         <div class="flex items-start">
-            <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mr-3">
+            <div class="w-8 h-8 rounded-full bg-[#9aa338] flex items-center justify-center flex-shrink-0 mr-3">
                 <i class="fas fa-robot text-white text-sm"></i>
-                </div>
+            </div>
             <div>
                 <p class="text-sm font-medium mb-1">AI助手提示</p>
                 <p class="text-sm text-gray-600">
@@ -200,8 +201,8 @@
     <!-- 上传区域 -->
     <div class="px-4 mb-5">
         <div id="upload-zone" class="upload-zone p-8 flex flex-col items-center justify-center text-center">
-            <div class="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mb-3">
-                <i class="fas fa-cloud-upload-alt text-green-500 text-xl"></i>
+            <div class="w-16 h-16 rounded-full bg-olive-10 flex items-center justify-center mb-3">
+                <i class="fas fa-cloud-upload-alt text-[#9aa338] text-xl"></i>
             </div>
             <h3 class="font-medium mb-1">点击或拖放上传</h3>
             <p class="text-sm text-gray-500 mb-4">支持jpg、png格式，单张图片不超过10MB</p>
@@ -218,8 +219,8 @@
 
         <div id="image-previews" class="grid grid-cols-2 gap-3">
             <!-- 图片预览将通过JS动态添加 -->
-            </div>
         </div>
+    </div>
 
     <!-- 模板：图片预览项 -->
     <template id="image-preview-template">
@@ -229,7 +230,7 @@
                 <button class="action-button delete-image">
                     <i class="fas fa-trash-alt text-red-500"></i>
                 </button>
-                </div>
+            </div>
             <div class="absolute bottom-0 left-0 right-0 p-2 bg-black bg-opacity-50">
                 <div class="progress-bar">
                     <div class="progress" style="width: 0%"></div>
@@ -258,7 +259,7 @@
                 <label for="product-intro" class="block text-sm font-medium text-gray-700 mb-1">产品简介</label>
                 <textarea id="product-intro" rows="2" placeholder="简单介绍产品的主要卖点"
                     class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 resize-none"></textarea>
-        </div>
+            </div>
 
             <!-- 产品特点 -->
             <div class="mb-4">
@@ -272,7 +273,7 @@
                 <label for="product-taste" class="block text-sm font-medium text-gray-700 mb-1">口感体验</label>
                 <textarea id="product-taste" rows="2" placeholder="描述产品的口感、风味等"
                     class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 resize-none"></textarea>
-                </div>
+            </div>
 
             <!-- 营养价值 -->
             <div class="mb-4">
@@ -280,7 +281,7 @@
                 <textarea id="product-nutrition" rows="2" placeholder="产品的营养成分和健康价值"
                     class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 resize-none"></textarea>
             </div>
-            
+
             <!-- 食用建议 -->
             <div>
                 <label for="product-suggestion" class="block text-sm font-medium text-gray-700 mb-1">食用建议</label>
@@ -288,7 +289,7 @@
                     class="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 resize-none"></textarea>
             </div>
         </div>
-        
+
         <!-- 表单提示 -->
         <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 flex mb-4">
             <div class="text-blue-500 mr-3">
@@ -512,4 +513,4 @@
     </script>
 </body>
 
-</html> 
+</html>

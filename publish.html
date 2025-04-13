@@ -8,567 +8,582 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/publish.css">
+    <link rel="stylesheet" href="css/colors.css">
     <style>
-        :root {
-            --primary-color: #537a5a;
-            --primary-light: #e8f3e9;
-            --primary-dark: #3d5b43;
-            --accent-color: #e67e22;
-            --accent-light: #fef0e6;
-            --text-primary: #333333;
-            --text-secondary: #666666;
-            --bg-primary: #f7f8fa;
-            --bg-secondary: #ffffff;
-            --border-color: #e5e7eb;
-        }
-
         body {
-            background-color: var(--bg-primary);
+            background-color: #f3f4ec;
             color: var(--text-primary);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        .bg-white {
-            background-color: var(--bg-secondary);
+            max-width: 100%;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
         }
 
         /* 顶部导航栏 */
-        .bg-white.p-4.flex.items-center {
-            background-color: var(--primary-color);
+        .nav-header {
+            background: #9aa338;
             color: white;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .bg-white.p-4.flex.items-center a {
-            color: rgba(255, 255, 255, 0.9);
+        /* 步骤指示器 */
+        .steps-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin: 1rem auto;
+            padding: 0 1rem;
+            max-width: 100%;
         }
 
-        .bg-white.p-4.flex.items-center h1 {
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #c1c9a6;
             color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .step.active .step-number {
+            background-color: #9aa338;
+        }
+
+        .step-name {
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        .step.active .step-name {
+            color: #9aa338;
+            font-weight: 500;
+        }
+
+        .connector {
+            height: 2px;
+            background-color: #c1c9a6;
+            flex-grow: 1;
+            margin-top: 14px;
+            position: relative;
+            z-index: 0;
+        }
+
+        .connector.active {
+            background-color: #9aa338;
+        }
+
+        /* AI助手提示 */
+        .ai-assistant {
+            background-color: rgba(154, 163, 56, 0.1);
+            border-radius: 0;
+            border-left: 4px solid #9aa338;
+            padding: 1rem;
+            margin: 1rem 0;
+            width: 100%;
         }
 
         /* 平台卡片样式 */
-        .platform-card {
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+        .platform-selection {
+            width: 100%;
+            max-width: 100%;
         }
 
-        .platform-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+        .platform-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            width: 100%;
+            max-width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .platform-card:first-child {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        .platform-card:last-child {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            border-bottom: none;
         }
 
         .platform-card.selected {
-            border-color: var(--primary-color);
-            border-width: 2px;
-            background-color: var(--primary-light);
+            background-color: rgba(154, 163, 56, 0.1);
+            border-left: 4px solid #9aa338;
         }
 
-        .platform-card.selected .platform-name {
-            color: var(--primary-color);
-            font-weight: 600;
+        .platform-card .platform-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
         }
 
-        /* 触摸反馈效果 */
-        .platform-card.active-feedback::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 12px;
-            animation: touch-fade 0.2s ease forwards;
+        .platform-info {
+            flex-grow: 1;
         }
 
-        @keyframes touch-fade {
-            0% {
-                opacity: 1;
-            }
-
-            100% {
-                opacity: 0;
-            }
+        .platform-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
         }
 
-        .checkmark-container {
-            width: 24px;
-            height: 24px;
+        .platform-description {
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .checkmark {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .platform-card .checkmark {
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
         .platform-card.selected .checkmark {
-            background-color: var(--primary-color);
+            background-color: #9aa338;
             border: none;
-            box-shadow: 0 2px 6px rgba(83, 122, 90, 0.4);
         }
 
-        /* 平台图标样式优化 */
-        .platform-card .w-10.h-10.rounded-full {
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+        /* 设置项目 */
+        .settings-container {
+            width: 100%;
+            margin-bottom: 5rem;
         }
 
-        .platform-card:hover .w-10.h-10.rounded-full {
-            transform: scale(1.1) rotate(5deg);
+        .setting-item {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
         }
 
-        .platform-card.selected .w-10.h-10.rounded-full {
-            transform: scale(1.15);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .platform-card img {
-            transition: all 0.3s ease;
-        }
-
-        .platform-card:hover img {
-            transform: scale(1.1);
-        }
-
-        .platform-card.selected img {
-            transform: scale(1.15);
-        }
-
-        /* 步骤指示器 */
-        .step-indicator .step {
-            color: var(--text-secondary);
-        }
-
-        .step-indicator .step.active {
-            color: var(--primary-color);
-        }
-
-        .step-indicator .step.active .step-number {
-            background-color: var(--primary-color);
-        }
-
-        .step-indicator .connector {
-            background-color: var(--border-color);
-        }
-
-        .step-indicator .connector.active {
-            background-color: var(--primary-color);
-        }
-
-        /* AI助手样式 */
-        .ai-assistant {
-            background-color: var(--primary-light);
-            border-left: 3px solid var(--primary-color);
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(83, 122, 90, 0.08);
+        /* 开关样式 */
+        .toggle-switch {
             position: relative;
-            overflow: hidden;
+            width: 48px;
+            height: 24px;
+            border-radius: 12px;
+            background-color: #e5e7eb;
         }
 
-        .ai-assistant::before {
-            content: '';
+        .toggle-switch.active {
+            background-color: #9aa338;
+        }
+
+        .toggle-switch::after {
+            content: "";
             position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: white;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch.active::after {
+            left: 26px;
+        }
+
+        /* 底部操作栏 */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 0.75rem 1rem;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            z-index: 10;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-prev {
+            background-color: #f3f4f6;
+            color: #4b5563;
+            margin-right: 0.5rem;
+        }
+
+        .btn-publish {
+            background-color: #9aa338;
+            color: white;
+            margin-left: 0.5rem;
+        }
+
+        /* 发布成功模态框 */
+        .modal {
+            position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg,
-                    rgba(255, 255, 255, 0.1) 0%,
-                    rgba(255, 255, 255, 0) 100%);
-            pointer-events: none;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
-        .ai-assistant .bg-green-500 {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            box-shadow: 0 3px 6px rgba(83, 122, 90, 0.2);
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 320px;
+            text-align: center;
         }
 
-        /* 按钮样式 */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: white;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(83, 122, 90, 0.2);
+        .success-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(154, 163, 56, 0.2);
+            color: #9aa338;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
         }
 
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(to bottom right,
-                    rgba(255, 255, 255, 0.2) 0%,
-                    rgba(255, 255, 255, 0) 100%);
-            transform: rotate(30deg);
-            transition: transform 0.5s ease;
-            opacity: 0;
+        .content-section {
+            margin: 1rem 0;
         }
 
-        .btn-primary:hover::before {
-            opacity: 1;
-            transform: rotate(30deg) translate(10%, 10%);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(83, 122, 90, 0.3);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 6px rgba(83, 122, 90, 0.2);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.6;
-            transform: none;
-            cursor: not-allowed;
-        }
-
-        .btn-secondary {
-            background-color: #f3f4f6;
-            color: var(--text-secondary);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .btn-secondary:hover {
-            background-color: #e5e7eb;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Linear设计风格 */
-        .rounded-xl {
-            border-radius: 12px;
-        }
-
-        .shadow-sm {
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        /* 发布成功弹窗优化 */
-        #publishSuccessModal .bg-white {
-            animation: modal-in 0.3s ease forwards;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .modal-success-icon {
-            animation: success-bounce 1s ease forwards;
-        }
-
-        @keyframes success-bounce {
-
-            0%,
-            20%,
-            50%,
-            80%,
-            100% {
-                transform: translateY(0);
-            }
-
-            40% {
-                transform: translateY(-20px);
-            }
-
-            60% {
-                transform: translateY(-10px);
-            }
-        }
-
-        @keyframes modal-in {
-            0% {
-                transform: scale(0.9);
-                opacity: 0;
-            }
-
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        /* 内容区域美化 */
-        .content-wrapper {
-            padding-bottom: 100px;
-            /* 为底部操作栏留出空间 */
-        }
-
-        /* 步骤指示器增强 */
-        .step-indicator {
-            margin-top: 1rem;
-        }
-
-        .step-number {
-            position: relative;
-            z-index: 1;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .step.active .step-name {
+        .section-title {
             font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            padding: 0 1rem;
         }
 
-        .connector {
-            position: relative;
-            z-index: 0;
-            height: 3px;
-            border-radius: 1.5px;
-            transition: all 0.5s ease;
-        }
-
-        .connector.active {
-            background: linear-gradient(to right,
-                    var(--primary-color) 0%,
-                    var(--primary-dark) 100%);
+        .section-subtitle {
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 1rem;
+            padding: 0 1rem;
         }
     </style>
 </head>
 
-<body class="safe-area">
+<body>
     <!-- 顶部导航栏 -->
-    <div class="glass-nav p-4 flex items-center">
-        <a href="preview.html" class="text-gray-600 mr-4">
-            <i class="fas fa-arrow-left text-lg"></i>
-        </a>
-        <h1 class="text-lg font-bold flex-1 text-center">选择发布平台</h1>
-        <div class="w-5"></div> <!-- 占位，保持标题居中 -->
+    <div class="nav-header">
+        <div class="flex items-center px-4">
+            <a href="preview.html" class="text-white mr-4">
+                <i class="fas fa-arrow-left text-lg"></i>
+            </a>
+            <h1 class="text-lg font-bold flex-1 text-center">选择发布平台</h1>
+            <div class="w-5"></div> <!-- 占位，保持标题居中 -->
+        </div>
     </div>
 
-    <!-- 内容区域 -->
-    <div class="content-wrapper">
-        <!-- AI助手提示 -->
-        <div class="ai-assistant p-4 mx-4 mt-4 mb-5 rounded-lg shadow-sm">
-            <div class="flex items-start">
-                <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mr-3">
-                    <i class="fas fa-robot text-white text-sm"></i>
-                </div>
-                <div>
-                    <p class="text-sm font-medium mb-1">AI助手推荐</p>
-                    <p class="text-sm text-gray-600">
-                        根据您的农产品特点，建议发布到 小红书、抖音和微信视频号，这些平台对农产品展示效果最佳，用户群体也更匹配。
-                    </p>
-                </div>
+    <!-- 步骤指示器 -->
+    <div class="steps-container">
+        <div class="step">
+            <div class="step-number">
+                <i class="fas fa-check text-xs"></i>
+            </div>
+            <div class="step-name">上传照片</div>
+        </div>
+        <div class="connector active"></div>
+        <div class="step">
+            <div class="step-number">
+                <i class="fas fa-check text-xs"></i>
+            </div>
+            <div class="step-name">预览图文</div>
+        </div>
+        <div class="connector active"></div>
+        <div class="step active">
+            <div class="step-number">3</div>
+            <div class="step-name">选择平台</div>
+        </div>
+    </div>
+
+    <!-- AI助手提示 -->
+    <div class="ai-assistant">
+        <div class="flex items-start">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mr-3 bg-[#9aa338]">
+                <i class="fas fa-robot text-white text-sm"></i>
+            </div>
+            <div>
+                <p class="text-sm font-medium mb-1">AI助手推荐</p>
+                <p class="text-sm text-gray-600">
+                    根据您的农产品特点，建议发布到小红书、抖音和微信视频号，这些平台对农产品展示效果最佳，用户群体也更匹配。
+                </p>
             </div>
         </div>
+    </div>
 
-        <!-- 步骤指示器 -->
-        <div class="step-indicator flex justify-between px-8 mb-6">
-            <div class="step flex flex-col items-center">
-                <div
-                    class="step-number w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center text-xs mb-1">
-                    <i class="fas fa-check"></i>
+    <!-- 平台选择 -->
+    <div class="content-section">
+        <h2 class="section-title">请选择您要发布的平台</h2>
+        <p class="section-subtitle">可多选，部分平台可能需要单独授权登录</p>
+
+        <div class="platform-selection">
+            <!-- 小红书 -->
+            <div class="platform-card selected">
+                <div class="flex items-center flex-1">
+                    <div class="platform-icon" style="background-color: #fee2e2;">
+                        <i class="fas fa-hashtag text-red-500"></i>
+                    </div>
+                    <div class="platform-info">
+                        <div class="platform-name">小红书</div>
+                        <div class="platform-description">图文笔记 | 实时互动</div>
+                    </div>
                 </div>
-                <div class="step-name text-xs text-center">上传照片</div>
+                <div class="checkmark">
+                    <i class="fas fa-check text-white text-xs"></i>
+                </div>
             </div>
-            <div class="connector flex-1 h-1 bg-green-500 mt-3 mx-2"></div>
-            <div class="step flex flex-col items-center">
-                <div
-                    class="step-number w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center text-xs mb-1">
-                    <i class="fas fa-check"></i>
+
+            <!-- 抖音 -->
+            <div class="platform-card">
+                <div class="flex items-center flex-1">
+                    <div class="platform-icon" style="background-color: #111827;">
+                        <i class="fab fa-tiktok text-white"></i>
+                    </div>
+                    <div class="platform-info">
+                        <div class="platform-name">抖音</div>
+                        <div class="platform-description">短视频 | 推荐算法强</div>
+                    </div>
                 </div>
-                <div class="step-name text-xs text-center">预览图文</div>
+                <div class="checkmark"></div>
             </div>
-            <div class="connector flex-1 h-1 active bg-green-500 mt-3 mx-2"></div>
-            <div class="step active flex flex-col items-center">
-                <div
-                    class="step-number w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center text-xs mb-1">
-                    3
+
+            <!-- 微信视频号 -->
+            <div class="platform-card">
+                <div class="flex items-center flex-1">
+                    <div class="platform-icon" style="background-color: #dcfce7;">
+                        <i class="fab fa-weixin text-green-600"></i>
+                    </div>
+                    <div class="platform-info">
+                        <div class="platform-name">微信视频号</div>
+                        <div class="platform-description">微信生态 | 私域流量</div>
+                    </div>
                 </div>
-                <div class="step-name text-xs text-center">选择平台</div>
+                <div class="checkmark"></div>
             </div>
-        </div>
 
-        <!-- 平台选择 -->
-        <div class="platform-selection px-4">
-            <h2 class="text-base font-bold mb-3">请选择您要发布的平台</h2>
-            <p class="text-xs text-gray-500 mb-4">可多选，部分平台可能需要单独授权登录</p>
-
-            <div class="grid grid-cols-1 gap-3">
-                <!-- 小红书 -->
-                <div class="platform-card selected p-3 flex items-center justify-between" data-platform="xiaohongshu">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
-                            <img src="https://cdn.iconscout.com/icon/free/png-256/free-xiaohongshu-3771655-3147508.png"
-                                alt="小红书" class="w-6 h-6">
-                        </div>
-                        <div class="ml-3">
-                            <div class="platform-name font-medium text-green-600">小红书</div>
-                            <div class="text-xs text-gray-500">图文笔记 | 实时互动</div>
-                        </div>
+            <!-- 蒙城平台 -->
+            <div class="platform-card">
+                <div class="flex items-center flex-1">
+                    <div class="platform-icon" style="background-color: #dbeafe;">
+                        <i class="fas fa-building text-blue-600"></i>
                     </div>
-                    <div class="checkmark-container">
-                        <div class="checkmark w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
-                            <i class="fas fa-check text-white text-xs"></i>
-                        </div>
+                    <div class="platform-info">
+                        <div class="platform-name">蒙城平台</div>
+                        <div class="platform-description">地方特色 | 区域流量</div>
                     </div>
                 </div>
+                <div class="checkmark"></div>
+            </div>
 
-                <!-- 抖音 -->
-                <div class="platform-card p-3 flex items-center justify-between" data-platform="douyin">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center">
-                            <img src="https://cdn.iconscout.com/icon/free/png-256/free-tiktok-4055218-3361118.png"
-                                alt="抖音" class="w-6 h-6">
-                        </div>
-                        <div class="ml-3">
-                            <div class="platform-name font-medium">抖音</div>
-                            <div class="text-xs text-gray-500">短视频 | 带货直播</div>
-                        </div>
+            <!-- 更多平台 -->
+            <div class="platform-card">
+                <div class="flex items-center flex-1">
+                    <div class="platform-icon" style="background-color: #f3e8ff;">
+                        <i class="fas fa-ellipsis-h text-purple-600"></i>
                     </div>
-                    <div class="checkmark-container">
-                        <div
-                            class="checkmark w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center">
-                        </div>
+                    <div class="platform-info">
+                        <div class="platform-name">更多平台</div>
+                        <div class="platform-description">即将上线更多平台支持</div>
                     </div>
                 </div>
-
-                <!-- 微信视频号 -->
-                <div class="platform-card p-3 flex items-center justify-between" data-platform="wechat">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                            <img src="https://cdn.iconscout.com/icon/free/png-256/free-wechat-8-283563.png" alt="微信视频号"
-                                class="w-6 h-6">
-                        </div>
-                        <div class="ml-3">
-                            <div class="platform-name font-medium">微信视频号</div>
-                            <div class="text-xs text-gray-500">微信生态 | 私域流量</div>
-                        </div>
-                    </div>
-                    <div class="checkmark-container">
-                        <div
-                            class="checkmark w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 微信公众号 -->
-                <div class="platform-card p-3 flex items-center justify-between" data-platform="wechat">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                            <img src="https://cdn.iconscout.com/icon/free/png-256/free-wechat-7-283564.png" alt="微信公众号"
-                                class="w-6 h-6">
-                        </div>
-                        <div class="ml-3">
-                            <div class="platform-name font-medium">微信公众号</div>
-                            <div class="text-xs text-gray-500">图文内容 | 订阅推送</div>
-                        </div>
-                    </div>
-                    <div class="checkmark-container">
-                        <div
-                            class="checkmark w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 淘宝 -->
-                <div class="platform-card p-3 flex items-center justify-between" data-platform="taobao">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center">
-                            <img src="https://cdn.iconscout.com/icon/free/png-256/free-taobao-4285019-3569394.png"
-                                alt="淘宝" class="w-6 h-6">
-                        </div>
-                        <div class="ml-3">
-                            <div class="platform-name font-medium">淘宝</div>
-                            <div class="text-xs text-gray-500">电商平台 | 农产直播</div>
-                        </div>
-                    </div>
-                    <div class="checkmark-container">
-                        <div
-                            class="checkmark w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 快手 -->
-                <div class="platform-card p-3 flex items-center justify-between" data-platform="kuaishou">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center">
-                            <img src="https://cdn.iconscout.com/icon/free/png-256/free-kuaishou-4064066-3360257.png"
-                                alt="快手" class="w-6 h-6">
-                        </div>
-                        <div class="ml-3">
-                            <div class="platform-name font-medium">快手</div>
-                            <div class="text-xs text-gray-500">短视频 | 农村电商</div>
-                        </div>
-                    </div>
-                    <div class="checkmark-container">
-                        <div
-                            class="checkmark w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 更多平台 -->
-                <div class="platform-card p-3 flex items-center justify-between">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-                            <img src="https://cdn.iconscout.com/icon/free/png-256/free-apps-1855952.png" alt="更多平台"
-                                class="w-6 h-6">
-                        </div>
-                        <div class="ml-3">
-                            <div class="platform-name font-medium">更多平台</div>
-                            <div class="text-xs text-gray-500">即将上线更多平台支持</div>
-                        </div>
-                    </div>
-                    <i class="fas fa-chevron-right text-gray-300"></i>
-                </div>
+                <i class="fas fa-chevron-right text-gray-400"></i>
             </div>
         </div>
+    </div>
 
-        <!-- 底部操作栏 -->
-        <div class="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-md">
-            <div class="flex space-x-3">
-                <button id="cancelPublishBtn" class="flex-1 btn-secondary py-3 rounded-lg font-medium text-center">
-                    暂不发布
+    <!-- 发布设置 -->
+    <div class="content-section">
+        <h2 class="section-title">发布设置</h2>
+
+        <div class="settings-container">
+            <div class="setting-item">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3"
+                        style="background-color: #f0fdf4;">
+                        <i class="fas fa-clock text-green-600"></i>
+                    </div>
+                    <div>
+                        <div class="font-medium">定时发布</div>
+                        <div class="text-xs text-gray-500">选择最佳时间发布获得更多曝光</div>
+                    </div>
+                </div>
+                <div class="toggle-switch" id="timeToggle"></div>
+            </div>
+
+            <div class="setting-item">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3"
+                        style="background-color: #fff7ed;">
+                        <i class="fas fa-tag text-orange-600"></i>
+                    </div>
+                    <div>
+                        <div class="font-medium">添加商品标签</div>
+                        <div class="text-xs text-gray-500">在内容中添加可购买的商品</div>
+                    </div>
+                </div>
+                <div class="toggle-switch" id="tagToggle"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部操作栏 -->
+    <div class="bottom-bar">
+        <a href="preview.html" class="btn btn-prev">
+            <i class="fas fa-arrow-left mr-1"></i> 上一步
+        </a>
+        <button id="publishBtn" class="btn btn-publish">
+            <i class="fas fa-paper-plane mr-1"></i> 发布内容
+        </button>
+    </div>
+
+    <!-- 发布成功模态框 -->
+    <div id="publishSuccessModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">发布成功</h3>
+            <p class="text-gray-600 mb-6">您的内容已成功发布到所选平台！</p>
+            <div class="flex justify-center space-x-3">
+                <button id="backToHomeBtn" class="btn btn-publish py-2 px-4 rounded">
+                    返回首页
                 </button>
-                <button id="publishBtn" class="flex-1 btn-primary py-3 rounded-lg font-medium text-center">
-                    立即发布
+                <button id="viewContentBtn" class="btn btn-prev py-2 px-4 rounded">
+                    查看内容
                 </button>
             </div>
         </div>
+    </div>
 
-        <!-- 发布成功模态框 -->
-        <div id="publishSuccessModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-            <div class="absolute inset-0 bg-black bg-opacity-50" id="modalOverlay"></div>
-            <div class="relative bg-white rounded-xl shadow-lg p-6 w-5/6 max-w-md">
-                <div class="text-center">
-                    <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-check-circle text-4xl text-green-500 modal-success-icon"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">发布成功</h3>
-                    <p class="text-gray-600 mb-6">您的内容已成功发布到所选平台！</p>
-                    <div class="flex justify-center space-x-3">
-                        <button id="backToHomeBtn" class="flex-1 btn-primary py-3 px-4 rounded-lg font-medium">
-                            返回首页
-                        </button>
-                        <button id="viewContentBtn"
-                            class="flex-1 bg-gray-100 text-gray-700 py-3 px-4 rounded-lg font-medium">
-                            查看内容
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <script src="js/common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 平台选择事件
+            const platformCards = document.querySelectorAll('.platform-card');
+            const publishBtn = document.getElementById('publishBtn');
 
-        <script src="js/common.js"></script>
-        <script src="js/utils.js"></script>
-        <script src="js/publish.js"></script>
+            // 初始化状态
+            let anySelected = true; // 默认小红书已选中
+
+            platformCards.forEach(card => {
+                // 跳过最后一个"更多平台"选项
+                if (card === platformCards[platformCards.length - 1]) return;
+
+                card.addEventListener('click', function () {
+                    // 切换选中状态
+                    this.classList.toggle('selected');
+
+                    // 处理勾选图标
+                    const checkmark = this.querySelector('.checkmark');
+                    if (this.classList.contains('selected')) {
+                        checkmark.innerHTML = '<i class="fas fa-check text-white text-xs"></i>';
+                        checkmark.style.backgroundColor = '#9aa338';
+                    } else {
+                        checkmark.innerHTML = '';
+                        checkmark.style.backgroundColor = 'transparent';
+                    }
+
+                    // 检查是否有任何平台被选中
+                    anySelected = document.querySelectorAll('.platform-card.selected').length > 0;
+                    publishBtn.disabled = !anySelected;
+                    if (publishBtn.disabled) {
+                        publishBtn.style.opacity = '0.6';
+                    } else {
+                        publishBtn.style.opacity = '1';
+                    }
+                });
+            });
+
+            // 切换开关
+            const toggleSwitches = document.querySelectorAll('.toggle-switch');
+            toggleSwitches.forEach(toggle => {
+                toggle.addEventListener('click', function () {
+                    this.classList.toggle('active');
+                });
+            });
+
+            // 发布按钮点击事件
+            publishBtn.addEventListener('click', function () {
+                // 显示发布中的加载动画
+                publishBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> 发布中...';
+                publishBtn.disabled = true;
+                publishBtn.style.opacity = '0.6';
+
+                // 模拟发布过程
+                setTimeout(() => {
+                    // 显示发布成功弹窗
+                    document.getElementById('publishSuccessModal').classList.remove('hidden');
+                }, 1500);
+            });
+
+            // 弹窗按钮事件
+            document.getElementById('backToHomeBtn').addEventListener('click', function () {
+                window.location.href = 'home.html';
+            });
+
+            document.getElementById('viewContentBtn').addEventListener('click', function () {
+                document.getElementById('publishSuccessModal').classList.add('hidden');
+                // 重置发布按钮
+                publishBtn.innerHTML = '<i class="fas fa-paper-plane mr-1"></i> 发布内容';
+                publishBtn.disabled = false;
+                publishBtn.style.opacity = '1';
+            });
+
+            // 点击模态框外部关闭
+            document.getElementById('publishSuccessModal').addEventListener('click', function (e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                    // 重置发布按钮
+                    publishBtn.innerHTML = '<i class="fas fa-paper-plane mr-1"></i> 发布内容';
+                    publishBtn.disabled = false;
+                    publishBtn.style.opacity = '1';
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

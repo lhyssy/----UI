@@ -8,10 +8,11 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/colors.css">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f7f8fa;
+            background-color: rgba(205, 210, 171, 0.9);
             color: #333;
             max-width: 100%;
             overflow-x: hidden;
@@ -36,8 +37,7 @@
         }
 
         .app-header {
-            background-color: #537a5a;
-            /* 更换为更温和的绿色，与农场风景图配合 */
+            background-color: rgba(154, 163, 56, 1);
             color: white;
             padding: 12px 16px;
             display: flex;
@@ -161,13 +161,13 @@
         .create-btn {
             width: 50px;
             height: 50px;
-            background-color: #537a5a;
+            background-color: rgba(154, 163, 56, 1);
             border-radius: 25px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-top: -20px;
-            box-shadow: 0 4px 15px rgba(83, 122, 90, 0.3);
+            box-shadow: 0 4px 15px rgba(154, 163, 56, 0.3);
             transition: all 0.3s ease;
         }
 
@@ -184,11 +184,11 @@
 
         /* 为卡片添加包含农场元素的配色 */
         .bg-farm-green {
-            background-color: #e8f3e9;
+            background-color: #ced29f;
         }
 
         .text-farm-green {
-            color: #537a5a;
+            color: rgba(154, 163, 56, 1);
         }
 
         .bg-farm-orange {
@@ -226,8 +226,8 @@
 
         .ai-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(59, 90, 65, 0.15);
-            border-color: rgba(59, 90, 65, 0.3);
+            box-shadow: 0 10px 20px rgba(154, 163, 56, 0.15);
+            border-color: rgba(154, 163, 56, 0.3);
         }
 
         .ai-card:after {
@@ -237,7 +237,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at top right, rgba(59, 90, 65, 0.05), transparent 70%);
+            background: radial-gradient(circle at top right, rgba(154, 163, 56, 0.05), transparent 70%);
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
@@ -253,15 +253,15 @@
 
         @keyframes pulse {
             0% {
-                box-shadow: 0 0 0 0 rgba(59, 90, 65, 0.4);
+                box-shadow: 0 0 0 0 rgba(154, 163, 56, 0.4);
             }
 
             70% {
-                box-shadow: 0 0 0 8px rgba(59, 90, 65, 0);
+                box-shadow: 0 0 0 8px rgba(154, 163, 56, 0);
             }
 
             100% {
-                box-shadow: 0 0 0 0 rgba(59, 90, 65, 0);
+                box-shadow: 0 0 0 0 rgba(154, 163, 56, 0);
             }
         }
 
@@ -299,7 +299,7 @@
             left: -5px;
             right: -5px;
             bottom: -5px;
-            background: rgba(59, 90, 65, 0.05);
+            background: rgba(154, 163, 56, 0.05);
             border-radius: 50%;
             z-index: -1;
             transform: scale(0);
@@ -366,8 +366,8 @@
                     <div class="p-6">
                         <div class="flex items-start">
                             <div
-                                class="icon-container w-12 h-12 rounded-xl bg-[#e8f3e9] flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-robot text-[#3b5a41] text-lg"></i>
+                                class="icon-container w-12 h-12 rounded-xl bg-[#ced29f] flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-robot text-[#9aa338] text-lg"></i>
                             </div>
                             <div class="ml-4 flex-1">
                                 <h3 class="font-bold text-gray-800">农产品宣传智能助手</h3>
@@ -378,7 +378,7 @@
                         <!-- 创建按钮 -->
                         <div class="mt-5 mb-2">
                             <div
-                                class="action-btn bg-[#3b5a41] hover:bg-[#2e4733] text-white text-sm py-3 rounded-lg flex items-center justify-center transition-colors duration-300 shadow-sm">
+                                class="action-btn bg-[#9aa338] hover:bg-[#a9b056] text-white text-sm py-3 rounded-lg flex items-center justify-center transition-colors duration-300 shadow-sm">
                                 <i class="fas fa-camera-retro mr-2"></i>
                                 点击开始创建
                             </div>
@@ -390,7 +390,7 @@
                                 <div class="text-xs text-gray-500">支持平台</div>
                                 <div
                                     class="font-medium text-gray-800 mt-1 flex items-center justify-center stat-bubble">
-                                    <i class="fas fa-circle-check text-[#3b5a41] mr-1 text-xs"></i>
+                                    <i class="fas fa-circle-check text-[#9aa338] mr-1 text-xs"></i>
                                     5+
                                 </div>
                             </div>
@@ -398,7 +398,7 @@
                                 <div class="text-xs text-gray-500">识别精度</div>
                                 <div
                                     class="font-medium text-gray-800 mt-1 flex items-center justify-center stat-bubble">
-                                    <i class="fas fa-circle-check text-[#3b5a41] mr-1 text-xs"></i>
+                                    <i class="fas fa-circle-check text-[#9aa338] mr-1 text-xs"></i>
                                     98%
                                 </div>
                             </div>
@@ -406,7 +406,7 @@
                                 <div class="text-xs text-gray-500">生成速度</div>
                                 <div
                                     class="font-medium text-gray-800 mt-1 flex items-center justify-center stat-bubble">
-                                    <i class="fas fa-circle-check text-[#3b5a41] mr-1 text-xs"></i>
+                                    <i class="fas fa-circle-check text-[#9aa338] mr-1 text-xs"></i>
                                     3秒
                                 </div>
                             </div>
@@ -499,24 +499,24 @@
     </div>
 
     <!-- 底部导航栏 -->
-    <div class="bottom-nav">
-        <div class="bottom-nav-item active" data-link="home.html">
-            <i class="fas fa-home text-xl"></i>
-            <span class="text-xs mt-1">首页</span>
-        </div>
-        <div class="bottom-nav-item" data-link="upload.html">
-            <div class="create-btn text-white pulse">
-                <i class="fas fa-plus"></i>
+    <div class="fixed bottom-0 left-0 right-0 custom-nav-bg py-2 px-5 border-t border-gray-100">
+        <div class="flex justify-between">
+            <div class="bottom-nav-item flex flex-col items-center text-navy active" data-link="home.html">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-xs mt-1">首页</span>
             </div>
-            <span class="text-xs mt-1">创建</span>
-        </div>
-        <div class="bottom-nav-item" data-link="tutorials.html">
-            <i class="fas fa-book text-xl"></i>
-            <span class="text-xs mt-1">教程</span>
-        </div>
-        <div class="bottom-nav-item" data-link="profile.html">
-            <i class="fas fa-user text-xl"></i>
-            <span class="text-xs mt-1">我的</span>
+            <div class="bottom-nav-item flex flex-col items-center text-navy" data-link="upload.html">
+                <i class="fas fa-plus-circle text-xl"></i>
+                <span class="text-xs mt-1">创建</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center text-navy" data-link="tutorials.html">
+                <i class="fas fa-book text-xl"></i>
+                <span class="text-xs mt-1">教程</span>
+            </div>
+            <div class="bottom-nav-item flex flex-col items-center text-navy" data-link="profile.html">
+                <i class="fas fa-user text-xl"></i>
+                <span class="text-xs mt-1">我的</span>
+            </div>
         </div>
     </div>
 
