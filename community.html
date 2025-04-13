@@ -179,16 +179,11 @@
 <body class="safe-area">
 <!-- 顶部导航 -->
 <div class="header-fixed p-4 flex items-center justify-between" style="background-color: rgba(154,163,56, 1)">
-    <h1 class="text-xl font-bold">农友社区</h1>
-    <div class="flex space-x-4">
-        <button class="text-gray-600 relative">
-            <i class="fas fa-bell text-lg"></i>
-            <span class="badge">3</span>
-        </button>
-        <button class="text-gray-600">
-            <i class="fas fa-search text-lg"></i>
-        </button>
-    </div>
+    <button style="color: rgba(15,45,73,1)" onclick="window.location.href='home.html'">
+        <i class="fas fa-arrow-left"></i>
+    </button>
+    <h1 class="text-xl font-bold absolute left-1/2 transform -translate-x-1/2">农友社区</h1>
+    <div class="w-6"><!-- 用于平衡布局的空div --></div>
 </div>
 
 <!-- 内容容器 -->
@@ -737,22 +732,21 @@
 <div class="fixed bottom-0 left-0 right-0 py-2 px-5 border-t border-gray-100"
      style="background-color: rgba(154,163,56, 1)">
     <div class="flex justify-between">
-        <div class="bottom-nav-item flex flex-col items-center text-gray-500" data-link="home.html">
-            <i class="fas fa-home text-xl"></i>
-            <span class="text-xs mt-1">首页</span>
+        <div class="bottom-nav-item flex flex-col items-center" data-link="home.html">
+            <i class="fas fa-home text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">首页</span>
         </div>
-        <div class="bottom-nav-item flex flex-col items-center active" data-link="community.html"
-             style="color: rgba(15,45,73,1)">
-            <i class="fas fa-users text-xl" style="color: rgba(15,45,73,1)"></i>
-            <span class="text-xs mt-1">社区</span>
+        <div class="bottom-nav-item flex flex-col items-center" data-link="upload.html">
+            <i class="fas fa-plus-circle text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">创建</span>
         </div>
-        <div class="bottom-nav-item flex flex-col items-center text-gray-500" data-link="tutorials.html">
-            <i class="fas fa-book text-xl"></i>
-            <span class="text-xs mt-1">教程</span>
+        <div class="bottom-nav-item flex flex-col items-center" data-link="tutorials.html">
+            <i class="fas fa-book text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">教程</span>
         </div>
-        <div class="bottom-nav-item flex flex-col items-center text-gray-500" data-link="profile.html">
-            <i class="fas fa-user text-xl"></i>
-            <span class="text-xs mt-1">我的</span>
+        <div class="bottom-nav-item flex flex-col items-center" data-link="profile.html">
+            <i class="fas fa-user text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">我的</span>
         </div>
     </div>
 </div>
