@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>助农宣传 - 首页</title>
+    <title>禾语智宣 - 首页</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/animations.css">
@@ -14,27 +15,52 @@
             color: #333;
             max-width: 100%;
             overflow-x: hidden;
+            background-image: url('path/to/background.jpg');
+            /* 将在JS中动态替换为上传的图片 */
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            position: relative;
         }
-        
+
+        /* 添加半透明遮罩，确保内容可读性 */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.85);
+            z-index: -1;
+        }
+
         .app-header {
-            background-color: #07c160;
+            background-color: #537a5a;
+            /* 更换为更温和的绿色，与农场风景图配合 */
             color: white;
             padding: 12px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
-        
+
         .search-bar {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.25);
             border-radius: 20px;
             padding: 5px 15px;
             flex: 1;
             margin: 0 10px;
             display: flex;
             align-items: center;
+            transition: all 0.3s ease;
         }
-        
+
+        .search-bar:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
         .search-bar input {
             background: transparent;
             border: none;
@@ -43,15 +69,15 @@
             width: 100%;
             padding: 5px;
         }
-        
+
         .search-bar input::placeholder {
             color: rgba(255, 255, 255, 0.8);
         }
-        
+
         .search-bar input:focus {
             outline: none;
         }
-        
+
         .feature-card {
             background-color: white;
             border-radius: 16px;
@@ -60,13 +86,15 @@
             margin-bottom: 16px;
             transition: all 0.3s ease;
             cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
-        
+
         .feature-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: #537a5a;
         }
-        
+
         .feature-icon {
             width: 50px;
             height: 50px;
@@ -77,7 +105,7 @@
             font-size: 24px;
             margin-bottom: 12px;
         }
-        
+
         .update-section {
             background-color: white;
             border-radius: 16px;
@@ -85,24 +113,24 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             margin-top: 20px;
         }
-        
+
         .update-item {
             display: flex;
             padding: 12px 0;
             border-bottom: 1px solid #f0f0f0;
         }
-        
+
         .update-item:last-child {
             border-bottom: none;
         }
-        
+
         .update-image {
             width: 60px;
             height: 60px;
             border-radius: 8px;
             object-fit: cover;
         }
-        
+
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -114,7 +142,7 @@
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
             z-index: 100;
         }
-        
+
         .bottom-nav-item {
             flex: 1;
             display: flex;
@@ -125,40 +153,74 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         .bottom-nav-item.active {
-            color: #07c160;
+            color: #537a5a;
         }
-        
+
         .create-btn {
             width: 50px;
             height: 50px;
-            background-color: #07c160;
+            background-color: #537a5a;
             border-radius: 25px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-top: -20px;
-            box-shadow: 0 4px 15px rgba(7, 193, 96, 0.3);
+            box-shadow: 0 4px 15px rgba(83, 122, 90, 0.3);
             transition: all 0.3s ease;
         }
-        
+
         .create-btn:hover {
             transform: scale(1.05);
         }
-        
+
         .feature-section {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
             margin-top: 16px;
         }
+
+        /* 为卡片添加包含农场元素的配色 */
+        .bg-farm-green {
+            background-color: #e8f3e9;
+        }
+
+        .text-farm-green {
+            color: #537a5a;
+        }
+
+        .bg-farm-orange {
+            background-color: #fef0e6;
+        }
+
+        .text-farm-orange {
+            color: #e67e22;
+        }
+
+        .bg-farm-blue {
+            background-color: #e6f3f8;
+        }
+
+        .text-farm-blue {
+            color: #3498db;
+        }
+
+        .bg-farm-yellow {
+            background-color: #fef8e6;
+        }
+
+        .text-farm-yellow {
+            color: #f1c40f;
+        }
     </style>
 </head>
+
 <body>
     <!-- 顶部导航 -->
     <header class="app-header slide-down">
-        <h1 class="text-lg font-medium">助农宣传</h1>
+        <h1 class="text-lg font-medium">禾语智宣</h1>
         <div class="search-bar">
             <i class="fas fa-search text-white opacity-80 mr-2"></i>
             <input type="text" placeholder="搜索教程和模板">
@@ -173,31 +235,34 @@
         <div class="mb-6 slide-up">
             <div class="flex items-center justify-between mb-3">
                 <h2 class="text-base font-medium flex items-center">
-                    <i class="fas fa-robot text-purple-500 mr-2"></i>
-                    农业AI助手
+                    <i class="fas fa-robot text-farm-green mr-2"></i>
+                    农业智能助手
                 </h2>
-                <a href="#" class="text-xs text-green-500">更多功能</a>
+                <a href="#" class="text-xs text-farm-green">更多功能</a>
             </div>
-            
-            <div class="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl p-4 text-white shadow-lg">
+
+            <div class="bg-gradient-to-r from-[#537a5a] to-[#7d9c81] rounded-xl p-4 text-white shadow-lg">
                 <div class="flex items-start">
                     <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
                         <i class="fas fa-brain text-white"></i>
                     </div>
                     <div class="ml-3 flex-1">
-                        <h3 class="font-bold text-white">智能农产品助手</h3>
-                        <p class="text-xs text-purple-100 mt-1">使用AI技术帮助您优化农产品宣传内容</p>
-                        
+                        <h3 class="font-bold text-white">智能宣传助手</h3>
+                        <p class="text-xs text-green-100 mt-1">使用AI技术帮助您优化农产品宣传内容</p>
+
                         <div class="mt-3 flex space-x-2">
-                            <a href="upload.html" class="bg-white/20 hover:bg-white/30 transition-colors text-white text-xs px-3 py-2 rounded-lg flex items-center">
+                            <a href="upload.html"
+                                class="bg-white/20 hover:bg-white/30 transition-colors text-white text-xs px-3 py-2 rounded-lg flex items-center">
                                 <i class="fas fa-image mr-1"></i>
                                 拍照识别
                             </a>
-                            <a href="preview.html" class="bg-white/20 hover:bg-white/30 transition-colors text-white text-xs px-3 py-2 rounded-lg flex items-center">
+                            <a href="preview.html"
+                                class="bg-white/20 hover:bg-white/30 transition-colors text-white text-xs px-3 py-2 rounded-lg flex items-center">
                                 <i class="fas fa-magic mr-1"></i>
                                 生成宣传
                             </a>
-                            <a href="publish.html" class="bg-white/20 hover:bg-white/30 transition-colors text-white text-xs px-3 py-2 rounded-lg flex items-center">
+                            <a href="publish.html"
+                                class="bg-white/20 hover:bg-white/30 transition-colors text-white text-xs px-3 py-2 rounded-lg flex items-center">
                                 <i class="fas fa-paper-plane mr-1"></i>
                                 发布内容
                             </a>
@@ -211,7 +276,7 @@
         <div class="grid grid-cols-2 gap-4 mb-6 slide-up">
             <!-- 电商教程卡片 -->
             <div class="feature-card stagger-item" data-link="tutorials.html">
-                <div class="feature-icon bg-orange-50 text-orange-500">
+                <div class="feature-icon bg-farm-orange text-farm-orange">
                     <i class="fas fa-book"></i>
                 </div>
                 <h3 class="font-medium">电商教程</h3>
@@ -220,56 +285,56 @@
 
             <!-- 数据分析卡片 -->
             <div class="feature-card stagger-item" data-link="analytics.html">
-                <div class="feature-icon bg-indigo-50 text-indigo-500">
+                <div class="feature-icon bg-farm-blue text-farm-blue">
                     <i class="fas fa-chart-bar"></i>
                 </div>
                 <h3 class="font-medium">数据分析</h3>
                 <p class="text-xs text-gray-500 mt-1">查看宣传效果分析</p>
             </div>
-            
+
             <!-- 农友社区卡片 -->
             <div class="feature-card stagger-item" data-link="community.html">
-                <div class="feature-icon bg-yellow-50 text-yellow-500">
+                <div class="feature-icon bg-farm-yellow text-farm-yellow">
                     <i class="fas fa-users"></i>
                 </div>
                 <h3 class="font-medium">农友社区</h3>
                 <p class="text-xs text-gray-500 mt-1">与其他农友交流经验</p>
             </div>
-            
+
             <!-- 营销日历卡片 -->
             <div class="feature-card stagger-item" data-link="marketing_calendar.html">
-                <div class="feature-icon bg-cyan-50 text-cyan-500">
+                <div class="feature-icon bg-farm-green text-farm-green">
                     <i class="fas fa-calendar-alt"></i>
                 </div>
                 <h3 class="font-medium">营销日历</h3>
                 <p class="text-xs text-gray-500 mt-1">规划宣传活动</p>
             </div>
         </div>
-        
+
         <!-- 数据统计区域 -->
         <div class="slide-up">
             <div class="flex items-center justify-between mb-2">
                 <h2 class="text-base font-medium flex items-center">
-                    <i class="fas fa-chart-line text-green-500 mr-2"></i>
+                    <i class="fas fa-chart-line text-farm-green mr-2"></i>
                     数据统计
                 </h2>
-                <a href="analytics.html" class="text-xs text-green-500">详细分析</a>
+                <a href="analytics.html" class="text-xs text-farm-green">详细分析</a>
             </div>
-            
+
             <div class="grid grid-cols-2 gap-3">
                 <div class="bg-white p-3 rounded-xl shadow-sm stagger-item">
                     <div class="text-xs text-gray-500">总浏览量</div>
                     <div class="text-xl font-bold mt-1">12,483</div>
-                    <div class="text-xs text-green-500 flex items-center mt-1">
+                    <div class="text-xs text-farm-green flex items-center mt-1">
                         <i class="fas fa-arrow-up mr-1"></i>
                         较上周增长32%
                     </div>
                 </div>
-                
+
                 <div class="bg-white p-3 rounded-xl shadow-sm stagger-item">
                     <div class="text-xs text-gray-500">内容转化率</div>
                     <div class="text-xl font-bold mt-1">12.8%</div>
-                    <div class="text-xs text-green-500 flex items-center mt-1">
+                    <div class="text-xs text-farm-green flex items-center mt-1">
                         <i class="fas fa-arrow-up mr-1"></i>
                         较上周增长5%
                     </div>
@@ -277,7 +342,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- 底部导航栏 -->
     <div class="bottom-nav">
         <div class="bottom-nav-item active" data-link="home.html">
@@ -302,28 +367,32 @@
 
     <script src="js/common.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
+            // 设置上传的背景图片
+            document.body.style.backgroundImage = "url('data:image/jpeg;base64,/* 这里将替换为实际的背景图片base64编码 */')";
+
             // 功能卡片点击事件
             document.querySelectorAll('.feature-card').forEach(card => {
-                card.addEventListener('click', function() {
+                card.addEventListener('click', function () {
                     const link = this.getAttribute('data-link');
                     if (link) {
                         window.location.href = link;
                     }
                 });
             });
-            
+
             // 创建气泡背景
             createBubbleEffect();
-            
+
             // 搜索框点击事件
             const searchBar = document.querySelector('.search-bar');
             if (searchBar) {
-                searchBar.addEventListener('click', function() {
+                searchBar.addEventListener('click', function () {
                     showToast('搜索功能已启用', 'info');
                 });
             }
         });
     </script>
 </body>
-</html> 
+
+</html>
