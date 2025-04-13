@@ -7,28 +7,15 @@
     <title>助农宣传 - 个人中心</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f7f8fa;
-            min-height: 100vh;
-            padding-bottom: 60px;
-        }
-
-        .main-container {
+            background-color: rgba(205, 210, 171, 0.2);
             height: 100vh;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            z-index: 100;
-            padding-bottom: env(safe-area-inset-bottom);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .modal {
@@ -40,7 +27,9 @@
             justify-content: center;
             visibility: hidden;
             opacity: 0;
-            transition: opacity 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
         }
 
         .modal.active {
@@ -49,184 +38,168 @@
         }
 
         .modal-content {
+            transform: scale(0.95);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .login-container {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(249, 250, 251, 0.9) 100%);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .bottom-nav-item.active {
+            color: #10B981;
+        }
+
+        .bottom-nav-item.active i {
+            color: #10B981;
+        }
+
+        .page-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 60px);
+            /* 减去底部导航的高度 */
+        }
+
+        .header {
+            height: 56px;
+            display: flex;
+            align-items: center;
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 400px;
-            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 1rem;
         }
     </style>
 </head>
 
-<body class="safe-area">
-<div class="main-container pb-20">
+<body>
+<div class="page-container">
     <!-- 顶部导航 -->
-    <div class="bg-white p-4 flex items-center justify-between">
+    <div class="fixed top-0 left-0 right-0 p-4 flex items-center justify-center z-50"
+         style="background-color: rgba(154,163,56, 1)">
         <h1 class="text-xl font-bold">个人中心</h1>
     </div>
 
-    <!-- 用户信息 -->
-    <div class="bg-white p-4 text-center">
-        <h1 class="text-xl font-bold">欢迎来到个人中心</h1>
-        <p class="mt-4">请点击登录</p>
-        <button id="loginBtn" class="mt-4 bg-blue-500 text-white py-2 px-8 rounded-md text-base">
-            登录
-        </button>
-    </div>
-
-    <!-- 登录弹窗 -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <h2 class="text-lg font-bold">登录</h2>
-            <div class="mt-4">
-                <label class="block text-sm font-medium">上传头像</label>
-                <input type="file" id="photoInput" accept="image/*" class="mt-1 w-full border p-2 rounded-md">
+    <!-- 登录区域 -->
+    <div class="main-content">
+        <div class="login-container w-full max-w-md rounded-2xl p-8 text-center">
+            <div class="mb-8">
+                <i class="fas fa-user-circle text-6xl text-gray-300 mb-4"></i>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">欢迎来到助农宣传</h2>
+                <p class="text-gray-600">登录后开启您的助农之旅</p>
             </div>
-            <div class="mt-4">
-                <label class="block text-sm font-medium">姓名</label>
-                <input type="text" id="nameInput" class="mt-1 w-full border p-2 rounded-md" placeholder="请输入姓名">
-            </div>
-            <div class="mt-4 flex justify-between">
-                <button id="cancelBtn" class="bg-gray-400 text-white px-4 py-2 rounded-md">取消</button>
-                <button id="submitBtn" class="bg-blue-500 text-white px-4 py-2 rounded-md">提交</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 数据概览占位 -->
-    <div class="grid grid-cols-4 gap-4 mt-5 bg-white p-4">
-        <div class="text-center">
-            <div class="font-bold text-gray-300">--</div>
-            <div class="text-xs text-gray-400">宣传图文</div>
-        </div>
-        <div class="text-center">
-            <div class="font-bold text-gray-300">--</div>
-            <div class="text-xs text-gray-400">已发布</div>
-        </div>
-        <div class="text-center">
-            <div class="font-bold text-gray-300">--</div>
-            <div class="text-xs text-gray-400">总浏览</div>
-        </div>
-        <div class="text-center">
-            <div class="font-bold text-gray-300">--</div>
-            <div class="text-xs text-gray-400">收藏</div>
-        </div>
-    </div>
-
-    <!-- 内容标签页占位 -->
-    <div class="bg-white mt-4">
-        <div class="flex border-b">
-            <div class="tab-item flex-1 text-center py-3 font-medium text-gray-400">我的宣传</div>
-            <div class="tab-item flex-1 text-center py-3 font-medium text-gray-400">收藏教程</div>
-            <div class="tab-item flex-1 text-center py-3 font-medium text-gray-400">发布记录</div>
-        </div>
-        <!-- 空内容提示 -->
-        <div class="p-8 text-center text-gray-400">
-            <i class="fas fa-user-circle text-4xl mb-4"></i>
-            <p>登录后查看内容</p>
-        </div>
-    </div>
-
-    <!-- 菜单区域 -->
-    <div class="mt-4 bg-white">
-        <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <div class="flex items-center">
-                <i class="fas fa-wallet text-lg text-gray-400 w-6"></i>
-                <span class="ml-3 text-gray-400">我的钱包</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
-        </div>
-        <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <div class="flex items-center">
-                <i class="fas fa-calendar-alt text-lg text-gray-400 w-6"></i>
-                <span class="ml-3 text-gray-400">营销日历</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
-        </div>
-        <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <div class="flex items-center">
-                <i class="fas fa-bell text-lg text-gray-400 w-6"></i>
-                <span class="ml-3 text-gray-400">消息通知</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
-        </div>
-        <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <div class="flex items-center">
-                <i class="fas fa-star text-lg text-gray-400 w-6"></i>
-                <span class="ml-3 text-gray-400">我的评价</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
-        </div>
-        <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <div class="flex items-center">
-                <i class="fas fa-headset text-lg text-gray-400 w-6"></i>
-                <span class="ml-3 text-gray-400">联系客服</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
-        </div>
-        <div class="menu-item flex items-center justify-between px-4 py-3">
-            <div class="flex items-center">
-                <i class="fas fa-question-circle text-lg text-gray-400 w-6"></i>
-                <span class="ml-3 text-gray-400">关于我们</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-300 text-xs"></i>
+            <button id="loginBtn"
+                    class="w-full text-white py-3 px-6 rounded-xl text-lg font-medium transition-all hover:opacity-90 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[rgba(255,142,50,0.88)] focus:ring-opacity-50"
+                    style="background-color: rgba(255,142,50,0.88)">
+                立即登录
+            </button>
         </div>
     </div>
 </div>
 
 <!-- 底部导航栏 -->
-<div class="bottom-nav bg-white py-2 px-5 border-t border-gray-100">
+<div class="fixed bottom-0 left-0 right-0 py-2 px-5 border-t border-gray-100"
+     style="background-color: rgba(154,163,56, 1)">
     <div class="flex justify-between">
-        <div class="bottom-nav-item flex flex-col items-center text-gray-400" data-link="home.html">
-            <i class="fas fa-home text-xl"></i>
-            <span class="text-xs mt-1">首页</span>
+        <div class="bottom-nav-item flex flex-col items-center" data-link="home.html">
+            <i class="fas fa-home text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">首页</span>
         </div>
-        <div class="bottom-nav-item flex flex-col items-center text-gray-400" data-link="upload.html">
-            <i class="fas fa-plus-circle text-xl"></i>
-            <span class="text-xs mt-1">创建</span>
+        <div class="bottom-nav-item flex flex-col items-center" data-link="upload.html">
+            <i class="fas fa-plus-circle text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">创建</span>
         </div>
-        <div class="bottom-nav-item flex flex-col items-center text-gray-400" data-link="tutorials.html">
-            <i class="fas fa-book text-xl"></i>
-            <span class="text-xs mt-1">教程</span>
+        <div class="bottom-nav-item flex flex-col items-center" data-link="tutorials.html">
+            <i class="fas fa-book text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">教程</span>
         </div>
-        <div class="bottom-nav-item flex flex-col items-center active text-green-500">
-            <i class="fas fa-user text-xl"></i>
-            <span class="text-xs mt-1">我的</span>
+        <div class="bottom-nav-item flex flex-col items-center" data-link="profile.html">
+            <i class="fas fa-user text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">我的</span>
         </div>
     </div>
 </div>
 
-<script>
-    const loginBtn = document.getElementById('loginBtn');
-    const loginModal = document.getElementById('loginModal');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const submitBtn = document.getElementById('submitBtn');
-    const nameInput = document.getElementById('nameInput');
-    const photoInput = document.getElementById('photoInput');
 
+<!-- 优化的登录弹窗 -->
+<div id="loginModal" class="modal">
+    <div class="modal-content bg-white rounded-2xl p-8 w-[90%] max-w-md shadow-2xl">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">欢迎登录</h2>
+            <p class="text-gray-600">完善信息开启助农之旅</p>
+        </div>
+        <div class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">上传头像</label>
+                <div class="relative">
+                    <input type="file" id="photoInput" accept="image/*"
+                           class="w-full border-2 border-gray-200 p-3 rounded-lg focus:outline-none focus:border-green-500 transition-colors">
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
+                <input type="text" id="nameInput"
+                       class="w-full border-2 border-gray-200 p-3 rounded-lg focus:outline-none focus:border-green-500 transition-colors"
+                       placeholder="请输入您的姓名">
+            </div>
+            <div class="flex space-x-4">
+                <button id="cancelBtn"
+                        class="flex-1 py-3 px-4 rounded-lg text-white font-medium transition-all hover:opacity-90"
+                        style="background-color: rgba(255,142,50,0.4)">
+                    取消
+                </button>
+                <button id="submitBtn"
+                        class="flex-1 py-3 px-4 rounded-lg text-white font-medium transition-all hover:opacity-90"
+                        style="background-color: rgba(255,142,50,0.88)">
+                    确认
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="js/common.js"></script>
+<script>
     // 进入网站时清除登录状态
     window.onload = function () {
-        localStorage.removeItem('userLoggedIn'); // 清除登录状态
+        localStorage.removeItem('userLoggedIn');
     };
 
     // 打开弹窗
-    loginBtn.addEventListener('click', () => {
-        loginModal.classList.add('active');
+    document.getElementById('loginBtn').addEventListener('click', () => {
+        document.getElementById('loginModal').classList.add('active');
     });
 
     // 关闭弹窗
-    cancelBtn.addEventListener('click', () => {
-        loginModal.classList.remove('active');
+    document.getElementById('cancelBtn').addEventListener('click', () => {
+        document.getElementById('loginModal').classList.remove('active');
     });
 
     // 提交数据并跳转
-    submitBtn.addEventListener('click', () => {
-        const name = nameInput.value.trim();
-        const photo = photoInput.files[0];
+    document.getElementById('submitBtn').addEventListener('click', () => {
+        const name = document.getElementById('nameInput').value.trim();
+        const photo = document.getElementById('photoInput').files[0];
 
         if (!name || !photo) {
-            alert("请填写姓名并上传照片");
+            showToast('请填写姓名并上传照片', 'error');
             return;
         }
 
@@ -244,7 +217,6 @@
     document.querySelectorAll('.bottom-nav-item').forEach(item => {
         item.addEventListener('click', function () {
             const link = this.getAttribute('data-link');
-
             if (link === 'profile.html') {
                 const loggedIn = localStorage.getItem('userLoggedIn');
                 window.location.href = loggedIn ? 'profile.html' : 'profile-guest.html';

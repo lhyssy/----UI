@@ -7,7 +7,7 @@ body {
 }
 
 .calendar-header {
-    background: linear-gradient(145deg, #2D7E5F 0%, #10b981 100%);
+    background: linear-gradient(145deg, rgb(48, 90, 130) 0%, rgb(11, 48, 82) 100%);
     color: white;
     border-radius: 16px 16px 0 0;
 }
@@ -20,19 +20,19 @@ body {
 }
 
 .calendar-day:hover {
-    background-color: rgba(16, 185, 129, 0.05);
+    background-color: rgba(154, 163, 56, 0.2);
 }
 
 .calendar-day.has-event {
-    background-color: rgba(16, 185, 129, 0.08);
+    background-color: rgba(154, 163, 56, 0.4);
 }
 
 .calendar-day.today {
-    background-color: rgba(16, 185, 129, 0.15);
+    background-color: rgba(154, 163, 56, 0.4);
 }
 
 .calendar-day.today .day-number {
-    background-color: #10b981;
+    background-color: rgba(154, 163, 56, 1);
     color: white;
     border-radius: 50%;
     width: 28px;
@@ -58,23 +58,23 @@ body {
 }
 
 .event-promotional {
-    background-color: rgba(239, 68, 68, 0.15);
-    color: #ef4444;
+    background-color: rgba(154, 163, 56, 0.1);
+    color: rgba(15, 45, 73, 0.8);
 }
 
 .event-harvest {
-    background-color: rgba(251, 191, 36, 0.15);
-    color: #d97706;
+    background-color: rgba(154, 163, 56, 0.1);
+    color: rgba(154, 163, 56, 1);
 }
 
 .event-planting {
-    background-color: rgba(16, 185, 129, 0.15);
-    color: #047857;
+    background-color: rgba(154, 163, 56, 0.1);
+    color: rgba(15, 45, 73, 0.6);
 }
 
 .event-market {
-    background-color: rgba(59, 130, 246, 0.15);
-    color: #2563eb;
+    background-color: rgba(154, 163, 56, 0.1);
+    color: rgba(154, 163, 56, 0.8);
 }
 
 .more-events {
@@ -180,4 +180,4 @@ body {
     to {
         transform: rotate(360deg);
     }
-} 
+}

@@ -7,12 +7,13 @@
     <title>助农宣传 - 个人中心</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
-            background-color: #f7f8fa;
+            background-color: rgba(205, 210, 171, 0.2);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -24,11 +25,11 @@
         }
 
         .nav-item.active {
-            color: #07c160;
+            color: rgba(15, 45, 73, 1);
         }
 
         .nav-item.active i {
-            color: #07c160;
+            color: rgba(15, 45, 73, 1);
         }
 
         .tab-item {
@@ -36,8 +37,8 @@
         }
 
         .tab-item.active {
-            color: #10b981;
-            border-bottom-color: #10b981;
+            color: rgba(15, 45, 73, 1);
+            border-bottom-color: rgba(15, 45, 73, 1);
         }
 
         .menu-item {
@@ -61,276 +62,467 @@
         .content-panel.active {
             display: block;
         }
+
+        /* 添加弹窗动画 */
+        .modal {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 50;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* 增强阴影效果 */
+        .modal>div {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+            /* 加深阴影 */
+            transform: translateY(30px);
+            /* 增加起始位移 */
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            /* 调整动画曲线 */
+        }
+
+        /* 修改模态框的背景模糊样式，限制模糊效果的范围 */
+        .modal::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        /* 确保模态框内容在模糊层之上 */
+        .modal>div {
+            position: relative;
+            z-index: 51;
+        }
+
+        /* 弹窗容器增加缩放动画 */
+        .modal>div {
+            transform: translateY(30px) scale(0.95);
+            /* 增加缩放效果 */
+            opacity: 0.8;
+        }
+
+        .modal.active>div {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .star.active {
+            color: #facc15;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) translateX(-50%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) translateX(-50%);
+            }
+        }
+
+        .animate-slideIn {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+
+        /* 修改提示容器的样式 */
+        #toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        /* 修改动画关键帧 */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-slideIn {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+
+        /* 增加内容块背景半透明效果 */
+        .bg-white {
+            background-color: rgba(255, 255, 255, 0.9) !important;
+        }
     </style>
 </head>
 
 <body class="safe-area">
 <!-- 顶部导航 -->
-<div class="bg-white p-4 flex items-center justify-between">
+<div class="fixed top-0 left-0 right-0 p-4 flex items-center justify-center z-50"
+     style="background-color: rgba(154,163,56, 1)">
     <h1 class="text-xl font-bold">个人中心</h1>
 </div>
 
-<!-- 添加可滚动的内容容器 -->
-<div class="content-wrapper">
-    <!-- 用户信息 -->
-    <div class="bg-white px-4 pt-4 pb-5">
+<!-- 添加一个占位div，防止内容被固定导航栏遮挡 -->
+<div class="h-16"></div>
+
+<!-- 用户信息 -->
+<div class="bg-white px-4 pt-4 pb-5">
+    <div class="flex items-center">
+        <img src="https://plus.unsplash.com/premium_photo-1686269460470-a44c06f16e0a?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+             alt="用户头像" class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm">
+        <div class="ml-4">
+            <h2 class="font-bold text-lg">农夫老李</h2>
+            <p class="text-sm text-gray-500">ID: 12345678</p>
+
+        </div>
+    </div>
+
+    <!-- 数据概览 -->
+    <div class="grid grid-cols-4 gap-4 mt-5">
+        <div class="text-center">
+            <div class="font-bold">6</div>
+            <div class="text-xs text-gray-500">宣传图文</div>
+        </div>
+        <div class="text-center">
+            <div class="font-bold">3</div>
+            <div class="text-xs text-gray-500">已发布</div>
+        </div>
+        <div class="text-center">
+            <div class="font-bold">12</div>
+            <div class="text-xs text-gray-500">总浏览</div>
+        </div>
+        <div class="text-center">
+            <div class="font-bold">2</div>
+            <div class="text-xs text-gray-500">收藏</div>
+        </div>
+    </div>
+</div>
+
+<!-- 平台账号 -->
+<h2 class="font-bold text-lg mb-3 mt-3 text-center">已绑定账号</h2>
+<div class="bg-white rounded-xl p-4 shadow-sm">
+    <div class="flex items-center justify-between">
         <div class="flex items-center">
             <img src="https://plus.unsplash.com/premium_photo-1686269460470-a44c06f16e0a?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                 alt="用户头像" class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm">
-            <div class="ml-4">
-                <h2 class="font-bold text-lg">农夫小李</h2>
-                <p class="text-sm text-gray-500">ID: 12345678</p>
-
-            </div>
-        </div>
-
-        <!-- 数据概览 -->
-        <div class="grid grid-cols-4 gap-4 mt-5">
-            <div class="text-center">
-                <div class="font-bold">6</div>
-                <div class="text-xs text-gray-500">宣传图文</div>
-            </div>
-            <div class="text-center">
-                <div class="font-bold">3</div>
-                <div class="text-xs text-gray-500">已发布</div>
-            </div>
-            <div class="text-center">
-                <div class="font-bold">12</div>
-                <div class="text-xs text-gray-500">总浏览</div>
-            </div>
-            <div class="text-center">
-                <div class="font-bold">2</div>
-                <div class="text-xs text-gray-500">收藏</div>
+                 alt="用户头像" class="w-10 h-10 rounded-full object-cover">
+            <div class="ml-3">
+                <div class="font-medium">老李的花园</div>
+                <div class="text-xs text-gray-500 mt-0.5">小红书 @绿色农产品</div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- 平台账号 -->
-    <h2 class="font-bold text-lg mb-3">已绑定账号</h2>
-    <div class="bg-white rounded-xl p-4 shadow-sm">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center">
-                <img src="https://plus.unsplash.com/premium_photo-1686269460470-a44c06f16e0a?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                     alt="用户头像" class="w-10 h-10 rounded-full object-cover">
-                <div class="ml-3">
-                    <div class="font-medium">农夫小李</div>
-                    <div class="text-xs text-gray-500 mt-0.5">小红书 @绿色农产品</div>
+<!-- 内容标签页 -->
+<div class="bg-white mt-4">
+    <div class="flex border-b">
+        <div class="tab-item flex-1 text-center py-3 font-medium border-b-2 border-[rgba(15,45,73,1)] active"
+             data-tab="promotion">我的宣传</div>
+        <div class="tab-item flex-1 text-center py-3 font-medium text-gray-500 border-b-2 border-transparent"
+             data-tab="collection">
+            收藏教程
+        </div>
+        <div class="tab-item flex-1 text-center py-3 font-medium text-gray-500 border-b-2 border-transparent"
+             data-tab="publish">
+            发布记录
+        </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="p-4">
+        <!-- 我的宣传内容 -->
+        <div class="content-panel active" id="promotion-panel">
+            <div class="space-y-4">
+                <!-- 宣传项 -->
+                <div class="flex bg-gray-50 rounded-lg p-3">
+                    <img src="https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                         alt="宣传图片" class="w-16 h-16 rounded-lg object-cover">
+                    <div class="ml-3 flex-1">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-medium text-sm">有机红富士苹果宣传</h3>
+                            <span class="text-xs text-green-600">已发布</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">小红书 · 4张图片 · 532字</p>
+                        <div class="flex items-center justify-between mt-1">
+                            <span class="text-xs text-gray-400">2025-03-20</span>
+                            <div class="flex space-x-2">
+                                <button class="text-xs text-gray-500"><i class="far fa-edit"></i></button>
+                                <button class="text-xs text-gray-500"><i class="far fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- 内容标签页 -->
-    <div class="bg-white mt-4">
-        <div class="flex border-b">
-            <div class="tab-item flex-1 text-center py-3 font-medium border-b-2 border-green-500 active"
-                 data-tab="promotion">我的宣传</div>
-            <div class="tab-item flex-1 text-center py-3 font-medium text-gray-500 border-b-2 border-transparent"
-                 data-tab="collection">
-                收藏教程
-            </div>
-            <div class="tab-item flex-1 text-center py-3 font-medium text-gray-500 border-b-2 border-transparent"
-                 data-tab="publish">
-                发布记录
-            </div>
-        </div>
-
-        <!-- 内容区域 -->
-        <div class="p-4">
-            <!-- 我的宣传内容 -->
-            <div class="content-panel active" id="promotion-panel">
-                <div class="space-y-4">
-                    <!-- 宣传项 -->
-                    <div class="flex bg-gray-50 rounded-lg p-3">
-                        <img src="https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                             alt="宣传图片" class="w-16 h-16 rounded-lg object-cover">
-                        <div class="ml-3 flex-1">
-                            <div class="flex items-center justify-between">
-                                <h3 class="font-medium text-sm">有机红富士苹果宣传</h3>
-                                <span class="text-xs text-green-600">已发布</span>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1">小红书 · 4张图片 · 532字</p>
-                            <div class="flex items-center justify-between mt-1">
-                                <span class="text-xs text-gray-400">2023-05-15</span>
-                                <div class="flex space-x-2">
-                                    <button class="text-xs text-gray-500"><i class="far fa-edit"></i></button>
-                                    <button class="text-xs text-gray-500"><i class="far fa-trash-alt"></i></button>
-                                </div>
+                <div class="flex bg-gray-50 rounded-lg p-3">
+                    <img src="https://images.unsplash.com/photo-1594282241894-4da286138f44?q=80&w=2667&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                         alt="宣传图片" class="w-16 h-16 rounded-lg object-cover">
+                    <div class="ml-3 flex-1">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-medium text-sm">新鲜草莓宣传</h3>
+                            <span class="text-xs text-green-600">已发布</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">微信 · 5张图片 · 468字</p>
+                        <div class="flex items-center justify-between mt-1">
+                            <span class="text-xs text-gray-400">2025-03-28</span>
+                            <div class="flex space-x-2">
+                                <button class="text-xs text-gray-500"><i class="far fa-edit"></i></button>
+                                <button class="text-xs text-gray-500"><i class="far fa-trash-alt"></i></button>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="flex bg-gray-50 rounded-lg p-3">
-                        <img src="https://images.unsplash.com/photo-1594282241894-4da286138f44?q=80&w=2667&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                             alt="宣传图片" class="w-16 h-16 rounded-lg object-cover">
-                        <div class="ml-3 flex-1">
-                            <div class="flex items-center justify-between">
-                                <h3 class="font-medium text-sm">新鲜草莓宣传</h3>
-                                <span class="text-xs text-green-600">已发布</span>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1">微信 · 5张图片 · 468字</p>
-                            <div class="flex items-center justify-between mt-1">
-                                <span class="text-xs text-gray-400">2023-05-10</span>
-                                <div class="flex space-x-2">
-                                    <button class="text-xs text-gray-500"><i class="far fa-edit"></i></button>
-                                    <button class="text-xs text-gray-500"><i class="far fa-trash-alt"></i></button>
-                                </div>
-                            </div>
+                <div class="flex bg-gray-50 rounded-lg p-3">
+                    <img src="https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?q=80&w=2532&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                         alt="宣传图片" class="w-16 h-16 rounded-lg object-cover">
+                    <div class="ml-3 flex-1">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-medium text-sm">有机蔬菜套装宣传</h3>
+                            <span class="text-xs text-gray-500">草稿</span>
                         </div>
-                    </div>
-
-                    <div class="flex bg-gray-50 rounded-lg p-3">
-                        <img src="https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?q=80&w=2532&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                             alt="宣传图片" class="w-16 h-16 rounded-lg object-cover">
-                        <div class="ml-3 flex-1">
-                            <div class="flex items-center justify-between">
-                                <h3 class="font-medium text-sm">有机蔬菜套装宣传</h3>
-                                <span class="text-xs text-gray-500">草稿</span>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1">未发布 · 3张图片 · 298字</p>
-                            <div class="flex items-center justify-between mt-1">
-                                <span class="text-xs text-gray-400">2023-05-08</span>
-                                <div class="flex space-x-2">
-                                    <button class="text-xs text-gray-500"><i class="far fa-edit"></i></button>
-                                    <button class="text-xs text-gray-500"><i class="far fa-trash-alt"></i></button>
-                                </div>
+                        <p class="text-xs text-gray-500 mt-1">未发布 · 3张图片 · 298字</p>
+                        <div class="flex items-center justify-between mt-1">
+                            <span class="text-xs text-gray-400">2025-03-30</span>
+                            <div class="flex space-x-2">
+                                <button class="text-xs text-gray-500"><i class="far fa-edit"></i></button>
+                                <button class="text-xs text-gray-500"><i class="far fa-trash-alt"></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- 收藏教程内容 -->
-            <div class="content-panel hidden" id="collection-panel">
-                <div class="space-y-4">
-                    <div class="flex bg-gray-50 rounded-lg p-3">
-                        <img src="https://images.unsplash.com/photo-1589254065909-b7086229d08c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
-                             alt="教程图片" class="w-16 h-16 rounded-lg object-cover">
-                        <div class="ml-3 flex-1">
-                            <div class="flex items-center justify-between">
-                                <h3 class="font-medium text-sm">农产品拍摄技巧：让你的产品更有吸引力</h3>
-                                <span class="text-xs text-blue-600">收藏于 2023-05-20</span>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1">商品拍摄 · 10分钟</p>
+        <!-- 收藏教程内容 -->
+        <div class="content-panel hidden" id="collection-panel">
+            <div class="space-y-4">
+                <div class="flex bg-gray-50 rounded-lg p-3">
+                    <img src="https://images.unsplash.com/photo-1589254065909-b7086229d08c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
+                         alt="教程图片" class="w-16 h-16 rounded-lg object-cover">
+                    <div class="ml-3 flex-1">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-medium text-sm">农产品拍摄技巧：让你的产品更有吸引力</h3>
+                            <span class="text-xs text-blue-600">收藏于 2025-03-18</span>
                         </div>
+                        <p class="text-xs text-gray-500 mt-1">商品拍摄 · 10分钟</p>
                     </div>
-                    <div class="flex bg-gray-50 rounded-lg p-3">
-                        <img src="https://images.unsplash.com/photo-1591696205602-2f950c417cb9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
-                             alt="教程图片" class="w-16 h-16 rounded-lg object-cover">
-                        <div class="ml-3 flex-1">
-                            <div class="flex items-center justify-between">
-                                <h3 class="font-medium text-sm">农产品文案创作技巧，让顾客爱上你的产品</h3>
-                                <span class="text-xs text-blue-600">收藏于 2023-05-18</span>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1">文案撰写 · 15分钟</p>
+                </div>
+                <div class="flex bg-gray-50 rounded-lg p-3">
+                    <img src="https://images.unsplash.com/photo-1591696205602-2f950c417cb9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
+                         alt="教程图片" class="w-16 h-16 rounded-lg object-cover">
+                    <div class="ml-3 flex-1">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-medium text-sm">农产品文案创作技巧，让顾客爱上你的产品</h3>
+                            <span class="text-xs text-blue-600">收藏于 2025-03-24</span>
                         </div>
+                        <p class="text-xs text-gray-500 mt-1">文案撰写 · 15分钟</p>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- 发布记录内容 -->
-            <div class="content-panel hidden" id="publish-panel">
-                <div class="space-y-4">
-                    <div class="flex bg-gray-50 rounded-lg p-3">
-                        <div class="ml-3 flex-1">
-                            <div class="flex items-center justify-between">
-                                <h3 class="font-medium text-sm">有机红富士苹果宣传</h3>
-                                <span class="text-xs text-green-600">发布成功</span>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1">发布平台：小红书</p>
-                            <p class="text-xs text-gray-400">发布时间：2023-05-15 14:30</p>
+        <!-- 发布记录内容 -->
+        <div class="content-panel hidden" id="publish-panel">
+            <div class="space-y-4">
+                <div class="flex bg-gray-50 rounded-lg p-3">
+                    <div class="ml-3 flex-1">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-medium text-sm">有机红富士苹果宣传</h3>
+                            <span class="text-xs text-green-600">发布成功</span>
                         </div>
+                        <p class="text-xs text-gray-500 mt-1">发布平台：小红书</p>
+                        <p class="text-xs text-gray-400">发布时间：2025-03-20 14:30</p>
                     </div>
-                    <div class="flex bg-gray-50 rounded-lg p-3">
-                        <div class="ml-3 flex-1">
-                            <div class="flex items-center justify-between">
-                                <h3 class="font-medium text-sm">新鲜草莓宣传</h3>
-                                <span class="text-xs text-green-600">发布成功</span>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1">发布平台：微信</p>
-                            <p class="text-xs text-gray-400">发布时间：2023-05-10 09:15</p>
+                </div>
+                <div class="flex bg-gray-50 rounded-lg p-3">
+                    <div class="ml-3 flex-1">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-medium text-sm">新鲜草莓宣传</h3>
+                            <span class="text-xs text-green-600">发布成功</span>
                         </div>
+                        <p class="text-xs text-gray-500 mt-1">发布平台：微信</p>
+                        <p class="text-xs text-gray-400">发布时间：2025-03-28 16:15</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- 菜单区域 -->
-    <div class="mt-4 bg-white mb-20">
-        <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100"
-             data-type="wallet">
-            <div class="flex items-center">
-                <i class="fas fa-wallet text-lg text-green-600 w-6"></i>
-                <span class="ml-3 menu-text">我的钱包</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+<!-- 菜单区域 -->
+<div class="mt-4 bg-white mb-20">
+    <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100"
+         data-type="calendar">
+        <div class="flex items-center">
+            <i class="fas fa-calendar-alt text-lg text-cyan-500 w-6"></i>
+            <span class="ml-3 menu-text">营销日历</span>
         </div>
-        <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100"
-             data-type="calendar">
-            <div class="flex items-center">
-                <i class="fas fa-calendar-alt text-lg text-cyan-500 w-6"></i>
-                <span class="ml-3 menu-text">营销日历</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
-        </div>
-        <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100"
-             data-type="notifications">
-            <div class="flex items-center">
-                <i class="fas fa-bell text-lg text-red-500 w-6"></i>
-                <span class="ml-3 menu-text">消息通知</span>
-                <span class="ml-2 bg-red-500 text-white text-xs px-1.5 rounded-full">3</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
-        </div>
-        <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100"
-             data-type="reviews">
-            <div class="flex items-center">
-                <i class="fas fa-star text-lg text-yellow-500 w-6"></i>
-                <span class="ml-3 menu-text">我的评价</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
-        </div>
-        <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100"
-             data-type="service">
-            <div class="flex items-center">
-                <i class="fas fa-headset text-lg text-blue-500 w-6"></i>
-                <span class="ml-3 menu-text">联系客服</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
-        </div>
-        <div class="menu-item flex items-center justify-between px-4 py-3" data-type="about">
-            <div class="flex items-center">
-                <i class="fas fa-question-circle text-lg text-purple-500 w-6"></i>
-                <span class="ml-3 menu-text">关于我们</span>
-            </div>
-            <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
-        </div>
-
+        <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
     </div>
+    <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100"
+         data-type="notifications">
+        <div class="flex items-center">
+            <i class="fas fa-bell text-lg text-red-500 w-6"></i>
+            <span class="ml-3 menu-text">消息通知</span>
+            <span class="ml-2 bg-red-500 text-white text-xs px-1.5 rounded-full">3</span>
+        </div>
+        <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+    </div>
+    <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100" data-type="reviews">
+        <div class="flex items-center">
+            <i class="fas fa-star text-lg text-yellow-500 w-6"></i>
+            <span class="ml-3 menu-text">我的评价</span>
+        </div>
+        <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+    </div>
+    <div class="menu-item flex items-center justify-between px-4 py-3 border-b border-gray-100" data-type="service">
+        <div class="flex items-center">
+            <i class="fas fa-headset text-lg text-blue-500 w-6"></i>
+            <span class="ml-3 menu-text">联系客服</span>
+        </div>
+        <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+    </div>
+    <div class="menu-item flex items-center justify-between px-4 py-3" data-type="about">
+        <div class="flex items-center">
+            <i class="fas fa-question-circle text-lg text-purple-500 w-6"></i>
+            <span class="ml-3 menu-text">关于我们</span>
+        </div>
+        <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+    </div>
+
 </div>
 
 <!-- 底部导航栏 -->
-<div class="fixed bottom-0 left-0 right-0 bg-white py-2 px-5 border-t border-gray-100">
+<div class="fixed bottom-0 left-0 right-0 py-2 px-5 border-t border-gray-100"
+     style="background-color: rgba(154,163,56, 1)">
     <div class="flex justify-between">
         <div class="bottom-nav-item flex flex-col items-center" data-link="home.html">
-            <i class="fas fa-home text-xl"></i>
-            <span class="text-xs mt-1">首页</span>
+            <i class="fas fa-home text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">首页</span>
         </div>
         <div class="bottom-nav-item flex flex-col items-center" data-link="upload.html">
-            <i class="fas fa-plus-circle text-xl"></i>
-            <span class="text-xs mt-1">创建</span>
+            <i class="fas fa-plus-circle text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">创建</span>
         </div>
         <div class="bottom-nav-item flex flex-col items-center" data-link="tutorials.html">
-            <i class="fas fa-book text-xl"></i>
-            <span class="text-xs mt-1">教程</span>
+            <i class="fas fa-book text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">教程</span>
         </div>
-        <div class="bottom-nav-item flex flex-col items-center active" data-link="profile.html">
-            <i class="fas fa-user text-xl"></i>
-            <span class="text-xs mt-1">我的</span>
+        <div class="bottom-nav-item flex flex-col items-center" data-link="profile.html">
+            <i class="fas fa-user text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">我的</span>
         </div>
     </div>
 </div>
+
+<!-- 在页面底部添加弹窗结构 -->
+<!-- 评价弹窗 -->
+<div class="modal hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" id="ratingModal">
+    <div class="bg-white rounded-xl p-6 w-full max-w-md">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold">发表评价</h3>
+            <button class="text-gray-500" onclick="hideModal('rating')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="star-rating flex space-x-2 mb-4">
+            <!-- 五星评分 -->
+            <div class="star text-2xl text-gray-300 cursor-pointer" data-rating="1">★</div>
+            <div class="star text-2xl text-gray-300 cursor-pointer" data-rating="2">★</div>
+            <div class="star text-2xl text-gray-300 cursor-pointer" data-rating="3">★</div>
+            <div class="star text-2xl text-gray-300 cursor-pointer" data-rating="4">★</div>
+            <div class="star text-2xl text-gray-300 cursor-pointer" data-rating="5">★</div>
+        </div>
+        <textarea class="w-full border rounded-lg p-3 text-sm" rows="4" placeholder="请输入您的评价内容（限200字）"></textarea>
+        <button class="mt-4 bg-green-500 text-white px-6 py-2 rounded-full w-full"
+                style="background-color: rgba(255,142,50,0.88)" onclick="submitRating()">提交评价</button>
+    </div>
+</div>
+
+<!-- 联系客服弹窗 -->
+<div class="modal hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" id="serviceModal">
+    <div class="bg-white rounded-xl p-6 w-full max-w-md text-center">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold">联系客服</h3>
+            <button class="text-gray-500" onclick="hideModal('service')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="space-y-4">
+            <div>
+                <div class="text-gray-600 mb-1">客服电话（周一至周六 9:00-21:00）</div>
+                <a href="tel:15897957209" class="font-medium" style="color: rgba(154,163,56, 1)">15897957209</a>
+            </div>
+            <div>
+                <div class="text-gray-600 mb-1">官方邮箱</div>
+                <a href="mailto:2084302767@qq.com" class="font-medium"
+                   style="color: rgba(154,163,56, 1)">2084302767@qq.com</a>
+            </div>
+            <div>
+                <div class="text-gray-600 mb-2">微信客服</div>
+                <div class="flex justify-center">
+                    <img src="https://i.imgur.com/O6eQHGE.jpeg" alt="微信二维码"
+                         class="w-auto max-w-[240px] rounded-lg border p-1">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 关于我们弹窗 -->
+<div class="modal hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" id="aboutModal">
+    <div class="bg-white rounded-xl p-6 w-full max-w-2xl overflow-y-auto max-h-[90vh]">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold">关于我们</h3>
+            <button class="text-gray-500" onclick="hideModal('about')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="text-gray-600 text-sm leading-relaxed space-y-6">
+            <!-- 关于我们部分 -->
+            <div>
+                <p class="text-base leading-7">
+                    我们是一群深耕农业数字化与 AI
+                    技术的青年团队，致力于解决农户"不会卖、卖得慢"的核心痛点。通过将人工智能与农业场景深度融合，我们打造了集智能营销、生产管理、数据洞察于一体的助农平台，让每一位农户都能轻松用上"数字工具"，让优质农产品从田间地头直达消费者手中。
+                </p>
+                <p class="text-base leading-7 mt-4">
+                    团队在调研中发现：全国大量的农户面临社交平台宣传难题，优质农产品因"酒香也怕巷子深"而滞销。我们坚信，技术不该是壁垒，而是助力乡村振兴的桥梁。于是，我们整合 NLP
+                    自然语言处理、多平台对接等技术，开发出AI 一键生成推文、全链路生产溯源、多账号协同管理等核心功能，让农户无需懂代码、懂营销，也能高效开展线上推广。
+                </p>
+            </div>
+
+            <!-- 结语部分 -->
+            <div class="border-t pt-4 mt-6">
+                <p class="text-base leading-7 text-gray-700 italic">
+                    我们始终相信，每一份用心的产品，都能成为改变的开始。让我们一起，用技术的温度，点亮乡村的未来。
+                </p>
+                <p class="text-base font-medium mt-2 italic" style="color: rgba(154,163,56, 1)">
+                    加入我们，让优质农产品不再沉默！
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 在页面中添加提示容器 -->
+<div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-[9999]"></div>
 
 <script src="js/common.js"></script>
 <script>
@@ -406,13 +598,20 @@
 
         // 菜单项点击事件
         document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('click', function () {
-                const menuName = this.querySelector('.menu-text').textContent;
-                showToast(`已选择: ${menuName}`, 'info');
-
-                // 根据菜单类型执行不同操作
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
                 const menuType = this.getAttribute('data-type');
+
                 switch (menuType) {
+                    case 'reviews':
+                        showModal('rating');
+                        break;
+                    case 'service':
+                        showModal('service');
+                        break;
+                    case 'about':
+                        showModal('about');
+                        break;
                     case 'wallet':
                         window.location.href = 'wallet.html';
                         break;
@@ -422,15 +621,10 @@
                     case 'notifications':
                         window.location.href = 'notifications.html';
                         break;
-                    case 'reviews':
-                        showToast('查看评价', 'info');
-                        break;
-                    case 'service':
-                        showToast('联系客服', 'info');
-                        break;
-                    case 'about':
-                        showToast('关于我们', 'info');
-                        break;
+                    default:
+                        // 保留原有跳转逻辑
+                        const link = this.querySelector('a')?.href;
+                        if (link) window.location.href = link;
                 }
             });
         });
@@ -440,6 +634,72 @@
             showToast('编辑个人资料', 'info');
         });
     });
+
+    // 星级评分功能
+    document.querySelectorAll('.star').forEach(star => {
+        star.addEventListener('click', function () {
+            const rating = parseInt(this.dataset.rating);
+            document.querySelectorAll('.star').forEach((s, index) => {
+                s.classList.toggle('active', index < rating);
+            });
+        });
+    });
+
+    // 弹窗控制函数
+    function showModal(type) {
+        document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('active'));
+        document.getElementById(`${type}Modal`).classList.add('active');
+    }
+
+    function hideModal(type) {
+        document.getElementById(`${type}Modal`).classList.remove('active');
+    }
+
+    // 修改提示函数
+    function showToast(message, type = 'success') {
+        const toast = document.getElementById('toast');
+        toast.innerHTML = `
+                <div class="bg-${type === 'error' ? 'red' : 'green'}-500 text-white px-6 py-3 rounded-lg shadow-lg animate-slideIn text-center min-w-[200px] max-w-[90%]" style="position: relative; z-index: 10000;">
+                    ${message}
+                </div>
+            `;
+        toast.classList.remove('hidden');
+
+        setTimeout(() => {
+            toast.innerHTML = '';
+            toast.classList.add('hidden');
+        }, 2000);
+    }
+
+    // 修改提交评价函数
+    function submitRating() {
+        const stars = document.querySelectorAll('.star.active').length;
+        const comment = document.querySelector('#ratingModal textarea').value;
+
+        // 简单验证
+        if (stars === 0) {
+            showToast('请先选择评分星级', 'error');
+            return;
+        }
+
+        if (comment.length < 10) {
+            showToast('评价内容至少需要10个字', 'error');
+            return;
+        }
+
+        // 这里可以添加实际提交逻辑
+        console.log('提交评价：', { stars, comment });
+
+        // 关闭弹窗
+        hideModal('rating');
+
+        // 显示成功提示
+        showToast('评价提交成功');
+
+        // 清空表单
+        document.querySelectorAll('.star').forEach(star => star.classList.remove('active'));
+        document.querySelector('#ratingModal textarea').value = '';
+    }
 </script>
 </body>
 

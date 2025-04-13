@@ -7,13 +7,15 @@
     <title>助农宣传 - 社区</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
-            background-color: #f8f9fc;
-            height: 100vh;
+            background-color: rgba(205, 210, 171, 0.2);
+            min-height: 100vh;
+            padding-bottom: 60px;
             display: flex;
             flex-direction: column;
         }
@@ -23,11 +25,11 @@
         }
 
         .nav-item.active {
-            color: #07c160;
+            color: rgba(15, 45, 73, 1);
         }
 
         .nav-item.active i {
-            color: #07c160;
+            color: rgba(15, 45, 73, 1);
         }
 
         .post-card {
@@ -70,8 +72,8 @@
         }
 
         .tab.active {
-            color: #07c160;
-            border-bottom-color: #07c160;
+            color: rgba(15, 45, 73, 1);
+            border-bottom-color: rgba(15, 45, 73, 1);
         }
 
         .action-btn {
@@ -98,8 +100,8 @@
         }
 
         .tag.primary {
-            background-color: #ecfdf5;
-            color: #10b981;
+            background-color: rgba(15, 45, 73, 0.1);
+            color: rgba(15, 45, 73, 1);
         }
 
         .badge {
@@ -124,545 +126,595 @@
         .content-panel.active {
             display: block;
         }
+
+        /* 增加内容块背景半透明效果 */
+        .bg-white {
+            background-color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        /* 添加固定导航栏的样式 */
+        .header-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+        }
+
+        .footer-fixed {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: white;
+        }
+
+        /* 调整内容区域的padding */
+        .content-container {
+            padding-top: 60px;
+            /* 顶部导航栏高度 */
+            padding-bottom: 120px;
+            /* 底部导航栏高度 + 发布按钮空间 */
+        }
+
+        /* 分类选项卡固定 */
+        .tabs-fixed {
+            position: fixed;
+            top: 60px;
+            /* 顶部导航栏高度 */
+            left: 0;
+            right: 0;
+            z-index: 40;
+        }
+
+        /* 内容区域的滚动容器 */
+        .scroll-container {
+            padding-top: 48px;
+            /* 分类选项卡高度 */
+        }
     </style>
 </head>
 
 <body class="safe-area">
 <!-- 顶部导航 -->
-<div class="bg-white p-4 flex items-center justify-between shadow-sm">
-    <h1 class="text-xl font-bold">农友社区</h1>
-    <div class="flex space-x-4">
-        <button class="text-gray-600 relative">
-            <i class="fas fa-bell text-lg"></i>
-            <span class="badge">3</span>
-        </button>
-        <button class="text-gray-600">
-            <i class="fas fa-search text-lg"></i>
-        </button>
-    </div>
+<div class="header-fixed p-4 flex items-center justify-between" style="background-color: rgba(154,163,56, 1)">
+    <button style="color: rgba(15,45,73,1)" onclick="window.location.href='home.html'">
+        <i class="fas fa-arrow-left"></i>
+    </button>
+    <h1 class="text-xl font-bold absolute left-1/2 transform -translate-x-1/2">农友社区</h1>
+    <div class="w-6"><!-- 用于平衡布局的空div --></div>
 </div>
 
-<!-- 分类选项卡 -->
-<div class="flex border-b bg-white overflow-x-auto">
-    <div class="tab active whitespace-nowrap" data-tab="recommended">推荐</div>
-    <div class="tab whitespace-nowrap" data-tab="planting">种植经验</div>
-    <div class="tab whitespace-nowrap" data-tab="sales">销售技巧</div>
-    <div class="tab whitespace-nowrap" data-tab="policy">政策解读</div>
-</div>
-
-<!-- 内容区域 -->
-<div class="flex-1 overflow-y-auto p-4 space-y-4">
-    <!-- 推荐内容 -->
-    <div class="content-panel active" id="recommended-panel">
-        <!-- 置顶帖子 -->
-        <div class="post-card p-4 border-l-4 border-green-500">
-            <div class="flex items-center mb-3">
-                <span class="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded mr-2">置顶</span>
-                <h3 class="font-bold text-base flex-1">欢迎加入助农宣传社区</h3>
-            </div>
-            <p class="text-sm text-gray-600 mb-3">官方发布：这里汇集了来自全国各地的农友，大家可以分享种植经验、销售技巧等内容，共同探讨农产品推广与销售的新思路。</p>
-            <div class="flex justify-between items-center">
-                <div class="flex items-center">
-                    <div class="avatar"
-                         style="background-image: url('https://plus.unsplash.com/premium_photo-1739538268993-2acf1ad3453c?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
-                    </div>
-                    <div class="ml-2">
-                        <div class="text-sm font-medium">官方小助手</div>
-                        <div class="text-xs text-gray-500">1小时前</div>
-                    </div>
-                </div>
-                <div class="flex items-center">
-                    <div class="text-xs text-gray-500 mr-3">
-                        <i class="far fa-eye mr-1"></i> 12
-                    </div>
-                    <div class="text-xs text-gray-500">
-                        <i class="far fa-comment mr-1"></i> 4
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 普通帖子 -->
-        <div class="post-card p-4">
-            <div class="flex items-center mb-3">
-                <div class="avatar"
-                     style="background-image: url('https://plus.unsplash.com/premium_photo-1661411325413-98a5ff88e8e4?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
-                </div>
-                <div class="ml-2 flex-1">
-                    <div class="text-sm font-medium">山东果农老李</div>
-                    <div class="text-xs text-gray-500">2小时前</div>
-                </div>
-                <button class="text-green-600 text-sm font-medium">
-                    <i class="fas fa-plus mr-1"></i> 关注
-                </button>
-            </div>
-
-            <h3 class="font-bold text-base mb-2">我的苹果今年又获丰收，分享几个提高品质的小技巧</h3>
-            <p class="text-sm text-gray-600 mb-3">
-                今年苹果品质特别好，分享一下我的种植心得：第一，合理控水，开花后减少浇水频次；第二，科学施肥，注重有机肥的使用；第三，适时疏果，保证单果营养充足...</p>
-
-            <div class="grid grid-cols-3 gap-1 mb-3">
-                <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
-                     alt="苹果图片" class="rounded-lg w-full aspect-[4/3] object-cover">
-                <img src="https://images.unsplash.com/photo-1693552766656-6d1243a91af1?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                     alt="苹果园" class="rounded-lg w-full aspect-[4/3] object-cover">
-                <div class="relative rounded-lg w-full aspect-[4/3] bg-gray-100 flex items-center justify-center">
-                    <img src="https://images.unsplash.com/photo-1663616774886-cd4d6b9c930c?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                         alt="更多图片" class="rounded-lg w-full aspect-[4/3] object-cover">
-                    <div
-                            class="absolute inset-0 bg-black/30 rounded-lg flex items-center justify-center text-white font-bold">
-                        +4
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="flex mb-3 overflow-x-auto py-1">
-                <div class="tag primary">种植技巧</div>
-                <div class="tag">苹果种植</div>
-                <div class="tag">果树管理</div>
-                <div class="tag">有机种植</div>
-            </div>
-
-            <div class="flex justify-between pt-3 border-t border-gray-100">
-                <div class="flex">
-                    <button class="action-btn text-gray-500 mr-2">
-                        <i class="far fa-heart mr-1"></i>
-                        <span class="text-xs">8</span>
-                    </button>
-                    <button class="action-btn text-gray-500 mr-2">
-                        <i class="far fa-comment mr-1"></i>
-                        <span class="text-xs">3</span>
-                    </button>
-                    <button class="action-btn text-gray-500">
-                        <i class="far fa-bookmark"></i>
-                    </button>
-                </div>
-                <button class="action-btn text-gray-500">
-                    <i class="fas fa-share-alt"></i>
-                </button>
-            </div>
-        </div>
-
-        <div class="post-card p-4">
-            <div class="flex items-center mb-3">
-                <div class="avatar"
-                     style="background-image: url('https://plus.unsplash.com/premium_photo-1661722653096-cc1a251de5db?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
-                </div>
-                <div class="ml-2 flex-1">
-                    <div class="text-sm font-medium">云南草莓农户</div>
-                    <div class="text-xs text-gray-500">昨天 16:35</div>
-                </div>
-                <button class="text-gray-500 text-sm">
-                    <i class="fas fa-check mr-1"></i> 已关注
-                </button>
-            </div>
-
-            <h3 class="font-bold text-base mb-2">小红书推广经验分享，一个月涨粉5000+</h3>
-            <p class="text-sm text-gray-600 mb-3">
-                分享我近期在小红书平台推广草莓的经验：注意拍摄光线，展示产品最佳状态；文案要详细描述口感和特点；选用热门话题和标签；保持稳定更新频率；与粉丝积极互动...</p>
-
-
-            <div class="grid grid-cols-3 gap-1 mb-3">
-                <img src="https://images.unsplash.com/photo-1522600543720-3dd435205466?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                     alt="草莓图片" class="rounded-lg w-full aspect-[4/3] object-cover">
-                <img src="https://images.unsplash.com/photo-1731768720822-8b22a6e9a8ee?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                     alt="草莓种植" class="rounded-lg w-full aspect-[4/3] object-cover">
-                <div class="relative rounded-lg w-full aspect-[4/3] bg-gray-100 flex items-center justify-center">
-                    <img src="https://images.unsplash.com/photo-1569613533527-d5ed4d02cb28?q=80&w=2674&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                         alt="更多图片" class="rounded-lg w-full aspect-[4/3] object-cover">
-                    <div
-                            class="absolute inset-0 bg-black/30 rounded-lg flex items-center justify-center text-white font-bold">
-                        +2
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex mb-3 overflow-x-auto py-1">
-                <div class="tag primary">营销技巧</div>
-                <div class="tag">小红书运营</div>
-                <div class="tag">草莓推广</div>
-            </div>
-
-            <div class="flex justify-between pt-3 border-t border-gray-100">
-                <div class="flex">
-                    <button class="action-btn text-gray-500 mr-2">
-                        <i class="far fa-heart mr-1"></i>
-                        <span class="text-xs">6</span>
-                    </button>
-                    <button class="action-btn text-gray-500 mr-2">
-                        <i class="far fa-comment mr-1"></i>
-                        <span class="text-xs">5</span>
-                    </button>
-                    <button class="action-btn text-gray-500">
-                        <i class="far fa-bookmark"></i>
-                    </button>
-                </div>
-                <button class="action-btn text-gray-500">
-                    <i class="fas fa-share-alt"></i>
-                </button>
-            </div>
-        </div>
-
-        <div class="post-card p-4">
-            <div class="flex items-center mb-3">
-                <div class="avatar"
-                     style="background-image: url('https://plus.unsplash.com/premium_photo-1663045211868-2c38d223d54b?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
-                </div>
-                <div class="ml-2 flex-1">
-                    <div class="text-sm font-medium">河南菜农老王</div>
-                    <div class="text-xs text-gray-500">前天 09:15</div>
-                </div>
-                <button class="text-green-600 text-sm font-medium">
-                    <i class="fas fa-plus mr-1"></i> 关注
-                </button>
-            </div>
-
-            <h3 class="font-bold text-base mb-2">关于农产品包装设计的几点思考</h3>
-            <p class="text-sm text-gray-600 mb-3">
-                好的包装能为农产品增加不少附加值。经过这几年的摸索，我总结了几点包装设计经验：标识清晰可辨；突出产品特色；选用环保材质；保证产品新鲜度；设计要有故事性...</p>
-
-            <div class="bg-gray-50 p-3 rounded-lg mb-3">
-                <h4 class="font-medium text-sm mb-2">求助：有没有推荐的包装供应商？</h4>
-                <div class="flex">
-                    <div class="avatar-group flex">
-                        <div class="avatar avatar-sm"
-                             style="background-image: url('https://images.unsplash.com/photo-1708182521069-77dbde06f741?q=80&w=2672&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
-                        </div>
-                        <div class="avatar avatar-sm"
-                             style="background-image: url('https://images.unsplash.com/photo-1590323853152-b9ade60d1d5f?q=80&w=2337&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
-                        </div>
-                        <div class="avatar avatar-sm"
-                             style="background-image: url('https://plus.unsplash.com/premium_photo-1661308272310-6ef98bf79533?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
-                        </div>
-                    </div>
-                    <div class="ml-2 flex-1">
-                        <span class="text-xs text-gray-500">12人回复了该问题</span>
-                    </div>
-                    <button class="text-green-600 text-xs font-medium">
-                        我也回复
-                    </button>
-                </div>
-            </div>
-
-            <div class="flex mb-3 overflow-x-auto py-1">
-                <div class="tag primary">包装设计</div>
-                <div class="tag">品牌推广</div>
-                <div class="tag">农产品营销</div>
-            </div>
-
-            <div class="flex justify-between pt-3 border-t border-gray-100">
-                <div class="flex">
-                    <button class="action-btn text-gray-500 mr-2">
-                        <i class="far fa-heart mr-1"></i>
-                        <span class="text-xs">5</span>
-                    </button>
-                    <button class="action-btn text-gray-500 mr-2">
-                        <i class="far fa-comment mr-1"></i>
-                        <span class="text-xs">2</span>
-                    </button>
-                    <button class="action-btn text-gray-500">
-                        <i class="far fa-bookmark"></i>
-                    </button>
-                </div>
-                <button class="action-btn text-gray-500">
-                    <i class="fas fa-share-alt"></i>
-                </button>
-            </div>
-        </div>
+<!-- 内容容器 -->
+<div class="content-container">
+    <!-- 分类选项卡 -->
+    <div class="tabs-fixed flex border-b bg-white overflow-x-auto">
+        <div class="tab active whitespace-nowrap" data-tab="recommended">推荐</div>
+        <div class="tab whitespace-nowrap" data-tab="planting">种植经验</div>
+        <div class="tab whitespace-nowrap" data-tab="sales">销售技巧</div>
+        <div class="tab whitespace-nowrap" data-tab="policy">政策解读</div>
     </div>
 
-    <!-- 种植经验内容 -->
-    <div class="content-panel hidden" id="planting-panel">
-        <div class="post-card p-4">
-            <div class="flex items-center mb-3">
-                <div class="avatar"
-                     style="background-image: url('https://images.unsplash.com/photo-1589254065909-b7086229d08c?ixlib=rb-4.0.3')">
-                </div>
-                <div class="ml-2 flex-1">
-                    <div class="text-sm font-medium">果园老张</div>
-                    <div class="text-xs text-gray-500">3小时前</div>
-                </div>
-                <button class="text-green-600 text-sm font-medium">
-                    <i class="fas fa-plus mr-1"></i> 关注
-                </button>
-            </div>
-            <h3 class="font-bold text-base mb-2">水果种植土壤管理经验分享</h3>
-            <p class="text-sm text-gray-600 mb-3">
-                分享多年种植经验，合理的土壤管理对水果品质至关重要。定期检测土壤pH值，保持在5.5-6.5之间；注重有机质含量，每年秋季补充腐熟农家肥；合理轮作，避免连作障碍...</p>
-
-            <div class="grid grid-cols-3 gap-1 mb-3">
-                <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3" alt="土壤管理"
-                     class="rounded-lg w-full aspect-[4/3] object-cover">
-                <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3" alt="果园土壤"
-                     class="rounded-lg w-full aspect-[4/3] object-cover">
-                <img src="https://images.unsplash.com/photo-1684154740378-49d4ec79ccdb?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                     alt="施肥技术" class="rounded-lg w-full aspect-[4/3] object-cover">
-            </div>
-
-            <div class="flex mb-3 overflow-x-auto py-1">
-                <div class="tag primary">土壤管理</div>
-                <div class="tag">果树种植</div>
-                <div class="tag">施肥技术</div>
-            </div>
-
-            <div class="flex justify-between pt-3 border-t border-gray-100">
-                <div class="flex">
-                    <button class="action-btn text-gray-500 mr-2">
-                        <i class="far fa-heart mr-1"></i>
-                        <span class="text-xs">6</span>
-                    </button>
-                    <button class="action-btn text-gray-500 mr-2">
-                        <i class="far fa-comment mr-1"></i>
-                        <span class="text-xs">4</span>
-                    </button>
-                    <button class="action-btn text-gray-500">
-                        <i class="far fa-bookmark"></i>
-                    </button>
-                </div>
-                <button class="action-btn text-gray-500">
-                    <i class="fas fa-share-alt"></i>
-                </button>
-            </div>
-        </div>
-
-        <div class="post-card p-4">
-            <div class="flex items-center mb-3">
-                <div class="avatar"
-                     style="background-image: url('https://images.unsplash.com/photo-1592878940526-0214b0f374f6?ixlib=rb-4.0.3')">
-                </div>
-                <div class="ml-2 flex-1">
-                    <div class="text-sm font-medium">蔬菜大师王叔</div>
-                    <div class="text-xs text-gray-500">5小时前</div>
-                </div>
-                <button class="text-gray-500 text-sm">
-                    <i class="fas fa-check mr-1"></i> 已关注
-                </button>
-            </div>
-            <h3 class="font-bold text-base mb-2">大棚蔬菜病虫害防治技巧</h3>
-            <p class="text-sm text-gray-600 mb-3">总结多年大棚种植经验，预防胜于治疗。采用生物防治和物理防治相结合的方式，减少农药使用，提高蔬菜品质...</p>
-
-            <div class="bg-gray-50 p-3 rounded-lg mb-3">
-                <h4 class="font-medium text-sm mb-2">防治要点</h4>
-                <div class="space-y-2">
-                    <div class="text-sm text-gray-600">1. 选用抗病品种</div>
-                    <div class="text-sm text-gray-600">2. 合理通风控温</div>
-                    <div class="text-sm text-gray-600">3. 及时清除病株</div>
-                </div>
-            </div>
-
-            <div class="flex mb-3 overflow-x-auto py-1">
-                <div class="tag primary">病虫害防治</div>
-                <div class="tag">大棚种植</div>
-                <div class="tag">绿色防控</div>
-            </div>
-
-            <div class="flex justify-between pt-3 border-t border-gray-100">
-                <div class="flex">
-                    <button class="action-btn text-gray-500 mr-2">
-                        <i class="far fa-heart mr-1"></i>
-                        <span class="text-xs">9</span>
-                    </button>
-                    <button class="action-btn text-gray-500 mr-2">
-                        <i class="far fa-comment mr-1"></i>
-                        <span class="text-xs">5</span>
-                    </button>
-                    <button class="action-btn text-gray-500">
-                        <i class="far fa-bookmark"></i>
-                    </button>
-                </div>
-                <button class="action-btn text-gray-500">
-                    <i class="fas fa-share-alt"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 销售技巧内容 -->
-    <div class="content-panel hidden" id="sales-panel">
-        <div class="post-card p-4">
-            <div class="flex items-center mb-3">
-                <div class="avatar"
-                     style="background-image: url('https://images.unsplash.com/photo-1591696205602-2f950c417cb9?ixlib=rb-4.0.3')">
-                </div>
-                <div class="ml-2 flex-1">
-                    <div class="text-sm font-medium">营销达人小王</div>
-                    <div class="text-xs text-gray-500">5小时前</div>
-                </div>
-                <button class="text-green-600 text-sm font-medium">
-                    <i class="fas fa-plus mr-1"></i> 关注
-                </button>
-            </div>
-            <h3 class="font-bold text-base mb-2">农产品线上销售技巧分享</h3>
-            <p class="text-sm text-gray-600 mb-3">如何利用社交平台提升销量，建立稳定客户群。重点是产品展示、内容运营和客户服务，以下是我的具体经验分享...</p>
-
-            <div class="grid grid-cols-2 gap-2 mb-3">
-                <img src="https://images.unsplash.com/photo-1607349913338-fca6f7fc42d0?ixlib=rb-4.0.3" alt="产品展示"
-                     class="rounded-lg w-full aspect-[4/3] object-cover">
-                <img src="https://images.unsplash.com/photo-1591696205602-2f950c417cb9?ixlib=rb-4.0.3" alt="直播带货"
-                     class="rounded-lg w-full aspect-[4/3] object-cover">
-            </div>
-
-            <div class="flex mb-3 overflow-x-auto py-1">
-                <div class="tag primary">线上营销</div>
-                <div class="tag">社交电商</div>
-                <div class="tag">客户运营</div>
-            </div>
-
-            <div class="flex justify-between pt-3 border-t border-gray-100">
-                <div class="flex">
-                    <button class="action-btn text-gray-500 mr-2">
-                        <i class="far fa-heart mr-1"></i>
-                        <span class="text-xs">2</span>
-                    </button>
-                    <button class="action-btn text-gray-500 mr-2">
-                        <i class="far fa-comment mr-1"></i>
-                        <span class="text-xs">1</span>
-                    </button>
-                    <button class="action-btn text-gray-500">
-                        <i class="far fa-bookmark"></i>
-                    </button>
-                </div>
-                <button class="action-btn text-gray-500">
-                    <i class="fas fa-share-alt"></i>
-                </button>
-            </div>
-        </div>
-
-        <div class="post-card p-4">
-            <div class="flex items-center mb-3">
-                <div class="avatar"
-                     style="background-image: url('https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3')">
-                </div>
-                <div class="ml-2 flex-1">
-                    <div class="text-sm font-medium">品牌顾问李老师</div>
-                    <div class="text-xs text-gray-500">昨天 14:20</div>
-                </div>
-                <button class="text-gray-500 text-sm">
-                    <i class="fas fa-check mr-1"></i> 已关注
-                </button>
-            </div>
-            <h3 class="font-bold text-base mb-2">农产品品牌打造全攻略</h3>
-            <p class="text-sm text-gray-600 mb-3">从产品定位到品牌故事，从包装设计到营销策略，手把手教你打造有竞争力的农产品品牌...</p>
-
-            <div class="bg-gray-50 p-3 rounded-lg mb-3">
-                <h4 class="font-medium text-sm mb-2">品牌建设要点</h4>
-                <div class="space-y-2">
-                    <div class="text-sm text-gray-600">1. 明确产品差异化优势</div>
-                    <div class="text-sm text-gray-600">2. 设计独特品牌标识</div>
-                    <div class="text-sm text-gray-600">3. 建立品牌故事体系</div>
-                </div>
-            </div>
-
-            <div class="flex mb-3 overflow-x-auto py-1">
-                <div class="tag primary">品牌营销</div>
-                <div class="tag">产品包装</div>
-                <div class="tag">品牌策略</div>
-            </div>
-
-            <div class="flex justify-between pt-3 border-t border-gray-100">
-                <div class="flex">
-                    <button class="action-btn text-gray-500 mr-2">
-                        <i class="far fa-heart mr-1"></i>
-                        <span class="text-xs">3</span>
-                    </button>
-                    <button class="action-btn text-gray-500 mr-2">
-                        <i class="far fa-comment mr-1"></i>
-                        <span class="text-xs">2</span>
-                    </button>
-                    <button class="action-btn text-gray-500">
-                        <i class="far fa-bookmark"></i>
-                    </button>
-                </div>
-                <button class="action-btn text-gray-500">
-                    <i class="fas fa-share-alt"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- 政策解读内容 -->
-    <div class="content-panel hidden" id="policy-panel">
-        <div class="post-card p-4 border-l-4 border-blue-500">
-            <div class="flex items-center mb-3">
-                <span class="bg-blue-100 text-blue-600 text-xs px-2 py-0.5 rounded mr-2">最新政策</span>
-                <h3 class="font-bold text-base flex-1">2024年农业补贴政策要点解读</h3>
-            </div>
-            <p class="text-sm text-gray-600 mb-3">
-                近日，农业农村部发布了2024年农业补贴新政策，主要包括种粮补贴、农机补贴、有机种植补贴等多个方面，现就政策要点进行解读...
-            </p>
-            <div class="flex justify-between items-center">
-                <div class="flex items-center">
-                    <div class="avatar"
-                         style="background-image: url('https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3')">
+    <!-- 内容区域 -->
+    <div class="scroll-container">
+        <div class="p-4 space-y-6">
+            <!-- 推荐内容 -->
+            <div class="content-panel active" id="recommended-panel">
+                <!-- 置顶帖子 -->
+                <div class="post-card p-4 border-l-4 mb-6" style="border-color: rgba(15,45,73,1)">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded mr-2">置顶</span>
+                        <h3 class="font-bold text-base flex-1">欢迎加入助农宣传社区</h3>
                     </div>
-                    <div class="ml-2">
-                        <div class="text-sm font-medium">政策解读专家</div>
-                        <div class="text-xs text-gray-500">今天 08:30</div>
+                    <p class="text-sm text-gray-600 mb-3">官方发布：这里汇集了来自全国各地的农友，大家可以分享种植经验、销售技巧等内容，共同探讨农产品推广与销售的新思路。
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <div class="avatar"
+                                 style="background-image: url('https://plus.unsplash.com/premium_photo-1739538268993-2acf1ad3453c?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
+                            </div>
+                            <div class="ml-2">
+                                <div class="text-sm font-medium">官方小助手</div>
+                                <div class="text-xs text-gray-500">1小时前</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="text-xs text-gray-500 mr-3">
+                                <i class="far fa-eye mr-1"></i> 12
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                <i class="far fa-comment mr-1"></i> 4
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="flex items-center">
-                    <div class="text-xs text-gray-500 mr-3">
-                        <i class="far fa-eye mr-1"></i> 23
+
+                <!-- 普通帖子 -->
+                <div class="post-card p-4 mb-6">
+                    <div class="flex items-center mb-3">
+                        <div class="avatar"
+                             style="background-image: url('https://plus.unsplash.com/premium_photo-1661411325413-98a5ff88e8e4?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
+                        </div>
+                        <div class="ml-2 flex-1">
+                            <div class="text-sm font-medium">山东果农老李</div>
+                            <div class="text-xs text-gray-500">2小时前</div>
+                        </div>
+                        <button class="text-sm font-medium" style="color: rgba(15,45,73,1)">
+                            <i class="fas fa-plus mr-1"></i> 关注
+                        </button>
                     </div>
-                    <div class="text-xs text-gray-500">
-                        <i class="far fa-comment mr-1"></i> 12
+
+                    <h3 class="font-bold text-base mb-2">我的苹果今年又获丰收，分享几个提高品质的小技巧</h3>
+                    <p class="text-sm text-gray-600 mb-3">
+                        今年苹果品质特别好，分享一下我的种植心得：第一，合理控水，开花后减少浇水频次；第二，科学施肥，注重有机肥的使用；第三，适时疏果，保证单果营养充足...</p>
+
+                    <div class="grid grid-cols-3 gap-1 mb-3">
+                        <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
+                             alt="苹果图片" class="rounded-lg w-full aspect-[4/3] object-cover">
+                        <img src="https://images.unsplash.com/photo-1693552766656-6d1243a91af1?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                             alt="苹果园" class="rounded-lg w-full aspect-[4/3] object-cover">
+                        <div
+                                class="relative rounded-lg w-full aspect-[4/3] bg-gray-100 flex items-center justify-center">
+                            <img src="https://images.unsplash.com/photo-1663616774886-cd4d6b9c930c?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                 alt="更多图片" class="rounded-lg w-full aspect-[4/3] object-cover">
+                            <div
+                                    class="absolute inset-0 bg-black/30 rounded-lg flex items-center justify-center text-white font-bold">
+                                +4
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="flex mb-3 overflow-x-auto py-1">
+                        <div class="tag primary">种植技巧</div>
+                        <div class="tag">苹果种植</div>
+                        <div class="tag">果树管理</div>
+                        <div class="tag">有机种植</div>
+                    </div>
+
+                    <div class="flex justify-between pt-3 border-t border-gray-100">
+                        <div class="flex">
+                            <button class="action-btn text-gray-500 mr-2">
+                                <i class="far fa-heart mr-1"></i>
+                                <span class="text-xs">8</span>
+                            </button>
+                            <button class="action-btn text-gray-500 mr-2">
+                                <i class="far fa-comment mr-1"></i>
+                                <span class="text-xs">3</span>
+                            </button>
+                            <button class="action-btn text-gray-500">
+                                <i class="far fa-bookmark"></i>
+                            </button>
+                        </div>
+                        <button class="action-btn text-gray-500">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="post-card p-4 mb-6">
+                    <div class="flex items-center mb-3">
+                        <div class="avatar"
+                             style="background-image: url('https://plus.unsplash.com/premium_photo-1661722653096-cc1a251de5db?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
+                        </div>
+                        <div class="ml-2 flex-1">
+                            <div class="text-sm font-medium">云南草莓农户</div>
+                            <div class="text-xs text-gray-500">昨天 16:35</div>
+                        </div>
+                        <button class="text-gray-500 text-sm">
+                            <i class="fas fa-check mr-1"></i> 已关注
+                        </button>
+                    </div>
+
+                    <h3 class="font-bold text-base mb-2">小红书推广经验分享，一个月涨粉5000+</h3>
+                    <p class="text-sm text-gray-600 mb-3">
+                        分享我近期在小红书平台推广草莓的经验：注意拍摄光线，展示产品最佳状态；文案要详细描述口感和特点；选用热门话题和标签；保持稳定更新频率；与粉丝积极互动...</p>
+
+
+                    <div class="grid grid-cols-3 gap-1 mb-3">
+                        <img src="https://images.unsplash.com/photo-1522600543720-3dd435205466?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                             alt="草莓图片" class="rounded-lg w-full aspect-[4/3] object-cover">
+                        <img src="https://images.unsplash.com/photo-1731768720822-8b22a6e9a8ee?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                             alt="草莓种植" class="rounded-lg w-full aspect-[4/3] object-cover">
+                        <div
+                                class="relative rounded-lg w-full aspect-[4/3] bg-gray-100 flex items-center justify-center">
+                            <img src="https://images.unsplash.com/photo-1569613533527-d5ed4d02cb28?q=80&w=2674&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                 alt="更多图片" class="rounded-lg w-full aspect-[4/3] object-cover">
+                            <div
+                                    class="absolute inset-0 bg-black/30 rounded-lg flex items-center justify-center text-white font-bold">
+                                +2
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex mb-3 overflow-x-auto py-1">
+                        <div class="tag primary">营销技巧</div>
+                        <div class="tag">小红书运营</div>
+                        <div class="tag">草莓推广</div>
+                    </div>
+
+                    <div class="flex justify-between pt-3 border-t border-gray-100">
+                        <div class="flex">
+                            <button class="action-btn text-gray-500 mr-2">
+                                <i class="far fa-heart mr-1"></i>
+                                <span class="text-xs">6</span>
+                            </button>
+                            <button class="action-btn text-gray-500 mr-2">
+                                <i class="far fa-comment mr-1"></i>
+                                <span class="text-xs">5</span>
+                            </button>
+                            <button class="action-btn text-gray-500">
+                                <i class="far fa-bookmark"></i>
+                            </button>
+                        </div>
+                        <button class="action-btn text-gray-500">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="post-card p-4 mb-6">
+                    <div class="flex items-center mb-3">
+                        <div class="avatar"
+                             style="background-image: url('https://plus.unsplash.com/premium_photo-1663045211868-2c38d223d54b?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
+                        </div>
+                        <div class="ml-2 flex-1">
+                            <div class="text-sm font-medium">河南菜农老王</div>
+                            <div class="text-xs text-gray-500">前天 09:15</div>
+                        </div>
+                        <button class="text-sm font-medium" style="color: rgba(15,45,73,1)">
+                            <i class="fas fa-plus mr-1"></i> 关注
+                        </button>
+                    </div>
+
+                    <h3 class="font-bold text-base mb-2">关于农产品包装设计的几点思考</h3>
+                    <p class="text-sm text-gray-600 mb-3">
+                        好的包装能为农产品增加不少附加值。经过这几年的摸索，我总结了几点包装设计经验：标识清晰可辨；突出产品特色；选用环保材质；保证产品新鲜度；设计要有故事性...</p>
+
+                    <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                        <h4 class="font-medium text-sm mb-2">求助：有没有推荐的包装供应商？</h4>
+                        <div class="flex">
+                            <div class="avatar-group flex">
+                                <div class="avatar avatar-sm"
+                                     style="background-image: url('https://images.unsplash.com/photo-1708182521069-77dbde06f741?q=80&w=2672&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
+                                </div>
+                                <div class="avatar avatar-sm"
+                                     style="background-image: url('https://images.unsplash.com/photo-1590323853152-b9ade60d1d5f?q=80&w=2337&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
+                                </div>
+                                <div class="avatar avatar-sm"
+                                     style="background-image: url('https://plus.unsplash.com/premium_photo-1661308272310-6ef98bf79533?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
+                                </div>
+                            </div>
+                            <div class="ml-2 flex-1">
+                                <span class="text-xs text-gray-500">12人回复了该问题</span>
+                            </div>
+                            <button class="text-xs font-medium" style="color: rgba(15,45,73,1)">
+                                我也回复
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex mb-3 overflow-x-auto py-1">
+                        <div class="tag primary">包装设计</div>
+                        <div class="tag">品牌推广</div>
+                        <div class="tag">农产品营销</div>
+                    </div>
+
+                    <div class="flex justify-between pt-3 border-t border-gray-100">
+                        <div class="flex">
+                            <button class="action-btn text-gray-500 mr-2">
+                                <i class="far fa-heart mr-1"></i>
+                                <span class="text-xs">5</span>
+                            </button>
+                            <button class="action-btn text-gray-500 mr-2">
+                                <i class="far fa-comment mr-1"></i>
+                                <span class="text-xs">2</span>
+                            </button>
+                            <button class="action-btn text-gray-500">
+                                <i class="far fa-bookmark"></i>
+                            </button>
+                        </div>
+                        <button class="action-btn text-gray-500">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="post-card p-4">
-            <div class="flex items-center mb-3">
-                <div class="avatar"
-                     style="background-image: url('https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixlib=rb-4.0.3')">
+            <!-- 种植经验内容 -->
+            <div class="content-panel hidden" id="planting-panel">
+                <div class="post-card p-4 mb-6">
+                    <div class="flex items-center mb-3">
+                        <div class="avatar"
+                             style="background-image: url('https://images.unsplash.com/photo-1589254065909-b7086229d08c?ixlib=rb-4.0.3')">
+                        </div>
+                        <div class="ml-2 flex-1">
+                            <div class="text-sm font-medium">果园老张</div>
+                            <div class="text-xs text-gray-500">3小时前</div>
+                        </div>
+                        <button class="text-sm font-medium" style="color: rgba(15,45,73,1)">
+                            <i class="fas fa-plus mr-1"></i> 关注
+                        </button>
+                    </div>
+                    <h3 class="font-bold text-base mb-2">水果种植土壤管理经验分享</h3>
+                    <p class="text-sm text-gray-600 mb-3">
+                        分享多年种植经验，合理的土壤管理对水果品质至关重要。定期检测土壤pH值，保持在5.5-6.5之间；注重有机质含量，每年秋季补充腐熟农家肥；合理轮作，避免连作障碍...</p>
+
+                    <div class="grid grid-cols-3 gap-1 mb-3">
+                        <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3"
+                             alt="土壤管理" class="rounded-lg w-full aspect-[4/3] object-cover">
+                        <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3"
+                             alt="果园土壤" class="rounded-lg w-full aspect-[4/3] object-cover">
+                        <img src="https://images.unsplash.com/photo-1684154740378-49d4ec79ccdb?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                             alt="施肥技术" class="rounded-lg w-full aspect-[4/3] object-cover">
+                    </div>
+
+                    <div class="flex mb-3 overflow-x-auto py-1">
+                        <div class="tag primary">土壤管理</div>
+                        <div class="tag">果树种植</div>
+                        <div class="tag">施肥技术</div>
+                    </div>
+
+                    <div class="flex justify-between pt-3 border-t border-gray-100">
+                        <div class="flex">
+                            <button class="action-btn text-gray-500 mr-2">
+                                <i class="far fa-heart mr-1"></i>
+                                <span class="text-xs">6</span>
+                            </button>
+                            <button class="action-btn text-gray-500 mr-2">
+                                <i class="far fa-comment mr-1"></i>
+                                <span class="text-xs">4</span>
+                            </button>
+                            <button class="action-btn text-gray-500">
+                                <i class="far fa-bookmark"></i>
+                            </button>
+                        </div>
+                        <button class="action-btn text-gray-500">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    </div>
                 </div>
-                <div class="ml-2 flex-1">
-                    <div class="text-sm font-medium">农业政策顾问</div>
-                    <div class="text-xs text-gray-500">昨天 15:20</div>
+
+                <div class="post-card p-4 mb-6">
+                    <div class="flex items-center mb-3">
+                        <div class="avatar"
+                             style="background-image: url('https://images.unsplash.com/photo-1592878940526-0214b0f374f6?ixlib=rb-4.0.3')">
+                        </div>
+                        <div class="ml-2 flex-1">
+                            <div class="text-sm font-medium">蔬菜大师王叔</div>
+                            <div class="text-xs text-gray-500">5小时前</div>
+                        </div>
+                        <button class="text-gray-500 text-sm">
+                            <i class="fas fa-check mr-1"></i> 已关注
+                        </button>
+                    </div>
+                    <h3 class="font-bold text-base mb-2">大棚蔬菜病虫害防治技巧</h3>
+                    <p class="text-sm text-gray-600 mb-3">总结多年大棚种植经验，预防胜于治疗。采用生物防治和物理防治相结合的方式，减少农药使用，提高蔬菜品质...</p>
+
+                    <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                        <h4 class="font-medium text-sm mb-2">防治要点</h4>
+                        <div class="space-y-2">
+                            <div class="text-sm text-gray-600">1. 选用抗病品种</div>
+                            <div class="text-sm text-gray-600">2. 合理通风控温</div>
+                            <div class="text-sm text-gray-600">3. 及时清除病株</div>
+                        </div>
+                    </div>
+
+                    <div class="flex mb-3 overflow-x-auto py-1">
+                        <div class="tag primary">病虫害防治</div>
+                        <div class="tag">大棚种植</div>
+                        <div class="tag">绿色防控</div>
+                    </div>
+
+                    <div class="flex justify-between pt-3 border-t border-gray-100">
+                        <div class="flex">
+                            <button class="action-btn text-gray-500 mr-2">
+                                <i class="far fa-heart mr-1"></i>
+                                <span class="text-xs">9</span>
+                            </button>
+                            <button class="action-btn text-gray-500 mr-2">
+                                <i class="far fa-comment mr-1"></i>
+                                <span class="text-xs">5</span>
+                            </button>
+                            <button class="action-btn text-gray-500">
+                                <i class="far fa-bookmark"></i>
+                            </button>
+                        </div>
+                        <button class="action-btn text-gray-500">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    </div>
                 </div>
-                <button class="text-green-600 text-sm font-medium">
-                    <i class="fas fa-plus mr-1"></i> 关注
-                </button>
             </div>
-            <h3 class="font-bold text-base mb-2">如何申请农业创业补贴？详细流程解析</h3>
-            <p class="text-sm text-gray-600 mb-3">
-                针对返乡创业农民的创业补贴申请流程解析：第一步，准备相关证明材料；第二步，向当地农业部门提交申请；第三步，等待审核...
-            </p>
 
-            <div class="bg-gray-50 p-3 rounded-lg mb-3">
-                <h4 class="font-medium text-sm mb-2">常见问题解答</h4>
-                <div class="space-y-2">
-                    <div class="text-sm text-gray-600">Q: 哪些人可以申请农业创业补贴？</div>
-                    <div class="text-sm text-gray-600">Q: 补贴金额是多少？</div>
-                    <div class="text-sm text-gray-600">Q: 申请材料有效期是多久？</div>
+            <!-- 销售技巧内容 -->
+            <div class="content-panel hidden" id="sales-panel">
+                <div class="post-card p-4 mb-6">
+                    <div class="flex items-center mb-3">
+                        <div class="avatar"
+                             style="background-image: url('https://images.unsplash.com/photo-1591696205602-2f950c417cb9?ixlib=rb-4.0.3')">
+                        </div>
+                        <div class="ml-2 flex-1">
+                            <div class="text-sm font-medium">营销达人小王</div>
+                            <div class="text-xs text-gray-500">5小时前</div>
+                        </div>
+                        <button class="text-sm font-medium" style="color: rgba(15,45,73,1)">
+                            <i class="fas fa-plus mr-1"></i> 关注
+                        </button>
+                    </div>
+                    <h3 class="font-bold text-base mb-2">农产品线上销售技巧分享</h3>
+                    <p class="text-sm text-gray-600 mb-3">如何利用社交平台提升销量，建立稳定客户群。重点是产品展示、内容运营和客户服务，以下是我的具体经验分享...</p>
+
+                    <div class="grid grid-cols-2 gap-2 mb-3">
+                        <img src="https://images.unsplash.com/photo-1607349913338-fca6f7fc42d0?ixlib=rb-4.0.3"
+                             alt="产品展示" class="rounded-lg w-full aspect-[4/3] object-cover">
+                        <img src="https://images.unsplash.com/photo-1591696205602-2f950c417cb9?ixlib=rb-4.0.3"
+                             alt="直播带货" class="rounded-lg w-full aspect-[4/3] object-cover">
+                    </div>
+
+                    <div class="flex mb-3 overflow-x-auto py-1">
+                        <div class="tag primary">线上营销</div>
+                        <div class="tag">社交电商</div>
+                        <div class="tag">客户运营</div>
+                    </div>
+
+                    <div class="flex justify-between pt-3 border-t border-gray-100">
+                        <div class="flex">
+                            <button class="action-btn text-gray-500 mr-2">
+                                <i class="far fa-heart mr-1"></i>
+                                <span class="text-xs">2</span>
+                            </button>
+                            <button class="action-btn text-gray-500 mr-2">
+                                <i class="far fa-comment mr-1"></i>
+                                <span class="text-xs">1</span>
+                            </button>
+                            <button class="action-btn text-gray-500">
+                                <i class="far fa-bookmark"></i>
+                            </button>
+                        </div>
+                        <button class="action-btn text-gray-500">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="post-card p-4 mb-6">
+                    <div class="flex items-center mb-3">
+                        <div class="avatar"
+                             style="background-image: url('https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3')">
+                        </div>
+                        <div class="ml-2 flex-1">
+                            <div class="text-sm font-medium">品牌顾问李老师</div>
+                            <div class="text-xs text-gray-500">昨天 14:20</div>
+                        </div>
+                        <button class="text-gray-500 text-sm">
+                            <i class="fas fa-check mr-1"></i> 已关注
+                        </button>
+                    </div>
+                    <h3 class="font-bold text-base mb-2">农产品品牌打造全攻略</h3>
+                    <p class="text-sm text-gray-600 mb-3">从产品定位到品牌故事，从包装设计到营销策略，手把手教你打造有竞争力的农产品品牌...</p>
+
+                    <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                        <h4 class="font-medium text-sm mb-2">品牌建设要点</h4>
+                        <div class="space-y-2">
+                            <div class="text-sm text-gray-600">1. 明确产品差异化优势</div>
+                            <div class="text-sm text-gray-600">2. 设计独特品牌标识</div>
+                            <div class="text-sm text-gray-600">3. 建立品牌故事体系</div>
+                        </div>
+                    </div>
+
+                    <div class="flex mb-3 overflow-x-auto py-1">
+                        <div class="tag primary">品牌营销</div>
+                        <div class="tag">产品包装</div>
+                        <div class="tag">品牌策略</div>
+                    </div>
+
+                    <div class="flex justify-between pt-3 border-t border-gray-100">
+                        <div class="flex">
+                            <button class="action-btn text-gray-500 mr-2">
+                                <i class="far fa-heart mr-1"></i>
+                                <span class="text-xs">3</span>
+                            </button>
+                            <button class="action-btn text-gray-500 mr-2">
+                                <i class="far fa-comment mr-1"></i>
+                                <span class="text-xs">2</span>
+                            </button>
+                            <button class="action-btn text-gray-500">
+                                <i class="far fa-bookmark"></i>
+                            </button>
+                        </div>
+                        <button class="action-btn text-gray-500">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <div class="flex mb-3 overflow-x-auto py-1">
-                <div class="tag primary">政策解读</div>
-                <div class="tag">创业补贴</div>
-                <div class="tag">申请指南</div>
-            </div>
 
-            <div class="flex justify-between pt-3 border-t border-gray-100">
-                <div class="flex">
-                    <button class="action-btn text-gray-500 mr-2">
-                        <i class="far fa-heart mr-1"></i>
-                        <span class="text-xs">4</span>
-                    </button>
-                    <button class="action-btn text-gray-500 mr-2">
-                        <i class="far fa-comment mr-1"></i>
-                        <span class="text-xs">1</span>
-                    </button>
-                    <button class="action-btn text-gray-500">
-                        <i class="far fa-bookmark"></i>
-                    </button>
+            <!-- 政策解读内容 -->
+            <div class="content-panel hidden" id="policy-panel">
+                <div class="post-card p-4 mb-6">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-blue-100 text-blue-600 text-xs px-2 py-0.5 rounded mr-2">最新政策</span>
+                        <h3 class="font-bold text-base flex-1">2024年农业补贴政策要点解读</h3>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">
+                        近日，农业农村部发布了2024年农业补贴新政策，主要包括种粮补贴、农机补贴、有机种植补贴等多个方面，现就政策要点进行解读...
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <div class="avatar"
+                                 style="background-image: url('https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3')">
+                            </div>
+                            <div class="ml-2">
+                                <div class="text-sm font-medium">政策解读专家</div>
+                                <div class="text-xs text-gray-500">今天 08:30</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="text-xs text-gray-500 mr-3">
+                                <i class="far fa-eye mr-1"></i> 23
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                <i class="far fa-comment mr-1"></i> 12
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button class="action-btn text-gray-500">
-                    <i class="fas fa-share-alt"></i>
-                </button>
+
+                <div class="post-card p-4 mb-6">
+                    <div class="flex items-center mb-3">
+                        <div class="avatar"
+                             style="background-image: url('https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixlib=rb-4.0.3')">
+                        </div>
+                        <div class="ml-2 flex-1">
+                            <div class="text-sm font-medium">农业政策顾问</div>
+                            <div class="text-xs text-gray-500">昨天 15:20</div>
+                        </div>
+                        <button class="text-sm font-medium" style="color: rgba(15,45,73,1)">
+                            <i class="fas fa-plus mr-1"></i> 关注
+                        </button>
+                    </div>
+                    <h3 class="font-bold text-base mb-2">如何申请农业创业补贴？详细流程解析</h3>
+                    <p class="text-sm text-gray-600 mb-3">
+                        针对返乡创业农民的创业补贴申请流程解析：第一步，准备相关证明材料；第二步，向当地农业部门提交申请；第三步，等待审核...
+                    </p>
+
+                    <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                        <h4 class="font-medium text-sm mb-2">常见问题解答</h4>
+                        <div class="space-y-2">
+                            <div class="text-sm text-gray-600">Q: 哪些人可以申请农业创业补贴？</div>
+                            <div class="text-sm text-gray-600">Q: 补贴金额是多少？</div>
+                            <div class="text-sm text-gray-600">Q: 申请材料有效期是多久？</div>
+                        </div>
+                    </div>
+
+                    <div class="flex mb-3 overflow-x-auto py-1">
+                        <div class="tag primary">政策解读</div>
+                        <div class="tag">创业补贴</div>
+                        <div class="tag">申请指南</div>
+                    </div>
+
+                    <div class="flex justify-between pt-3 border-t border-gray-100">
+                        <div class="flex">
+                            <button class="action-btn text-gray-500 mr-2">
+                                <i class="far fa-heart mr-1"></i>
+                                <span class="text-xs">4</span>
+                            </button>
+                            <button class="action-btn text-gray-500 mr-2">
+                                <i class="far fa-comment mr-1"></i>
+                                <span class="text-xs">1</span>
+                            </button>
+                            <button class="action-btn text-gray-500">
+                                <i class="far fa-bookmark"></i>
+                            </button>
+                        </div>
+                        <button class="action-btn text-gray-500">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -670,33 +722,36 @@
 
 <!-- 发布按钮 -->
 <div class="fixed bottom-20 right-4">
-    <button
-            class="w-14 h-14 rounded-full bg-gradient-to-r from-green-500 to-green-600 text-white flex items-center justify-center shadow-lg">
+    <button class="w-14 h-14 rounded-full text-white flex items-center justify-center shadow-lg"
+            style="background: linear-gradient(to right, rgba(15,45,73,0.9), rgba(15,45,73,1))">
         <i class="fas fa-plus text-xl"></i>
     </button>
 </div>
 
-<!-- 底部导航 -->
-<div class="pt-2">
-    <div class="flex justify-around items-center bg-white py-2 border-t border-gray-200">
-        <a href="home.html" class="nav-item text-gray-500 flex flex-col items-center">
-            <i class="fas fa-home text-xl mb-1"></i>
-            <span class="text-xs">首页</span>
-        </a>
-        <a href="community.html" class="nav-item active flex flex-col items-center">
-            <i class="fas fa-users text-xl mb-1"></i>
-            <span class="text-xs">社区</span>
-        </a>
-        <a href="tutorials.html" class="nav-item text-gray-500 flex flex-col items-center">
-            <i class="fas fa-book text-xl mb-1"></i>
-            <span class="text-xs">教程</span>
-        </a>
-        <a href="profile.html" class="nav-item text-gray-500 flex flex-col items-center">
-            <i class="fas fa-user text-xl mb-1"></i>
-            <span class="text-xs">我的</span>
-        </a>
+<!-- 底部导航栏 -->
+<div class="fixed bottom-0 left-0 right-0 py-2 px-5 border-t border-gray-100"
+     style="background-color: rgba(154,163,56, 1)">
+    <div class="flex justify-between">
+        <div class="bottom-nav-item flex flex-col items-center" data-link="home.html">
+            <i class="fas fa-home text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">首页</span>
+        </div>
+        <div class="bottom-nav-item flex flex-col items-center" data-link="upload.html">
+            <i class="fas fa-plus-circle text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">创建</span>
+        </div>
+        <div class="bottom-nav-item flex flex-col items-center" data-link="tutorials.html">
+            <i class="fas fa-book text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">教程</span>
+        </div>
+        <div class="bottom-nav-item flex flex-col items-center" data-link="profile.html">
+            <i class="fas fa-user text-xl" style="color: rgba(15,45,73,1)"></i>
+            <span class="text-xs mt-1" style="color: rgba(15,45,73,1)">我的</span>
+        </div>
     </div>
 </div>
+
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -717,6 +772,20 @@
                 // 显示对应的内容面板
                 const tabId = this.getAttribute('data-tab');
                 document.getElementById(`${tabId}-panel`).classList.add('active');
+            });
+        });
+
+        // 添加底部导航栏点击事件处理
+        document.querySelectorAll('.bottom-nav-item').forEach(item => {
+            item.addEventListener('click', function () {
+                const link = this.getAttribute('data-link');
+                if (link === 'profile.html') {
+                    // 检查登录状态
+                    const userLoggedIn = localStorage.getItem('userLoggedIn');
+                    window.location.href = userLoggedIn ? 'profile.html' : 'profile-guest.html';
+                } else {
+                    window.location.href = link;
+                }
             });
         });
     });

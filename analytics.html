@@ -11,21 +11,26 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            background-color: rgba(205, 210, 171, 0.2);
+            color: rgba(15, 45, 73, 1);
             max-width: 100%;
             overflow-x: hidden;
         }
 
         .header {
-            background: white;
+            background: rgba(154, 163, 56, 1);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .fixed {
+            background-color: rgba(154, 163, 56, 1);
         }
 
         .data-card {
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             overflow: hidden;
+            background: white;
         }
 
         .chart-container {
@@ -43,7 +48,7 @@
         .bar {
             flex: 1;
             margin: 0 2px;
-            background: linear-gradient(to top, #07c160, #33d685);
+            background: rgba(154, 163, 56, 1);
             border-top-left-radius: 3px;
             border-top-right-radius: 3px;
             position: relative;
@@ -52,7 +57,8 @@
         }
 
         .bar.highlight {
-            background: linear-gradient(to top, #0d9b77, #07c160);
+            background: rgba(154, 163, 56, 1);
+            opacity: 0.7;
         }
 
         .bar::after {
@@ -62,7 +68,7 @@
             left: 50%;
             transform: translateX(-50%);
             font-size: 10px;
-            color: #666;
+            color: rgba(15, 45, 73, 1);
         }
 
         .chart-label {
@@ -77,7 +83,7 @@
 
         .chart-label span {
             font-size: 10px;
-            color: #999;
+            color: rgba(15, 45, 73, 0.7);
             transform: rotate(-45deg);
             transform-origin: top left;
             position: relative;
@@ -87,6 +93,8 @@
         .time-tabs {
             display: flex;
             margin-bottom: 20px;
+            background: white;
+            border-radius: 12px;
         }
 
         .time-tab {
@@ -94,16 +102,16 @@
             text-align: center;
             padding: 10px;
             font-size: 14px;
-            color: #666;
+            color: rgba(15, 45, 73, 0.7);
             border-bottom: 2px solid transparent;
             transition: all 0.3s ease;
             cursor: pointer;
         }
 
         .time-tab.active {
-            color: #07c160;
+            color: rgba(154, 163, 56, 1);
             font-weight: 500;
-            border-bottom-color: #07c160;
+            border-bottom-color: rgba(154, 163, 56, 1);
         }
 
         .progress-container {
@@ -128,11 +136,11 @@
         }
 
         .progress-ring circle.bg {
-            stroke: #e6e6e6;
+            stroke: rgba(15, 45, 73, 0.1);
         }
 
         .progress-ring circle.progress {
-            stroke: #07c160;
+            stroke: rgba(154, 163, 56, 1);
         }
 
         .percent-text {
@@ -154,7 +162,7 @@
 
         .funnel-bar {
             height: 100%;
-            background: linear-gradient(to right, #07c160, #33d685);
+            background: linear-gradient(to right, rgba(154, 163, 56, 1), rgba(15, 45, 73, 1));
             border-radius: 6px;
             transition: width 1s ease;
             display: flex;
@@ -189,32 +197,55 @@
         }
 
         .tag {
-            background-color: rgba(7, 193, 96, 0.1);
-            color: #07c160;
+            background-color: rgba(154, 163, 56, 0.1);
+            color: rgba(154, 163, 56, 1);
             padding: 2px 8px;
             border-radius: 4px;
             font-size: 12px;
             margin-right: 5px;
+        }
+
+        .text-green-500 {
+            color: rgba(154, 163, 56, 1) !important;
+        }
+
+        .bg-green-500 {
+            background-color: rgba(154, 163, 56, 1) !important;
+        }
+
+        .bottom-nav-item {
+            color: rgba(15, 45, 73, 1);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .bottom-nav-item i {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .bottom-nav-item span {
+            font-size: 12px;
         }
     </style>
 </head>
 
 <body>
     <!-- 顶部导航 -->
-    <header class="header py-4 px-5 flex items-center justify-between">
-        <div class="flex items-center">
-            <button class="back-button mr-3 slide-right" id="backButton">
+    <header class="header py-3 px-5 flex items-center justify-between fixed top-0 left-0 right-0 z-50">
+        <div class="flex items-center w-full">
+            <a href="home.html" class="back-button mr-3 slide-right">
                 <i class="fas fa-arrow-left"></i>
-            </button>
-            <h1 class="text-xl font-semibold slide-down">宣传效果分析</h1>
+            </a>
+            <h1 class="text-lg font-semibold slide-down flex-1 text-center">宣传效果分析</h1>
+            <div class="w-8"></div> <!-- 用于平衡布局 -->
         </div>
-        <button class="px-3 py-2 bg-gray-100 rounded-lg text-sm flex items-center slide-left">
-            <i class="fas fa-file-export mr-1 text-gray-500"></i>
-            <span>导出</span>
-        </button>
     </header>
 
-    <div class="container mx-auto px-4 pb-24 mt-2">
+    <div class="container mx-auto px-4 pb-24 mt-16">
         <!-- 时间Tab -->
         <div class="time-tabs bg-white rounded-lg mb-5 slide-up">
             <div class="time-tab active" data-range="today">今日</div>
@@ -293,26 +324,26 @@
     </div>
 
     <!-- 底部导航栏 -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white py-2 px-5 border-t border-gray-100">
+    <nav class="fixed bottom-0 left-0 right-0 bg-white py-2 px-5 border-t border-gray-100 z-50">
         <div class="flex justify-between">
-            <div class="bottom-nav-item flex flex-col items-center" data-link="home.html">
+            <a href="home.html" class="bottom-nav-item">
                 <i class="fas fa-home text-xl"></i>
                 <span class="text-xs mt-1">首页</span>
-            </div>
-            <div class="bottom-nav-item flex flex-col items-center" data-link="upload.html">
+            </a>
+            <a href="upload.html" class="bottom-nav-item">
                 <i class="fas fa-plus-circle text-xl"></i>
                 <span class="text-xs mt-1">上传</span>
-            </div>
-            <div class="bottom-nav-item flex flex-col items-center" data-link="tutorials.html">
+            </a>
+            <a href="tutorials.html" class="bottom-nav-item">
                 <i class="fas fa-book text-xl"></i>
                 <span class="text-xs mt-1">教程</span>
-            </div>
-            <div class="bottom-nav-item flex flex-col items-center" data-link="profile.html">
+            </a>
+            <a href="profile.html" class="bottom-nav-item">
                 <i class="fas fa-user text-xl"></i>
                 <span class="text-xs mt-1">我的</span>
-            </div>
+            </a>
         </div>
-    </div>
+    </nav>
 
     <script src="js/analytics.js"></script>
 </body>
