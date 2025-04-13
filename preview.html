@@ -1,29 +1,187 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>助农宣传 - 宣传图文预览</title>
+    <title>禾语智宣 - 宣传图文预览</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/preview.css">
+    <style>
+        :root {
+            --primary-color: #537a5a;
+            --primary-light: #e8f3e9;
+            --primary-dark: #3d5b43;
+            --accent-color: #e67e22;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --bg-primary: #f7f8fa;
+            --bg-secondary: #ffffff;
+            --border-color: #e5e7eb;
+        }
+
+        /* 图片轮播样式优化 */
+        .image-container {
+            position: relative;
+            max-height: 320px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 16px;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .indicator-container {
+            position: absolute;
+            bottom: 16px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            z-index: 5;
+        }
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background-color: white;
+            width: 10px;
+            height: 10px;
+        }
+
+        .prev-btn,
+        .next-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.4);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            cursor: pointer;
+            border: none;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .prev-btn:hover,
+        .next-btn:hover {
+            opacity: 1;
+        }
+
+        .prev-btn {
+            left: 12px;
+        }
+
+        .next-btn {
+            right: 12px;
+        }
+
+        /* 当没有图片时显示占位符 */
+        .image-container.no-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            color: #999;
+            min-height: 200px;
+        }
+
+        .image-container.no-image::before {
+            content: attr(data-placeholder);
+            font-size: 16px;
+        }
+
+        /* 加载状态 */
+        .image-container.loading {
+            background-color: #f0f0f0;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-container.loading::before {
+            content: "";
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
-<body class="safe-area">
+
+<body>
     <!-- 顶部导航 -->
-    <div class="bg-white p-4 flex items-center">
+    <div class="nav-header p-4 flex items-center">
         <a href="upload.html" class="text-gray-600 mr-4">
             <i class="fas fa-arrow-left text-lg"></i>
         </a>
         <h1 class="text-lg font-bold flex-1 text-center">宣传图文预览</h1>
         <div class="w-5"></div> <!-- 占位，保持标题居中 -->
     </div>
-    
+
+    <!-- 步骤指示器 -->
+    <div class="step-indicator flex justify-between px-8 mb-6">
+        <div class="step flex flex-col items-center">
+            <div
+                class="step-number w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center text-xs mb-1">
+                <i class="fas fa-check"></i>
+            </div>
+            <div class="step-name text-xs text-center">上传照片</div>
+        </div>
+        <div class="connector flex-1 h-1 bg-green-500 mt-3 mx-2"></div>
+        <div class="step active flex flex-col items-center">
+            <div
+                class="step-number w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center text-xs mb-1">
+                2
+            </div>
+            <div class="step-name text-xs text-center">预览图文</div>
+        </div>
+        <div class="connector flex-1 h-1 bg-gray-200 mt-3 mx-2"></div>
+        <div class="step flex flex-col items-center">
+            <div
+                class="step-number w-7 h-7 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs mb-1">
+                3
+            </div>
+            <div class="step-name text-xs text-center">选择平台</div>
+        </div>
+    </div>
+
     <!-- 内容区域 -->
-    <div class="overflow-y-auto flex-1">
+    <div class="overflow-y-auto flex-1 my-content">
         <!-- 图文预览 -->
         <div class="px-4 py-4">
-            <div class="template-preview bg-white">
+            <div class="template-preview bg-white rounded-xl shadow-sm">
                 <!-- 头部信息 -->
                 <div class="p-4 border-b border-gray-100">
                     <div class="mb-2 flex items-center">
@@ -32,82 +190,56 @@
                     </div>
                     <h2 class="text-lg font-bold mb-2">高山果园红富士苹果 | 有机种植 · 自然成熟 · 脆甜多汁</h2>
                     <p class="text-sm text-gray-700 leading-relaxed">
-                        ✨ 来自海拔2000m以上生态果园，昼夜温差大造就了独特口感。采用纯天然有机种植，告别农药化肥，保留原始果香。每一口都能感受到阳光雨露的馈赠，健康又美味，是您馈赠亲友、自用享受的理想选择。
+                        ✨ 来自高海拔山区的红富士苹果，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。每一口都能感受到新鲜与甜脆，是您日常水果的理想选择。
                     </p>
-                    
                 </div>
-                
+
                 <!-- 图片区域 -->
-                <div class="image-carousel">
-                    <div class="grid grid-cols-1">
-                        <img id="carouselImage" src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="农产品图片" class="w-full h-64 object-cover">
-                    </div>
-                    <div class="image-carousel-indicators" id="carouselIndicators">
-                        <!-- 指示器将动态添加 -->
-                    </div>
-                    <button class="image-carousel-btn image-carousel-prev" id="prevImageBtn">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="image-carousel-btn image-carousel-next" id="nextImageBtn">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
+                <div class="image-container">
+                    <img id="carouselImage" src="" alt="Product image">
+                    <div id="carouselIndicators" class="indicator-container"></div>
+                    <button class="prev-btn" id="prevImageBtn">&#10094;</button>
+                    <button class="next-btn" id="nextImageBtn">&#10095;</button>
                 </div>
-                
+
                 <!-- 文章内容 -->
                 <div class="p-4">
                     <!-- 添加产品标签 -->
                     <div class="flex flex-wrap gap-2 mb-4">
-                        <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">有机认证</span>
-                        <span class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full font-medium">特级品质</span>
-                        <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">高山种植</span>
-                        <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full font-medium">产地直发</span>
+                        <span
+                            class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">有机认证</span>
+                        <span
+                            class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full font-medium">特级品质</span>
+                        <span
+                            class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">高山种植</span>
+                        <span
+                            class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full font-medium">产地直发</span>
                     </div>
-                    
+
                     <!-- 产品特点 -->
                     <div class="mb-5 border-l-4 border-green-500 pl-3">
                         <h3 class="font-bold mb-2 text-green-700">🍎 产品特点</h3>
                         <p class="text-sm text-gray-700 mb-3 leading-relaxed">
-                            高海拔阳光充足，昼夜温差大，果实生长缓慢，营养更加丰富。采用有机种植方式，不使用化学农药和化肥，坚持生态友好理念，保证果实天然纯净。每一颗苹果都经过严格的筛选，确保品质卓越。
+                            这款红富士苹果产自高海拔山区，生长环境优越，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。果实成熟度高，颜色红润，外观光亮诱人。
                         </p>
                     </div>
-                    
+
                     <!-- 口感描述 -->
                     <div class="mb-5 border-l-4 border-orange-500 pl-3">
                         <h3 class="font-bold mb-2 text-orange-700">👅 口感体验</h3>
                         <p class="text-sm text-gray-700 mb-3 leading-relaxed">
-                            轻咬一口，清脆的声音伴随着果汁四溢，甜度适中且回甘持久，不会过分甜腻。果肉细腻多汁，香气浓郁怡人，带有独特的花蜜香调。冰镇后食用，口感更加清爽提神，是夏日解暑的绝佳选择。
+                            口感脆甜多汁，果肉细腻，香气怡人。咬一口，汁水四溢，甜度适中不腻口，是水果爱好者的不二之选。冷藏后食用，口感更佳。
                         </p>
                     </div>
-                    
+
                     <!-- 营养价值 -->
                     <div class="mb-5 border-l-4 border-blue-500 pl-3">
                         <h3 class="font-bold mb-2 text-blue-700">💪 营养价值</h3>
                         <p class="text-sm text-gray-700 mb-3 leading-relaxed">
-                            富含多种维生素、矿物质和膳食纤维，苹果多酚有助于抗氧化，促进肠道健康，增强免疫力。适合各年龄段人群食用，是健康饮食的理想选择。常言道："每天一个苹果，医生远离我"，科学研究表明，苹果确实有助于维持心血管健康。
+                            富含多种维生素和膳食纤维，有助于肠道健康，增强免疫力。每天一个苹果，医生远离我！特别适合注重健康生活的现代人。
                         </p>
                     </div>
-                    
-                    <!-- 限时优惠 -->
-                    <div class="p-3 bg-red-50 rounded-lg my-4 border border-red-100" style="display: none;">
-                        <h3 class="font-bold text-red-700 flex items-center mb-2">
-                            <i class="fas fa-gift mr-2"></i> 限时特惠
-                        </h3>
-                        <div class="grid grid-cols-3 gap-2 text-center">
-                            <div class="bg-white p-2 rounded-lg shadow-sm">
-                                <div class="text-sm font-bold text-gray-800">原价</div>
-                                <div class="text-xs text-gray-500 line-through">¥19.8/斤</div>
-                            </div>
-                            <div class="bg-white p-2 rounded-lg shadow-sm">
-                                <div class="text-sm font-bold text-red-600">特惠价</div>
-                                <div class="text-xs text-red-500">¥15.8/斤</div>
-                            </div>
-                            <div class="bg-white p-2 rounded-lg shadow-sm">
-                                <div class="text-sm font-bold text-gray-800">包邮</div>
-                                <div class="text-xs text-gray-500">满3斤起</div>
-                            </div>
-                        </div>
-                    </div>
-                    
+
                     <!-- 食用建议 -->
                     <div class="mb-5 border-l-4 border-purple-500 pl-3">
                         <h3 class="font-bold mb-2 text-purple-700">🍽️ 食用建议</h3>
@@ -120,46 +252,59 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- 模板选择 -->
         <div class="px-4 py-3">
             <h3 class="font-bold text-gray-700 mb-2">选择模板风格</h3>
             <div class="flex overflow-x-auto pb-2 -mx-1">
-                <div class="template-option selected flex-shrink-0 w-24 h-24 border-2 rounded-lg overflow-hidden mx-1">
-                    <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="小红书风格" class="w-full h-full object-cover">
-                    <div class="bg-black/60 text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0">小红书风格</div>
+                <div
+                    class="template-option selected flex-shrink-0 w-24 h-24 border-2 rounded-lg overflow-hidden mx-1 relative">
+                    <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
+                        alt="小红书风格" class="w-full h-full object-cover">
+                    <div class="bg-black/60 text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0">小红书风格
+                    </div>
                 </div>
-                <div class="template-option flex-shrink-0 w-24 h-24 border-2 border-gray-200 rounded-lg overflow-hidden mx-1 relative">
-                    <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="微信风格" class="w-full h-full object-cover">
-                    <div class="bg-black/60 text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0">微信风格</div>
+                <div
+                    class="template-option flex-shrink-0 w-24 h-24 border-2 border-gray-200 rounded-lg overflow-hidden mx-1 relative">
+                    <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
+                        alt="微信风格" class="w-full h-full object-cover">
+                    <div class="bg-black/60 text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0">微信风格
+                    </div>
                 </div>
-                <div class="template-option flex-shrink-0 w-24 h-24 border-2 border-gray-200 rounded-lg overflow-hidden mx-1 relative">
-                    <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="抖音风格" class="w-full h-full object-cover">
-                    <div class="bg-black/60 text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0">抖音风格</div>
+                <div
+                    class="template-option flex-shrink-0 w-24 h-24 border-2 border-gray-200 rounded-lg overflow-hidden mx-1 relative">
+                    <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
+                        alt="抖音风格" class="w-full h-full object-cover">
+                    <div class="bg-black/60 text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0">抖音风格
+                    </div>
                 </div>
-                <div class="template-option flex-shrink-0 w-24 h-24 border-2 border-gray-200 rounded-lg overflow-hidden mx-1 relative">
-                    <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="简约风格" class="w-full h-full object-cover">
-                    <div class="bg-black/60 text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0">简约风格</div>
+                <div
+                    class="template-option flex-shrink-0 w-24 h-24 border-2 border-gray-200 rounded-lg overflow-hidden mx-1 relative">
+                    <img src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80"
+                        alt="简约风格" class="w-full h-full object-cover">
+                    <div class="bg-black/60 text-white text-xs py-1 text-center absolute bottom-0 left-0 right-0">简约风格
+                    </div>
                 </div>
             </div>
         </div>
-        
+
         <!-- AI优化功能 -->
         <div class="px-4 py-3">
             <h3 class="font-bold text-gray-700 mb-2">AI内容优化</h3>
-            
+
             <!-- AI文案生成按钮 -->
             <div class="bg-white rounded-xl p-4 shadow-sm mb-4">
                 <div class="mb-3">
                     <h4 class="font-medium mb-1">生成产品文案</h4>
                     <p class="text-xs text-gray-500">使用 SiliconFlow deepseek-R1 模型智能生成优质文案</p>
                 </div>
-                
-                <button id="generateCopyBtn" class="ai-generate-btn w-full py-3 px-4 rounded-lg font-medium flex items-center justify-center">
+
+                <button id="generateCopyBtn"
+                    class="ai-generate-btn w-full py-3 px-4 rounded-lg font-medium flex items-center justify-center">
                     <i class="fas fa-robot mr-2"></i>
                     <span>AI优化文案</span>
                 </button>
-                
+
                 <!-- 生成状态 -->
                 <div id="aiGeneratingContainer" class="hidden mt-4 text-center">
                     <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center mx-auto mb-2">
@@ -172,7 +317,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="bg-white rounded-xl p-3 shadow-sm mb-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
@@ -189,7 +334,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="bg-white rounded-xl p-3 shadow-sm mb-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
@@ -206,7 +351,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="bg-white rounded-xl p-3 shadow-sm">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
@@ -224,9 +369,9 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- 在内容区域添加AI分析标签 -->
-        <div class="mt-4 mb-2">
+        <div class="mt-4 mb-2 px-4">
             <div class="flex flex-wrap gap-2">
                 <span class="ai-analysis-tag">
                     <i class="fas fa-chart-line"></i>
@@ -242,34 +387,36 @@
                 </span>
             </div>
         </div>
-        
+
         <!-- 添加AI优化建议 -->
-        <div class="ai-suggestion">
+        <div class="ai-suggestion mx-4 mb-6 p-3 rounded-lg">
             <i class="fas fa-lightbulb text-green-600 mr-2"></i>
             AI建议：根据图片分析，建议突出产品的有机种植特点和新鲜度，可以吸引更多注重健康的消费者。
         </div>
     </div>
-    
+
     <!-- 底部操作栏 -->
-    <div class="bg-white p-4 shadow-md pb-24">
+    <div class="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-md border-t border-gray-100">
         <div class="flex space-x-3">
             <a href="#" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-medium text-center">
                 <i class="fas fa-save mr-1"></i> 保存草稿
             </a>
-            <a href="publish.html" class="flex-1 bg-green-500 text-white py-3 rounded-lg font-medium text-center publish-button">
+            <a href="publish.html"
+                class="flex-1 bg-green-500 text-white py-3 rounded-lg font-medium text-center publish-button">
                 <i class="fas fa-paper-plane mr-1"></i> 去发布
             </a>
         </div>
     </div>
 
     <!-- 底部导航栏 -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white py-2 px-5 border-t border-gray-100">
+    <div class="fixed bottom-0 left-0 right-0 bg-white py-2 px-5 border-t border-gray-100 bottom-nav"
+        style="transform: translateY(70px);">
         <div class="flex justify-between">
             <div class="bottom-nav-item flex flex-col items-center" data-link="home.html">
                 <i class="fas fa-home text-xl"></i>
                 <span class="text-xs mt-1">首页</span>
             </div>
-            <div class="bottom-nav-item flex flex-col items-center" data-link="upload.html">
+            <div class="bottom-nav-item active flex flex-col items-center" data-link="upload.html">
                 <i class="fas fa-plus-circle text-xl"></i>
                 <span class="text-xs mt-1">创建</span>
             </div>
@@ -285,7 +432,7 @@
     </div>
 
     <script src="js/common.js"></script>
-    <script src="js/utils.js"></script>
     <script src="js/preview.js"></script>
 </body>
-</html> 
+
+</html>
