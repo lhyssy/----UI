@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>农产品电商完全指南</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+      :root {
+          --primary-color: rgba(154, 163, 56, 1);
+          --secondary-color: rgba(205, 210, 171, 0.2);
+      }
+      body{
+        background-color: var(--light-olive);
+      }
+      .lesson-header {
+          background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%);
+      }
+      .platform-card {
+          border-left: 3px solid var(--primary-color);
+          transition: transform 0.2s;
+      }
+      .platform-card:hover {
+          transform: translateY(-3px);
+      }
+      .formula-box {
+          background: linear-gradient(45deg, #f0fff4, #f7fee7);
+      }
+      .cost-chart {
+          background: linear-gradient(135deg, #f7fee7 0%, #ecfccb 100%);
+      }
+      .case-study {
+          border-top: 3px solid var(--secondary-color);
+      }
+      .stat-card {
+          transition: all 0.3s ease;
+      }
+      .stat-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      }
+      .bg-olive{
+        background: rgba(154, 163, 56, 1)
+      }
+      .bg-olive-shallow{
+        background-color: rgba(205, 210, 171, 0.9);
+      }
+  </style>
+</head>
+<body class="bg-olive-shallow">
+  <!-- 标题图片区 -->
+  <div class="relative h-64 d:h-96 mb-8">
+      <img src="https://images.unsplash.com/photo-1556155092-490a1ba16284?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
+           class="w-full h-full object-cover"
+           alt="电商指南封面">
+      <div class="lesson-header absolute inset-0 flex items-end p-6">
+          <div class="text-white">
+              <h1 class="text-3xl font-bold mb-2">农产品电商完全指南</h1>
+              <div class="flex items-center space-x-4">
+                  <span>电商运营专家 · 李老师</span>
+                  <span>·</span>
+                  <span>已帮助3220家农户</span>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- 正文内容容器 -->
+  <div class=" max-w-5xl mx-auto px-4 space-y-8">
+      <!-- 核心数据概览 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="stat-card bg-white p-6 rounded-xl shadow-lg">
+              <h3 class="text-lg font-semibold text-gray-700">平均流量成本</h3>
+              <p class="text-3xl font-bold text-green-600 mt-2">5-18% </p>
+              <p class="text-sm text-gray-500 mt-1">因平台定位不同而异</p>
+          </div>
+          <div class="stat-card bg-white p-6 rounded-xl shadow-lg">
+              <h3 class="text-lg font-semibold text-gray-700">农产品损耗率</h3>
+              <p class="text-3xl font-bold text-green-600 mt-2">8-12% </p>
+              <p class="text-sm text-gray-500 mt-1">生鲜类目平均水平</p>
+          </div>
+          <div class="stat-card bg-white p-6 rounded-xl shadow-lg">
+              <h3 class="text-lg font-semibold text-gray-700">目标复购率</h3>
+              <p class="text-3xl font-bold text-green-600 mt-2">≥35% </p>
+              <p class="text-sm text-gray-500 mt-1">季度最低要求</p>
+          </div>
+      </div>
+
+      <!-- 平台对比卡 -->
+      <div class="bg-white rounded-xl p-6 shadow-lg">
+          <h2 class="text-xl font-bold mb-4">主流平台对比</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="platform-card bg-white p-4 shadow-md">
+                  <h3 class="font-semibold mb-2">淘宝/天猫</h3>
+                  <p class="text-gray-600">入驻费：5-10万</p>
+                  <p class="text-gray-600">佣金率：2-5% </p>
+                  <p class="text-sm text-green-600">√ 流量优势明显</p>
+              </div>
+              <div class="platform-card bg-white p-4 shadow-md">
+                  <h3 class="font-semibold mb-2">一亩田 </h3>
+                  <p class="text-gray-600">入驻费：0.5-2万</p>
+                  <p class="text-gray-600">流量成本：12-18% </p>
+                  <p class="text-sm text-green-600">√ 产地直供优势</p>
+              </div>
+              <div class="platform-card bg-white p-4 shadow-md">
+                  <h3 class="font-semibold mb-2">美菜商城 </h3>
+                  <p class="text-gray-600">保证金：2万起</p>
+                  <p class="text-gray-600">物流整合率：85%</p>
+                  <p class="text-sm text-green-600">√ B2B渠道优势</p>
+              </div>
+          </div>
+      </div>
+
+      <!-- 选品公式区 -->
+      <div class="formula-box p-6 rounded-xl shadow-lg">
+          <h2 class="text-xl font-bold mb-4">选品决策模型</h2>
+          <div class="flex flex-col md:flex-row items-center gap-6">
+              <div class="flex-1">
+                  <div class="bg-white p-4 rounded-lg shadow">
+                      <p class="text-xl font-bold text-green-800 mb-3">
+                          爆款概率 = (稀缺性 × 复购率) ÷ (物流难度 + 售后成本)
+                      </p>
+                      <ul class="text-sm text-gray-600 space-y-2">
+                          <li>• 稀缺性：市场同类产品数量的倒数</li>
+                          <li>• 复购率：30天内重复购买率 </li>
+                          <li>• 物流难度：运输时间和损耗率</li>
+                          <li>• 售后成本：退换货率与客诉率</li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <!-- 运营流程区 -->
+      <div class="bg-white rounded-xl p-6 shadow-lg">
+          <h2 class="text-xl font-bold mb-6">入驻运营流程</h2>
+          <div class="space-y-4">
+              <div class="p-4 bg-gray-50 rounded-lg">
+                  <div class="flex justify-between mb-2">
+                      <span class="font-medium">1. 资质准备</span>
+                      <span class="text-green-600">2-3工作日</span>
+                  </div>
+                  <ul class="text-sm text-gray-600 pl-4">
+                      <li>• 营业执照、食品经营许可证</li>
+                      <li>• 品控体系认证（推荐）</li>
+                  </ul>
+              </div>
+              <div class="p-4 bg-gray-50 rounded-lg">
+                  <div class="flex justify-between mb-2">
+                      <span class="font-medium">2. 平台选择</span>
+                      <span class="text-green-600">基于ROI </span>
+                  </div>
+                  <ul class="text-sm text-gray-600 pl-4">
+                      <li>• 流量成本评估</li>
+                      <li>• 目标用户匹配度</li>
+                  </ul>
+              </div>
+              <div class="p-4 bg-gray-50 rounded-lg">
+                  <div class="flex justify-between mb-2">
+                      <span class="font-medium">3. 运营策略</span>
+                      <span class="text-green-600">月度优化 </span>
+                  </div>
+                  <ul class="text-sm text-gray-600 pl-4">
+                      <li>• 广告投放≤总成本15%</li>
+                      <li>• 客单价优化方案</li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+
+      <!-- 成功案例展示 -->
+      <div class="case-study bg-white rounded-xl p-6 shadow-lg">
+          <h2 class="text-xl font-bold mb-4">实战案例分析</h2>
+          <div class="grid md:grid-cols-2 gap-6">
+              <div class="p-4 bg-green-50 rounded-lg">
+                  <h3 class="font-semibold mb-2">🌾 粮油基地案例 </h3>
+                  <p class="text-sm text-gray-600">通过一亩田平台对接50+批发商，年交易额破千万</p>
+                  <div class="mt-2 flex space-x-2">
+                      <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">产地直供</span>
+                      <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">规模化</span>
+                  </div>
+              </div>
+              <div class="p-4 bg-green-50 rounded-lg">
+                  <h3 class="font-semibold mb-2">🍎 水果合作社案例 </h3>
+                  <p class="text-sm text-gray-600">线上线下渠道整合，流量成本降低40%</p>
+                  <div class="mt-2 flex space-x-2">
+                      <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">全渠道</span>
+                      <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">成本优化</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- 固定操作栏 -->
+  <div class="sticky bottom-0 bg-olive border-t py-4 shadow-lg">
+    <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
+        <div class="flex space-x-4">
+            <button class="p-2 text-gray-100 hover:text-green-600 transition-colors">
+                <i class="far fa-star text-xl"></i>
+            </button>
+            <button class="p-2 text-gray-100 hover:text-green-600 transition-colors">
+                <i class="fas fa-share-alt text-xl"></i>
+            </button>
+        </div>
+        <button class="bg-green-600 text-white px-8 py-3 rounded-full 
+                    hover:bg-green-700 active:scale-95 transition-all">
+            开始学习
+        </button>
+    </div>
+</div>
+</div>
+</body>
+</html>
