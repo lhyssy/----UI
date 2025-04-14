@@ -3,16 +3,27 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#48BB78"> <!-- 状态栏颜色 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- iOS全屏显示 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> <!-- iOS状态栏样式 -->
     <title>禾语智宣 - 上传农产品图片</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/colors.css">
     <style>
         :root {
-            --primary-color: rgba(154, 163, 56, 1);
-            --primary-light: #ced29f;
-            --primary-dark: #a9b056;
+            --primary-color: #48BB78;
+            --primary-dark: #38A169;
+            --primary-light: #C6F6D5;
+            --secondary-color: #4A5568;
+            --bg-color: #F7FAFC;
+            --text-color: #2D3748;
+            --error-color: #F56565;
+            --success-color: #48BB78;
+            --warning-color: #ED8936;
+            --info-color: #4299E1;
             --accent-color: #e67e22;
             --accent-light: #fef0e6;
             --text-primary: #333333;
@@ -23,8 +34,8 @@
         }
 
         body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
+            background-color: var(--bg-color);
+            color: var(--text-color);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             max-width: 100%;
             overflow-x: hidden;
@@ -34,6 +45,11 @@
             background-size: cover;
             background-position: center center;
             background-attachment: fixed;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         /* 添加半透明遮罩，确保内容可读性 */
@@ -146,6 +162,7 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
             position: relative;
             overflow: hidden;
+            padding: 1.5rem;
         }
 
         .upload-zone::after {
@@ -374,6 +391,8 @@
             -webkit-backdrop-filter: blur(10px);
             border-top: 1px solid rgba(0, 0, 0, 0.05);
             box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+            padding-bottom: env(safe-area-inset-bottom, 0);
+            /* iOS安全区域 */
         }
 
         /* 上传进度对话框 */
@@ -406,6 +425,172 @@
 
         .animated-icon {
             animation: slight-bounce 2s infinite;
+        }
+
+        /* 移动端适配样式 */
+        @media (max-width: 640px) {
+            .floating-bg {
+                opacity: 0.5;
+            }
+
+            .bg-1,
+            .bg-2,
+            .bg-3 {
+                width: 150px;
+                height: 150px;
+            }
+
+            .upload-zone {
+                padding: 1.25rem;
+            }
+
+            .step-indicator {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .step-number {
+                width: 1.5rem;
+                height: 1.5rem;
+                font-size: 0.7rem;
+            }
+
+            .ai-assistant {
+                margin-left: 0.5rem;
+                margin-right: 0.5rem;
+            }
+
+            .upload-icon {
+                width: 3rem;
+                height: 3rem;
+            }
+
+            .ai-icon {
+                width: 2rem;
+                height: 2rem;
+            }
+
+            .bottom-fixed {
+                padding: 0.75rem;
+            }
+
+            .form-input {
+                padding: 0.75rem;
+            }
+
+            /* 针对iPhone刘海屏的适配 */
+            .header-nav {
+                padding-top: env(safe-area-inset-top, 12px);
+            }
+
+            /* 修复iOS滚动橡皮筋效果问题 */
+            html {
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* 针对小屏幕优化表单间距 */
+            .form-input {
+                padding: 0.75rem;
+                margin-bottom: 0.5rem;
+            }
+
+            /* 缩小字体大小提高可读性 */
+            h3 {
+                font-size: 1rem;
+            }
+
+            p {
+                font-size: 0.875rem;
+            }
+
+            .text-sm {
+                font-size: 0.75rem;
+            }
+
+            /* 阻止表单区域的长按选择 */
+            .form-input {
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                user-select: none;
+            }
+
+            /* 优化图片预览区显示 */
+            .image-preview {
+                max-height: 200px;
+            }
+        }
+
+        /* 错误提示样式 */
+        .error-toast {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(220, 38, 38, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            animation: fadeInOut 3s forwards;
+        }
+
+        /* 成功提示样式 */
+        .success-toast {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(16, 185, 129, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            animation: fadeInOut 3s forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -20px);
+            }
+
+            10% {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+
+            90% {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -20px);
+            }
+        }
+
+        /* 触摸反馈 */
+        @media (hover: none) {
+            .btn-primary:active {
+                background: var(--primary-dark);
+                transform: translateY(1px);
+            }
+
+            .btn-secondary:active {
+                background: rgba(229, 231, 235, 0.9);
+                transform: translateY(1px);
+            }
+
+            .action-button:active {
+                transform: scale(0.95);
+            }
         }
     </style>
 </head>
@@ -472,7 +657,7 @@
 
     <!-- 上传区域 -->
     <div class="px-4 mb-5">
-        <div id="upload-zone" class="upload-zone p-8 flex flex-col items-center justify-center text-center">
+        <div id="upload-zone" class="upload-zone p-6 flex flex-col items-center justify-center text-center">
             <div class="upload-icon w-16 h-16 rounded-full bg-olive-10 flex items-center justify-center mb-3">
                 <i class="fas fa-cloud-upload-alt text-[#9aa338] text-xl"></i>
             </div>
@@ -480,8 +665,9 @@
             <p class="text-sm text-gray-500 mb-4">支持jpg、png格式，单张图片不超过10MB</p>
             <label class="btn-primary px-6 py-2 font-medium cursor-pointer">
                 选择图片
-                <input type="file" id="file-upload" accept="image/*" multiple class="hidden">
+                <input type="file" id="file-upload" accept="image/jpeg,image/png,image/jpg" multiple class="hidden">
             </label>
+            <!-- 快捷操作区将通过JS动态添加 -->
         </div>
     </div>
 
@@ -489,7 +675,7 @@
     <div id="preview-area" class="px-4 mb-6" style="display: none;">
         <h3 class="font-medium mb-3">已上传图片 (<span id="image-count">0</span>)</h3>
 
-        <div id="image-previews" class="grid grid-cols-2 gap-3">
+        <div id="image-previews" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <!-- 图片预览将通过JS动态添加 -->
         </div>
     </div>
@@ -612,7 +798,7 @@
                 particlesJS('particles-js', {
                     "particles": {
                         "number": {
-                            "value": 30,
+                            "value": window.innerWidth < 768 ? 15 : 30,
                             "density": {
                                 "enable": true,
                                 "value_area": 800
@@ -932,6 +1118,84 @@
                     }, 300);
                 });
             });
+
+            // 添加错误处理
+            function showErrorMessage(message) {
+                const toast = document.createElement('div');
+                toast.className = 'error-toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
+            }
+
+            // 添加成功提示
+            function showSuccessMessage(message) {
+                const toast = document.createElement('div');
+                toast.className = 'success-toast';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
+            }
+
+            // 对文件上传添加错误处理
+            fileUpload.addEventListener('change', function () {
+                try {
+                    if (this.files.length === 0) return;
+
+                    // 验证文件类型
+                    const invalidFiles = Array.from(this.files).filter(file => !file.type.match(/^image\/(jpeg|png|jpg)$/));
+                    if (invalidFiles.length > 0) {
+                        showErrorMessage('只支持JPG和PNG格式的图片');
+                        return;
+                    }
+
+                    // 验证文件大小
+                    const largeFiles = Array.from(this.files).filter(file => file.size > 10 * 1024 * 1024);
+                    if (largeFiles.length > 0) {
+                        showErrorMessage('图片大小不能超过10MB');
+                        return;
+                    }
+
+                    // 检查上传总数限制
+                    const currentCount = document.querySelectorAll('.image-preview-container').length;
+                    if (currentCount + this.files.length > 9) {
+                        showErrorMessage('最多只能上传9张图片');
+                        return;
+                    }
+
+                    handleFiles(this.files);
+                } catch (error) {
+                    console.error('文件处理错误:', error);
+                    showErrorMessage('图片处理失败，请重试');
+                }
+            });
+
+            // 优化移动端触摸体验
+            if ('ontouchstart' in window) {
+                // 让按钮有触摸反馈
+                document.querySelectorAll('button, .btn-primary, .btn-secondary').forEach(btn => {
+                    btn.addEventListener('touchstart', function () {
+                        this.classList.add('active');
+                    }, { passive: true });
+
+                    btn.addEventListener('touchend', function () {
+                        this.classList.remove('active');
+                    }, { passive: true });
+                });
+
+                // 禁用长按选择文本
+                document.addEventListener('contextmenu', function (e) {
+                    if (e.target.tagName === 'IMG') {
+                        e.preventDefault();
+                    }
+                });
+            }
         });
     </script>
     <!-- 引用外部的upload.js脚本 -->

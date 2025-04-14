@@ -1,516 +1,602 @@
 /**
- * 助农宣传 - 图片上传页面交互
- * 实现图片上传、拖放、预览、多图管理等功能
+ * 禾语智宣 - 图片上传与预览功能增强
+ * 本文件为upload.html页面提供移动端适配与增强功能
  */
-document.addEventListener('DOMContentLoaded', function () {
-    // 元素引用
-    const uploadZone = document.querySelector('.upload-zone');
-    const cameraBtn = document.getElementById('cameraBtn');
-    const albumBtn = document.getElementById('albumBtn');
-    const nextStepBtn = document.getElementById('nextStepBtn');
-    const imageGrid = document.getElementById('imageGrid');
-    const emptyState = document.getElementById('emptyState');
-    const imageCount = document.getElementById('imageCount');
-    const uploadingMask = document.getElementById('uploadingMask');
-    const uploadProgress = document.getElementById('uploadProgress');
-    const aiEnhanceSwitch = document.getElementById('aiEnhanceSwitch');
 
-    // 状态变量
+(function () {
+    // 全局变量
     let uploadedImages = [];
     const MAX_IMAGES = 9;
-    let isAIEnhanceEnabled = true; // AI增强开关状态
+    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+    let dragSrcEl = null;
+    let isMobile = window.innerWidth < 768;
 
-    // 初始化拖放上传
-    initDragAndDrop();
+    // DOM元素
+    let fileUpload;
+    let uploadZone;
+    let previewSection;
+    let previewGrid;
+    let uploadStatus;
+    let nextStepBtn;
+    let aiEnhanceSwitch;
+    let cameraButton;
+    let albumButton;
 
-    // 初始化按钮事件
-    initButtonEvents();
+    // 初始化函数
+    function init() {
+        // 获取DOM元素
+        fileUpload = document.getElementById('file-upload');
+        uploadZone = document.getElementById('upload-zone');
+        previewSection = document.querySelector('.preview-section');
+        previewGrid = document.getElementById('image-preview-grid');
+        uploadStatus = document.querySelector('.upload-status');
+        nextStepBtn = document.getElementById('next-step');
+        aiEnhanceSwitch = document.getElementById('ai-enhance-switch');
+        cameraButton = document.querySelector('.camera-button');
+        albumButton = document.querySelector('.album-button');
 
-    // 初始化AI增强开关
-    initAIEnhanceSwitch();
+        // 初始化移动端交互增强
+        initMobileInteractions();
 
-    // 不再从本地存储加载之前上传的图片
-    // loadImagesFromStorage();
-    // 确保UI状态正确
-    updateImageGrid();
+        // 初始化响应式布局更新
+        updateResponsiveLayout();
 
-    /**
-     * 初始化拖放上传功能
-     */
-    function initDragAndDrop() {
-        const dropZone = uploadZone.querySelector('div');
+        // 绑定事件
+        bindEvents();
 
-        // 拖动进入区域
-        dropZone.addEventListener('dragenter', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.classList.add('drag-over');
+        // 恢复之前的上传状态（如果有）
+        restoreUploadState();
+    }
+
+    // 初始化移动端交互增强
+    function initMobileInteractions() {
+        // 监听键盘事件来调整布局
+        window.addEventListener('resize', function () {
+            isMobile = window.innerWidth < 768;
+            updateResponsiveLayout();
         });
 
-        // 拖动在区域上方
-        dropZone.addEventListener('dragover', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.classList.add('drag-over');
-        });
+        // 处理iOS键盘弹出
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+            document.addEventListener('focusin', function (e) {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                    document.body.classList.add('keyboard-open');
+                }
+            });
+            document.addEventListener('focusout', function (e) {
+                document.body.classList.remove('keyboard-open');
+            });
+        }
 
-        // 拖动离开区域
-        dropZone.addEventListener('dragleave', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.classList.remove('drag-over');
-        });
-
-        // 放下文件
-        dropZone.addEventListener('drop', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.classList.remove('drag-over');
-
-            const files = e.dataTransfer.files;
-            handleFiles(files);
-        });
-
-        // 点击上传区域
-        dropZone.addEventListener('click', function () {
-            // 选择相册中的图片
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.multiple = true;
-
-            input.onchange = function () {
-                handleFiles(this.files);
-            };
-
-            input.click();
+        // 监听屏幕方向变化
+        window.addEventListener('orientationchange', function () {
+            setTimeout(updateResponsiveLayout, 300);
         });
     }
 
-    /**
-     * 初始化按钮事件
-     */
-    function initButtonEvents() {
-        // 相册选择按钮
-        albumBtn.addEventListener('click', function () {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.multiple = true;
+    // 更新响应式布局
+    function updateResponsiveLayout() {
+        if (isMobile) {
+            // 手机端优化
+            previewGrid.className = 'grid grid-cols-2 gap-3';
+            uploadZone.classList.add('p-4');
+            uploadZone.classList.remove('p-8');
+        } else {
+            // 桌面端优化
+            previewGrid.className = 'grid grid-cols-4 gap-4';
+            uploadZone.classList.add('p-8');
+            uploadZone.classList.remove('p-4');
+        }
+    }
 
-            input.onchange = function () {
-                handleFiles(this.files);
-            };
-
-            input.click();
+    // 绑定事件
+    function bindEvents() {
+        // 拖拽上传相关事件
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadZone.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
         });
 
-        // 拍照按钮
-        cameraBtn.addEventListener('click', function () {
-            // 检查是否支持媒体设备API
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                showToast('您的浏览器不支持拍照功能', 'error');
-                return;
+        // 高亮拖拽区域
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadZone.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        // 处理文件拖拽
+        uploadZone.addEventListener('drop', handleDrop, false);
+
+        // 点击上传区域或按钮时触发文件选择
+        uploadZone.addEventListener('click', () => fileUpload.click());
+        cameraButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isMobile) {
+                fileUpload.setAttribute('capture', 'environment');
             }
-
-            takePhoto();
+            fileUpload.click();
         });
 
-        // 下一步按钮
+        albumButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            fileUpload.removeAttribute('capture');
+            fileUpload.click();
+        });
+
+        // 文件选择事件
+        fileUpload.addEventListener('change', handleFiles, false);
+
+        // AI增强开关事件
+        aiEnhanceSwitch.addEventListener('change', function () {
+            localStorage.setItem('aiEnhance', this.checked);
+
+            // 如果有图片且开关打开，模拟AI增强效果
+            if (this.checked && uploadedImages.length > 0) {
+                simulateAIEnhancement();
+            }
+        });
+
+        // 下一步按钮点击事件
         nextStepBtn.addEventListener('click', function () {
             if (uploadedImages.length > 0) {
-                // 保存图片到本地存储
-                if (typeof window.saveImagesToStorage === 'function') {
-                    window.saveImagesToStorage(uploadedImages);
-                } else {
-                    // 备用方案：直接保存到localStorage
-                    localStorage.setItem('uploadedImages', JSON.stringify(uploadedImages));
-                }
+                // 保存上传的图片到本地存储，以便在下一页使用
+                localStorage.setItem('uploadedImages', JSON.stringify(uploadedImages));
 
-                // 收集用户输入的文案信息
-                const productCopy = {
-                    title: document.getElementById('product-title').value || '',
-                    description: document.getElementById('product-intro').value || '',
-                    features: document.getElementById('product-features').value || '',
-                    taste: document.getElementById('product-taste').value || '',
-                    nutrition: document.getElementById('product-nutrition').value || '',
-                    suggestion: document.getElementById('product-suggestion').value || '',
-                    isUserGenerated: true // 标记为用户生成的内容，非AI生成
-                };
+                // 显示成功消息
+                showSuccessMessage('图片上传成功！正在前往下一步...');
 
-                // 保存文案信息到localStorage
-                localStorage.setItem('productCopy', JSON.stringify(productCopy));
-
-                // 跳转到下一个页面
-                window.location.href = 'preview.html';
-            } else {
-                showToast('请至少上传一张产品图片', 'warning');
+                // 跳转到预览页面
+                setTimeout(() => {
+                    window.location.href = 'preview.html';
+                }, 1000);
             }
         });
     }
 
-    /**
-     * 初始化AI增强开关
-     */
-    function initAIEnhanceSwitch() {
-        // 检查开关元素是否存在
-        if (!aiEnhanceSwitch) {
-            console.error('未找到AI增强开关元素');
+    // 阻止默认行为
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    // 高亮上传区域
+    function highlight() {
+        uploadZone.classList.add('highlight');
+    }
+
+    // 取消高亮上传区域
+    function unhighlight() {
+        uploadZone.classList.remove('highlight');
+    }
+
+    // 处理拖放的文件
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFileUpload(files);
+    }
+
+    // 处理选择的文件
+    function handleFiles() {
+        const files = this.files;
+        handleFileUpload(files);
+    }
+
+    // 处理文件上传
+    function handleFileUpload(files) {
+        if (files.length === 0) return;
+
+        // 检查是否超过最大图片数量
+        if (uploadedImages.length + files.length > MAX_IMAGES) {
+            showErrorMessage(`最多只能上传${MAX_IMAGES}张图片`);
             return;
         }
 
-        // 从本地存储加载开关状态
-        const savedState = localStorage.getItem('aiEnhanceEnabled');
-        if (savedState !== null) {
-            isAIEnhanceEnabled = savedState === 'true';
-        } else {
-            isAIEnhanceEnabled = true; // 默认为开启状态
-        }
-
-        // 设置开关状态
-        aiEnhanceSwitch.checked = isAIEnhanceEnabled;
-
-        // 添加开关事件监听
-        aiEnhanceSwitch.addEventListener('change', function () {
-            isAIEnhanceEnabled = this.checked;
-            localStorage.setItem('aiEnhanceEnabled', isAIEnhanceEnabled);
-
-            // 显示提示信息
-            showToast(isAIEnhanceEnabled ? '已开启AI图像增强' : '已关闭AI图像增强', 'info');
-        });
-    }
-
-    /**
-     * 处理选择的文件
-     */
-    function handleFiles(files) {
-        if (!files || files.length === 0) return;
-
-        // 检查是否超过最大图片数
-        if (uploadedImages.length + files.length > MAX_IMAGES) {
-            showToast(`最多只能上传${MAX_IMAGES}张图片`, 'warning');
-
-            // 只处理能加入的图片
-            const availableSlots = MAX_IMAGES - uploadedImages.length;
-            if (availableSlots <= 0) return;
-
-            // 只处理前N张
-            const filesToProcess = Array.from(files).slice(0, availableSlots);
-            processImageFiles(filesToProcess);
-        } else {
-            processImageFiles(files);
-        }
-    }
-
-    /**
-     * 处理图片文件
-     */
-    function processImageFiles(files) {
-        // 显示上传中遮罩
-        uploadingMask.classList.remove('hidden');
-        uploadingMask.style.display = 'flex';
-
-        // 确保emptyState隐藏，预先显示imageGrid
-        if (files.length > 0) {
-            emptyState.classList.add('hidden');
-            imageGrid.classList.remove('hidden');
-        }
-
-        const filesToProcess = Array.from(files);
-        let processedCount = 0;
-
-        filesToProcess.forEach((file, index) => {
-            // 验证文件类型
+        // 处理每个文件
+        Array.from(files).forEach(file => {
+            // 检查文件类型
             if (!file.type.match('image.*')) {
-                showToast(`仅支持图片文件`, 'error');
+                showErrorMessage('只能上传图片文件');
                 return;
             }
 
-            // 验证文件大小
-            if (file.size > 5 * 1024 * 1024) { // 5MB
-                showToast(`图片 ${file.name} 超过5MB限制`, 'error');
+            // 检查文件大小
+            if (file.size > MAX_FILE_SIZE) {
+                showErrorMessage('图片大小不能超过10MB');
                 return;
             }
 
+            // 读取文件并创建预览
             const reader = new FileReader();
+            reader.readAsDataURL(file);
 
             reader.onload = function (e) {
-                const imageUrl = e.target.result;
+                const imageData = {
+                    id: Date.now() + Math.random().toString(36).substr(2, 9),
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    src: e.target.result,
+                    enhanced: false
+                };
 
-                // 压缩图片
-                compressImage(imageUrl, file.type, function (compressedImageUrl) {
-                    // 添加到图片列表
-                    uploadedImages.push(compressedImageUrl);
+                uploadedImages.push(imageData);
+                createImagePreview(imageData);
+                updateUploadStatus();
+                saveUploadState();
 
-                    // 更新进度
-                    processedCount++;
-                    updateUploadProgress(processedCount / filesToProcess.length * 100);
-
-                    // 所有图片处理完成
-                    if (processedCount === filesToProcess.length) {
-                        // 隐藏上传中遮罩
-                        setTimeout(() => {
-                            uploadingMask.classList.add('hidden');
-
-                            // 更新UI
-                            updateImageGrid();
-
-                            showToast('图片上传完成', 'success');
-                        }, 500);
-                    }
-                });
+                // 如果AI增强开关打开，模拟增强效果
+                if (aiEnhanceSwitch.checked) {
+                    simulateAIEnhancement();
+                }
             };
-
-            reader.readAsDataURL(file);
         });
     }
 
-    /**
-     * 拍照功能
-     */
-    function takePhoto() {
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function (stream) {
-                // 创建相机界面
-                const cameraInterface = document.createElement('div');
-                cameraInterface.className = 'fixed inset-0 bg-black z-50 flex flex-col';
+    // 创建图片预览元素
+    function createImagePreview(imageData) {
+        // 显示预览区域
+        previewSection.classList.remove('hidden');
 
-                const video = document.createElement('video');
-                video.className = 'flex-1 object-cover';
-                video.autoplay = true;
-                video.playsInline = true;
-                video.srcObject = stream;
+        // 创建预览容器
+        const container = document.createElement('div');
+        container.className = 'image-preview-container relative bg-white rounded-lg overflow-hidden shadow-sm';
+        container.dataset.id = imageData.id;
+        container.draggable = true;
 
-                const controls = document.createElement('div');
-                controls.className = 'flex justify-between items-center p-4 bg-black';
+        // 添加拖拽事件
+        container.addEventListener('dragstart', handleDragStart, false);
+        container.addEventListener('dragenter', handleDragEnter, false);
+        container.addEventListener('dragover', handleDragOver, false);
+        container.addEventListener('dragleave', handleDragLeave, false);
+        container.addEventListener('drop', handlePreviewDrop, false);
+        container.addEventListener('dragend', handleDragEnd, false);
 
-                const closeBtn = document.createElement('button');
-                closeBtn.className = 'w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center';
-                closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+        // 添加触摸事件（移动端）
+        if ('ontouchstart' in window) {
+            container.addEventListener('touchstart', handleTouchStart, false);
+            container.addEventListener('touchmove', handleTouchMove, false);
+            container.addEventListener('touchend', handleTouchEnd, false);
+        }
 
-                const captureBtn = document.createElement('button');
-                captureBtn.className = 'w-16 h-16 rounded-full border-4 border-white flex items-center justify-center';
-                captureBtn.innerHTML = '<div class="w-12 h-12 rounded-full bg-white"></div>';
+        // 创建图片元素
+        const imgWrapper = document.createElement('div');
+        imgWrapper.className = 'aspect-w-1 aspect-h-1 w-full';
 
-                const switchBtn = document.createElement('button');
-                switchBtn.className = 'w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center';
-                switchBtn.innerHTML = '<i class="fas fa-sync-alt"></i>';
+        const img = document.createElement('img');
+        img.src = imageData.src;
+        img.className = 'w-full h-full object-cover';
+        img.alt = imageData.name;
+        img.loading = 'lazy';
 
-                controls.appendChild(closeBtn);
-                controls.appendChild(captureBtn);
-                controls.appendChild(switchBtn);
+        imgWrapper.appendChild(img);
+        container.appendChild(imgWrapper);
 
-                cameraInterface.appendChild(video);
-                cameraInterface.appendChild(controls);
+        // 添加删除按钮
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md transform transition-transform hover:scale-110';
+        deleteBtn.innerHTML = '<i class="fas fa-times text-xs"></i>';
+        deleteBtn.addEventListener('click', function () {
+            removeImage(imageData.id);
+        });
 
-                document.body.appendChild(cameraInterface);
+        container.appendChild(deleteBtn);
 
-                // 关闭相机
-                closeBtn.addEventListener('click', function () {
-                    stream.getTracks().forEach(track => track.stop());
-                    cameraInterface.remove();
-                });
+        // 添加增强标签（如果已增强）
+        if (imageData.enhanced) {
+            const enhancedBadge = document.createElement('div');
+            enhancedBadge.className = 'absolute bottom-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full shadow-sm';
+            enhancedBadge.innerHTML = '<i class="fas fa-magic mr-1"></i>已增强';
+            container.appendChild(enhancedBadge);
+        }
 
-                // 拍照
-                captureBtn.addEventListener('click', function () {
-                    // 创建Canvas
-                    const canvas = document.createElement('canvas');
-                    const context = canvas.getContext('2d');
-
-                    // 设置Canvas尺寸
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-
-                    // 绘制视频帧到Canvas
-                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                    // 获取图片数据
-                    const imageUrl = canvas.toDataURL('image/jpeg');
-
-                    // 压缩图片
-                    compressImage(imageUrl, 'image/jpeg', function (compressedImageUrl) {
-                        // 添加到图片列表
-                        uploadedImages.push(compressedImageUrl);
-
-                        // 更新UI
-                        updateImageGrid();
-
-                        // 关闭相机
-                        stream.getTracks().forEach(track => track.stop());
-                        cameraInterface.remove();
-
-                        showToast('照片已添加', 'success');
-                    });
-                });
-
-                // 切换前后摄像头
-                let frontCamera = true;
-                switchBtn.addEventListener('click', function () {
-                    frontCamera = !frontCamera;
-
-                    // 停止当前视频流
-                    stream.getTracks().forEach(track => track.stop());
-
-                    // 获取新的视频流
-                    navigator.mediaDevices.getUserMedia({
-                        video: { facingMode: frontCamera ? 'user' : 'environment' }
-                    }).then(function (newStream) {
-                        stream = newStream;
-                        video.srcObject = newStream;
-                    });
-                });
-            })
-            .catch(function (error) {
-                console.error('访问相机失败:', error);
-                showToast('无法访问相机，请检查权限设置', 'error');
-            });
+        // 添加到预览网格
+        previewGrid.appendChild(container);
     }
 
-    /**
-     * 图片压缩
-     */
-    function compressImage(imageUrl, mimeType, callback) {
-        const img = new Image();
-        img.src = imageUrl;
+    // 拖拽开始处理函数
+    function handleDragStart(e) {
+        dragSrcEl = this;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', this.dataset.id);
+        this.classList.add('dragging');
+    }
 
-        img.onload = function () {
-            let width = img.width;
-            let height = img.height;
+    // 拖拽进入处理函数
+    function handleDragEnter(e) {
+        this.classList.add('active');
+    }
 
-            // 计算压缩比例
-            const maxDimension = 1200;
-            if (width > maxDimension || height > maxDimension) {
-                if (width > height) {
-                    height = Math.round(height * (maxDimension / width));
-                    width = maxDimension;
-                } else {
-                    width = Math.round(width * (maxDimension / height));
-                    height = maxDimension;
-                }
+    // 拖拽悬停处理函数
+    function handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        return false;
+    }
+
+    // 拖拽离开处理函数
+    function handleDragLeave(e) {
+        this.classList.remove('active');
+    }
+
+    // 拖拽放置处理函数
+    function handlePreviewDrop(e) {
+        e.stopPropagation();
+
+        if (dragSrcEl !== this) {
+            const draggedId = e.dataTransfer.getData('text/plain');
+            const targetId = this.dataset.id;
+
+            // 交换元素位置
+            swapImages(draggedId, targetId);
+        }
+
+        return false;
+    }
+
+    // 拖拽结束处理函数
+    function handleDragEnd(e) {
+        // 移除所有拖拽相关的类
+        document.querySelectorAll('.image-preview-container').forEach(item => {
+            item.classList.remove('active', 'dragging');
+        });
+    }
+
+    // 触摸开始处理函数（移动端拖拽）
+    let touchStartX, touchStartY, touchEl;
+
+    function handleTouchStart(e) {
+        if (e.touches.length !== 1) return;
+
+        touchEl = this;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+
+        // 为长按设置一个延时
+        this.longPressTimer = setTimeout(() => {
+            this.classList.add('dragging');
+            showSuccessMessage('拖动调整顺序');
+        }, 500);
+    }
+
+    // 触摸移动处理函数
+    function handleTouchMove(e) {
+        if (!touchEl || !touchEl.classList.contains('dragging')) return;
+
+        const touch = e.touches[0];
+        const currentX = touch.clientX;
+        const currentY = touch.clientY;
+
+        // 计算移动距离
+        const deltaX = currentX - touchStartX;
+        const deltaY = currentY - touchStartY;
+
+        // 设置元素位置
+        touchEl.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+        touchEl.style.zIndex = 1000;
+
+        // 检测是否悬停在其他图片预览元素上
+        const elementsBelow = document.elementsFromPoint(currentX, currentY);
+        let dropTarget = null;
+
+        for (let i = 0; i < elementsBelow.length; i++) {
+            if (elementsBelow[i].classList.contains('image-preview-container') &&
+                elementsBelow[i] !== touchEl) {
+                dropTarget = elementsBelow[i];
+                break;
             }
+        }
 
-            // 创建Canvas
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
+        // 清除所有高亮
+        document.querySelectorAll('.image-preview-container').forEach(item => {
+            item.classList.remove('active');
+        });
 
-            // 设置Canvas尺寸
-            canvas.width = width;
-            canvas.height = height;
-
-            // 绘制图片到Canvas
-            context.drawImage(img, 0, 0, width, height);
-
-            // 获取压缩后的图片数据
-            const compressedImageUrl = canvas.toDataURL(mimeType, 0.8);
-
-            // 返回压缩后的图片
-            callback(compressedImageUrl);
-        };
+        // 高亮当前悬停元素
+        if (dropTarget) {
+            dropTarget.classList.add('active');
+        }
     }
 
-    /**
-     * 更新图片网格
-     */
-    function updateImageGrid() {
-        // 更新图片计数
-        imageCount.textContent = `(${uploadedImages.length}/${MAX_IMAGES})`;
+    // 触摸结束处理函数
+    function handleTouchEnd(e) {
+        clearTimeout(this.longPressTimer);
+
+        if (!touchEl || !touchEl.classList.contains('dragging')) return;
+
+        const touch = e.changedTouches[0];
+        const currentX = touch.clientX;
+        const currentY = touch.clientY;
+
+        // 清除变换样式
+        touchEl.style.transform = '';
+        touchEl.style.zIndex = '';
+        touchEl.classList.remove('dragging');
+
+        // 检测拖放目标
+        const elementsBelow = document.elementsFromPoint(currentX, currentY);
+        let dropTarget = null;
+
+        for (let i = 0; i < elementsBelow.length; i++) {
+            if (elementsBelow[i].classList.contains('image-preview-container') &&
+                elementsBelow[i] !== touchEl) {
+                dropTarget = elementsBelow[i];
+                break;
+            }
+        }
+
+        // 如果有有效的拖放目标，交换位置
+        if (dropTarget) {
+            swapImages(touchEl.dataset.id, dropTarget.dataset.id);
+        }
+
+        // 清除所有高亮
+        document.querySelectorAll('.image-preview-container').forEach(item => {
+            item.classList.remove('active');
+        });
+
+        touchEl = null;
+    }
+
+    // 交换图片位置
+    function swapImages(draggedId, targetId) {
+        // 查找图片在数组中的索引
+        const draggedIndex = uploadedImages.findIndex(img => img.id === draggedId);
+        const targetIndex = uploadedImages.findIndex(img => img.id === targetId);
+
+        if (draggedIndex !== -1 && targetIndex !== -1) {
+            // 交换数组中的位置
+            [uploadedImages[draggedIndex], uploadedImages[targetIndex]] =
+                [uploadedImages[targetIndex], uploadedImages[draggedIndex]];
+
+            // 保存状态
+            saveUploadState();
+
+            // 重新渲染预览区域
+            refreshImagePreviews();
+        }
+    }
+
+    // 刷新图片预览区域
+    function refreshImagePreviews() {
+        // 清空预览网格
+        previewGrid.innerHTML = '';
+
+        // 重新创建所有预览
+        uploadedImages.forEach(imageData => {
+            createImagePreview(imageData);
+        });
+    }
+
+    // 移除图片
+    function removeImage(id) {
+        // 在数组中移除图片
+        uploadedImages = uploadedImages.filter(img => img.id !== id);
+
+        // 移除图片预览元素
+        const container = document.querySelector(`.image-preview-container[data-id="${id}"]`);
+        if (container) {
+            // 添加消失动画
+            container.style.transition = 'all 0.3s ease';
+            container.style.transform = 'scale(0.8)';
+            container.style.opacity = '0';
+
+            // 动画完成后移除元素
+            setTimeout(() => {
+                container.remove();
+
+                // 如果没有图片了，隐藏预览区域
+                if (uploadedImages.length === 0) {
+                    previewSection.classList.add('hidden');
+                }
+            }, 300);
+        }
+
+        // 更新上传状态
+        updateUploadStatus();
+        saveUploadState();
+    }
+
+    // 更新上传状态
+    function updateUploadStatus() {
+        uploadStatus.textContent = `已上传 ${uploadedImages.length}/${MAX_IMAGES}`;
 
         // 更新下一步按钮状态
         if (uploadedImages.length > 0) {
-            nextStepBtn.disabled = false;
-            nextStepBtn.classList.remove('bg-gray-200', 'text-gray-400');
-            nextStepBtn.classList.add('bg-green-500', 'text-white');
+            nextStepBtn.classList.remove('opacity-50', 'pointer-events-none');
         } else {
-            nextStepBtn.disabled = true;
-            nextStepBtn.classList.add('bg-gray-200', 'text-gray-400');
-            nextStepBtn.classList.remove('bg-green-500', 'text-white');
+            nextStepBtn.classList.add('opacity-50', 'pointer-events-none');
         }
+    }
 
-        // 清空图片网格
-        imageGrid.innerHTML = '';
+    // 模拟AI增强效果
+    function simulateAIEnhancement() {
+        // 找到未增强的图片
+        const unenhancedImages = uploadedImages.filter(img => !img.enhanced);
 
-        // 显示或隐藏空状态
-        if (uploadedImages.length === 0) {
-            emptyState.classList.remove('hidden');
-            imageGrid.classList.add('hidden');
-            return;
-        } else {
-            emptyState.classList.add('hidden');
-            imageGrid.classList.remove('hidden');
-        }
+        if (unenhancedImages.length === 0) return;
 
-        // 添加图片到网格
-        uploadedImages.forEach((imageUrl, index) => {
-            const imageItem = document.createElement('div');
-            imageItem.className = 'image-preview-item';
+        // 显示加载消息
+        showSuccessMessage('AI正在增强图片质量...');
 
-            const image = document.createElement('img');
-            image.src = imageUrl;
-            image.alt = `图片 ${index + 1}`;
+        // 模拟增强延迟
+        setTimeout(() => {
+            unenhancedImages.forEach(img => {
+                // 标记为已增强
+                img.enhanced = true;
 
-            const removeButton = document.createElement('button');
-            removeButton.className = 'remove-button';
-            removeButton.innerHTML = '<i class="fas fa-times"></i>';
-            removeButton.addEventListener('click', function (e) {
-                e.stopPropagation();
-                removeImage(index);
+                // 实际项目中，这里应该发送请求到后端进行图片增强处理
+                // 这里仅作模拟，实际不修改图片
             });
 
-            const imageOrder = document.createElement('div');
-            imageOrder.className = 'image-order';
-            imageOrder.textContent = index + 1;
+            // 刷新预览以显示增强标签
+            refreshImagePreviews();
+            saveUploadState();
 
-            imageItem.appendChild(image);
-            imageItem.appendChild(removeButton);
-            imageItem.appendChild(imageOrder);
+            // 显示完成消息
+            showSuccessMessage('图片增强完成！');
+        }, 1500);
+    }
 
-            imageGrid.appendChild(imageItem);
-        });
+    // 保存上传状态到本地存储
+    function saveUploadState() {
+        localStorage.setItem('uploadState', JSON.stringify({
+            images: uploadedImages,
+            aiEnhance: aiEnhanceSwitch.checked
+        }));
+    }
 
-        // 添加"添加更多"按钮
-        if (uploadedImages.length < MAX_IMAGES) {
-            const addMoreButton = document.createElement('div');
-            addMoreButton.className = 'add-image-button';
-            addMoreButton.innerHTML = `
-                <i class="fas fa-plus"></i>
-                <span>添加</span>
-            `;
+    // 恢复上传状态
+    function restoreUploadState() {
+        const state = localStorage.getItem('uploadState');
+        if (state) {
+            try {
+                const parsedState = JSON.parse(state);
 
-            addMoreButton.addEventListener('click', function () {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'image/*';
-                input.multiple = true;
+                // 恢复图片
+                if (parsedState.images && parsedState.images.length > 0) {
+                    uploadedImages = parsedState.images;
+                    refreshImagePreviews();
+                    updateUploadStatus();
+                }
 
-                input.onchange = function () {
-                    handleFiles(this.files);
-                };
+                // 恢复AI增强开关状态
+                if (parsedState.aiEnhance !== undefined) {
+                    aiEnhanceSwitch.checked = parsedState.aiEnhance;
+                }
 
-                input.click();
-            });
-
-            imageGrid.appendChild(addMoreButton);
+            } catch (e) {
+                console.error('恢复上传状态失败:', e);
+            }
         }
     }
 
-    /**
-     * 移除图片
-     */
-    function removeImage(index) {
-        uploadedImages.splice(index, 1);
-        updateImageGrid();
-        showToast('图片已移除', 'success');
+    // 显示错误消息
+    function showErrorMessage(message) {
+        const toast = document.createElement('div');
+        toast.className = 'error-toast';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
     }
 
-    function loadImagesFromStorage() {
-        // 清除之前上传的图片记录
-        localStorage.removeItem('uploadedImages');
-        uploadedImages = [];
-        updateImageGrid();
+    // 显示成功消息
+    function showSuccessMessage(message) {
+        const toast = document.createElement('div');
+        toast.className = 'success-toast';
+        toast.textContent = message;
+        document.body.appendChild(toast);
 
-    
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
     }
-    function updateUploadProgress(percent) {
-        uploadProgress.style.width = `${percent}%`;
-    }
-}); 
+
+    // 当文档加载完成时初始化
+    document.addEventListener('DOMContentLoaded', init);
+})(); 
