@@ -502,30 +502,14 @@ document.addEventListener('DOMContentLoaded', function () {
         showToast('图片已移除', 'success');
     }
 
-    /**
-     * 从本地存储加载图片 - 此功能已禁用
-     * 我们希望每次进入上传页面时都是全新的状态
-     */
     function loadImagesFromStorage() {
         // 清除之前上传的图片记录
         localStorage.removeItem('uploadedImages');
         uploadedImages = [];
         updateImageGrid();
 
-        // 原代码已禁用
-        /*
-        const storedImages = localStorage.getItem('uploadedImages');
-        
-        if (storedImages) {
-            uploadedImages = JSON.parse(storedImages);
-            updateImageGrid();
-        }
-        */
+    
     }
-
-    /**
-     * 更新上传进度
-     */
     function updateUploadProgress(percent) {
         uploadProgress.style.width = `${percent}%`;
     }
