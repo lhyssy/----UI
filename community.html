@@ -18,6 +18,140 @@
             padding-bottom: 60px;
             display: flex;
             flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 粒子背景 */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        /* 浮动背景元素 */
+        .floating-bg {
+            position: fixed;
+            border-radius: 50%;
+            z-index: -2;
+            filter: blur(80px);
+            opacity: 0.2;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .floating-bg-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(154, 163, 56, 0.3), transparent 70%);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .floating-bg-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(154, 163, 56, 0.2), transparent 70%);
+            bottom: -50px;
+            right: -50px;
+            animation-delay: -5s;
+        }
+
+        .floating-bg-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(124, 133, 26, 0.2), transparent 70%);
+            top: 50%;
+            left: 50%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(30px, -30px) rotate(120deg);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) rotate(240deg);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* 卡片动画 */
+        .post-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+            border-radius: 16px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.03), 0 3px 6px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .post-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.05), 0 5px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        /* 顶部导航栏动画 */
+        .header-fixed {
+            animation: slideDown 0.5s ease forwards;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 动画关键帧 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 延迟动画 */
+        .post-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .post-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .post-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .post-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .post-card:nth-child(5) {
+            animation-delay: 0.5s;
         }
 
         .safe-area {
@@ -30,18 +164,6 @@
 
         .nav-item.active i {
             color: rgba(15, 45, 73, 1);
-        }
-
-        .post-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
-            border-radius: 16px;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.03), 0 3px 6px rgba(0, 0, 0, 0.02);
-            transition: all 0.3s ease;
-        }
-
-        .post-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.05), 0 5px 8px rgba(0, 0, 0, 0.02);
         }
 
         .avatar {
@@ -140,7 +262,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             position: fixed;
@@ -148,7 +270,8 @@
             left: 0;
             right: 0;
             z-index: 100;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 56px;
+            border-bottom: none;
         }
 
         .footer-fixed {
@@ -220,11 +343,13 @@
         /* 分类选项卡固定 */
         .tabs-fixed {
             position: fixed;
-            top: 60px;
-            /* 顶部导航栏高度 */
+            top: 56px;
+            /* 对应顶部导航栏高度 */
             left: 0;
             right: 0;
             z-index: 40;
+            border-top: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
         }
 
         /* 内容区域的滚动容器 */
@@ -236,6 +361,14 @@
 </head>
 
 <body class="safe-area">
+<!-- 粒子背景 -->
+<div id="particles-js"></div>
+
+<!-- 浮动背景元素 -->
+<div class="floating-bg floating-bg-1"></div>
+<div class="floating-bg floating-bg-2"></div>
+<div class="floating-bg floating-bg-3"></div>
+
 <!-- 顶部导航 -->
 <div class="header-fixed">
     <button style="color: white" onclick="window.location.href='home.html'">
@@ -799,7 +932,7 @@
             <span class="text-xs mt-1">创建</span>
         </div>
         <div class="bottom-nav-item" data-link="tutorials.html">
-            <i class="fas fa-users text-xl"></i>
+            <i class="fas fa-book text-xl"></i>
             <span class="text-xs mt-1">教程</span>
         </div>
         <div class="bottom-nav-item" data-link="profile.html">
@@ -809,6 +942,8 @@
     </div>
 </div>
 
+<!-- 粒子效果库 -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const tabs = document.querySelectorAll('.tab');
@@ -844,6 +979,94 @@
                 }
             });
         });
+
+        // 初始化粒子效果
+        if (window.particlesJS) {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 30,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#9aa338"
+                    },
+                    "shape": {
+                        "type": "circle"
+                    },
+                    "opacity": {
+                        "value": 0.3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 5,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#9aa338",
+                        "opacity": 0.2,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 0.5
+                            }
+                        },
+                        "push": {
+                            "particles_nb": 3
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+        }
     });
 </script>
 </body>
