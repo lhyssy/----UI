@@ -97,26 +97,13 @@ function getEventClass(type) {
 
 // 显示指定日期的活动
 function showEventsForDate(dateStr) {
-  const selectedEvents = events.filter(event => event.date === dateStr);
-  const eventList = document.getElementById('eventList');
-  const selectedDateTitle = document.getElementById('selectedDateTitle');
-
-  // 更新标题
+  selectedDate = dateStr;
   const date = new Date(dateStr);
   const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
-  selectedDateTitle.textContent = `${date.getFullYear()}年${monthNames[date.getMonth()]}${date.getDate()}日活动`;
+  document.getElementById('selectedDateTitle').textContent = `${date.getFullYear()}年${monthNames[date.getMonth()]}${date.getDate()}日活动`;
 
-  // 更新活动列表
-  eventList.innerHTML = '';
-  if (selectedEvents.length === 0) {
-    eventList.innerHTML = '<div class="p-4 text-center text-gray-500">暂无活动</div>';
-    return;
-  }
-
-  selectedEvents.forEach(event => {
-    const eventItem = createEventItem(event);
-    eventList.appendChild(eventItem);
-  });
+  const events = getEventsForDate(dateStr);
+  renderEventList(events);
 }
 
 function createEventItem(event) {
@@ -203,6 +190,29 @@ function getEventBadgeClass(type) {
   }
 }
 
+// 打开添加活动模态框
+function openAddEventModal(date = null) {
+  const modal = document.getElementById('addEventModal');
+  const eventDate = document.getElementById('eventDate');
+
+  if (date) {
+    eventDate.value = date;
+  } else {
+    eventDate.value = new Date().toISOString().split('T')[0];
+  }
+
+  modal.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+// 关闭添加活动模态框
+function closeAddEventModal() {
+  const modal = document.getElementById('addEventModal');
+  modal.style.display = 'none';
+  document.body.style.overflow = 'auto';
+  document.getElementById('eventForm').reset();
+}
+
 // 添加新活动
 function addEvent(eventData) {
   const newEvent = {
@@ -213,6 +223,50 @@ function addEvent(eventData) {
   localStorage.setItem('marketingEvents', JSON.stringify(events));
   generateCalendar();
   showEventsForDate(eventData.date);
+  closeAddEventModal();
+}
+
+// 更新活动列表
+function updateEventList() {
+  const eventList = document.getElementById('eventList');
+  const selectedDate = document.getElementById('selectedDateTitle').dataset.date;
+
+  const dayEvents = events.filter(event => event.date === selectedDate);
+
+  if (dayEvents.length === 0) {
+    eventList.innerHTML = '<div class="p-4 text-center text-gray-500">暂无活动</div>';
+    return;
+  }
+
+  eventList.innerHTML = dayEvents.map(event => `
+        <div class="event-item p-4">
+            <div class="flex justify-between items-start">
+                <div class="event-title">${event.name}</div>
+                <div class="flex items-center">
+                    <div class="event-type ${event.type}">
+                        <div class="event-badge ${getEventBadgeClass(event.type)}"></div>
+                        <span>${getEventTypeName(event.type)}</span>
+                    </div>
+                    <div class="platform-tags">
+                        ${event.platforms.map(platform => `
+                            <span class="platform-tag">${getPlatformName(platform)}</span>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+            <div class="event-description mt-2">${event.description || '暂无描述'}</div>
+        </div>
+    `).join('');
+}
+
+// 获取平台名称
+function getPlatformName(platform) {
+  const platforms = {
+    'douyin': '抖音',
+    'xiaohongshu': '小红书',
+    'wechat': '微信公众号'
+  };
+  return platforms[platform] || platform;
 }
 
 // 删除活动
@@ -224,66 +278,114 @@ function deleteEvent(eventId) {
 }
 
 // 初始化
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function () {
   // 初始化日历
-  updateMonthDisplay();
-  generateCalendar();
-  showEventsForDate(currentDate.toISOString().split('T')[0]);
+  renderCalendar(currentYear, currentMonth);
 
-  // 月份切换按钮
-  document.getElementById('prevMonth').addEventListener('click', () => {
+  // 显示今天的活动
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  showEventsForDate(todayStr);
+
+  // 添加活动按钮点击事件
+  document.getElementById('addEventBtn').addEventListener('click', function () {
+    const modal = document.getElementById('addEventModal');
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  });
+
+  // 关闭模态框按钮点击事件
+  document.querySelector('.close-modal').addEventListener('click', function () {
+    const modal = document.getElementById('addEventModal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  });
+
+  // 取消按钮点击事件
+  document.getElementById('cancelEvent').addEventListener('click', function () {
+    const modal = document.getElementById('addEventModal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  });
+
+  // 表单提交事件
+  document.getElementById('eventForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const eventName = document.getElementById('eventName').value;
+    const eventDate = document.getElementById('eventDate').value;
+    const eventType = document.getElementById('eventType').value;
+    const eventDescription = document.getElementById('eventDescription').value;
+
+    // 获取选中的平台
+    const platforms = [];
+    document.querySelectorAll('input[name="platform"]:checked').forEach(checkbox => {
+      platforms.push(checkbox.value);
+    });
+
+    // 创建新活动
+    const newEvent = {
+      id: Date.now().toString(),
+      name: eventName,
+      date: eventDate,
+      type: eventType,
+      platforms: platforms,
+      description: eventDescription
+    };
+
+    // 保存活动
+    let events = JSON.parse(localStorage.getItem('marketingEvents') || '[]');
+    events.push(newEvent);
+    localStorage.setItem('marketingEvents', JSON.stringify(events));
+
+    // 更新日历和活动列表
+    renderCalendar(currentYear, currentMonth);
+    showEventsForDate(eventDate);
+
+    // 关闭模态框
+    const modal = document.getElementById('addEventModal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+
+    // 重置表单
+    document.getElementById('eventForm').reset();
+  });
+
+  // 月份切换按钮事件
+  document.getElementById('prevMonth').addEventListener('click', function () {
     currentMonth--;
     if (currentMonth < 0) {
       currentMonth = 11;
       currentYear--;
     }
     updateMonthDisplay();
-    generateCalendar();
+    renderCalendar(currentYear, currentMonth);
   });
 
-  document.getElementById('nextMonth').addEventListener('click', () => {
+  document.getElementById('nextMonth').addEventListener('click', function () {
     currentMonth++;
     if (currentMonth > 11) {
       currentMonth = 0;
       currentYear++;
     }
     updateMonthDisplay();
-    generateCalendar();
+    renderCalendar(currentYear, currentMonth);
   });
 
-  // 添加活动按钮
-  document.getElementById('addEventBtn').addEventListener('click', () => {
-    document.getElementById('addEventModal').style.display = 'block';
+  // 日历格子点击事件
+  document.getElementById('calendarGrid').addEventListener('click', (e) => {
+    const dayElement = e.target.closest('.calendar-day');
+    if (dayElement && !dayElement.classList.contains('inactive')) {
+      const date = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${dayElement.querySelector('.day-number').textContent.padStart(2, '0')}`;
+      openAddEventModal(date);
+    }
   });
 
-  // 取消添加活动
-  document.getElementById('cancelEvent').addEventListener('click', () => {
-    document.getElementById('addEventModal').style.display = 'none';
-  });
-
-  // 提交活动表单
-  document.getElementById('eventForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const eventName = document.getElementById('eventName').value;
-    const eventDate = document.getElementById('eventDate').value;
-    const eventType = document.getElementById('eventType').value;
-    const eventDescription = document.getElementById('eventDescription').value;
-
-    // 获取选中的营销平台
-    const selectedPlatforms = Array.from(document.querySelectorAll('input[name="platform"]:checked'))
-      .map(checkbox => checkbox.value);
-
-    addEvent({
-      name: eventName,
-      date: eventDate,
-      type: eventType,
-      description: eventDescription,
-      platforms: selectedPlatforms
-    });
-
-    // 重置表单并关闭模态框
-    document.getElementById('eventForm').reset();
-    document.getElementById('addEventModal').style.display = 'none';
+  // 点击模态框外部关闭
+  document.getElementById('addEventModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) {
+      closeAddEventModal();
+    }
   });
 
   // 删除活动
@@ -310,4 +412,124 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-}); 
+});
+
+function renderEventList(events) {
+  const eventList = document.getElementById('eventList');
+  eventList.innerHTML = '';
+
+  if (events.length === 0) {
+    eventList.innerHTML = '<div class="text-center py-4 text-gray-500">暂无活动</div>';
+    return;
+  }
+
+  events.forEach(event => {
+    const eventItem = document.createElement('div');
+    eventItem.className = 'event-item';
+    eventItem.dataset.eventId = event.id;
+
+    const eventTitle = document.createElement('div');
+    eventTitle.className = 'event-title';
+    eventTitle.textContent = event.name;
+
+    const eventMeta = document.createElement('div');
+    eventMeta.className = 'flex items-center mb-2';
+
+    const eventType = document.createElement('div');
+    eventType.className = `event-type ${event.type}`;
+    eventType.textContent = getEventTypeText(event.type);
+
+    const platformTags = document.createElement('div');
+    platformTags.className = 'platform-tags';
+    event.platforms.forEach(platform => {
+      const tag = document.createElement('span');
+      tag.className = 'platform-tag';
+      tag.textContent = getPlatformText(platform);
+      platformTags.appendChild(tag);
+    });
+
+    const eventDescription = document.createElement('div');
+    eventDescription.className = 'event-description';
+    eventDescription.textContent = event.description;
+
+    eventMeta.appendChild(eventType);
+    eventMeta.appendChild(platformTags);
+    eventItem.appendChild(eventTitle);
+    eventItem.appendChild(eventMeta);
+    eventItem.appendChild(eventDescription);
+    eventList.appendChild(eventItem);
+  });
+}
+
+function deleteEvent(eventId) {
+  // 从本地存储中删除活动
+  let events = JSON.parse(localStorage.getItem('marketingEvents') || '[]');
+  events = events.filter(event => event.id !== eventId);
+  localStorage.setItem('marketingEvents', JSON.stringify(events));
+
+  // 重新渲染日历和活动列表
+  renderCalendar(currentYear, currentMonth);
+  renderEventList(getEventsForDate(selectedDate));
+}
+
+// 修改 renderCalendar 函数中的活动渲染部分
+function renderCalendar(year, month) {
+  const calendarGrid = document.getElementById('calendarGrid');
+  calendarGrid.innerHTML = '';
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const today = new Date();
+
+  // 填充空白格子
+  for (let i = 0; i < firstDay; i++) {
+    const emptyDay = document.createElement('div');
+    emptyDay.className = 'calendar-day empty';
+    calendarGrid.appendChild(emptyDay);
+  }
+
+  // 填充日期格子
+  for (let day = 1; day <= daysInMonth; day++) {
+    const dayElement = document.createElement('div');
+    dayElement.className = 'calendar-day';
+
+    // 检查是否是今天
+    if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+      dayElement.classList.add('today');
+    }
+
+    // 获取当天的活动
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const dayEvents = getEventsForDate(dateStr);
+
+    // 如果有活动，添加has-event类
+    if (dayEvents.length > 0) {
+      dayElement.classList.add('has-event');
+    }
+
+    // 构建日期格子的内容
+    let dayContent = `<div class="day-number">${day}</div>`;
+
+    // 添加活动
+    if (dayEvents.length > 0) {
+      dayEvents.forEach(event => {
+        dayContent += `<div class="calendar-event">${event.name}</div>`;
+      });
+
+      // 如果活动超过2个，显示更多提示
+      if (dayEvents.length > 2) {
+        dayContent += `<div class="more-events">+${dayEvents.length - 2} 更多</div>`;
+      }
+    }
+
+    dayElement.innerHTML = dayContent;
+    dayElement.onclick = () => showEventsForDate(dateStr);
+    calendarGrid.appendChild(dayElement);
+  }
+}
+
+// 获取指定日期的活动
+function getEventsForDate(dateStr) {
+  const events = JSON.parse(localStorage.getItem('marketingEvents') || '[]');
+  return events.filter(event => event.date === dateStr);
+} 

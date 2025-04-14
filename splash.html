@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +17,7 @@
             height: 100vh;
             width: 100vw;
         }
+
         .logo-container {
             position: absolute;
             top: 50%;
@@ -24,6 +26,7 @@
             text-align: center;
             z-index: 2;
         }
+
         .logo {
             width: 120px;
             height: 120px;
@@ -36,21 +39,25 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             animation: pulse 2s infinite;
         }
+
         .logo i {
             font-size: 64px;
             color: white;
         }
+
         .app-name {
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 6px;
             letter-spacing: 1px;
         }
+
         .slogan {
             font-size: 16px;
             opacity: 0.9;
             margin-bottom: 30px;
         }
+
         .loading-bar {
             width: 200px;
             height: 4px;
@@ -59,6 +66,7 @@
             overflow: hidden;
             margin: 0 auto;
         }
+
         .loading-progress {
             height: 100%;
             width: 0%;
@@ -66,7 +74,7 @@
             border-radius: 2px;
             transition: width 3s ease;
         }
-        
+
         /* 气泡动画 */
         .bubble {
             position: absolute;
@@ -74,7 +82,7 @@
             border-radius: 50%;
             animation: float-up linear infinite;
         }
-        
+
         /* 波纹特效 */
         .ripple {
             position: absolute;
@@ -83,28 +91,31 @@
             animation: ripple 6s linear infinite;
             opacity: 0;
         }
-        
+
         @keyframes ripple {
             0% {
                 width: 0px;
                 height: 0px;
                 opacity: 0.5;
             }
+
             100% {
                 width: 500px;
                 height: 500px;
                 opacity: 0;
             }
         }
-        
+
         @keyframes float-up {
             0% {
                 transform: translateY(100vh) scale(0);
                 opacity: 0.1;
             }
+
             50% {
                 opacity: 0.5;
             }
+
             100% {
                 transform: translateY(-20vh) scale(1);
                 opacity: 0;
@@ -112,75 +123,83 @@
         }
     </style>
 </head>
+
 <body>
-    <!-- 主要内容 -->
-    <div class="logo-container">
-        <div class="logo">
-            <i class="fas fa-seedling"></i>
-        </div>
-        <h1 class="app-name">助农宣传</h1>
-        <p class="slogan">让农产品营销更简单、更高效</p>
-        <div class="loading-bar">
-            <div class="loading-progress" id="loadingProgress"></div>
-        </div>
+<!-- 主要内容 -->
+<div class="logo-container">
+    <div class="logo">
+        <i class="fas fa-seedling"></i>
     </div>
-    
-    <!-- 波纹特效 -->
-    <div class="ripple" style="bottom: 20%; left: 50%"></div>
-    <div class="ripple" style="bottom: 20%; left: 50%; animation-delay: 2s"></div>
-    <div class="ripple" style="bottom: 20%; left: 50%; animation-delay: 4s"></div>
-    
-    <!-- 版本信息 -->
-    <div class="absolute bottom-8 w-full text-center text-white text-opacity-70 text-sm">
-        版本 1.0.0
+    <h1 class="app-name">禾语智宣</h1>
+    <p class="slogan">让农产品营销更简单、更高效</p>
+    <div class="loading-bar">
+        <div class="loading-progress" id="loadingProgress"></div>
     </div>
-    
-    <script>
-        // 生成随机气泡
-        function createBubbles() {
-            const bubbleCount = 20;
-            
-            for (let i = 0; i < bubbleCount; i++) {
-                const bubble = document.createElement('div');
-                bubble.classList.add('bubble');
-                
-                // 随机尺寸 (10-50px)
-                const size = Math.floor(Math.random() * 40) + 10;
-                bubble.style.width = `${size}px`;
-                bubble.style.height = `${size}px`;
-                
-                // 随机位置
-                bubble.style.left = `${Math.floor(Math.random() * 100)}%`;
-                
-                // 随机透明度
-                bubble.style.opacity = (Math.random() * 0.3 + 0.1).toString();
-                
-                // 随机动画持续时间 (3-8s)
-                const duration = Math.random() * 5 + 3;
-                bubble.style.animationDuration = `${duration}s`;
-                
-                // 随机延迟 (0-5s)
-                bubble.style.animationDelay = `${Math.random() * 5}s`;
-                
-                document.body.appendChild(bubble);
-            }
+</div>
+
+<!-- 波纹特效 -->
+<div class="ripple" style="bottom: 20%; left: 50%"></div>
+<div class="ripple" style="bottom: 20%; left: 50%; animation-delay: 2s"></div>
+<div class="ripple" style="bottom: 20%; left: 50%; animation-delay: 4s"></div>
+
+<!-- 版本信息 -->
+<div class="absolute bottom-8 w-full text-center text-white text-opacity-70 text-sm">
+    版本 1.0.0
+</div>
+
+<script>
+
+    // 进入网站时清除登录状态
+    window.onload = function () {
+        localStorage.removeItem('userLoggedIn'); // 清除登录状态
+    };
+
+    // 生成随机气泡
+    function createBubbles() {
+        const bubbleCount = 20;
+
+        for (let i = 0; i < bubbleCount; i++) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+
+            // 随机尺寸 (10-50px)
+            const size = Math.floor(Math.random() * 40) + 10;
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+
+            // 随机位置
+            bubble.style.left = `${Math.floor(Math.random() * 100)}%`;
+
+            // 随机透明度
+            bubble.style.opacity = (Math.random() * 0.3 + 0.1).toString();
+
+            // 随机动画持续时间 (3-8s)
+            const duration = Math.random() * 5 + 3;
+            bubble.style.animationDuration = `${duration}s`;
+
+            // 随机延迟 (0-5s)
+            bubble.style.animationDelay = `${Math.random() * 5}s`;
+
+            document.body.appendChild(bubble);
         }
-        
-        // 启动页倒计时
-        function startTimer() {
-            const progressBar = document.getElementById('loadingProgress');
-            progressBar.style.width = '100%';
-            
-            // 3秒后跳转到首页
-            setTimeout(() => {
-                window.location.href = 'home.html';
-            }, 3000);
-        }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            createBubbles();
-            startTimer();
-        });
-    </script>
+    }
+
+    // 启动页倒计时
+    function startTimer() {
+        const progressBar = document.getElementById('loadingProgress');
+        progressBar.style.width = '100%';
+
+        // 3秒后跳转到首页
+        setTimeout(() => {
+            window.location.href = 'home.html';
+        }, 3000);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        createBubbles();
+        startTimer();
+    });
+</script>
 </body>
-</html> 
+
+</html>
