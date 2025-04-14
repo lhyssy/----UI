@@ -23,7 +23,7 @@ const mockData = {
     ],
     popularContent: [
       {
-        title: '🍓救命！这草莓是灌了蜜吧？！甜到跺脚，现摘现发，实现草莓自由就趁现在～',
+        title: '🍓谁懂啊！在办公室吃草莓被追着要链接！现摘的丹东九九，咬一口爆浆的甜，连叶子都带着奶香✨',
         image: 'https://images.unsplash.com/photo-1587393855524-087f83d95bc9?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         platform: '小红书',
         tags: ['小红书', '热门'],
@@ -35,7 +35,7 @@ const mockData = {
         }
       },
       {
-        title: '紧急通知：你的夏日 “菠萝补给站” 已上线！新鲜直采，甜爽暴击，速来查收',
+        title: '紧急通知：你的夏日 "菠萝补给站" 已上线！新鲜直采，甜爽暴击，速来查收',
         image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
         platform: '微信',
         tags: ['微信', '推荐'],
@@ -71,7 +71,7 @@ const mockData = {
     ],
     popularContent: [
       {
-        title: '🍓救命！这草莓是灌了蜜吧？！甜到跺脚，现摘现发，实现草莓自由就趁现在～',
+        title: '🍓谁懂啊！在办公室吃草莓被追着要链接！现摘的丹东九九，咬一口爆浆的甜，连叶子都带着奶香✨',
         image: 'https://images.unsplash.com/photo-1587393855524-087f83d95bc9?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         platform: '小红书',
         tags: ['小红书', '热门'],
@@ -83,7 +83,7 @@ const mockData = {
         }
       },
       {
-        title: '紧急通知：你的夏日 “菠萝补给站” 已上线！新鲜直采，甜爽暴击，速来查收',
+        title: '紧急通知：你的夏日 "菠萝补给站" 已上线！新鲜直采，甜爽暴击，速来查收',
         image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
         platform: '微信',
         tags: ['微信', '推荐'],
@@ -119,7 +119,7 @@ const mockData = {
     ],
     popularContent: [
       {
-        title: '🍓救命！这草莓是灌了蜜吧？！甜到跺脚，现摘现发，实现草莓自由就趁现在～',
+        title: '🍓谁懂啊！在办公室吃草莓被追着要链接！现摘的丹东九九，咬一口爆浆的甜，连叶子都带着奶香✨',
         image: 'https://images.unsplash.com/photo-1587393855524-087f83d95bc9?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         platform: '小红书',
         tags: ['小红书', '热门'],
@@ -131,7 +131,7 @@ const mockData = {
         }
       },
       {
-        title: '紧急通知：你的夏日 “菠萝补给站” 已上线！新鲜直采，甜爽暴击，速来查收',
+        title: '紧急通知：你的夏日 "菠萝补给站" 已上线！新鲜直采，甜爽暴击，速来查收',
         image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
         platform: '微信',
         tags: ['微信', '推荐'],
@@ -167,7 +167,7 @@ const mockData = {
     ],
     popularContent: [
       {
-        title: '🍓救命！这草莓是灌了蜜吧？！甜到跺脚，现摘现发，实现草莓自由就趁现在～',
+        title: '🍓谁懂啊！在办公室吃草莓被追着要链接！现摘的丹东九九，咬一口爆浆的甜，连叶子都带着奶香✨',
         image: 'https://images.unsplash.com/photo-1587393855524-087f83d95bc9?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         platform: '小红书',
         tags: ['小红书', '热门'],
@@ -179,7 +179,7 @@ const mockData = {
         }
       },
       {
-        title: '紧急通知：你的夏日 “菠萝补给站” 已上线！新鲜直采，甜爽暴击，速来查收',
+        title: '紧急通知：你的夏日 "菠萝补给站" 已上线！新鲜直采，甜爽暴击，速来查收',
         image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
         platform: '微信',
         tags: ['微信', '推荐'],
@@ -213,7 +213,7 @@ function updateCharts(timeRange) {
   const maxViews = Math.max(...data.views);
   data.views.forEach((value, index) => {
     const height = (value / maxViews) * 100;
-    const opacity = 0.3 + (value / maxViews) * 0.7; // 透明度从0.3到1.0
+    const opacity = 0.3 + (value / maxViews) * 0.7;
     const bar = document.createElement('div');
     bar.className = 'bar' + (index >= data.views.length - 2 ? ' highlight' : '');
     bar.style.height = `${height}%`;
@@ -228,7 +228,7 @@ function updateCharts(timeRange) {
   const maxInteractions = Math.max(...data.interactions);
   data.interactions.forEach((value, index) => {
     const height = (value / maxInteractions) * 100;
-    const opacity = 0.3 + (value / maxInteractions) * 0.7; // 透明度从0.3到1.0
+    const opacity = 0.3 + (value / maxInteractions) * 0.7;
     const bar = document.createElement('div');
     bar.className = 'bar' + (index >= data.interactions.length - 2 ? ' highlight' : '');
     bar.style.height = `${height}%`;
@@ -273,24 +273,58 @@ function updateCharts(timeRange) {
   document.getElementById('finalConversionRate').textContent =
     ((data.funnel.orders / data.funnel.views) * 100).toFixed(1) + '%';
 
-  // 更新平台分布
-  const platformDistribution = document.getElementById('platformDistribution');
-  platformDistribution.innerHTML = '';
-  data.platforms.forEach(platform => {
-    const div = document.createElement('div');
-    div.className = 'flex-1 flex flex-col items-center';
-    div.innerHTML = `
-      <div class="progress-ring">
-        <svg width="60" height="60" viewBox="0 0 60 60">
-          <circle class="bg" cx="30" cy="30" r="24" />
-          <circle class="progress" cx="30" cy="30" r="24" style="stroke-dasharray: 150.8; stroke-dashoffset: ${150.8 * (1 - platform.percentage / 100)};" />
-        </svg>
-        <div class="percent-text">${platform.percentage}%</div>
-      </div>
-      <p class="text-sm mt-2">${platform.name}</p>
-    `;
-    platformDistribution.appendChild(div);
-  });
+  // 更新平台分布饼图
+  const platformChart = echarts.init(document.getElementById('platformDistribution'));
+  const platformOption = {
+    tooltip: {
+      trigger: 'item',
+      formatter: '{b}: {c}%'
+    },
+    series: [{
+      type: 'pie',
+      radius: ['40%', '70%'],
+      center: ['50%', '50%'],
+      data: [
+        {
+          name: '抖音',
+          value: data.platforms.find(p => p.name === '抖音').percentage,
+          itemStyle: {
+            color: 'rgba(154, 163, 56, 1)'
+          }
+        },
+        {
+          name: '小红书',
+          value: data.platforms.find(p => p.name === '小红书').percentage,
+          itemStyle: {
+            color: 'rgba(154, 163, 56, 0.7)'
+          }
+        },
+        {
+          name: '微信',
+          value: data.platforms.find(p => p.name === '微信').percentage,
+          itemStyle: {
+            color: 'rgba(154, 163, 56, 0.4)'
+          }
+        }
+      ],
+      label: {
+        show: true,
+        formatter: '{b}\n{d}%',
+        color: 'rgba(15, 45, 73, 1)',
+        fontSize: 14,
+        lineHeight: 20,
+        padding: [10, 0, 10, 0]
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    }]
+  };
+  platformChart.setOption(platformOption);
 
   // 更新热门内容
   const popularContent = document.getElementById('popularContent');
@@ -387,5 +421,11 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = link;
       }
     });
+  });
+
+  // 监听窗口大小变化，重新调整图表大小
+  window.addEventListener('resize', function () {
+    const platformChart = echarts.init(document.getElementById('platformDistribution'));
+    platformChart.resize();
   });
 }); 

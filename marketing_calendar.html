@@ -9,43 +9,252 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/calendar.css">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
-        .sticky {
-            background-color: rgba(154, 163, 56, 1);
-        }
-
-        .fixed {
-            background-color: rgba(154, 163, 56, 1);
+        :root {
+            --primary-green: rgba(154, 163, 56, 1);
+            --primary-green-light: rgba(154, 163, 56, 0.7);
+            --primary-green-dark: rgba(124, 133, 26, 1);
+            --text-dark: rgba(15, 45, 73, 1);
+            --bg-light: rgba(235, 238, 220, 1);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: rgba(205, 210, 171, 0.2);
-            color: rgba(15, 45, 73, 1);
-            max-width: 100%;
-            overflow-x: hidden;
-        }
-
-        .header {
-            background: rgba(154, 163, 56, 1);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-        }
-
-        .calendar-day {
-            aspect-ratio: 1;
-            background: white;
-            border-radius: 8px;
-            padding: 8px;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            min-height: 100vh;
             position: relative;
-            min-height: 80px;
+            overflow-x: hidden;
+            padding-top: 60px;
+            padding-bottom: 80px;
+            height: auto;
+        }
+
+        /* 粒子背景 */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* 浮动背景元素 */
+        .floating-bg {
+            position: fixed;
+            border-radius: 50%;
+            z-index: -2;
+            filter: blur(80px);
+            opacity: 0.2;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .floating-bg-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(154, 163, 56, 0.3), transparent 70%);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .floating-bg-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(154, 163, 56, 0.2), transparent 70%);
+            bottom: -50px;
+            right: -50px;
+            animation-delay: -5s;
+        }
+
+        .floating-bg-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(124, 133, 26, 0.2), transparent 70%);
+            top: 50%;
+            left: 50%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            25% {
+                transform: translate(20px, 20px);
+            }
+
+            50% {
+                transform: translate(0, 40px);
+            }
+
+            75% {
+                transform: translate(-20px, 20px);
+            }
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            background: linear-gradient(135deg, rgba(154, 163, 56, 0.95), rgba(83, 122, 90, 0.95));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            height: 56px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+        }
+
+        .header .back-button {
+            color: white;
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .header .back-button:hover {
+            transform: translateX(-2px);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            margin: 0;
+            flex: 1;
+            text-align: center;
+        }
+
+        .header .add-event-button {
+            color: white;
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .header .add-event-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* 日历卡片样式 */
+        .bg-white.rounded-xl.shadow-sm {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .bg-white.rounded-xl.shadow-sm:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        /* 今日活动卡片样式 */
+        #eventList {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 底部导航栏 */
+        .fixed.bottom-0 {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+            padding: 12px 0;
+        }
+
+        .bottom-nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1%;
+            max-width: 100%;
+        }
+
+        .bottom-nav-item {
+            color: #666;
+            text-decoration: none;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            padding: 4px 0;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .bottom-nav-item i {
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .bottom-nav-item span {
+            font-size: 0.7rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .bottom-nav-item:hover,
+        .bottom-nav-item.active {
+            color: rgba(154, 163, 56, 1);
+        }
+
+        .bottom-nav-item:hover i,
+        .bottom-nav-item.active i {
+            transform: translateY(-2px);
+        }
+
+        .bottom-nav-item:hover span,
+        .bottom-nav-item.active span {
+            transform: translateY(2px);
+        }
+
+        /* 日历日期格子样式 */
+        .calendar-day {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            min-height: 80px;
+            padding: 8px;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .calendar-day.today {
+            background: rgba(154, 163, 56, 0.15);
+            border: 2px solid rgba(154, 163, 56, 0.8);
+            box-shadow: 0 4px 12px rgba(154, 163, 56, 0.2);
+        }
+
+        .calendar-day.has-event {
+            background: rgba(154, 163, 56, 0.1);
+            box-shadow: 0 4px 12px rgba(154, 163, 56, 0.1);
         }
 
         .calendar-day .day-number {
@@ -66,6 +275,7 @@
             text-overflow: ellipsis;
             background: rgba(154, 163, 56, 0.1);
             color: rgba(15, 45, 73, 0.8);
+            border-left: 2px solid rgba(154, 163, 56, 0.8);
         }
 
         .calendar-day .more-events {
@@ -75,29 +285,10 @@
             margin-top: 2px;
         }
 
-        @media (max-width: 640px) {
-            .calendar-day {
-                min-height: 100px;
-                padding: 10px;
-            }
-
-            .calendar-day .day-number {
-                font-size: 16px;
-            }
-
-            .calendar-day .calendar-event {
-                font-size: 12px;
-                padding: 3px 6px;
-            }
-        }
-
-        .calendar-day.today {
-            background: rgba(154, 163, 56, 0.1);
-            border: 2px solid rgba(154, 163, 56, 1);
-        }
-
-        .calendar-day.has-event {
-            background: rgba(154, 163, 56, 0.05);
+        /* 日历网格样式 */
+        .grid.grid-cols-7.divide-x.divide-y.divide-gray-100 {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .event-dot {
@@ -113,11 +304,12 @@
 
         .event-item {
             border-left: 3px solid rgba(154, 163, 56, 1);
-            padding: 8px;
-            margin-bottom: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
             background: white;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: relative;
         }
 
         .event-item .event-title {
@@ -185,6 +377,8 @@
             bottom: 0;
             background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+            overflow-y: auto;
         }
 
         .modal-content {
@@ -194,6 +388,40 @@
             max-width: 500px;
             margin: 20px auto;
             padding: 20px;
+            animation: slideUp 0.3s ease-out;
+            transform: translateY(0);
+            position: relative;
+        }
+
+        /* 添加输入框焦点样式 */
+        .modal-content input[type="text"],
+        .modal-content input[type="date"],
+        .modal-content select,
+        .modal-content textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .modal-content input[type="text"]:focus,
+        .modal-content input[type="date"]:focus,
+        .modal-content select:focus,
+        .modal-content textarea:focus {
+            outline: none;
+            border-color: rgba(154, 163, 56, 1);
+            box-shadow: 0 0 0 2px rgba(154, 163, 56, 0.2);
+        }
+
+        /* 修改复选框样式 */
+        .modal-content input[type="checkbox"] {
+            accent-color: rgba(154, 163, 56, 1);
+        }
+
+        .modal-content input[type="checkbox"]:focus {
+            outline: 2px solid rgba(154, 163, 56, 0.2);
+            outline-offset: 2px;
         }
 
         .event-type-selector.selected {
@@ -231,41 +459,137 @@
             background-color: rgba(154, 163, 56, 1) !important;
         } */
 
-        .bottom-nav-item {
-            color: rgba(15, 45, 73, 1);
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
+        /* 主要内容区域 */
+        main {
+            position: relative;
+            z-index: 1;
+            min-height: calc(100vh - 140px);
+            overflow-y: visible;
+        }
+
+        /* 修改容器样式 */
+        .px-4.pt-4 {
+            position: relative;
+            z-index: 1;
+            min-height: calc(100vh - 140px);
+            overflow-y: visible;
+        }
+
+        /* 日历头部样式 */
+        .calendar-header {
+            background: linear-gradient(135deg, rgba(154, 163, 56, 0.8), rgba(83, 122, 90, 0.8));
+            color: white;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            height: 55px;
             align-items: center;
-            padding: 8px 0;
         }
 
-        .bottom-nav-item i {
-            font-size: 20px;
-            margin-bottom: 4px;
+        .calendar-header div {
+            padding: 12px 0;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .bottom-nav-item span {
-            font-size: 12px;
+        .calendar-header div:last-child {
+            border-right: none;
+        }
+
+        /* 动画效果 */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-slide-in {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .animate-scale-in {
+            animation: scaleIn 0.5s ease-out forwards;
+        }
+
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-300 {
+            animation-delay: 0.3s;
+        }
+
+        .delay-400 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-500 {
+            animation-delay: 0.5s;
         }
     </style>
 </head>
 
-<body class="pb-24">
-    <!-- 顶部导航 -->
-    <header class="header py-3 px-5 flex items-center justify-between fixed top-0 left-0 right-0 z-50">
+<body class="min-h-screen">
+    <!-- 粒子背景 -->
+    <div id="particles-js"></div>
+
+    <!-- 浮动背景元素 -->
+    <div class="floating-bg floating-bg-1"></div>
+    <div class="floating-bg floating-bg-2"></div>
+    <div class="floating-bg floating-bg-3"></div>
+
+    <!-- 顶部导航栏 -->
+    <header class="header py-3 px-5 flex items-center justify-between fixed top-0 left-0 right-0 z-50 animate-slide-in">
         <div class="flex items-center w-full">
             <a href="home.html" class="back-button mr-3 slide-right">
                 <i class="fas fa-arrow-left"></i>
             </a>
             <h1 class="text-lg font-semibold slide-down flex-1 text-center">营销日历</h1>
-            <div class="w-8"></div> <!-- 用于平衡布局 -->
+            <button class="add-event-button w-8 h-8 flex items-center justify-center" id="addEventBtn">
+                <i class="fas fa-plus"></i>
+            </button>
         </div>
     </header>
 
-    <div class="px-4 py-3">
+    <div class="px-4 pt-4">
         <!-- 日历标题和月份选择器 -->
-        <div class="flex justify-between items-center mb-4">
+        <div class="flex justify-between items-center mb-4 mt-2 animate-slide-in delay-100">
             <div class="flex items-center">
                 <div class="font-semibold text-xl text-gray-800" id="currentMonth">2023年7月</div>
                 <div class="calendar-switch" data-active="month">
@@ -285,7 +609,7 @@
         </div>
 
         <!-- 日历主体 -->
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6 animate-scale-in delay-200">
             <!-- 日历头部（星期） -->
             <div class="calendar-header grid grid-cols-7 text-center p-3">
                 <div class="text-sm font-medium">日</div>
@@ -303,31 +627,8 @@
             </div>
         </div>
 
-        <!-- 活动筛选器 -->
-        <div class="mb-5">
-            <h2 class="text-lg font-medium mb-3">活动类型</h2>
-            <div class="flex space-x-3 overflow-x-auto pb-2">
-                <div class="event-type-selector rounded-lg px-4 py-2 flex items-center bg-white selected">
-                    <div class="event-badge bg-red-500"></div>
-                    <span class="text-sm">促销宣传</span>
-                </div>
-                <div class="event-type-selector rounded-lg px-4 py-2 flex items-center bg-white selected">
-                    <div class="event-badge bg-yellow-500"></div>
-                    <span class="text-sm">收获季节</span>
-                </div>
-                <div class="event-type-selector rounded-lg px-4 py-2 flex items-center bg-white selected">
-                    <div class="event-badge bg-green-500"></div>
-                    <span class="text-sm">种植计划</span>
-                </div>
-                <div class="event-type-selector rounded-lg px-4 py-2 flex items-center bg-white selected">
-                    <div class="event-badge bg-blue-500"></div>
-                    <span class="text-sm">市场活动</span>
-                </div>
-            </div>
-        </div>
-
         <!-- 今日活动 -->
-        <div>
+        <div class="animate-fade-in delay-300">
             <h2 class="text-lg font-medium mb-3" id="selectedDateTitle">今日活动</h2>
             <div id="eventList" class="bg-white rounded-xl shadow-sm divide-y divide-gray-100">
                 <!-- 活动列表将通过JavaScript动态填充 -->
@@ -338,19 +639,24 @@
     <!-- 添加活动模态框 -->
     <div class="modal" id="addEventModal">
         <div class="modal-content">
-            <h3 class="text-lg font-medium mb-4">添加营销活动</h3>
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-medium">添加营销活动</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
             <form id="eventForm">
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">活动名称</label>
-                    <input type="text" class="w-full px-3 py-2 border rounded-lg" id="eventName" required>
+                    <input type="text" id="eventName" required>
                 </div>
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">活动日期</label>
-                    <input type="date" class="w-full px-3 py-2 border rounded-lg" id="eventDate" required>
+                    <input type="date" id="eventDate" required>
                 </div>
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">活动类型</label>
-                    <select class="w-full px-3 py-2 border rounded-lg" id="eventType" required>
+                    <select id="eventType" required>
                         <option value="promotional">促销宣传</option>
                         <option value="harvest">收获季节</option>
                         <option value="planting">种植计划</option>
@@ -361,53 +667,125 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">营销平台</label>
                     <div class="flex flex-wrap gap-2">
                         <label class="flex items-center space-x-2">
-                            <input type="checkbox" name="platform" value="douyin" class="rounded text-green-500">
+                            <input type="checkbox" name="platform" value="douyin">
                             <span>抖音</span>
                         </label>
                         <label class="flex items-center space-x-2">
-                            <input type="checkbox" name="platform" value="xiaohongshu" class="rounded text-green-500">
+                            <input type="checkbox" name="platform" value="xiaohongshu">
                             <span>小红书</span>
                         </label>
                         <label class="flex items-center space-x-2">
-                            <input type="checkbox" name="platform" value="wechat" class="rounded text-green-500">
+                            <input type="checkbox" name="platform" value="wechat">
                             <span>微信公众号</span>
                         </label>
                     </div>
                 </div>
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">活动描述</label>
-                    <textarea class="w-full px-3 py-2 border rounded-lg" id="eventDescription" rows="3"></textarea>
+                    <textarea id="eventDescription" rows="3"></textarea>
                 </div>
                 <div class="flex justify-end space-x-3">
-                    <button type="button" class="px-4 py-2 bg-gray-100 rounded-lg" id="cancelEvent">取消</button>
-                    <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg">保存</button>
+                    <button type="button" class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                        id="cancelEvent">取消</button>
+                    <button type="submit" class="px-4 py-2 text-white rounded-lg transition-colors"
+                        style="background-color: rgba(154, 163, 56, 1);">保存</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- 底部导航栏 -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white py-2 px-5 border-t border-gray-100">
-        <div class="flex justify-between">
-            <div class="bottom-nav-item flex flex-col items-center" data-link="home.html">
-                <i class="fas fa-home text-xl"></i>
-                <span class="text-xs mt-1">首页</span>
-            </div>
-            <div class="bottom-nav-item flex flex-col items-center" data-link="upload.html">
-                <i class="fas fa-plus-circle text-xl"></i>
-                <span class="text-xs mt-1">上传</span>
-            </div>
-            <div class="bottom-nav-item flex flex-col items-center" data-link="tutorials.html">
-                <i class="fas fa-book text-xl"></i>
-                <span class="text-xs mt-1">教程</span>
-            </div>
-            <div class="bottom-nav-item flex flex-col items-center" data-link="profile.html">
-                <i class="fas fa-user text-xl"></i>
-                <span class="text-xs mt-1">我的</span>
-            </div>
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 animate-slide-in delay-400">
+        <div class="bottom-nav-container">
+            <a href="home.html" class="bottom-nav-item">
+                <i class="fas fa-home"></i>
+                <span>首页</span>
+            </a>
+            <a href="upload.html" class="bottom-nav-item">
+                <i class="fas fa-plus-circle"></i>
+                <span>创建</span>
+            </a>
+            <a href="tutorials.html" class="bottom-nav-item">
+                <i class="fas fa-book"></i>
+                <span>教程</span>
+            </a>
+            <a href="profile.html" class="bottom-nav-item">
+                <i class="fas fa-user"></i>
+                <span>我的</span>
+            </a>
         </div>
     </div>
 
+    <script>
+        // 初始化粒子效果
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#9AA338' },
+                shape: { type: 'circle' },
+                opacity: {
+                    value: 0.5,
+                    random: true,
+                    animation: { enable: true, speed: 1, minimumValue: 0.1 }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    animation: { enable: true, speed: 2, minimumValue: 0.1 }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#9AA338',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 1,
+                    direction: 'none',
+                    random: true,
+                    straight: false,
+                    outMode: 'out',
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detectOn: 'canvas',
+                events: {
+                    onHover: { enable: true, mode: 'repulse' },
+                    onClick: { enable: true, mode: 'push' },
+                    resize: true
+                }
+            }
+        });
+
+        // 底部导航栏交互
+        document.querySelectorAll('.bottom-nav-item').forEach(item => {
+            item.addEventListener('click', function () {
+                document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // 设置当前页面的导航项为激活状态
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('.bottom-nav-item').forEach(item => {
+            if (currentPath.includes(item.getAttribute('href'))) {
+                item.classList.add('active');
+            }
+        });
+
+        // 添加卡片悬停效果
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', function () {
+                this.classList.add('shine-effect');
+            });
+            card.addEventListener('mouseleave', function () {
+                this.classList.remove('shine-effect');
+            });
+        });
+    </script>
     <script src="js/marketing_calendar.js"></script>
 </body>
 
