@@ -194,6 +194,8 @@
             height: 24px;
             border-radius: 12px;
             background-color: #e5e7eb;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
         .toggle-switch.active {
@@ -209,11 +211,105 @@
             height: 20px;
             border-radius: 50%;
             background-color: white;
-            transition: all 0.3s;
+            transition: transform 0.3s;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         .toggle-switch.active::after {
-            left: 26px;
+            transform: translateX(24px);
+        }
+
+        /* 定时发布设置面板 */
+        .time-options {
+            background-color: #f9fafb;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            width: 100%;
+        }
+
+        .time-options.show {
+            max-height: 300px;
+            padding: 0.75rem 1rem;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .time-slot {
+            display: inline-block;
+            padding: 0.4rem 0.75rem;
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .time-slot.selected {
+            background-color: #9aa338;
+            color: white;
+            border-color: #9aa338;
+        }
+
+        /* 标签设置面板 */
+        .tag-options {
+            background-color: #f9fafb;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            width: 100%;
+        }
+
+        .tag-options.show {
+            max-height: 300px;
+            padding: 0.75rem 1rem;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .tag-input {
+            display: flex;
+            margin-bottom: 0.75rem;
+        }
+
+        .tag-input input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px 0 0 4px;
+            font-size: 0.75rem;
+        }
+
+        .tag-input button {
+            background-color: #9aa338;
+            color: white;
+            border: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            display: flex;
+            align-items: center;
+            background-color: #f3f4ec;
+            padding: 0.3rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        .tag .remove {
+            margin-left: 0.5rem;
+            color: #9b9b9b;
+            cursor: pointer;
         }
 
         /* 底部操作栏 */
@@ -235,6 +331,12 @@
             border-radius: 4px;
             font-weight: 500;
             text-align: center;
+            cursor: pointer;
+        }
+
+        .btn[disabled] {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .btn-prev {
@@ -247,42 +349,6 @@
             background-color: #9aa338;
             color: white;
             margin-left: 0.5rem;
-        }
-
-        /* 发布成功模态框 */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 50;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            width: 90%;
-            max-width: 320px;
-            text-align: center;
-        }
-
-        .success-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: rgba(154, 163, 56, 0.2);
-            color: #9aa338;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin: 0 auto 1rem;
         }
 
         .content-section {
@@ -301,6 +367,75 @@
             color: #666;
             margin-bottom: 1rem;
             padding: 0 1rem;
+        }
+
+        /* 发布成功模态框 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            background-color: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 320px;
+            text-align: center;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .success-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(154, 163, 56, 0.2);
+            color: #9aa338;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+        }
+
+        /* 发布中动画效果 */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .btn-publishing {
+            animation: pulse 1.5s infinite;
         }
     </style>
 </head>
@@ -404,20 +539,6 @@
                 <div class="checkmark"></div>
             </div>
 
-            <!-- 蒙城平台 -->
-            <div class="platform-card">
-                <div class="flex items-center flex-1">
-                    <div class="platform-icon" style="background-color: #dbeafe;">
-                        <i class="fas fa-building text-blue-600"></i>
-                    </div>
-                    <div class="platform-info">
-                        <div class="platform-name">蒙城平台</div>
-                        <div class="platform-description">地方特色 | 区域流量</div>
-                    </div>
-                </div>
-                <div class="checkmark"></div>
-            </div>
-
             <!-- 更多平台 -->
             <div class="platform-card">
                 <div class="flex items-center flex-1">
@@ -439,32 +560,66 @@
         <h2 class="section-title">发布设置</h2>
 
         <div class="settings-container">
-            <div class="setting-item">
-                <div class="flex items-center">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3"
-                        style="background-color: #f0fdf4;">
-                        <i class="fas fa-clock text-green-600"></i>
+            <!-- 定时发布设置 -->
+            <div>
+                <div class="setting-item">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3"
+                            style="background-color: #f0fdf4;">
+                            <i class="fas fa-clock text-green-600"></i>
+                        </div>
+                        <div>
+                            <div class="font-medium">定时发布</div>
+                            <div class="text-xs text-gray-500">选择最佳时间发布获得更多曝光</div>
+                        </div>
                     </div>
-                    <div>
-                        <div class="font-medium">定时发布</div>
-                        <div class="text-xs text-gray-500">选择最佳时间发布获得更多曝光</div>
-                    </div>
+                    <div class="toggle-switch" id="timeToggle"></div>
                 </div>
-                <div class="toggle-switch" id="timeToggle"></div>
+
+                <!-- 时间选择选项 -->
+                <div class="time-options" id="timeOptions">
+                    <p class="text-xs text-gray-500 mb-2">选择发布时间段:</p>
+                    <div class="time-slots">
+                        <span class="time-slot" data-time="8:00">上午 8:00</span>
+                        <span class="time-slot" data-time="12:00">中午 12:00</span>
+                        <span class="time-slot" data-time="18:00">晚上 18:00</span>
+                        <span class="time-slot" data-time="21:00">晚上 21:00</span>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        注: AI分析表明，农产品宣传在中午12:00最具效果
+                    </p>
+                </div>
             </div>
 
-            <div class="setting-item">
-                <div class="flex items-center">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3"
-                        style="background-color: #fff7ed;">
-                        <i class="fas fa-tag text-orange-600"></i>
+            <!-- 商品标签设置 -->
+            <div>
+                <div class="setting-item">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center mr-3"
+                            style="background-color: #fff7ed;">
+                            <i class="fas fa-tag text-orange-600"></i>
+                        </div>
+                        <div>
+                            <div class="font-medium">添加商品标签</div>
+                            <div class="text-xs text-gray-500">在内容中添加可购买的商品</div>
+                        </div>
                     </div>
-                    <div>
-                        <div class="font-medium">添加商品标签</div>
-                        <div class="text-xs text-gray-500">在内容中添加可购买的商品</div>
+                    <div class="toggle-switch" id="tagToggle"></div>
+                </div>
+
+                <!-- 标签添加选项 -->
+                <div class="tag-options" id="tagOptions">
+                    <div class="tag-input">
+                        <input type="text" placeholder="输入商品标签..." id="tagInput">
+                        <button id="addTagBtn">添加</button>
+                    </div>
+                    <div class="tags" id="tagContainer">
+                        <div class="tag">
+                            有机红富士 <span class="remove">×</span>
+                        </div>
                     </div>
                 </div>
-                <div class="toggle-switch" id="tagToggle"></div>
             </div>
         </div>
     </div>
@@ -480,13 +635,13 @@
     </div>
 
     <!-- 发布成功模态框 -->
-    <div id="publishSuccessModal" class="modal hidden">
+    <div id="publishSuccessModal" class="modal">
         <div class="modal-content">
             <div class="success-icon">
-                <i class="fas fa-check-circle"></i>
+                <i class="fas fa-check"></i>
             </div>
             <h3 class="text-xl font-bold mb-2">发布成功</h3>
-            <p class="text-gray-600 mb-6">您的内容已成功发布到所选平台！</p>
+            <p class="text-gray-600 mb-4" id="publishSuccessText">您的内容已成功发布到所选平台！</p>
             <div class="flex justify-center space-x-3">
                 <button id="backToHomeBtn" class="btn btn-publish py-2 px-4 rounded">
                     返回首页
@@ -500,13 +655,17 @@
 
     <script src="js/common.js"></script>
     <script>
+        // 页面初始化脚本
         document.addEventListener('DOMContentLoaded', function () {
-            // 平台选择事件
+            console.log("选择发布平台界面已加载");
+
+            // 平台选择交互
             const platformCards = document.querySelectorAll('.platform-card');
             const publishBtn = document.getElementById('publishBtn');
-
-            // 初始化状态
-            let anySelected = true; // 默认小红书已选中
+            const publishSuccessModal = document.getElementById('publishSuccessModal');
+            const publishSuccessText = document.getElementById('publishSuccessText');
+            const backToHomeBtn = document.getElementById('backToHomeBtn');
+            const viewContentBtn = document.getElementById('viewContentBtn');
 
             platformCards.forEach(card => {
                 // 跳过最后一个"更多平台"选项
@@ -527,61 +686,176 @@
                     }
 
                     // 检查是否有任何平台被选中
-                    anySelected = document.querySelectorAll('.platform-card.selected').length > 0;
+                    const anySelected = document.querySelectorAll('.platform-card.selected').length > 0;
                     publishBtn.disabled = !anySelected;
-                    if (publishBtn.disabled) {
-                        publishBtn.style.opacity = '0.6';
-                    } else {
-                        publishBtn.style.opacity = '1';
+                    publishBtn.style.opacity = publishBtn.disabled ? '0.6' : '1';
+                });
+            });
+
+            // 定时发布开关功能
+            const timeToggle = document.getElementById('timeToggle');
+            const timeOptions = document.getElementById('timeOptions');
+
+            if (timeToggle && timeOptions) {
+                timeToggle.addEventListener('click', function () {
+                    this.classList.toggle('active');
+                    timeOptions.classList.toggle('show');
+                });
+            }
+
+            // 时间选择功能
+            const timeSlots = document.querySelectorAll('.time-slot');
+            if (timeSlots) {
+                timeSlots.forEach(slot => {
+                    slot.addEventListener('click', function () {
+                        timeSlots.forEach(s => s.classList.remove('selected'));
+                        this.classList.add('selected');
+                    });
+                });
+            }
+
+            // 商品标签开关功能
+            const tagToggle = document.getElementById('tagToggle');
+            const tagOptions = document.getElementById('tagOptions');
+
+            if (tagToggle && tagOptions) {
+                tagToggle.addEventListener('click', function () {
+                    this.classList.toggle('active');
+                    tagOptions.classList.toggle('show');
+                });
+            }
+
+            // 添加标签功能
+            const tagInput = document.getElementById('tagInput');
+            const addTagBtn = document.getElementById('addTagBtn');
+            const tagContainer = document.getElementById('tagContainer');
+
+            if (addTagBtn && tagInput && tagContainer) {
+                addTagBtn.addEventListener('click', function () {
+                    addTag();
+                });
+
+                tagInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addTag();
                     }
                 });
-            });
 
-            // 切换开关
-            const toggleSwitches = document.querySelectorAll('.toggle-switch');
-            toggleSwitches.forEach(toggle => {
-                toggle.addEventListener('click', function () {
-                    this.classList.toggle('active');
+                // 初始标签删除功能
+                document.querySelectorAll('.tag .remove').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        this.parentElement.remove();
+                    });
                 });
-            });
+
+                function addTag() {
+                    const tagText = tagInput.value.trim();
+                    if (tagText) {
+                        const tag = document.createElement('div');
+                        tag.className = 'tag';
+                        tag.innerHTML = `${tagText} <span class="remove">×</span>`;
+
+                        tag.querySelector('.remove').addEventListener('click', function () {
+                            tag.remove();
+                        });
+
+                        tagContainer.appendChild(tag);
+                        tagInput.value = '';
+                    }
+                }
+            }
 
             // 发布按钮点击事件
-            publishBtn.addEventListener('click', function () {
-                // 显示发布中的加载动画
-                publishBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> 发布中...';
-                publishBtn.disabled = true;
-                publishBtn.style.opacity = '0.6';
+            if (publishBtn) {
+                publishBtn.addEventListener('click', function () {
+                    // 检查是否有平台被选中
+                    const anySelected = document.querySelectorAll('.platform-card.selected').length > 0;
+                    if (!anySelected) {
+                        alert('请至少选择一个发布平台');
+                        return;
+                    }
 
-                // 模拟发布过程
-                setTimeout(() => {
-                    // 显示发布成功弹窗
-                    document.getElementById('publishSuccessModal').classList.remove('hidden');
-                }, 1500);
-            });
+                    // 收集发布信息
+                    const selectedPlatforms = [];
+                    document.querySelectorAll('.platform-card.selected').forEach(card => {
+                        const platformName = card.querySelector('.platform-name').textContent;
+                        selectedPlatforms.push(platformName);
+                    });
 
-            // 弹窗按钮事件
-            document.getElementById('backToHomeBtn').addEventListener('click', function () {
-                window.location.href = 'home.html';
-            });
+                    // 获取定时发布设置
+                    let scheduledTime = null;
+                    if (timeToggle && timeToggle.classList.contains('active')) {
+                        const selectedTimeSlot = document.querySelector('.time-slot.selected');
+                        if (selectedTimeSlot) {
+                            scheduledTime = selectedTimeSlot.dataset.time;
+                        }
+                    }
 
-            document.getElementById('viewContentBtn').addEventListener('click', function () {
-                document.getElementById('publishSuccessModal').classList.add('hidden');
-                // 重置发布按钮
-                publishBtn.innerHTML = '<i class="fas fa-paper-plane mr-1"></i> 发布内容';
-                publishBtn.disabled = false;
-                publishBtn.style.opacity = '1';
-            });
+                    // 获取商品标签
+                    const tags = [];
+                    if (tagToggle && tagToggle.classList.contains('active')) {
+                        document.querySelectorAll('#tagContainer .tag').forEach(tag => {
+                            tags.push(tag.textContent.trim().replace('×', '').trim());
+                        });
+                    }
+
+                    // 显示发布中状态
+                    publishBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> 发布中...';
+                    publishBtn.disabled = true;
+                    publishBtn.classList.add('btn-publishing');
+
+                    // 准备成功消息
+                    let successMessage = `您的内容已成功发布到：${selectedPlatforms.join('、')}`;
+                    if (scheduledTime) {
+                        successMessage += `<br>定时发布时间：${scheduledTime}`;
+                    }
+                    if (tags.length > 0) {
+                        successMessage += `<br>商品标签：${tags.join('、')}`;
+                    }
+
+                    // 模拟发布过程
+                    setTimeout(() => {
+                        // 恢复按钮状态
+                        publishBtn.disabled = false;
+                        publishBtn.classList.remove('btn-publishing');
+                        publishBtn.innerHTML = '<i class="fas fa-paper-plane mr-1"></i> 发布内容';
+
+                        // 更新并显示成功消息
+                        if (publishSuccessText) {
+                            publishSuccessText.innerHTML = successMessage;
+                        }
+
+                        // 显示成功模态框
+                        if (publishSuccessModal) {
+                            publishSuccessModal.classList.add('show');
+                        }
+                    }, 1500);
+                });
+            }
+
+            // 模态框按钮事件
+            if (backToHomeBtn) {
+                backToHomeBtn.addEventListener('click', function () {
+                    window.location.href = 'home.html';
+                });
+            }
+
+            if (viewContentBtn) {
+                viewContentBtn.addEventListener('click', function () {
+                    // 这里可以导航到内容详情页，暂时默认返回首页
+                    publishSuccessModal.classList.remove('show');
+                });
+            }
 
             // 点击模态框外部关闭
-            document.getElementById('publishSuccessModal').addEventListener('click', function (e) {
-                if (e.target === this) {
-                    this.classList.add('hidden');
-                    // 重置发布按钮
-                    publishBtn.innerHTML = '<i class="fas fa-paper-plane mr-1"></i> 发布内容';
-                    publishBtn.disabled = false;
-                    publishBtn.style.opacity = '1';
-                }
-            });
+            if (publishSuccessModal) {
+                publishSuccessModal.addEventListener('click', function (e) {
+                    if (e.target === this) {
+                        this.classList.remove('show');
+                    }
+                });
+            }
         });
     </script>
 </body>

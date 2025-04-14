@@ -602,11 +602,12 @@
     <div class="fixed bottom-0 left-0 right-0 p-4 shadow-md border-t border-gray-100"
         style="background: linear-gradient(to bottom, #ffffff, #f9fafb); z-index: 50;">
         <div class="flex space-x-3">
-            <a href="#" class="flex-1 py-3 rounded-lg font-medium text-center text-gray-700"
+            <a href="#" id="saveDraftBtn" class="flex-1 py-3 rounded-lg font-medium text-center text-gray-700"
                 style="background: linear-gradient(135deg, #f7f8fa, #e5e7eb); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);">
                 <i class="fas fa-save mr-1"></i> 保存草稿
             </a>
-            <a href="publish.html" class="flex-1 py-3 rounded-lg font-medium text-center publish-button text-white"
+            <a href="#" id="goToPublishBtn"
+                class="flex-1 py-3 rounded-lg font-medium text-center publish-button text-white"
                 style="background: linear-gradient(135deg, #9aa338, #a9b056); box-shadow: 0 2px 6px rgba(154, 163, 56, 0.3);">
                 <i class="fas fa-paper-plane mr-1"></i> 去发布
             </a>
@@ -639,6 +640,17 @@
     <script>
         // 底部导航展示动画
         document.addEventListener('DOMContentLoaded', function () {
+            // 处理去发布按钮的点击事件
+            const goToPublishBtn = document.getElementById('goToPublishBtn');
+            if (goToPublishBtn) {
+                goToPublishBtn.addEventListener('click', function (event) {
+                    event.preventDefault(); // 阻止默认行为
+                    console.log('去发布按钮被点击，准备跳转到发布页面');
+                    // 简单跳转，不附加任何参数
+                    window.location.href = 'publish.html';
+                });
+            }
+
             const bottomNav = document.querySelector('.bottom-nav');
             const showNavBtn = document.createElement('button');
             showNavBtn.classList.add('show-nav-btn');
