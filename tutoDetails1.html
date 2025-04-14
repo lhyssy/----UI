@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>农产品拍摄技巧详解</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .lesson-header {
+            background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%);
+        }
+        .sticky-tools {
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
+        }
+        .content-section p {
+            /*@apply text-gray-700 leading-relaxed mb-4;*/
+            line-height: 1.75;
+        }
+        /* 关闭按钮动效 */
+        .fa-times {
+            transition: transform 0.2s;
+        }
+        button:hover .fa-times {
+            transform: rotate(90deg);
+        }
+
+        /* 视频容器入场动画 */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .rounded-xl {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .bg-olive-0{
+        background-color: #f3f4ec;
+        }
+        .bg-olive-10{
+        background-color: #ced29f;
+        }
+        .bg-olive-20{
+        background-color: #bec381;
+        }
+        .bg-olive-30{
+        background-color: #a9b056;
+        }
+        .bg-olive-40{
+        background-color: rgba(154, 163, 56, 1)
+        }
+        .text-navy{
+        color: rgba(15, 45, 73, 1);
+        }
+    </style>
+</head>
+<body class="bg-olive-0">
+    <!-- 封面区域 -->
+    <div class="relative h-64 md:h-96">
+        <img src="https://images.unsplash.com/photo-1589254065909-b7086229d08c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80" 
+             class="w-full h-full object-cover"
+             alt="农产品拍摄教学封面">
+        
+        <!-- 渐变遮罩 -->
+        <div class="lesson-header absolute inset-0 flex items-end p-4 md:p-6">
+            <div class="text-white">
+                <h1 class="text-2xl md:text-3xl font-bold mb-2">农产品拍摄技巧详解</h1>
+                <div class="flex items-center space-x-3 text-sm">
+                    <span>王老师 · 资深摄影师</span>
+                    <span>·</span>
+                    <span>15分钟课程</span>
+                    <span>·</span>
+                    <span>5.2万次学习</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="max-w-3xl mx-auto px-4 py-6 md:py-8">
+        <!-- 课程信息卡 -->
+        <div class="bg-white rounded-xl p-4 md:p-6 shadow-sm mb-6">
+            <div class="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                    <p class="text-gray-500">适合人群</p>
+                    <p class="font-medium">电商新手 · 农产品经营者</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">所需设备</p>
+                    <p class="font-medium">手机/单反 · 三脚架</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 课程目录 -->
+        <div class="bg-white rounded-xl p-4 md:p-6 shadow-sm mb-6">
+            <h2 class="text-lg font-bold mb-4">课程目录</h2>
+            <div class="space-y-3">
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span>1. 自然光运用技巧</span>
+                    <span class="text-gray-500">6:30</span>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span>2. 构图黄金法则</span>
+                    <span class="text-gray-500">4:15</span>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span>3. 后期调色演示</span>
+                    <span class="text-gray-500">4:45</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 详细内容 -->
+        <div class="content-section bg-white rounded-xl p-4 md:p-6 shadow-sm">
+            <h2 class="text-lg font-bold mb-4">课程亮点</h2>
+            <p class="text-gray-700">通过本课程，您将掌握农产品拍摄的三大核心技巧：</p>
+            
+            <div class="my-6 p-4 bg-olive-0 rounded-lg">
+                <h3 class="font-medium text-green-800 mb-2">✓ 自然光线的完美运用</h3>
+                <p>学习如何利用不同时段的自然光线，通过反光板等简单工具打造专业级布光效果。</p>
+            </div>
+
+            <div class="my-6 p-4 bg-olive-0 rounded-lg">
+                <h3 class="font-medium text-blue-800 mb-2">✓ 构图黄金比例实践</h3>
+                <p>掌握三分法、中心构图等经典技巧，结合农产品特点设计最佳视觉呈现方案。</p>
+            </div>
+
+            <div class="my-6 p-4 bg-olive-0 rounded-lg">
+                <h3 class="font-medium text-purple-800 mb-2">✓ 手机后期快速处理</h3>
+                <p>使用Snapseed等常见APP完成专业级调色，让农产品图片更具吸引力。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 教学内容 -->
+    <div class="bg-white rounded-xl p-4 md:p-6 shadow-sm mb-6">
+        <h2 class="text-lg font-bold mb-4">推荐设备清单</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="equipment-card p-4 bg-gray-50 rounded-lg">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-mobile-alt text-2xl text-green-600"></i>
+                    <div>
+                        <h3 class="font-medium">手机拍摄</h3>
+                        <p class="text-sm text-gray-600">iPhone 13及以上/华为P40及以上</p>
+                    </div>
+                </div>
+            </div>
+            <div class="equipment-card p-4 bg-gray-50 rounded-lg">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-camera text-2xl text-green-600"></i>
+                    <div>
+                        <h3 class="font-medium">相机选择</h3>
+                        <p class="text-sm text-gray-600">佳能M50/索尼A7C</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增：实战技巧 -->
+    <div class="bg-white rounded-xl p-4 md:p-6 shadow-sm mb-6">
+        <h2 class="text-lg font-bold mb-4">实战技巧要点</h2>
+        
+        <div class="tip-card p-4 bg-gray-50 rounded-lg mb-4">
+            <h3 class="font-medium mb-2">光线控制技巧</h3>
+            <ul class="space-y-2 text-sm text-gray-700">
+                <li>• 上午9-11点：适合拍摄水果表面质感</li>
+                <li>• 下午2-4点：适合拍摄农产品整体外观</li>
+                <li>• 阴天光线：最适合拍摄绿叶类蔬菜</li>
+            </ul>
+        </div>
+
+        <div class="tip-card p-4 bg-gray-50 rounded-lg mb-4">
+            <h3 class="font-medium mb-2">构图技巧</h3>
+            <ul class="space-y-2 text-sm text-gray-700">
+                <li>• 单品特写：45°俯拍突出立体感</li>
+                <li>• 组合陈列：三分法突出主次关系</li>
+                <li>• 细节刻画：微距模式展现纹理</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 新增：案例展示 -->
+    <div class="bg-white rounded-xl p-4 md:p-6 shadow-sm mb-6">
+        <h2 class="text-lg font-bold mb-4">优秀案例展示</h2>
+        <div class="gallery-grid">
+            <div class="before-after rounded-lg overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1597362925123-77861d3fbac7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                     alt="蔬菜拍摄案例"
+                     class="w-full h-32 object-cover">
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增：常见问题 -->
+    <div class="bg-white rounded-xl p-4 md:p-6 shadow-sm mb-6">
+        <h2 class="text-lg font-bold mb-4">常见问题解答</h2>
+        <div class="space-y-4">
+            <div class="p-4 bg-gray-50 rounded-lg">
+                <h3 class="font-medium mb-2">Q: 如何避免水果拍摄过度曝光？</h3>
+                <p class="text-sm text-gray-700">A: 建议使用HDR模式，或在手机设置中将曝光度调低0.3-0.7档，同时避开正午强光时段拍摄。</p>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-lg">
+                <h3 class="font-medium mb-2">Q: 叶菜类拍摄如何保持新鲜感？</h3>
+                <p class="text-sm text-gray-700">A: 可以在拍摄前轻轻喷洒水雾，并使用逆光拍摄突出水珠效果，营造新鲜感。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 固定底部工具栏 -->
+    <div class="sticky-tools fixed bottom-0 bg-olive-40 w-full py-3 px-6">
+        <div class="flex items-center justify-between">
+            <div class="flex space-x-4">
+                <button class="p-2 text-navy hover:text-green-600 transition-colors">
+                    <i class="far fa-star text-xl"></i>
+                </button>
+                <button class="p-2 text-navy hover:text-green-600 transition-colors">
+                    <i class="fas fa-share-alt text-xl"></i>
+                </button>
+            </div>
+            <button class="bg-green-600 text-white px-6 py-3 rounded-full 
+                        hover:bg-green-700 active:scale-95 transition-all">
+                立即学习
+            </button>
+        </div>
+    </div>
+
+    <script>
+    // 收藏功能
+    document.querySelector('.fa-star').addEventListener('click', function() {
+        this.classList.toggle('fas');
+        this.classList.toggle('far');
+        this.style.color = this.classList.contains('fas') ? '#ffd700' : '';
+    });
+
+    // 目录交互,点击事件
+    let videoPlayerInstance = null;
+
+    document.querySelectorAll('.bg-gray-50').forEach(item => {
+        item.addEventListener('click', function(event) {
+            // 仅当点击目录项主体时触发（排除内部元素）
+            if (!event.target.closest('.lesson-item')) return;
+            
+            if (!videoPlayerInstance) {
+                createVideoPlayer();
+            }
+        });
+    });
+
+    function createVideoPlayer() {
+        videoPlayerInstance = document.createElement('div');
+        videoPlayerInstance.innerHTML = `
+            <div class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center"
+                onclick="handleVideoClick(event)">
+                <div class="bg-white rounded-xl w-full max-w-2xl p-4 relative">
+                    <button class="absolute -top-3 -right-3 bg-white rounded-full p-2 shadow-lg
+                                hover:bg-gray-100 transition-colors"
+                            onclick="closeVideoPlayer(event)">
+                        <i class="fas fa-times text-gray-600"></i>
+                    </button>
+                    <video class="w-full rounded-lg" controls>
+                        <source src="sample.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(videoPlayerInstance);
+    }
+
+    // 修复后的关闭逻辑
+    function closeVideoPlayer(event) {
+        event.stopPropagation(); // 阻止事件冒泡
+        if (videoPlayerInstance) {
+            const video = videoPlayerInstance.querySelector('video');
+            video.pause();
+            video.currentTime = 0;
+            videoPlayerInstance.remove();
+            videoPlayerInstance = null;
+        }
+    }
+
+    // 优化遮罩层点击判断
+    function handleVideoClick(event) {
+        if (event.target === videoPlayerInstance?.firstElementChild) {
+            closeVideoPlayer(event);
+        }
+    }
+
+    // ESC关闭优化
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && videoPlayerInstance) {
+            closeVideoPlayer(e);
+        }
+    });
+    </script>
+</body>
+</html>
+
+<!-- 
+
+-->

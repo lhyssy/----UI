@@ -1,0 +1,172 @@
+/**
+ * 禾语智宣 - 橄榄色系配色方案
+ * 基础色：rgba(205, 210, 171, 0.2) - 浅橄榄色
+ */
+
+:root {
+    /* 基础色彩 - 橄榄色系 */
+    --olive-base: rgba(205, 210, 171, 1);
+    /* 实心橄榄色 */
+    --olive-light: rgba(225, 230, 191, 1);
+    /* 浅橄榄色 */
+    --olive-dark: rgba(185, 190, 151, 1);
+    /* 深橄榄色 */
+    --olive-darkest: rgba(165, 170, 131, 1);
+    /* 最深橄榄色 */
+
+    /* 带透明度变体 */
+    --olive-alpha-5: rgba(205, 210, 171, 0.05);
+    --olive-alpha-10: rgba(205, 210, 171, 0.1);
+    --olive-alpha-20: rgba(205, 210, 171, 0.2);
+    --olive-alpha-30: rgba(205, 210, 171, 0.3);
+    --olive-alpha-50: rgba(205, 210, 171, 0.5);
+    --olive-alpha-80: rgba(205, 210, 171, 0.8);
+
+    /* tutorials.html配色 */
+    --bg-olive-0: #f3f4ec;
+    --bg-olive-10: #ced29f;
+    --bg-olive-20: #bec381;
+    --bg-olive-30: #a9b056;
+    --bg-olive-40: rgba(154, 163, 56, 1);
+    --text-navy: rgba(15, 45, 73, 1);
+
+    /* 强调色 - 与橄榄色互补的橙色系 */
+    --accent-color: #ff9a3c;
+    --accent-light: #ffbe7b;
+    --accent-dark: #e67e00;
+    --accent-alpha-10: rgba(255, 154, 60, 0.1);
+    --accent-alpha-20: rgba(255, 154, 60, 0.2);
+
+    /* 中性色 */
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --text-tertiary: #999999;
+    --text-light: #f5f5f5;
+    --text-on-primary: #ffffff;
+
+    /* 背景色 */
+    --bg-primary: #f8f9f7;
+    /* 带一点橄榄色调的白色背景 */
+    --bg-secondary: #ffffff;
+    /* 纯白色背景 */
+    --bg-tertiary: #f0f2ec;
+    /* 略深的带橄榄色调背景 */
+
+    /* 边框色 */
+    --border-color: #e5e7e0;
+    /* 带一点橄榄色调的边框色 */
+    --border-light: #f0f2ec;
+    /* 浅色边框 */
+
+    /* 功能色 */
+    --success: #4caf50;
+    --warning: #ff9800;
+    --error: #f44336;
+    --info: #2196f3;
+
+    /* 功能色带透明度变体 */
+    --success-alpha-10: rgba(76, 175, 80, 0.1);
+    --warning-alpha-10: rgba(255, 152, 0, 0.1);
+    --error-alpha-10: rgba(244, 67, 54, 0.1);
+    --info-alpha-10: rgba(33, 150, 243, 0.1);
+
+    /* 渐变色 */
+    --gradient-primary: linear-gradient(135deg, var(--olive-base) 0%, var(--olive-dark) 100%);
+    --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-dark) 100%);
+    --gradient-light: linear-gradient(135deg, var(--olive-light) 0%, var(--olive-base) 100%);
+
+    /* 映射到通用色彩变量 */
+    --primary-color: var(--olive-base);
+    --primary-light: var(--olive-light);
+    --primary-dark: var(--olive-dark);
+    --primary-alpha-5: var(--olive-alpha-5);
+    --primary-alpha-10: var(--olive-alpha-10);
+    --primary-alpha-20: var(--olive-alpha-20);
+
+    /* 阴影 */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+    --shadow-primary: 0 4px 12px rgba(205, 210, 171, 0.3);
+}
+
+/* 互动状态颜色 */
+.hover-primary:hover {
+    background-color: var(--primary-light);
+}
+
+.active-primary:active {
+    background-color: var(--primary-color);
+}
+
+/* 文本颜色工具类 */
+.text-primary {
+    color: var(--primary-dark);
+}
+
+.text-accent {
+    color: var(--accent-color);
+}
+
+/* 背景颜色工具类 */
+.bg-primary-gradient {
+    background: var(--gradient-primary);
+}
+
+.bg-primary-light {
+    background-color: var(--primary-light);
+}
+
+.bg-primary {
+    background-color: var(--primary-color);
+}
+
+.bg-primary-dark {
+    background-color: var(--primary-dark);
+}
+
+.bg-accent {
+    background-color: var(--accent-color);
+}
+
+/* 边框颜色工具类 */
+.border-primary {
+    border-color: var(--primary-color);
+}
+
+.border-accent {
+    border-color: var(--accent-color);
+}
+
+/* 添加自定义导航背景类 */
+.custom-nav-bg {
+    background-color: rgba(154, 163, 56, 1) !important;
+}
+
+.custom-nav-bg2 {
+    background-color: #a9b056 !important;
+}
+
+.text-navy {
+    color: rgba(15, 45, 73, 1);
+}
+
+.bg-olive-0 {
+    background-color: #f3f4ec;
+}
+
+.bg-olive-10 {
+    background-color: #ced29f;
+}
+
+.bg-olive-20 {
+    background-color: #bec381;
+}
+
+.bg-olive-30 {
+    background-color: #a9b056;
+}
+
+.bg-olive-40 {
+    background-color: rgba(154, 163, 56, 1)
+}
