@@ -15,7 +15,7 @@ const TOAST_DURATION = 2000;
 function showToast(message, type = 'info', duration = TOAST_DURATION) {
     // 检查是否已存在Toast容器
     let toastContainer = document.getElementById('toastContainer');
-    
+
     if (!toastContainer) {
         // 创建Toast容器
         toastContainer = document.createElement('div');
@@ -23,20 +23,20 @@ function showToast(message, type = 'info', duration = TOAST_DURATION) {
         toastContainer.className = 'toast-container';
         document.body.appendChild(toastContainer);
     }
-    
+
     // 创建新的Toast元素
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
     toast.textContent = message;
-    
+
     // 添加到容器中
     toastContainer.appendChild(toast);
-    
+
     // 显示Toast
     setTimeout(() => {
         toast.classList.add('show');
     }, 10);
-    
+
     // 设置自动消失
     setTimeout(() => {
         toast.classList.remove('show');
@@ -58,22 +58,22 @@ function showToast(message, type = 'info', duration = TOAST_DURATION) {
 function showLoading(message = '加载中...') {
     // 检查是否已存在加载指示器
     let loadingElement = document.getElementById('globalLoading');
-    
+
     if (!loadingElement) {
         // 创建加载指示器
         loadingElement = document.createElement('div');
         loadingElement.id = 'globalLoading';
         loadingElement.className = 'loading-container';
-        
+
         const spinner = document.createElement('div');
         spinner.className = 'loading-spinner';
         loadingElement.appendChild(spinner);
-        
+
         const loadingText = document.createElement('div');
         loadingText.className = 'loading-text';
         loadingText.textContent = message;
         loadingElement.appendChild(loadingText);
-        
+
         document.body.appendChild(loadingElement);
     } else {
         // 更新现有加载指示器的消息
@@ -82,7 +82,7 @@ function showLoading(message = '加载中...') {
             loadingText.textContent = message;
         }
     }
-    
+
     return loadingElement;
 }
 
@@ -104,7 +104,7 @@ function hideLoading() {
  */
 function debounce(func, wait = 300) {
     let timeout;
-    return function(...args) {
+    return function (...args) {
         const context = this;
         clearTimeout(timeout);
         timeout = setTimeout(() => {
@@ -121,7 +121,7 @@ function debounce(func, wait = 300) {
  */
 function throttle(func, limit = 300) {
     let inThrottle;
-    return function(...args) {
+    return function (...args) {
         const context = this;
         if (!inThrottle) {
             func.apply(context, args);
@@ -142,14 +142,14 @@ function formatDate(date, format = 'YYYY-MM-DD') {
     if (isNaN(d.getTime())) {
         return '';
     }
-    
+
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
     const hours = String(d.getHours()).padStart(2, '0');
     const minutes = String(d.getMinutes()).padStart(2, '0');
     const seconds = String(d.getSeconds()).padStart(2, '0');
-    
+
     return format
         .replace('YYYY', year)
         .replace('MM', month)
@@ -194,19 +194,19 @@ function deepClone(obj) {
  */
 function createElement(tag, attributes = {}, content = '') {
     const element = document.createElement(tag);
-    
+
     // 设置属性
     Object.keys(attributes).forEach(key => {
         element.setAttribute(key, attributes[key]);
     });
-    
+
     // 设置内容
     if (typeof content === 'string') {
         element.innerHTML = content;
     } else if (content instanceof HTMLElement) {
         element.appendChild(content);
     }
-    
+
     return element;
 }
 
@@ -221,11 +221,11 @@ function dataURLtoBlob(dataURL) {
     const bstr = atob(arr[1]);
     let n = bstr.length;
     const u8arr = new Uint8Array(n);
-    
+
     while (n--) {
         u8arr[n] = bstr.charCodeAt(n);
     }
-    
+
     return new Blob([u8arr], { type: mime });
 }
 
@@ -242,6 +242,161 @@ function blobToDataURL(blob) {
         reader.readAsDataURL(blob);
     });
 }
+
+/**
+ * 通用图片处理功能
+ * 提供图片压缩、存储、加载等功能
+ */
+
+// 图片存储键
+const IMAGE_STORAGE_KEYS = ['uploadedImages', 'productImages', 'uploadedFiles'];
+
+/**
+ * 保存图片到localStorage
+ * @param {Array} images - 图片数组
+ * @param {string} key - 存储键名，默认为uploadedImages
+ */
+function saveImagesToStorage(images, key = 'uploadedImages') {
+    if (!images || !Array.isArray(images)) return;
+
+    try {
+        localStorage.setItem(key, JSON.stringify(images));
+        console.log(`已保存${images.length}张图片到${key}`);
+    } catch (error) {
+        console.error('保存图片失败:', error);
+    }
+}
+
+/**
+ * 从localStorage加载图片
+ * @param {string|Array} keys - 存储键名或键名数组
+ * @returns {Array} 图片数组
+ */
+function loadImagesFromStorage(keys = IMAGE_STORAGE_KEYS) {
+    let images = [];
+    const keysToCheck = Array.isArray(keys) ? keys : [keys];
+
+    for (const key of keysToCheck) {
+        try {
+            const storedData = localStorage.getItem(key);
+            if (storedData) {
+                const parsedData = JSON.parse(storedData);
+
+                if (Array.isArray(parsedData) && parsedData.length > 0) {
+                    console.log(`从${key}加载了${parsedData.length}张图片`);
+                    images = parsedData;
+                    break;
+                } else if (typeof parsedData === 'object' && parsedData !== null) {
+                    // 对象格式，尝试提取URLs
+                    const extractedImages = Object.values(parsedData).filter(item =>
+                        typeof item === 'string' ||
+                        (item && (item.url || item.preview || item.src))
+                    );
+
+                    if (extractedImages.length > 0) {
+                        console.log(`从${key}对象中提取了${extractedImages.length}张图片`);
+                        images = extractedImages;
+                        break;
+                    }
+                }
+            }
+        } catch (error) {
+            console.error(`从${key}加载图片失败:`, error);
+        }
+    }
+
+    return images;
+}
+
+/**
+ * 获取图片源URL（处理不同格式的图片数据）
+ * @param {string|object} img - 图片数据
+ * @returns {string} 图片URL
+ */
+function getImageSource(img) {
+    if (!img) return "";
+
+    // 如果是字符串（直接URL），返回
+    if (typeof img === 'string') {
+        return img;
+    }
+    // 如果是File对象，尝试创建objectURL
+    else if (typeof File !== 'undefined' && img instanceof File) {
+        return URL.createObjectURL(img);
+    }
+    // 如果是对象，尝试获取URL属性
+    else if (typeof img === 'object') {
+        // 检查各种可能的URL属性
+        if (img.preview) return img.preview;
+        if (img.url) return img.url;
+        if (img.src) return img.src;
+        if (img.path) return img.path;
+        if (img.uri) return img.uri;
+
+        // 如果有base64数据
+        if (img.data && typeof img.data === 'string' &&
+            (img.data.startsWith('data:image') || img.data.startsWith('http'))) {
+            return img.data;
+        }
+
+        // 如果有objectURL
+        if (img.objectURL) return img.objectURL;
+    }
+
+    console.warn('无法提取图片URL:', img);
+    return "";
+}
+
+/**
+ * 压缩图片
+ * @param {string} imageUrl - 图片URL
+ * @param {string} mimeType - MIME类型
+ * @param {Function} callback - 回调函数
+ */
+function compressImage(imageUrl, mimeType, callback) {
+    const img = new Image();
+    img.src = imageUrl;
+
+    img.onload = function () {
+        let width = img.width;
+        let height = img.height;
+
+        // 计算压缩比例
+        const maxDimension = 1200;
+        if (width > maxDimension || height > maxDimension) {
+            if (width > height) {
+                height = Math.round(height * (maxDimension / width));
+                width = maxDimension;
+            } else {
+                width = Math.round(width * (maxDimension / height));
+                height = maxDimension;
+            }
+        }
+
+        // 创建Canvas
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+
+        // 设置Canvas尺寸
+        canvas.width = width;
+        canvas.height = height;
+
+        // 绘制图片到Canvas
+        context.drawImage(img, 0, 0, width, height);
+
+        // 获取压缩后的图片数据
+        const compressedImageUrl = canvas.toDataURL(mimeType || 'image/jpeg', 0.8);
+
+        // 返回压缩后的图片
+        callback(compressedImageUrl);
+    };
+}
+
+// 导出函数，使其可以在其他脚本中访问
+window.saveImagesToStorage = saveImagesToStorage;
+window.loadImagesFromStorage = loadImagesFromStorage;
+window.getImageSource = getImageSource;
+window.compressImage = compressImage;
 
 // 导出工具函数
 if (typeof module !== 'undefined' && module.exports) {

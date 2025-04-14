@@ -3,7 +3,7 @@
  * 包含页面导航、公共UI组件和常用功能
  */
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // 页面入场动画
     initPageAnimations();
 
@@ -21,10 +21,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 初始化所有页面导航
     initNavigation();
-    
+
     // 初始化页面动画
     initAnimations();
-    
+
     // 初始化返回按钮
     initBackButton();
 });
@@ -48,7 +48,7 @@ function initPageAnimations() {
 function setupBackButtons() {
     const backButtons = document.querySelectorAll('#backButton, .back-button');
     backButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
+        button.addEventListener('click', function (e) {
             e.preventDefault();
             // 检查是否有指定的返回URL
             const backUrl = this.getAttribute('data-back-url');
@@ -66,17 +66,17 @@ function setupBackButtons() {
  */
 function setupBottomNavigation() {
     const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
-    
+
     // 根据当前页面设置激活状态
     const currentPage = getCurrentPage();
-    
+
     bottomNavItems.forEach(item => {
         const link = item.getAttribute('data-link');
         if (link && currentPage.includes(link)) {
             item.classList.add('active');
         }
-        
-        item.addEventListener('click', function() {
+
+        item.addEventListener('click', function () {
             const link = this.getAttribute('data-link');
             if (link) {
                 window.location.href = link;
@@ -102,15 +102,15 @@ function initPageEffects() {
     if (document.querySelector('.hero-section')) {
         createBubbleEffect();
     }
-    
+
     // 初始化卡片悬停效果
     const cards = document.querySelectorAll('.card');
     cards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
+        card.addEventListener('mouseenter', function () {
             this.classList.add('hover');
         });
-        
-        card.addEventListener('mouseleave', function() {
+
+        card.addEventListener('mouseleave', function () {
             this.classList.remove('hover');
         });
     });
@@ -130,9 +130,9 @@ function createBubbleEffect() {
     container.style.overflow = 'hidden';
     container.style.pointerEvents = 'none';
     container.style.zIndex = '-1';
-    
+
     document.body.appendChild(container);
-    
+
     // 创建气泡
     for (let i = 0; i < 15; i++) {
         createBubble(container);
@@ -148,7 +148,7 @@ function createBubble(container) {
     const size = Math.random() * 60 + 20;
     const duration = Math.random() * 20 + 10;
     const left = Math.random() * 100;
-    
+
     bubble.style.position = 'absolute';
     bubble.style.bottom = '-100px';
     bubble.style.left = `${left}%`;
@@ -157,9 +157,9 @@ function createBubble(container) {
     bubble.style.borderRadius = '50%';
     bubble.style.background = 'rgba(7, 193, 96, 0.05)';
     bubble.style.animation = `float ${duration}s linear infinite`;
-    
+
     container.appendChild(bubble);
-    
+
     // 创建动画关键帧
     if (!document.querySelector('#bubble-keyframes')) {
         const keyframes = document.createElement('style');
@@ -189,7 +189,7 @@ function createBubble(container) {
 function setupPlatformOptions() {
     const platformOptions = document.querySelectorAll('.platform-option');
     platformOptions.forEach(option => {
-        option.addEventListener('click', function() {
+        option.addEventListener('click', function () {
             const checkIcon = this.querySelector('.check-icon i');
             if (checkIcon) {
                 if (checkIcon.classList.contains('fa-circle')) {
@@ -205,7 +205,7 @@ function setupPlatformOptions() {
                 // 切换选中状态
                 this.classList.toggle('selected');
             }
-            
+
             // 通知状态变化
             const event = new CustomEvent('platformSelectionChanged');
             document.dispatchEvent(event);
@@ -220,20 +220,20 @@ function setupPlatformOptions() {
  */
 function showLoading(element, text = '加载中...') {
     element.classList.add('loading');
-    
+
     // 创建加载指示器
     const spinner = document.createElement('div');
     spinner.classList.add('loading-spinner');
-    
+
     const message = document.createElement('div');
     message.classList.add('loading-message');
     message.textContent = text;
-    
+
     const loadingContainer = document.createElement('div');
     loadingContainer.classList.add('loading-container');
     loadingContainer.appendChild(spinner);
     loadingContainer.appendChild(message);
-    
+
     // 备份原内容
     element.setAttribute('data-original-content', element.innerHTML);
     element.innerHTML = '';
@@ -246,7 +246,7 @@ function showLoading(element, text = '加载中...') {
  */
 function hideLoading(element) {
     element.classList.remove('loading');
-    
+
     // 恢复原内容
     const originalContent = element.getAttribute('data-original-content');
     if (originalContent) {
@@ -266,14 +266,14 @@ function showToast(message, type = 'info', duration = 3000) {
     if (existingToast) {
         existingToast.remove();
     }
-    
+
     // 创建新的toast
     const toast = document.createElement('div');
     toast.className = `toast-container ${type}`;
-    
+
     // 添加图标
     let icon = '';
-    switch(type) {
+    switch (type) {
         case 'success':
             icon = '<i class="fas fa-check-circle"></i>';
             break;
@@ -289,21 +289,21 @@ function showToast(message, type = 'info', duration = 3000) {
         default:
             icon = '<i class="fas fa-info-circle"></i>';
     }
-    
+
     toast.innerHTML = `
         <div class="toast-content">
             <div class="toast-icon">${icon}</div>
             <div class="toast-message">${message}</div>
         </div>
     `;
-    
+
     document.body.appendChild(toast);
-    
+
     // 添加显示类（用于动画）
     setTimeout(() => {
         toast.classList.add('show');
     }, 10);
-    
+
     // 如果不是加载中，自动隐藏
     if (type !== 'loading' && duration > 0) {
         setTimeout(() => {
@@ -313,7 +313,7 @@ function showToast(message, type = 'info', duration = 3000) {
             }, 300);
         }, duration);
     }
-    
+
     return toast;
 }
 
@@ -346,7 +346,7 @@ function formatDate(date, format = 'YYYY-MM-DD') {
     const hours = String(d.getHours()).padStart(2, '0');
     const minutes = String(d.getMinutes()).padStart(2, '0');
     const seconds = String(d.getSeconds()).padStart(2, '0');
-    
+
     return format
         .replace('YYYY', year)
         .replace('MM', month)
@@ -362,7 +362,7 @@ function formatDate(date, format = 'YYYY-MM-DD') {
 function initNavigation() {
     // 处理底部导航栏点击
     document.querySelectorAll('[data-link]').forEach(item => {
-        item.addEventListener('click', function(e) {
+        item.addEventListener('click', function (e) {
             e.preventDefault();
             const link = this.getAttribute('data-link');
             if (link) {
@@ -375,7 +375,7 @@ function initNavigation() {
             }
         });
     });
-    
+
     // 激活当前页面对应的导航项
     const currentPage = window.location.pathname.split('/').pop();
     document.querySelectorAll('.bottom-nav-item').forEach(item => {
@@ -389,14 +389,14 @@ function initNavigation() {
 
     // 为菜单项添加统一点击效果
     document.querySelectorAll('.menu-item').forEach(item => {
-        item.addEventListener('click', function() {
+        item.addEventListener('click', function () {
             addClickEffect(this);
         });
     });
 
     // 为所有按钮添加统一点击效果
     document.querySelectorAll('button').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             addClickEffect(this);
         });
     });
@@ -409,7 +409,7 @@ function initNavigation() {
 function addClickEffect(element) {
     // 添加点击效果类
     element.classList.add('click-effect');
-    
+
     // 移除效果类
     setTimeout(() => {
         element.classList.remove('click-effect');
@@ -423,7 +423,7 @@ function addClickEffect(element) {
 function navigateTo(page) {
     // 添加页面切换动画
     document.body.classList.add('page-transition-out');
-    
+
     // 延迟跳转以便显示动画
     setTimeout(() => {
         window.location.href = page;
@@ -443,7 +443,7 @@ function initAnimations() {
             el.style.opacity = '1';
         }, 100);
     });
-    
+
     // 滑入动画
     const slideElements = document.querySelectorAll('.slide-up');
     slideElements.forEach((el, index) => {
@@ -455,7 +455,7 @@ function initAnimations() {
             el.style.opacity = '1';
         }, 100 + index * 100);
     });
-    
+
     // 交错动画
     const staggerElements = document.querySelectorAll('.stagger-item');
     staggerElements.forEach((el, index) => {
@@ -475,7 +475,7 @@ function initAnimations() {
 function initBackButton() {
     const backButton = document.getElementById('backButton');
     if (backButton) {
-        backButton.addEventListener('click', function() {
+        backButton.addEventListener('click', function () {
             window.history.back();
         });
     }
