@@ -483,13 +483,22 @@
                 padding-top: env(safe-area-inset-top, 12px);
             }
 
-            /* 修复iOS滚动橡皮筋效果问题 */
+            /* 修复滚动问题 - 移除导致无法滚动的固定定位 */
             html {
-                position: fixed;
+                position: relative;
                 width: 100%;
-                height: 100%;
-                overflow: auto;
+                height: auto;
+                overflow-y: visible;
                 -webkit-overflow-scrolling: touch;
+            }
+
+            body {
+                position: relative;
+                overflow-x: hidden;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 80px;
+                /* 为底部导航栏留出空间 */
             }
 
             /* 针对小屏幕优化表单间距 */
@@ -1176,6 +1185,23 @@
                 }
             });
 
+            // 修复iOS上的滚动问题
+            function fixIOSScroll() {
+                if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                    document.addEventListener('touchmove', function (e) {
+                        // 允许默认的滚动行为
+                    }, { passive: true });
+
+                    // 确保页面可以完全滚动
+                    document.body.style.height = 'auto';
+                    document.body.style.overflow = 'auto';
+                    document.documentElement.style.overflow = 'auto';
+                }
+            }
+
+            // 执行iOS滚动修复
+            fixIOSScroll();
+
             // 优化移动端触摸体验
             if ('ontouchstart' in window) {
                 // 让按钮有触摸反馈
@@ -1189,7 +1215,7 @@
                     }, { passive: true });
                 });
 
-                // 禁用长按选择文本
+                // 禁用长按选择文本，但允许滚动
                 document.addEventListener('contextmenu', function (e) {
                     if (e.target.tagName === 'IMG') {
                         e.preventDefault();
