@@ -1,633 +1,597 @@
 /**
- * 宣传图文预览页面 - 功能脚本
- * 处理图片轮播、AI生成文案、模板切换等功能
+ * 禾语智宣 - 宣传图文预览页面脚本
+ * 提供轮播图效果、粒子流、浮动背景以及各种交互增强
  */
+
 document.addEventListener('DOMContentLoaded', function () {
-    // 获取元素
-    const carouselImage = document.getElementById('carouselImage');
-    const carouselIndicators = document.getElementById('carouselIndicators');
+    console.log('预览页面JS加载完成');
+
+    // 初始化粒子背景
+    initParticlesBackground();
+
+    // 初始化轮播图
+    initImageCarousel();
+
+    // 初始化浮动背景
+    initFloatingBackground();
+
+    // 初始化文本编辑区域
+    initTextEditing();
+
+    // 初始化AI助手
+    initAIAssistant();
+
+    // 初始化交互效果
+    initInteractionEffects();
+
+    // 恢复之前上传的图片
+    restoreUploadedImages();
+});
+
+/**
+ * 初始化粒子背景效果
+ */
+function initParticlesBackground() {
+    if (typeof particlesJS !== 'undefined') {
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": window.innerWidth < 768 ? 15 : 30,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#9aa338"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.3,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 5,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#9aa338",
+                    "opacity": 0.2,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 0.5
+                        }
+                    },
+                    "push": {
+                        "particles_nb": 3
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+    } else {
+        console.warn('particlesJS 未加载，无法初始化粒子背景');
+    }
+}
+
+/**
+ * 初始化浮动背景
+ */
+function initFloatingBackground() {
+    // 添加浮动背景元素
+    const container = document.querySelector('body');
+    if (!container) return;
+
+    // 检查是否已存在浮动背景元素
+    if (!document.querySelector('.floating-bg')) {
+        // 创建浮动背景元素
+        for (let i = 1; i <= 3; i++) {
+            const floatingBg = document.createElement('div');
+            floatingBg.className = `floating-bg bg-${i}`;
+            container.appendChild(floatingBg);
+        }
+    }
+
+    // 添加随机移动效果
+    const floatingElements = document.querySelectorAll('.floating-bg');
+
+    floatingElements.forEach((el, index) => {
+        // 为每个元素添加不同的动画延迟
+        el.style.animationDelay = `${index * 2}s`;
+    });
+}
+
+/**
+ * 初始化图片轮播
+ */
+function initImageCarousel() {
+    const imageContainer = document.querySelector('.image-container');
+    const indicators = document.querySelectorAll('.indicator');
     const prevBtn = document.querySelector('.prev-btn');
     const nextBtn = document.querySelector('.next-btn');
-    const generateCopyBtn = document.getElementById('generateCopyBtn');
-    const aiGeneratingContainer = document.getElementById('aiGeneratingContainer');
-    const aiProgressBar = document.getElementById('aiProgressBar');
-    const previewTitle = document.querySelector('.text-lg.font-bold.mb-2');
-    const previewDesc = document.querySelector('.p-4.border-b.border-gray-100 .text-sm.text-gray-700.leading-relaxed');
-    const contentSections = document.querySelectorAll('.border-l-4 .text-sm.text-gray-700.mb-3.leading-relaxed');
-    const imageContainer = document.querySelector('.image-container');
 
-    // 开关状态
-    let isCopyOptimized = true;
-    let isLayoutOptimized = true;
-    let isTopicEnabled = false;
+    if (!imageContainer || !indicators.length) return;
 
-    // 轮播图状态
     let currentIndex = 0;
-    let autoplayInterval;
-    let images = [];
+    const images = imageContainer.querySelectorAll('img');
 
-    // 初始化组件
-    initCarousel();
-    initAIGeneration();
-    initTemplateSelectors();
-    initOptimizationSwitches();
+    // 如果没有图片，显示占位信息
+    if (images.length === 0) {
+        imageContainer.classList.add('no-image');
+        imageContainer.setAttribute('data-placeholder', '暂无图片，请先上传');
+        return;
+    }
 
-    // 设置初始基础文案
-    setupInitialContent();
+    // 显示当前图片
+    function showImage(index) {
+        // 隐藏所有图片
+        images.forEach(img => {
+            img.style.display = 'none';
+        });
 
-    /**
-     * 初始化轮播图功能
-     */
-    function initCarousel() {
+        // 移除所有指示器的active类
+        indicators.forEach(indicator => {
+            indicator.classList.remove('active');
+        });
+
+        // 显示当前图片
+        if (images[index]) {
+            images[index].style.display = 'block';
+
+            // 添加淡入动画
+            images[index].style.opacity = '0';
+            images[index].style.transition = 'opacity 0.5s ease';
+
+            setTimeout(() => {
+                images[index].style.opacity = '1';
+            }, 10);
+        }
+
+        // 高亮当前指示器
+        if (indicators[index]) {
+            indicators[index].classList.add('active');
+        }
+
+        currentIndex = index;
+    }
+
+    // 下一张图片
+    function nextImage() {
+        let nextIndex = currentIndex + 1;
+        if (nextIndex >= images.length) {
+            nextIndex = 0;
+        }
+        showImage(nextIndex);
+    }
+
+    // 上一张图片
+    function prevImage() {
+        let prevIndex = currentIndex - 1;
+        if (prevIndex < 0) {
+            prevIndex = images.length - 1;
+        }
+        showImage(prevIndex);
+    }
+
+    // 绑定指示器点击事件
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            showImage(index);
+        });
+    });
+
+    // 绑定按钮点击事件
+    if (prevBtn && nextBtn) {
+        prevBtn.addEventListener('click', prevImage);
+        nextBtn.addEventListener('click', nextImage);
+    }
+
+    // 自动轮播
+    let autoplayInterval = setInterval(nextImage, 5000);
+
+    // 鼠标悬停时暂停轮播
+    imageContainer.addEventListener('mouseenter', () => {
+        clearInterval(autoplayInterval);
+    });
+
+    // 鼠标离开时恢复轮播
+    imageContainer.addEventListener('mouseleave', () => {
+        autoplayInterval = setInterval(nextImage, 5000);
+    });
+
+    // 触摸滑动支持
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    imageContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        // 暂停自动轮播
+        clearInterval(autoplayInterval);
+    }, { passive: true });
+
+    imageContainer.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+
+        // 判断滑动方向
+        if (touchEndX < touchStartX - 50) {
+            // 向左滑动，显示下一张
+            nextImage();
+        } else if (touchEndX > touchStartX + 50) {
+            // 向右滑动，显示上一张
+            prevImage();
+        }
+
+        // 恢复自动轮播
+        autoplayInterval = setInterval(nextImage, 5000);
+    }, { passive: true });
+
+    // 初始显示第一张图片
+    showImage(0);
+}
+
+/**
+ * 初始化文本编辑区域
+ */
+function initTextEditing() {
+    const editableAreas = document.querySelectorAll('[contenteditable="true"]');
+
+    editableAreas.forEach(area => {
+        // 监听焦点事件
+        area.addEventListener('focus', function () {
+            this.classList.add('editing');
+
+            // 显示编辑提示
+            const parent = this.closest('.info-card');
+            if (parent) {
+                if (!parent.querySelector('.edit-hint')) {
+                    const hint = document.createElement('div');
+                    hint.className = 'edit-hint text-xs text-gray-500 mt-2 italic';
+                    hint.innerHTML = '<i class="fas fa-pen-nib mr-1"></i> 正在编辑...';
+                    parent.appendChild(hint);
+                }
+            }
+        });
+
+        // 监听失焦事件
+        area.addEventListener('blur', function () {
+            this.classList.remove('editing');
+
+            // 移除编辑提示
+            const parent = this.closest('.info-card');
+            if (parent) {
+                const hint = parent.querySelector('.edit-hint');
+                if (hint) {
+                    hint.remove();
+                }
+            }
+
+            // 保存编辑内容
+            saveContentToLocalStorage();
+        });
+
+        // 处理粘贴事件，清除格式
+        area.addEventListener('paste', function (e) {
+            e.preventDefault();
+
+            // 获取纯文本
+            const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+
+            // 插入纯文本
+            document.execCommand('insertText', false, text);
+        });
+    });
+
+    // 保存内容到本地存储
+    function saveContentToLocalStorage() {
+        const content = {};
+
+        editableAreas.forEach(area => {
+            if (area.id) {
+                content[area.id] = area.innerHTML;
+            }
+        });
+
+        localStorage.setItem('previewContent', JSON.stringify(content));
+    }
+
+    // 从本地存储恢复内容
+    const savedContent = localStorage.getItem('previewContent');
+    if (savedContent) {
         try {
-            // 设置加载状态
-            if (imageContainer) {
-                imageContainer.classList.add('loading');
-            }
+            const content = JSON.parse(savedContent);
 
-            // 使用utils.js中的函数加载图片
-            let images = [];
-            if (typeof window.loadImagesFromStorage === 'function') {
-                images = window.loadImagesFromStorage();
-            } else {
-                // 备用方案：直接从localStorage获取
-                const uploadedImagesJSON = localStorage.getItem('uploadedImages');
-                if (uploadedImagesJSON) {
-                    try {
-                        images = JSON.parse(uploadedImagesJSON);
-                        console.log('从uploadedImages加载图片:', images);
-                    } catch (e) {
-                        console.error('解析uploadedImages失败:', e);
-                    }
+            for (const id in content) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.innerHTML = content[id];
                 }
             }
+        } catch (e) {
+            console.error('恢复编辑内容失败:', e);
+        }
+    }
+}
 
-            // 如果依然没有图片，使用默认示例图片
-            if (!images || images.length === 0) {
-                console.log('未找到上传的图片，使用默认图片');
+/**
+ * 初始化AI助手
+ */
+function initAIAssistant() {
+    const aiGenerateBtn = document.querySelector('.ai-generate-btn');
+    if (!aiGenerateBtn) return;
 
-                // 显示无图片状态
-                if (imageContainer) {
-                    imageContainer.classList.remove('loading');
-                    imageContainer.classList.add('no-image');
-                    imageContainer.setAttribute('data-placeholder', '请上传产品图片');
-                }
+    aiGenerateBtn.addEventListener('click', function () {
+        // 显示生成中状态
+        const originalText = this.innerHTML;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> AI正在生成中...';
+        this.disabled = true;
 
-                // 使用示例图片
-                images = [
-                    "https://img.alicdn.com/imgextra/i3/O1CN01I45oTi1vdDnxRSC1I_!!6000000006198-0-tps-1080-720.jpg",
-                    "https://img.alicdn.com/imgextra/i4/O1CN01A0iWb91wiXylQC0RL_!!6000000006347-0-tps-1080-720.jpg",
-                    "https://img.alicdn.com/imgextra/i2/O1CN01Z0S2Kr1KpQnQ4YC4R_!!6000000001211-0-tps-1080-720.jpg",
-                    "https://img.alicdn.com/imgextra/i1/O1CN01lMQRRE1xfrjKFAihs_!!6000000006471-0-tps-1080-720.jpg"
-                ];
-            }
+        // 模拟AI生成过程
+        setTimeout(() => {
+            // 生成示例内容
+            generateAIContent();
+
+            // 恢复按钮状态
+            this.innerHTML = originalText;
+            this.disabled = false;
+
+            // 显示成功提示
+            showToast('AI内容生成成功！', 'success');
+        }, 2000);
+    });
+
+    function generateAIContent() {
+        // 示例AI生成的内容
+        const productTitle = document.getElementById('product-title');
+        const productIntro = document.getElementById('product-intro');
+        const productFeatures = document.getElementById('product-features');
+        const productTaste = document.getElementById('product-taste');
+        const productNutrition = document.getElementById('product-nutrition');
+        const productSuggestion = document.getElementById('product-suggestion');
+
+        if (productTitle) {
+            productTitle.innerHTML = '高山有机红富士苹果 - 自然生长 健康美味';
+            addHighlightAnimation(productTitle);
+        }
+
+        if (productIntro) {
+            productIntro.innerHTML = '来自海拔1500米高山果园的有机红富士苹果，无化肥农药，自然生长180天，果肉饱满多汁，香甜可口，是您送礼佳品的不二之选！';
+            addHighlightAnimation(productIntro);
+        }
+
+        if (productFeatures) {
+            productFeatures.innerHTML = '采用有机种植方式，无化学农药，果园全天然生态环境，每一颗苹果都经过精心挑选，保证新鲜度和口感。果实色泽鲜艳，果皮光滑细腻。';
+            addHighlightAnimation(productFeatures);
+        }
+
+        if (productTaste) {
+            productTaste.innerHTML = '口感脆爽多汁，甜度适中（含糖量15°以上），酸甜平衡，入口即化，回味悠长。咬一口仿佛闻到了高山果园的清新空气。';
+            addHighlightAnimation(productTaste);
+        }
+
+        if (productNutrition) {
+            productNutrition.innerHTML = '富含维生素C、膳食纤维和多种抗氧化物质，能够增强免疫力，促进消化，帮助肠道健康。每100克果肉约含52千卡热量，适合健康饮食。';
+            addHighlightAnimation(productNutrition);
+        }
+
+        if (productSuggestion) {
+            productSuggestion.innerHTML = '可直接食用，也可切片拌沙拉，或制作成苹果派、苹果汁等。餐前食用一个苹果有助于控制食欲，是减肥人士的理想选择。冷藏保存可延长新鲜度。';
+            addHighlightAnimation(productSuggestion);
+        }
+    }
+
+    function addHighlightAnimation(element) {
+        // 添加高亮动画效果
+        element.style.transition = 'background-color 1s ease';
+        element.style.backgroundColor = 'rgba(154, 163, 56, 0.2)';
+
+        setTimeout(() => {
+            element.style.backgroundColor = 'transparent';
+        }, 1500);
+    }
+}
+
+/**
+ * 初始化交互效果
+ */
+function initInteractionEffects() {
+    // 添加卡片悬停效果
+    const cards = document.querySelectorAll('.info-card');
+    cards.forEach(card => {
+        card.classList.add('fade-in');
+    });
+
+    // 添加按钮点击效果
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(btn => {
+        btn.addEventListener('mousedown', function () {
+            this.style.transform = 'scale(0.98)';
+        });
+
+        btn.addEventListener('mouseup', function () {
+            this.style.transform = '';
+        });
+
+        btn.addEventListener('mouseleave', function () {
+            this.style.transform = '';
+        });
+    });
+
+    // 修复iOS上的滚动问题
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        document.addEventListener('touchmove', function (e) {
+            // 允许默认的滚动行为
+        }, { passive: true });
+    }
+
+    // 添加发布按钮事件
+    const publishBtn = document.querySelector('.btn-publish');
+    if (publishBtn) {
+        publishBtn.addEventListener('click', function () {
+            window.location.href = 'publish.html';
+        });
+    }
+}
+
+/**
+* 恢复之前上传的图片
+*/
+function restoreUploadedImages() {
+    const imageContainer = document.querySelector('.image-container');
+    const indicatorContainer = document.querySelector('.indicator-container');
+
+    if (!imageContainer || !indicatorContainer) return;
+
+    // 从localStorage获取图片
+    const uploadedImagesStr = localStorage.getItem('uploadedImages');
+    if (!uploadedImagesStr) return;
+
+    try {
+        const uploadedImages = JSON.parse(uploadedImagesStr);
+
+        // 检查是否有图片
+        if (!Array.isArray(uploadedImages) || uploadedImages.length === 0) return;
+
+        // 清除"暂无图片"提示
+        imageContainer.classList.remove('no-image');
+        imageContainer.removeAttribute('data-placeholder');
+
+        // 清除现有图片和指示器
+        const existingImages = imageContainer.querySelectorAll('img');
+        const existingIndicators = indicatorContainer.querySelectorAll('.indicator');
+
+        existingImages.forEach(img => img.remove());
+        existingIndicators.forEach(indicator => indicator.remove());
+
+        // 添加上传的图片
+        uploadedImages.forEach((img, index) => {
+            // 创建图片元素
+            const imgEl = document.createElement('img');
+            imgEl.src = img.preview || img.src;
+            imgEl.style.display = index === 0 ? 'block' : 'none';
+            imgEl.alt = `农产品图片 ${index + 1}`;
+            imgEl.className = 'w-full h-full object-cover';
 
             // 创建指示器
-            if (carouselIndicators) {
-                carouselIndicators.innerHTML = '';
-                images.forEach((_, index) => {
-                    const indicator = document.createElement('div');
-                    indicator.classList.add('indicator');
-                    if (index === 0) indicator.classList.add('active');
-                    indicator.addEventListener('click', () => goToSlide(index));
-                    carouselIndicators.appendChild(indicator);
-                });
-            }
+            const indicator = document.createElement('div');
+            indicator.className = `indicator ${index === 0 ? 'active' : ''}`;
+            indicator.setAttribute('data-index', index);
 
-            // 显示第一张图片
-            if (images.length > 0 && carouselImage) {
-                const imgSrc = typeof window.getImageSource === 'function'
-                    ? window.getImageSource(images[0])
-                    : getImageSource(images[0]);
-
-                console.log('显示第一张图片:', imgSrc);
-
-                // 图片加载完成后移除加载状态
-                carouselImage.onload = function () {
-                    if (imageContainer) {
-                        imageContainer.classList.remove('loading');
-                        imageContainer.classList.remove('no-image');
-                    }
-                    console.log('图片加载完成');
-                };
-
-                // 图片加载失败时显示错误状态
-                carouselImage.onerror = function () {
-                    console.error('图片加载失败:', imgSrc);
-                    if (imageContainer) {
-                        imageContainer.classList.remove('loading');
-                        imageContainer.classList.add('no-image');
-                        imageContainer.setAttribute('data-placeholder', '图片加载失败');
-                    }
-                    // 尝试使用默认图片
-                    carouselImage.src = "https://img.alicdn.com/imgextra/i3/O1CN01I45oTi1vdDnxRSC1I_!!6000000006198-0-tps-1080-720.jpg";
-                };
-
-                carouselImage.src = imgSrc;
-            }
-
-            // 隐藏轮播按钮（如果只有一张图片）
-            if (images.length <= 1) {
-                if (prevBtn) prevBtn.style.display = 'none';
-                if (nextBtn) nextBtn.style.display = 'none';
-                if (carouselIndicators) carouselIndicators.style.display = 'none';
-            } else {
-                // 显示按钮
-                if (prevBtn) prevBtn.style.display = 'flex';
-                if (nextBtn) nextBtn.style.display = 'flex';
-
-                // 绑定按钮事件
-                if (prevBtn) prevBtn.addEventListener('click', prevImage);
-                if (nextBtn) nextBtn.addEventListener('click', nextImage);
-
-                // 启动自动轮播
-                startAutoplay();
-
-                // 鼠标悬停时暂停轮播
-                if (imageContainer) {
-                    imageContainer.addEventListener('mouseenter', stopAutoplay);
-                    imageContainer.addEventListener('mouseleave', startAutoplay);
-                }
-            }
-        } catch (error) {
-            console.error('初始化轮播图失败:', error);
-
-            // 出错时显示错误状态
-            if (imageContainer) {
-                imageContainer.classList.remove('loading');
-                imageContainer.classList.add('no-image');
-                imageContainer.setAttribute('data-placeholder', '图片加载失败');
-            }
-
-            if (carouselImage) {
-                carouselImage.src = "https://img.alicdn.com/imgextra/i3/O1CN01I45oTi1vdDnxRSC1I_!!6000000006198-0-tps-1080-720.jpg";
-            }
-        }
-    }
-
-    /**
-     * 获取图片源URL（处理不同格式的图片数据）
-     * 如果utils.js中存在同名函数，该函数将不会被使用
-     */
-    function getImageSource(img) {
-        // 这个函数是备用实现，优先使用utils.js中的版本
-        if (!img) return "";
-
-        if (typeof img === 'string') {
-            return img;
-        } else if (typeof img === 'object') {
-            return img.preview || img.url || img.src || "";
-        }
-
-        return "";
-    }
-
-    /**
-     * 切换到指定幻灯片
-     */
-    function goToSlide(index) {
-        if (!images || images.length === 0) return;
-
-        // 添加加载状态
-        if (imageContainer) {
-            imageContainer.classList.add('loading');
-        }
-
-        // 更新当前索引
-        currentIndex = index;
-
-        // 更新图片
-        if (carouselImage) {
-            const imgSrc = getImageSource(images[currentIndex]);
-            carouselImage.onload = function () {
-                if (imageContainer) {
-                    imageContainer.classList.remove('loading');
-                }
-            };
-            carouselImage.src = imgSrc;
-        }
-
-        // 更新指示器状态
-        const indicators = document.querySelectorAll('.indicator');
-        indicators.forEach((indicator, i) => {
-            if (i === currentIndex) {
-                indicator.classList.add('active');
-            } else {
-                indicator.classList.remove('active');
-            }
-        });
-    }
-
-    /**
-     * 显示上一张图片
-     */
-    function prevImage() {
-        if (!images || images.length <= 1) return;
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        goToSlide(currentIndex);
-        resetAutoplay();
-    }
-
-    /**
-     * 显示下一张图片
-     */
-    function nextImage() {
-        if (!images || images.length <= 1) return;
-        currentIndex = (currentIndex + 1) % images.length;
-        goToSlide(currentIndex);
-        resetAutoplay();
-    }
-
-    /**
-     * 开始自动播放
-     */
-    function startAutoplay() {
-        stopAutoplay(); // 确保不会有多个计时器
-        autoplayInterval = setInterval(() => {
-            nextImage();
-        }, 3000);
-    }
-
-    /**
-     * 停止自动播放
-     */
-    function stopAutoplay() {
-        if (autoplayInterval) {
-            clearInterval(autoplayInterval);
-        }
-    }
-
-    /**
-     * 重置自动播放（点击按钮后重新开始计时）
-     */
-    function resetAutoplay() {
-        stopAutoplay();
-        startAutoplay();
-    }
-
-    /**
-     * 设置初始基础文案
-     */
-    function setupInitialContent() {
-        // 尝试从localStorage加载用户输入的文案
-        const savedCopy = localStorage.getItem('productCopy');
-        let userCopy = null;
-
-        if (savedCopy) {
-            try {
-                userCopy = JSON.parse(savedCopy);
-                console.log('已加载用户输入的文案信息', userCopy);
-
-                // 存储原始用户输入，以便后续可以恢复
-                window.originalUserCopy = { ...userCopy };
-
-                // 显示用户输入的文案
-                if (userCopy.isUserGenerated) {
-                    displayUserContent(userCopy);
-                    return; // 如果成功加载并显示了用户输入的文案，则返回
-                }
-            } catch (e) {
-                console.error('解析用户文案失败:', e);
-            }
-        }
-
-        // 如果没有用户输入的文案或解析失败，使用默认内容
-        console.log('使用默认文案内容');
-
-        // 这些是初始的基础文案，用户可以在预览页面修改
-        if (previewTitle) {
-            previewTitle.textContent = "高山果园红富士苹果 | 有机种植 · 自然成熟 · 脆甜多汁";
-        }
-
-        if (previewDesc) {
-            previewDesc.innerHTML = "✨ 来自高海拔山区的红富士苹果，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。每一口都能感受到新鲜与甜脆，是您日常水果的理想选择。";
-        }
-
-        if (contentSections && contentSections.length > 0) {
-            // 设置产品特点
-            if (contentSections[0]) {
-                contentSections[0].textContent = "这款红富士苹果产自高海拔山区，生长环境优越，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。果实成熟度高，颜色红润，外观光亮诱人。";
-            }
-
-            // 设置口感体验
-            if (contentSections[1]) {
-                contentSections[1].textContent = "口感脆甜多汁，果肉细腻，香气怡人。咬一口，汁水四溢，甜度适中不腻口，是水果爱好者的不二之选。冷藏后食用，口感更佳。";
-            }
-
-            // 设置营养价值
-            if (contentSections[2]) {
-                contentSections[2].textContent = "富含多种维生素和膳食纤维，有助于肠道健康，增强免疫力。每天一个苹果，医生远离我！特别适合注重健康生活的现代人。";
-            }
-
-            // 设置食用建议
-            if (contentSections[3]) {
-                contentSections[3].textContent = "建议冷藏后食用，口感更佳。可以直接作为水果享用，也可切片加入沙拉、搭配酸奶或制作苹果派。苹果还能制作成鲜榨果汁，搭配其他水果制作特色饮品，带来清新健康的口感体验。";
-            }
-        }
-
-        // 将默认内容保存为原始内容
-        window.originalUserCopy = {
-            title: previewTitle ? previewTitle.textContent : "",
-            description: previewDesc ? previewDesc.textContent : "",
-            features: contentSections && contentSections[0] ? contentSections[0].textContent : "",
-            taste: contentSections && contentSections[1] ? contentSections[1].textContent : "",
-            nutrition: contentSections && contentSections[2] ? contentSections[2].textContent : "",
-            suggestion: contentSections && contentSections[3] ? contentSections[3].textContent : "",
-            isUserGenerated: false
-        };
-    }
-
-    /**
-     * 显示用户输入的文案
-     */
-    function displayUserContent(userCopy) {
-        if (previewTitle && userCopy.title) {
-            previewTitle.textContent = userCopy.title;
-        }
-
-        if (previewDesc && userCopy.description) {
-            previewDesc.innerHTML = userCopy.description;
-        }
-
-        if (contentSections && contentSections.length > 0) {
-            // 设置产品特点
-            if (contentSections[0] && userCopy.features) {
-                contentSections[0].textContent = userCopy.features;
-            }
-
-            // 设置口感体验
-            if (contentSections[1] && userCopy.taste) {
-                contentSections[1].textContent = userCopy.taste;
-            }
-
-            // 设置营养价值
-            if (contentSections[2] && userCopy.nutrition) {
-                contentSections[2].textContent = userCopy.nutrition;
-            }
-
-            // 设置食用建议
-            if (contentSections[3] && userCopy.suggestion) {
-                contentSections[3].textContent = userCopy.suggestion;
-            }
-        }
-    }
-
-    /**
-     * 初始化优化开关
-     */
-    function initOptimizationSwitches() {
-        // 优化文案开关
-        const copySwitch = document.querySelector('.bg-white.rounded-xl.p-3.shadow-sm.mb-3:nth-child(2) .relative');
-        if (copySwitch) {
-            copySwitch.addEventListener('click', function () {
-                isCopyOptimized = !isCopyOptimized;
-                this.classList.toggle('bg-gray-300');
-                this.classList.toggle('bg-green-500');
-                const dot = this.querySelector('span');
-                if (dot) {
-                    dot.classList.toggle('right-1');
-                    dot.classList.toggle('left-1');
-                }
-                showToast(isCopyOptimized ? '已开启文案优化' : '已关闭文案优化', 'info');
-            });
-        }
-
-        // 优化排版开关
-        const layoutSwitch = document.querySelector('.bg-white.rounded-xl.p-3.shadow-sm.mb-3:nth-child(3) .relative');
-        if (layoutSwitch) {
-            layoutSwitch.addEventListener('click', function () {
-                isLayoutOptimized = !isLayoutOptimized;
-                this.classList.toggle('bg-gray-300');
-                this.classList.toggle('bg-green-500');
-                const dot = this.querySelector('span');
-                if (dot) {
-                    dot.classList.toggle('right-1');
-                    dot.classList.toggle('left-1');
-                }
-                showToast(isLayoutOptimized ? '已开启排版优化' : '已关闭排版优化', 'info');
-            });
-        }
-
-        // 热门话题开关
-        const topicSwitch = document.querySelector('.bg-white.rounded-xl.p-3.shadow-sm:last-child .relative');
-        if (topicSwitch) {
-            topicSwitch.addEventListener('click', function () {
-                isTopicEnabled = !isTopicEnabled;
-                this.classList.toggle('bg-gray-300');
-                this.classList.toggle('bg-green-500');
-                const dot = this.querySelector('span');
-                if (dot) {
-                    dot.classList.toggle('right-1');
-                    dot.classList.toggle('left-1');
-                }
-                showToast(isTopicEnabled ? '已开启热门话题' : '已关闭热门话题', 'info');
-            });
-        }
-    }
-
-    /**
-     * AI生成文案功能
-     */
-    function initAIGeneration() {
-        if (!generateCopyBtn) return;
-
-        generateCopyBtn.addEventListener('click', async function () {
-            // 确保有图片可供分析
-            if (!carouselImage || !carouselImage.src || carouselImage.src === '') {
-                showToast('请先上传图片', 'error');
-                return;
-            }
-
-            // 禁用按钮，显示生成状态
-            generateCopyBtn.disabled = true;
-            if (aiGeneratingContainer) {
-                aiGeneratingContainer.classList.remove('hidden');
-            }
-
-            try {
-                // 模拟AI生成进度
-                let progress = 0;
-                const interval = setInterval(() => {
-                    progress += Math.random() * 5;
-                    if (progress > 100) progress = 100;
-
-                    if (aiProgressBar) {
-                        aiProgressBar.style.width = progress + '%';
-                    }
-
-                    // 完成时应用新文案
-                    if (progress === 100) {
-                        clearInterval(interval);
-                        setTimeout(() => {
-                            // 生成文案
-                            const result = generateSampleContent();
-
-                            // 保存AI生成的文案到localStorage
-                            localStorage.setItem('aiGeneratedCopy', JSON.stringify(result));
-
-                            // 应用生成的文案
-                            applyGeneratedContent(result);
-
-                            // 隐藏生成状态，启用按钮
-                            if (aiGeneratingContainer) {
-                                aiGeneratingContainer.classList.add('hidden');
-                            }
-                            generateCopyBtn.disabled = false;
-
-                            // 添加恢复原始文案的按钮
-                            addRestoreButton();
-
-                            // 显示完成提示
-                            showToast('文案生成完成', 'success');
-                        }, 500);
-                    }
-                }, 200);
-            } catch (error) {
-                console.error('生成文案失败:', error);
-                showToast('生成文案失败，请重试', 'error');
-
-                // 出错时恢复按钮状态
-                generateCopyBtn.disabled = false;
-                if (aiGeneratingContainer) {
-                    aiGeneratingContainer.classList.add('hidden');
-                }
-            }
-        });
-    }
-
-    /**
-     * 添加恢复原始文案的按钮
-     */
-    function addRestoreButton() {
-        // 检查是否已经有恢复按钮
-        if (document.getElementById('restoreOriginalBtn')) {
-            return;
-        }
-
-        // 创建恢复按钮
-        const restoreBtn = document.createElement('button');
-        restoreBtn.id = 'restoreOriginalBtn';
-        restoreBtn.className = 'ml-3 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm px-4 py-2 rounded-lg flex items-center justify-center transition-colors';
-        restoreBtn.innerHTML = '<i class="fas fa-undo mr-2"></i>恢复原文案';
-
-        // 添加点击事件
-        restoreBtn.addEventListener('click', function () {
-            if (window.originalUserCopy) {
-                displayUserContent(window.originalUserCopy);
-                showToast('已恢复原始文案', 'info');
-            }
+            // 添加到容器
+            imageContainer.appendChild(imgEl);
+            indicatorContainer.appendChild(indicator);
         });
 
-        // 将按钮添加到生成按钮旁边
-        const container = generateCopyBtn.parentElement;
-        if (container) {
-            container.appendChild(restoreBtn);
-        }
+        // 重新初始化轮播
+        initImageCarousel();
+
+    } catch (e) {
+        console.error('恢复上传图片失败:', e);
+    }
+}
+
+/**
+* 显示提示消息
+* @param {string} message - 提示消息
+* @param {string} type - 提示类型 (success, error, warning, info)
+*/
+function showToast(message, type = 'info') {
+    // 检查是否已存在toast
+    let toast = document.querySelector('.toast');
+
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.className = 'toast';
+        document.body.appendChild(toast);
     }
 
-    /**
-     * 生成示例内容（真实项目中应调用API）
-     */
-    function generateSampleContent() {
-        return {
-            title: "有机山地红富士苹果 | 鲜脆多汁 · 自然生长 · 营养丰富",
-            description: "🌟 精选自海拔1200米以上的山地果园，每一颗红富士苹果都经过严格的有机种植标准，不使用化学农药和肥料，保留了水果的原始风味和营养价值。果肉脆嫩，汁水丰富，自然甜度适中，是您日常健康饮食的理想选择！",
-            features: "产自高海拔山地果园，采用纯有机种植工艺，严格按照欧盟有机认证标准管理。果实个头均匀，表皮光滑，通体红润，自然光泽诱人。每一颗都是经过精心挑选，确保品质如一。",
-            taste: "咬一口，清脆的口感伴随着丰富的果汁在口中迸发，自然甜度不腻口，带有淡淡的果香，余味中还有一丝清爽的酸，平衡了整体风味，让人忍不住再吃一口。",
-            nutrition: "富含多种维生素、膳食纤维和抗氧化物质，有助于提升免疫力、促进肠道健康、减缓衰老。相比普通苹果，有机种植的富士苹果多酚含量更高，营养价值更为丰富。每100克仅含52大卡热量，是减肥期的理想零食。",
-            suggestion: "最佳食用温度为4-8℃，建议冷藏后食用口感更佳。可直接享用，也可切片加入沙拉、搭配酸奶或制作苹果派。果皮中含有丰富的营养物质，建议连皮一起食用。适合全家人日常食用，尤其推荐给需要补充维生素的儿童和老人。"
-        };
+    // 设置样式
+    toast.className = `toast toast-${type}`;
+
+    // 设置图标
+    let icon = '';
+    switch (type) {
+        case 'success':
+            icon = '<i class="fas fa-check-circle mr-2"></i>';
+            break;
+        case 'error':
+            icon = '<i class="fas fa-times-circle mr-2"></i>';
+            break;
+        case 'warning':
+            icon = '<i class="fas fa-exclamation-triangle mr-2"></i>';
+            break;
+        case 'info':
+            icon = '<i class="fas fa-info-circle mr-2"></i>';
+            break;
     }
 
-    /**
-     * 应用生成的内容到界面
-     */
-    function applyGeneratedContent(result) {
-        // 渐变应用文本的动画函数
-        const applyWithAnimation = (element, newText) => {
-            if (!element) return;
+    // 设置内容
+    toast.innerHTML = `${icon}${message}`;
 
-            // 先淡出
-            element.style.transition = 'opacity 0.3s ease';
-            element.style.opacity = '0';
+    // 显示提示
+    toast.classList.add('show');
 
-            // 更新内容并淡入
-            setTimeout(() => {
-                element.textContent = newText;
-                element.style.opacity = '1';
-            }, 300);
-        };
+    // 自动关闭
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
 
-        // 应用标题
-        if (previewTitle && result.title) {
-            applyWithAnimation(previewTitle, result.title);
-        }
-
-        // 应用描述
-        if (previewDesc && result.description) {
-            applyWithAnimation(previewDesc, result.description);
-        }
-
-        // 应用详细内容
-        if (contentSections && contentSections.length > 0) {
-            // 产品特点
-            if (contentSections[0] && result.features) {
-                applyWithAnimation(contentSections[0], result.features);
-            }
-
-            // 口感体验
-            if (contentSections[1] && result.taste) {
-                applyWithAnimation(contentSections[1], result.taste);
-            }
-
-            // 营养价值
-            if (contentSections[2] && result.nutrition) {
-                applyWithAnimation(contentSections[2], result.nutrition);
-            }
-
-            // 食用建议
-            if (contentSections[3] && result.suggestion) {
-                applyWithAnimation(contentSections[3], result.suggestion);
-            }
-        }
-    }
-
-    /**
-     * 初始化模板选择器
-     */
-    function initTemplateSelectors() {
-        const templateOptions = document.querySelectorAll('.template-option');
-
-        templateOptions.forEach(option => {
-            option.addEventListener('click', function () {
-                // 移除所有选中样式
-                templateOptions.forEach(opt => {
-                    opt.classList.remove('selected');
-                    opt.classList.add('border-gray-200');
-                });
-
-                // 添加选中样式
-                this.classList.add('selected');
-                this.classList.remove('border-gray-200');
-
-                // 获取模板名称
-                const templateName = this.querySelector('.bg-black\\/60').textContent.trim();
-                showToast(`已选择${templateName}`, 'success');
-
-                // 这里可以添加模板切换的实际逻辑
-                // applyTemplate(templateName);
-            });
-        });
-    }
-
-    /**
-     * 显示提示信息（依赖common.js中的showToast函数）
-     */
-    function showToast(message, type) {
-        if (typeof window.showToast === 'function') {
-            window.showToast(message, type);
-        } else {
-            console.log(`${type}: ${message}`);
-        }
-    }
-}); 
+// 导出公共函数
+window.previewPage = {
+    showToast
+}; 
