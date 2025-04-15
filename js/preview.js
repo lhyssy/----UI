@@ -560,12 +560,33 @@ function initMobileAdaptation() {
             container.style.maxHeight = window.innerWidth * 0.6 + 'px';
         });
 
-        // 禁用缩放
-        document.addEventListener('touchmove', function (event) {
-            if (event.scale !== 1) {
-                event.preventDefault();
-            }
+        // 修改：只禁用多指缩放，不阻止正常滚动
+        document.addEventListener('gesturestart', function (event) {
+            event.preventDefault();
         }, { passive: false });
+
+        document.addEventListener('gesturechange', function (event) {
+            event.preventDefault();
+        }, { passive: false });
+
+        // 处理iOS的滚动问题
+        if ((/iPhone|iPad|iPod/).test(navigator.userAgent)) {
+            // 确保内容区域可滚动
+            const contentArea = document.querySelector('.my-content');
+            if (contentArea) {
+                contentArea.style.webkitOverflowScrolling = 'touch';
+
+                // 修复iOS滚动卡顿
+                contentArea.addEventListener('touchmove', function (e) {
+                    // 允许默认滚动
+                }, { passive: true });
+            }
+
+            // 添加空白的body touchmove处理，修复iOS 11+上的滚动问题
+            document.body.addEventListener('touchmove', function (e) {
+                // 允许正常滚动
+            }, { passive: true });
+        }
 
         // 修复iOS点击延迟
         const fastClickAreas = document.querySelectorAll('button, a, .template-option');
@@ -573,6 +594,27 @@ function initMobileAdaptation() {
             el.addEventListener('touchstart', function () { }, { passive: true });
         });
     }
+
+    // 确保页面可以滚动
+    window.addEventListener('load', function () {
+        // 短暂延迟，确保所有内容加载完毕
+        setTimeout(function () {
+            // 尝试滚动到顶部，重置任何潜在的滚动问题
+            window.scrollTo(0, 0);
+
+            // 检测内容高度，确保滚动正常工作
+            const contentArea = document.querySelector('.my-content');
+            if (contentArea && contentArea.scrollHeight > contentArea.clientHeight) {
+                console.log('内容区域可滚动，高度差: ' + (contentArea.scrollHeight - contentArea.clientHeight) + 'px');
+
+                // 如果检测到无法滚动，强制启用滚动
+                if (getComputedStyle(contentArea).overflow === 'hidden') {
+                    contentArea.style.overflowY = 'auto';
+                    console.log('已强制启用滚动');
+                }
+            }
+        }, 300);
+    });
 }
 
 /**

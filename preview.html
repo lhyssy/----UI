@@ -109,14 +109,21 @@
     </div>
 
     <!-- 内容区域 -->
-    <div class="overflow-y-auto flex-1 my-content">
+    <div class="my-content overflow-y-auto w-full">
         <!-- 图文预览 -->
         <div class="px-4 py-4">
             <div class="template-preview bg-white rounded-xl shadow-sm">
                 <!-- 图片区域 -->
                 <div class="image-container">
-                    <img id="carouselImage" src="" alt="Product image">
-                    <div id="carouselIndicators" class="indicator-container"></div>
+                    <img id="carouselImage"
+                        src="https://images.unsplash.com/photo-1570913149827-d2ac84ab3f9a?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80"
+                        alt="Product image">
+                    <div id="carouselIndicators" class="indicator-container">
+                        <div class="indicator active" data-index="0"></div>
+                        <div class="indicator" data-index="1"></div>
+                        <div class="indicator" data-index="2"></div>
+                        <div class="indicator" data-index="3"></div>
+                    </div>
                     <button class="prev-btn" id="prevImageBtn">&#10094;</button>
                     <button class="next-btn" id="nextImageBtn">&#10095;</button>
                     <!-- 图片功能提示 -->
@@ -407,7 +414,11 @@
             <i class="fas fa-lightbulb text-green-600 mr-2"></i>
             AI建议：根据图片分析，建议突出产品的有机种植特点和新鲜度，可以吸引更多注重健康的消费者。
         </div>
+
+        <!-- 底部空间占位，防止底部栏遮挡内容 -->
+        <div class="h-20"></div>
     </div>
+
     <!-- 底部操作栏 -->
     <div class="fixed bottom-0 left-0 right-0 p-4 shadow-md border-t border-gray-100"
         style="background: linear-gradient(to bottom, #ffffff, #f9fafb); z-index: 50;">
