@@ -26,6 +26,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 恢复之前上传的图片
     restoreUploadedImages();
+
+    // 移动端适配
+    initMobileAdaptation();
+
+    // 底部导航展示动画
+    initBottomNavAnimation();
+
+    // 处理去发布按钮
+    initPublishButton();
+
+    // 处理AI内容优化
+    initAIOptimization();
 });
 
 /**
@@ -288,82 +300,63 @@ function initImageCarousel() {
  * 初始化文本编辑区域
  */
 function initTextEditing() {
-    const editableAreas = document.querySelectorAll('[contenteditable="true"]');
+    const toggleEditBtn = document.getElementById('toggleEditBtn');
+    const editorToolbar = document.getElementById('editorToolbar');
+    const contentEditor = document.getElementById('contentEditor');
+    const staticContent = document.getElementById('staticContent');
 
-    editableAreas.forEach(area => {
-        // 监听焦点事件
-        area.addEventListener('focus', function () {
-            this.classList.add('editing');
+    if (toggleEditBtn && contentEditor && staticContent) {
+        // 初始化文本编辑器
+        contentEditor.contentEditable = 'true';
 
-            // 显示编辑提示
-            const parent = this.closest('.info-card');
-            if (parent) {
-                if (!parent.querySelector('.edit-hint')) {
-                    const hint = document.createElement('div');
-                    hint.className = 'edit-hint text-xs text-gray-500 mt-2 italic';
-                    hint.innerHTML = '<i class="fas fa-pen-nib mr-1"></i> 正在编辑...';
-                    parent.appendChild(hint);
+        // 将静态内容复制到编辑器中
+        contentEditor.innerHTML = staticContent.innerHTML;
+
+        // 编辑按钮点击事件
+        toggleEditBtn.addEventListener('click', function () {
+            if (contentEditor.style.display === 'none') {
+                // 切换到编辑模式
+                contentEditor.style.display = 'block';
+                staticContent.style.display = 'none';
+                editorToolbar.classList.remove('hidden');
+                toggleEditBtn.innerHTML = '<i class="fas fa-check mr-1"></i> 保存文案';
+                toggleEditBtn.style.background = 'linear-gradient(135deg, #4caf50, #388e3c)';
+            } else {
+                // 保存并切换回静态模式
+                staticContent.innerHTML = contentEditor.innerHTML;
+                contentEditor.style.display = 'none';
+                staticContent.style.display = 'block';
+                editorToolbar.classList.add('hidden');
+                toggleEditBtn.innerHTML = '<i class="fas fa-edit mr-1"></i> 编辑文案';
+                toggleEditBtn.style.background = 'linear-gradient(135deg, #9aa338, #a9b056)';
+
+                // 可以在这里添加保存到服务器的代码
+                console.log('文案已保存');
+                // 显示保存成功提示
+                showSaveSuccess();
+            }
+        });
+
+        // 编辑器工具栏功能
+        const editorBtns = document.querySelectorAll('.editor-btn');
+        editorBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const command = this.dataset.command;
+                const value = this.dataset.value || '';
+
+                if (command === 'createLink') {
+                    const url = prompt('请输入链接地址:', 'https://');
+                    if (url) {
+                        document.execCommand(command, false, url);
+                    }
+                } else {
+                    document.execCommand(command, false, value);
                 }
-            }
+
+                // 保持编辑器焦点
+                contentEditor.focus();
+            });
         });
-
-        // 监听失焦事件
-        area.addEventListener('blur', function () {
-            this.classList.remove('editing');
-
-            // 移除编辑提示
-            const parent = this.closest('.info-card');
-            if (parent) {
-                const hint = parent.querySelector('.edit-hint');
-                if (hint) {
-                    hint.remove();
-                }
-            }
-
-            // 保存编辑内容
-            saveContentToLocalStorage();
-        });
-
-        // 处理粘贴事件，清除格式
-        area.addEventListener('paste', function (e) {
-            e.preventDefault();
-
-            // 获取纯文本
-            const text = (e.clipboardData || window.clipboardData).getData('text/plain');
-
-            // 插入纯文本
-            document.execCommand('insertText', false, text);
-        });
-    });
-
-    // 保存内容到本地存储
-    function saveContentToLocalStorage() {
-        const content = {};
-
-        editableAreas.forEach(area => {
-            if (area.id) {
-                content[area.id] = area.innerHTML;
-            }
-        });
-
-        localStorage.setItem('previewContent', JSON.stringify(content));
-    }
-
-    // 从本地存储恢复内容
-    const savedContent = localStorage.getItem('previewContent');
-    if (savedContent) {
-        try {
-            const content = JSON.parse(savedContent);
-
-            for (const id in content) {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.innerHTML = content[id];
-                }
-            }
-        } catch (e) {
-            console.error('恢复编辑内容失败:', e);
-        }
     }
 }
 
@@ -439,7 +432,7 @@ function initAIAssistant() {
         element.style.transition = 'background-color 1s ease';
         element.style.backgroundColor = 'rgba(154, 163, 56, 0.2)';
 
-                        setTimeout(() => {
+        setTimeout(() => {
             element.style.backgroundColor = 'transparent';
         }, 1500);
     }
@@ -484,10 +477,10 @@ function initInteractionEffects() {
         publishBtn.addEventListener('click', function () {
             window.location.href = 'publish.html';
         });
-        }
     }
+}
 
-    /**
+/**
 * 恢复之前上传的图片
 */
 function restoreUploadedImages() {
@@ -541,54 +534,313 @@ function restoreUploadedImages() {
 
     } catch (e) {
         console.error('恢复上传图片失败:', e);
+    }
+}
+
+/**
+ * 初始化移动端适配
+ */
+function initMobileAdaptation() {
+    // 检测设备类型
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    // 添加移动端viewport meta标签
+    if (isMobile && !document.querySelector('meta[name="viewport"]')) {
+        const viewportMeta = document.createElement('meta');
+        viewportMeta.name = 'viewport';
+        viewportMeta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover';
+        document.head.appendChild(viewportMeta);
+    }
+
+    // 调整移动端元素大小
+    if (isMobile) {
+        // 调整图片容器高度
+        const imageContainers = document.querySelectorAll('.image-container');
+        imageContainers.forEach(container => {
+            container.style.maxHeight = window.innerWidth * 0.6 + 'px';
+        });
+
+        // 禁用缩放
+        document.addEventListener('touchmove', function (event) {
+            if (event.scale !== 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        // 修复iOS点击延迟
+        const fastClickAreas = document.querySelectorAll('button, a, .template-option');
+        fastClickAreas.forEach(el => {
+            el.addEventListener('touchstart', function () { }, { passive: true });
+        });
+    }
+}
+
+/**
+ * 初始化底部导航动画
+ */
+function initBottomNavAnimation() {
+    const bottomNav = document.querySelector('.bottom-nav');
+
+    if (!bottomNav) return;
+
+    // 创建底部导航开关按钮
+    const showNavBtn = document.createElement('button');
+    showNavBtn.classList.add('show-nav-btn');
+    showNavBtn.style.position = 'fixed';
+    showNavBtn.style.bottom = '20px';
+    showNavBtn.style.right = '20px';
+    showNavBtn.style.width = '40px';
+    showNavBtn.style.height = '40px';
+    showNavBtn.style.borderRadius = '50%';
+    showNavBtn.style.background = 'linear-gradient(135deg, rgba(154, 163, 56, 1), #a9b056)';
+    showNavBtn.style.color = 'white';
+    showNavBtn.style.display = 'flex';
+    showNavBtn.style.alignItems = 'center';
+    showNavBtn.style.justifyContent = 'center';
+    showNavBtn.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.2)';
+    showNavBtn.style.border = 'none';
+    showNavBtn.style.zIndex = '45';
+    showNavBtn.innerHTML = '<i class="fas fa-bars"></i>';
+    document.body.appendChild(showNavBtn);
+
+    let navVisible = false;
+
+    showNavBtn.addEventListener('click', function () {
+        if (navVisible) {
+            bottomNav.style.transform = 'translateY(70px)';
+            showNavBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        } else {
+            bottomNav.style.transform = 'translateY(0)';
+            showNavBtn.innerHTML = '<i class="fas fa-times"></i>';
         }
+        navVisible = !navVisible;
+    });
+
+    // 底部导航项点击处理
+    const navItems = document.querySelectorAll('.bottom-nav-item');
+    navItems.forEach(item => {
+        item.addEventListener('click', function () {
+            const link = this.getAttribute('data-link');
+            if (link) {
+                window.location.href = link;
+            }
+        });
+    });
+}
+
+/**
+ * 初始化发布按钮
+ */
+function initPublishButton() {
+    const goToPublishBtn = document.getElementById('goToPublishBtn');
+    if (goToPublishBtn) {
+        goToPublishBtn.addEventListener('click', function (event) {
+            event.preventDefault(); // 阻止默认行为
+            console.log('去发布按钮被点击，准备跳转到发布页面');
+            // 简单跳转，不附加任何参数
+            window.location.href = 'publish.html';
+        });
     }
 
-    /**
-* 显示提示消息
-* @param {string} message - 提示消息
-* @param {string} type - 提示类型 (success, error, warning, info)
-*/
-function showToast(message, type = 'info') {
-    // 检查是否已存在toast
-    let toast = document.querySelector('.toast');
-
-    if (!toast) {
-        toast = document.createElement('div');
-        toast.className = 'toast';
-        document.body.appendChild(toast);
+    const saveDraftBtn = document.getElementById('saveDraftBtn');
+    if (saveDraftBtn) {
+        saveDraftBtn.addEventListener('click', function (event) {
+            event.preventDefault();
+            console.log('保存草稿按钮被点击');
+            showToast('草稿已保存', 'success');
+        });
     }
+}
 
-    // 设置样式
-    toast.className = `toast toast-${type}`;
+/**
+ * 初始化AI内容优化
+ */
+function initAIOptimization() {
+    // AI优化后的文案内容
+    const optimizedContent = `
+        <div class="mb-4">
+            <div class="mb-2 flex items-center">
+                <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded mr-2"
+                    style="background: linear-gradient(135deg, #ffcdd2, #ef9a9a); color: #c62828;">限时特惠</span>
+                <span class="bg-green-100 text-green-600 text-xs font-bold px-2 py-1 rounded"
+                    style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #2e7d32;">有机认证</span>
+            </div>
+            <h2 class="text-lg font-bold mb-2">💫高山红富士｜咬一口就沦陷的冰糖心小炸弹！🍎</h2>
+            <p class="text-sm text-gray-700 leading-relaxed">#有机种植 #会爆汁的苹果 #产地直发</p>
+        </div>
 
-    // 设置图标
-    let icon = '';
-    switch (type) {
-        case 'success':
-            icon = '<i class="fas fa-check-circle mr-2"></i>';
-            break;
-        case 'error':
-            icon = '<i class="fas fa-times-circle mr-2"></i>';
-            break;
-        case 'warning':
-            icon = '<i class="fas fa-exclamation-triangle mr-2"></i>';
-            break;
-        case 'info':
-            icon = '<i class="fas fa-info-circle mr-2"></i>';
-            break;
+        <div class="flex flex-wrap gap-2 mb-4">
+            <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+                style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #1b5e20;">有机认证</span>
+            <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+                style="background: linear-gradient(135deg, #ffcdd2, #ef9a9a); color: #b71c1c;">特级品质</span>
+            <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+                style="background: linear-gradient(135deg, #bbdefb, #90caf9); color: #0d47a1;">高山种植</span>
+            <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+                style="background: linear-gradient(135deg, #fff9c4, #fff59d); color: #f57f17;">产地直发</span>
+        </div>
+
+        <div class="mb-5 text-center text-sm text-gray-700 leading-relaxed">
+            <p>——————🌲自然の馈赠——————</p>
+            <p class="mt-2">✨谁还没吃过这颗300天自然长成的红宝石！</p>
+            <p>海拔2000m+云端果园 | 365天有机养护</p>
+            <p>拒绝催熟剂❌ 不用膨大剂❌</p>
+            <p>自带有机小绿标认证 每一颗都是阳光吻过的红脸蛋</p>
+        </div>
+
+        <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+            style="border-color: #9aa338; background: linear-gradient(to right, rgba(154, 163, 56, 0.15), rgba(154, 163, 56, 0.05), transparent);">
+            <h3 class="font-bold mb-2 text-[#9aa338]">🍎 产品特点</h3>
+            <p class="text-sm text-gray-700 mb-3 leading-relaxed">
+                🌱「有机喂养」不用农药的天然baby<br>
+                ☀️「日光SPA」昼夜温差凝出冰糖心<br>
+                📦「现摘现发」枝头到舌尖72h直达<br>
+                📸「颜值爆表」自带高光滤镜的苹果届爱豆
+            </p>
+        </div>
+
+        <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+            style="border-color: #e67e22; background: linear-gradient(to right, rgba(230, 126, 34, 0.15), rgba(230, 126, 34, 0.05), transparent);">
+            <h3 class="font-bold mb-2 text-orange-700">👅 口感体验</h3>
+            <p class="text-sm text-gray-700 mb-3 leading-relaxed">
+                🔥牙齿轻轻一碰就爆汁！果肉像初雪般细嫩<br>
+                💥甜度直接拉满18°+ 却完全不齁嗓子！<br>
+                ❄️冰镇后吃绝了！像在啃液态蜂蜜冻<br>
+                ⚠️温馨提示：吃前备好纸巾 汁水多到能洗脸
+            </p>
+        </div>
+
+        <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+            style="border-color: #3498db; background: linear-gradient(to right, rgba(52, 152, 219, 0.15), rgba(52, 152, 219, 0.05), transparent);">
+            <h3 class="font-bold mb-2 text-blue-700">💪 营养价值</h3>
+            <p class="text-sm text-gray-700 mb-3 leading-relaxed">
+                🍏维C含量≈3颗柠檬 熬夜党快码住<br>
+                🍎果胶含量MAX 噗噗困难户救星<br>
+                🍐每天1颗=给肠道做瑜伽<br>
+                👩👧适配人群：健身党/宝妈/996打工人
+            </p>
+        </div>
+
+        <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+            style="border-color: #9b59b6; background: linear-gradient(to right, rgba(155, 89, 182, 0.15), rgba(155, 89, 182, 0.05), transparent);">
+            <h3 class="font-bold mb-2 text-purple-700">🍽️ 神仙吃法</h3>
+            <p class="text-sm text-gray-700 mb-3 leading-relaxed">
+                ☀️早起切块拌酸奶碗 唤醒甜甜一整天<br>
+                🍵下午茶做成ins风水果拼盘 秒杀甜品<br>
+                🍹榨汁加气泡水+薄荷 自制冷饮店爆款<br>
+                📸对半切开摆盘发朋友圈 收获99+点赞
+            </p>
+        </div>
+
+        <div class="mt-5 text-center p-3 rounded-lg bg-gradient-to-r from-pink-50 to-red-50">
+            <p class="text-sm text-red-600">🌟现在下单送苹果花胸针！把春天别在衣襟上～</p>
+        </div>
+    `;
+
+    const generateCopyBtn = document.getElementById('generateCopyBtn');
+    const aiGeneratingContainer = document.getElementById('aiGeneratingContainer');
+    const aiProgressBar = document.getElementById('aiProgressBar');
+    const contentEditor = document.getElementById('contentEditor');
+    const staticContent = document.getElementById('staticContent');
+
+    if (generateCopyBtn && aiGeneratingContainer && aiProgressBar) {
+        generateCopyBtn.addEventListener('click', function () {
+            // 显示生成状态
+            aiGeneratingContainer.classList.remove('hidden');
+            generateCopyBtn.disabled = true;
+            generateCopyBtn.style.opacity = '0.7';
+
+            // 模拟进度条动画
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 2;
+                aiProgressBar.style.width = `${progress}%`;
+
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                    setTimeout(() => {
+                        // 更新内容
+                        if (contentEditor) contentEditor.innerHTML = optimizedContent;
+                        if (staticContent) staticContent.innerHTML = optimizedContent;
+
+                        // 隐藏生成状态
+                        aiGeneratingContainer.classList.add('hidden');
+                        generateCopyBtn.disabled = false;
+                        generateCopyBtn.style.opacity = '1';
+
+                        // 显示成功提示
+                        showAiSuccess();
+                    }, 500);
+                }
+            }, 50);
+        });
     }
+}
 
-    // 设置内容
-    toast.innerHTML = `${icon}${message}`;
+/**
+ * 显示保存成功提示
+ */
+function showSaveSuccess() {
+    showNotification('文案已保存', 'check-circle');
+}
 
-    // 显示提示
-    toast.classList.add('show');
+/**
+ * 显示AI生成成功提示
+ */
+function showAiSuccess() {
+    showNotification('AI优化完成', 'magic');
+}
 
-    // 自动关闭
+/**
+ * 通用提示框函数
+ */
+function showNotification(message, icon) {
+    const notification = document.createElement('div');
+    notification.classList.add('save-notification');
+    notification.innerHTML = `<i class="fas fa-${icon} mr-2"></i>${message}`;
+    notification.style.position = 'fixed';
+    notification.style.bottom = '80px';
+    notification.style.left = '50%';
+    notification.style.transform = 'translateX(-50%)';
+    notification.style.padding = '8px 16px';
+    notification.style.borderRadius = '20px';
+    notification.style.backgroundColor = 'rgba(76, 175, 80, 0.9)';
+    notification.style.color = 'white';
+    notification.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.2)';
+    notification.style.zIndex = '100';
+    notification.style.transition = 'opacity 0.5s, transform 0.5s';
+
+    document.body.appendChild(notification);
+
+    // 淡出效果
     setTimeout(() => {
-        toast.classList.remove('show');
-    }, 3000);
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateX(-50%) translateY(-20px)';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 500);
+    }, 2000);
+}
+
+/**
+ * 显示Toast消息
+ */
+function showToast(message, type = 'info') {
+    let bgColor = 'rgba(33, 150, 243, 0.9)'; // 默认蓝色
+    let icon = 'info-circle';
+
+    if (type === 'success') {
+        bgColor = 'rgba(76, 175, 80, 0.9)';
+        icon = 'check-circle';
+    } else if (type === 'error') {
+        bgColor = 'rgba(244, 67, 54, 0.9)';
+        icon = 'exclamation-circle';
+    } else if (type === 'warning') {
+        bgColor = 'rgba(255, 152, 0, 0.9)';
+        icon = 'exclamation-triangle';
+    }
+
+    showNotification(message, icon);
 }
 
 // 导出公共函数
