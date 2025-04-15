@@ -159,17 +159,17 @@ function initFloatingBackground() {
     });
 }
 
-/**
- * 初始化平台选择功能
- */
-function initPlatformSelection() {
+    /**
+     * 初始化平台选择功能
+     */
+    function initPlatformSelection() {
     const platformCards = document.querySelectorAll('.platform-card');
     const selectedPlatforms = new Set();
     const maxSelections = 5; // 最大选择数量
     const platformCounter = document.getElementById('selected-count');
 
     // 初始化checkmark显示
-    platformCards.forEach(card => {
+        platformCards.forEach(card => {
         // 确保小红书默认选择的checkmark正确显示
         if (card.classList.contains('selected')) {
             const checkmark = card.querySelector('.checkmark');
@@ -237,7 +237,7 @@ function initPlatformSelection() {
                 }
 
                 showToast(`已取消选择 ${platformName}`, 'info');
-            } else {
+                    } else {
                 // 检查是否超过最大选择数量
                 if (selectedPlatforms.size >= maxSelections) {
                     showToast(`最多只能选择 ${maxSelections} 个平台`, 'warning');
@@ -290,7 +290,7 @@ function initPlatformSelection() {
             } else if (selectedPlatforms.size < maxSelections) {
                 platformCounter.classList.remove('text-gray-400', 'text-yellow-500');
                 platformCounter.classList.add('text-green-500');
-            } else {
+        } else {
                 platformCounter.classList.remove('text-gray-400', 'text-green-500');
                 platformCounter.classList.add('text-yellow-500');
             }
@@ -498,10 +498,10 @@ function initAIRecommendation() {
                 analysisPanel.classList.add('show');
             }, 10);
         }
+        }
     }
-}
 
-/**
+    /**
 * 初始化交互效果
 */
 function initInteractionEffects() {

@@ -439,7 +439,7 @@ function initAIAssistant() {
         element.style.transition = 'background-color 1s ease';
         element.style.backgroundColor = 'rgba(154, 163, 56, 0.2)';
 
-        setTimeout(() => {
+                        setTimeout(() => {
             element.style.backgroundColor = 'transparent';
         }, 1500);
     }
@@ -484,10 +484,10 @@ function initInteractionEffects() {
         publishBtn.addEventListener('click', function () {
             window.location.href = 'publish.html';
         });
+        }
     }
-}
 
-/**
+    /**
 * 恢复之前上传的图片
 */
 function restoreUploadedImages() {
@@ -541,10 +541,10 @@ function restoreUploadedImages() {
 
     } catch (e) {
         console.error('恢复上传图片失败:', e);
+        }
     }
-}
 
-/**
+    /**
 * 显示提示消息
 * @param {string} message - 提示消息
 * @param {string} type - 提示类型 (success, error, warning, info)

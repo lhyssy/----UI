@@ -1,83 +1,139 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>助农宣传 - 农产品推广助手</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/animations.css">
     <style>
+        :root {
+            --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #f8f9fa;
             color: #333;
             max-width: 100%;
             overflow-x: hidden;
+            padding-bottom: calc(1rem + var(--safe-area-inset-bottom));
         }
+
+        .container {
+            padding: 1.5rem;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 1.5rem;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 2rem;
+        }
+
         .card {
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border-radius: 20px;
+            position: relative;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            aspect-ratio: 1/1;
         }
-        .card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+        .card:hover,
+        .card:active {
+            transform: translateY(-5px);
         }
+
         .card-header {
-            height: 180px;
+            width: 100%;
+            height: 100%;
             background-size: cover;
             background-position: center;
-            display: flex;
-            align-items: flex-end;
             position: relative;
         }
-        .card-header::after {
+
+        .card-header:before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7));
         }
+
         .card-content {
-            position: relative;
-            z-index: 1;
+            position: absolute;
+            bottom: 0;
+            left: 0;
             width: 100%;
-            padding: 15px;
-            color: white;
+            padding: 16px;
+            z-index: 1;
         }
+
         .card-tag {
             display: inline-block;
+            font-size: 0.75rem;
             padding: 4px 8px;
-            background-color: rgba(7, 193, 96, 0.8);
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
             color: white;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 500;
-            margin-bottom: 8px;
+            margin-bottom: 0.5rem;
+            backdrop-filter: blur(4px);
         }
+
         .floating-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 30px;
-            background: linear-gradient(135deg, #07c160 0%, #0d9b77 100%);
             position: fixed;
             right: 20px;
-            bottom: 80px;
+            bottom: calc(20px + var(--safe-area-inset-bottom));
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #07c160 0%, #0d9b77 100%);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            box-shadow: 0 5px 20px rgba(7, 193, 96, 0.3);
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(7, 193, 96, 0.3);
+            z-index: 100;
+            transition: all 0.3s;
         }
-        .floating-btn:hover {
-            transform: scale(1.1);
+
+        .floating-btn:active {
+            transform: scale(0.95);
         }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(7, 193, 96, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(7, 193, 96, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(7, 193, 96, 0);
+            }
+        }
+
         .modal {
             position: fixed;
             top: 0;
@@ -85,59 +141,187 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            display: none;
-            align-items: center;
+            display: flex;
+            align-items: flex-end;
             justify-content: center;
-            z-index: 1000;
+            z-index: 200;
             opacity: 0;
+            pointer-events: none;
             transition: opacity 0.3s ease;
         }
+
         .modal.show {
-            display: flex;
             opacity: 1;
+            pointer-events: auto;
         }
+
         .modal-content {
+            width: 100%;
+            max-width: 500px;
             background-color: white;
-            width: 80%;
-            max-width: 400px;
-            border-radius: 20px;
-            padding: 30px;
-            transform: scale(0.9);
+            border-radius: 24px 24px 0 0;
+            padding: 1.5rem;
+            padding-bottom: calc(1.5rem + var(--safe-area-inset-bottom));
+            margin-bottom: 0;
+            transform: translateY(100%);
             transition: transform 0.3s ease;
         }
+
         .modal.show .modal-content {
-            transform: scale(1);
+            transform: translateY(0);
         }
+
         .btn-feature {
-            width: 100%;
-            padding: 15px;
-            border-radius: 10px;
             display: flex;
             align-items: center;
+            padding: 12px;
+            border-radius: 16px;
+            margin-bottom: 12px;
             background-color: #f8f9fa;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
         }
-        .btn-feature:hover {
-            background-color: #f0fdf4;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(7, 193, 96, 0.1);
+
+        .btn-feature:active {
+            background-color: #e9ecef;
         }
+
         .feature-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 25px;
-            background-color: rgba(7, 193, 96, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background-color: #e9f7ef;
+            color: #07c160;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #07c160;
-            font-size: 24px;
-            margin-right: 15px;
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: staggerFadeIn 0.5s ease forwards;
+        }
+
+        .slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.5s ease forwards;
+            animation-delay: 0.2s;
+        }
+
+        @keyframes staggerFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 移动端适配样式 */
+        @media (max-width: 640px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .card-content {
+                padding: 10px;
+            }
+
+            .card-tag {
+                font-size: 0.65rem;
+                padding: 3px 6px;
+            }
+
+            h3 {
+                font-size: 0.95rem;
+            }
+
+            .feature-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .floating-btn {
+                width: 48px;
+                height: 48px;
+                right: 16px;
+                bottom: calc(16px + var(--safe-area-inset-bottom));
+            }
+
+            .w-12,
+            .h-12 {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+
+            .text-xl {
+                font-size: 1.1rem;
+            }
+
+            .modal-content {
+                border-radius: 20px 20px 0 0;
+                padding: 1.25rem;
+            }
+        }
+
+        /* 触摸反馈 */
+        @media (hover: none) {
+            .card:active {
+                transform: scale(0.98);
+            }
+
+            .btn-feature:active {
+                background-color: #e9ecef;
+            }
+        }
+
+        /* 暗黑模式支持 */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #121212;
+                color: rgba(255, 255, 255, 0.87);
+            }
+
+            .bg-white {
+                background-color: #1e1e1e;
+            }
+
+            .text-gray-800 {
+                color: rgba(255, 255, 255, 0.87);
+            }
+
+            .text-gray-500 {
+                color: rgba(255, 255, 255, 0.6);
+            }
+
+            .modal-content,
+            .btn-feature {
+                background-color: #1e1e1e;
+            }
+
+            .btn-feature:active {
+                background-color: #2d2d2d;
+            }
         }
     </style>
 </head>
+
 <body>
     <!-- 页面标题 -->
     <header class="py-6 px-5 text-center">
@@ -154,67 +338,74 @@
         <div class="grid grid-cols-2 gap-4 mb-8">
             <!-- 首页卡片 -->
             <div class="card stagger-item" onclick="window.location.href='home.html'">
-                <div class="card-header" style="background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                <div class="card-header"
+                    style="background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
                     <div class="card-content">
                         <span class="card-tag">首页</span>
                         <h3 class="font-medium text-white">特色功能入口</h3>
                     </div>
                 </div>
             </div>
-            
+
             <!-- 上传卡片 -->
             <div class="card stagger-item" onclick="window.location.href='upload.html'">
-                <div class="card-header" style="background-image: url('https://images.unsplash.com/photo-1579447167432-ba8b796e727d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                <div class="card-header"
+                    style="background-image: url('https://images.unsplash.com/photo-1579447167432-ba8b796e727d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
                     <div class="card-content">
                         <span class="card-tag">上传</span>
                         <h3 class="font-medium text-white">照片上传</h3>
                     </div>
                 </div>
             </div>
-            
+
             <!-- 预览卡片 -->
             <div class="card stagger-item" onclick="window.location.href='preview.html'">
-                <div class="card-header" style="background-image: url('https://images.unsplash.com/photo-1611095971113-9f7e83e92e14?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                <div class="card-header"
+                    style="background-image: url('https://images.unsplash.com/photo-1611095971113-9f7e83e92e14?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
                     <div class="card-content">
                         <span class="card-tag">预览</span>
                         <h3 class="font-medium text-white">内容预览</h3>
                     </div>
                 </div>
             </div>
-            
+
             <!-- 发布卡片 -->
             <div class="card stagger-item" onclick="window.location.href='publish.html'">
-                <div class="card-header" style="background-image: url('https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                <div class="card-header"
+                    style="background-image: url('https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
                     <div class="card-content">
                         <span class="card-tag">发布</span>
                         <h3 class="font-medium text-white">平台选择</h3>
                     </div>
                 </div>
             </div>
-            
+
             <!-- 教程卡片 -->
             <div class="card stagger-item" onclick="window.location.href='tutorials.html'">
-                <div class="card-header" style="background-image: url('https://images.unsplash.com/photo-1532619675605-1ede6c2ed2b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                <div class="card-header"
+                    style="background-image: url('https://images.unsplash.com/photo-1532619675605-1ede6c2ed2b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
                     <div class="card-content">
                         <span class="card-tag">教程</span>
                         <h3 class="font-medium text-white">电商指南</h3>
                     </div>
                 </div>
             </div>
-            
+
             <!-- 个人中心卡片 -->
             <div class="card stagger-item" onclick="window.location.href='profile.html'">
-                <div class="card-header" style="background-image: url('https://images.unsplash.com/photo-1608453162650-08e27f013e04?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                <div class="card-header"
+                    style="background-image: url('https://images.unsplash.com/photo-1608453162650-08e27f013e04?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
                     <div class="card-content">
                         <span class="card-tag">我的</span>
                         <h3 class="font-medium text-white">个人中心</h3>
                     </div>
                 </div>
             </div>
-            
+
             <!-- 数据分析卡片 -->
             <div class="card stagger-item" onclick="window.location.href='analytics.html'">
-                <div class="card-header" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
+                <div class="card-header"
+                    style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80')">
                     <div class="card-content">
                         <span class="card-tag">统计</span>
                         <h3 class="font-medium text-white">数据分析</h3>
@@ -222,17 +413,18 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- 特色功能简介 -->
         <div class="text-center mb-6 slide-up">
             <h2 class="text-xl font-semibold text-gray-800">应用特色</h2>
             <p class="text-sm text-gray-500 mt-1">智能科技助力农产品营销</p>
         </div>
-        
+
         <div class="grid grid-cols-1 gap-4 mb-8">
             <div class="bg-white p-4 rounded-2xl shadow-sm stagger-item">
                 <div class="flex items-center">
-                    <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-500 mr-4">
+                    <div
+                        class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-500 mr-4">
                         <i class="fas fa-magic text-xl"></i>
                     </div>
                     <div>
@@ -241,10 +433,11 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="bg-white p-4 rounded-2xl shadow-sm stagger-item">
                 <div class="flex items-center">
-                    <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-500 mr-4">
+                    <div
+                        class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-500 mr-4">
                         <i class="fas fa-share-alt text-xl"></i>
                     </div>
                     <div>
@@ -253,10 +446,11 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="bg-white p-4 rounded-2xl shadow-sm stagger-item">
                 <div class="flex items-center">
-                    <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-500 mr-4">
+                    <div
+                        class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-500 mr-4">
                         <i class="fas fa-chart-line text-xl"></i>
                     </div>
                     <div>
@@ -266,18 +460,18 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- 快速操作按钮 -->
         <div class="floating-btn pulse" id="floatingBtn">
             <i class="fas fa-plus text-2xl"></i>
         </div>
     </div>
-    
+
     <!-- 操作选择弹窗 -->
     <div class="modal" id="actionModal">
         <div class="modal-content">
             <h3 class="text-xl font-bold mb-4 text-center">快速操作</h3>
-            
+
             <a href="upload.html" class="btn-feature">
                 <div class="feature-icon">
                     <i class="fas fa-camera"></i>
@@ -287,7 +481,7 @@
                     <p class="text-xs text-gray-500 mt-1">上传照片，智能生成宣传素材</p>
                 </div>
             </a>
-            
+
             <a href="analytics.html" class="btn-feature">
                 <div class="feature-icon">
                     <i class="fas fa-chart-pie"></i>
@@ -297,7 +491,7 @@
                     <p class="text-xs text-gray-500 mt-1">查看宣传内容表现数据</p>
                 </div>
             </a>
-            
+
             <a href="tutorials.html" class="btn-feature">
                 <div class="feature-icon">
                     <i class="fas fa-book-open"></i>
@@ -307,7 +501,7 @@
                     <p class="text-xs text-gray-500 mt-1">获取电商运营技巧</p>
                 </div>
             </a>
-            
+
             <button class="w-full bg-gray-100 py-3 rounded-lg mt-3 text-gray-700" id="closeModalBtn">
                 取消
             </button>
@@ -319,32 +513,88 @@
         // 进入网站时清除登录状态
         window.onload = function () {
             localStorage.removeItem('userLoggedIn'); // 清除登录状态
+
+            // 检测并设置安全区域
+            updateSafeAreaVariables();
         };
 
-        document.addEventListener('DOMContentLoaded', function() {
+        // 更新安全区域变量
+        function updateSafeAreaVariables() {
+            if (CSS.supports('padding-bottom: env(safe-area-inset-bottom)')) {
+                document.documentElement.style.setProperty(
+                    '--safe-area-inset-bottom',
+                    'env(safe-area-inset-bottom)'
+                );
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
             // 浮动按钮点击事件
             const floatingBtn = document.getElementById('floatingBtn');
             const actionModal = document.getElementById('actionModal');
             const closeModalBtn = document.getElementById('closeModalBtn');
-            
-            floatingBtn.addEventListener('click', function() {
+
+            floatingBtn.addEventListener('click', function () {
                 actionModal.classList.add('show');
             });
-            
-            closeModalBtn.addEventListener('click', function() {
+
+            closeModalBtn.addEventListener('click', function () {
                 actionModal.classList.remove('show');
             });
-            
+
             // 点击模态框外部关闭
-            actionModal.addEventListener('click', function(e) {
+            actionModal.addEventListener('click', function (e) {
                 if (e.target === actionModal) {
                     actionModal.classList.remove('show');
                 }
             });
-            
-            // 气泡背景效果
-            createBubbleEffect();
+
+            // 为卡片添加触摸反馈
+            document.querySelectorAll('.card').forEach(card => {
+                card.addEventListener('touchstart', function () {
+                    this.style.transform = 'scale(0.98)';
+                });
+                card.addEventListener('touchend', function () {
+                    this.style.transform = '';
+                });
+            });
+
+            // 气泡背景效果 - 移动端减少数量提高性能
+            createBubbleEffect(window.innerWidth < 640 ? 30 : 50);
         });
+
+        // 监听屏幕大小变化，优化气泡效果
+        let resizeTimeout;
+        window.addEventListener('resize', function () {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(function () {
+                document.querySelectorAll('.bubble').forEach(bubble => bubble.remove());
+                createBubbleEffect(window.innerWidth < 640 ? 30 : 50);
+            }, 300);
+        });
+
+        // 修改气泡背景效果函数，添加数量参数
+        function createBubbleEffect(count = 50) {
+            const container = document.querySelector('body');
+            for (let i = 0; i < count; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+
+                const size = Math.random() * 15 + 5;
+                const left = Math.random() * 100;
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 10;
+
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${left}%`;
+                bubble.style.animationDuration = `${duration}s`;
+                bubble.style.animationDelay = `${delay}s`;
+
+                container.appendChild(bubble);
+            }
+        }
     </script>
 </body>
-</html> 
+
+</html>
