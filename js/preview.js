@@ -395,59 +395,42 @@ function initAIAssistant() {
     });
 
     function generateAIContent() {
-        // 获取需要更新的元素
-        const productTitle = document.querySelector('.template-preview h2');
-        const productIntro = document.querySelector('.template-preview p.text-sm.text-gray-700');
-        const productFeatures = document.querySelector('.template-preview div:nth-child(1) p.text-sm.text-gray-700');
-        const productTaste = document.querySelector('.template-preview div:nth-child(2) p.text-sm.text-gray-700');
-        const productNutrition = document.querySelector('.template-preview div:nth-child(3) p.text-sm.text-gray-700');
-        const productSuggestion = document.querySelector('.template-preview div:nth-child(4) p.text-sm.text-gray-700');
+        // 示例AI生成的内容
+        const productTitle = document.getElementById('product-title');
+        const productIntro = document.getElementById('product-intro');
+        const productFeatures = document.getElementById('product-features');
+        const productTaste = document.getElementById('product-taste');
+        const productNutrition = document.getElementById('product-nutrition');
+        const productSuggestion = document.getElementById('product-suggestion');
 
-        // 更新标题
         if (productTitle) {
-            productTitle.innerHTML = '🍎高海拔冰糖心苹果 | 0化肥0农残·树上熟透·一口爆甜汁';
+            productTitle.innerHTML = '高山有机红富士苹果 - 自然生长 健康美味';
             addHighlightAnimation(productTitle);
         }
 
-        // 更新简介
         if (productIntro) {
-            productIntro.innerHTML = '✨云巅果园直供的S级红富士！300天自然挂枝生长，果皮自带天然果蜡，咬开全是雪山阳光的味道！减脂姐妹锁死这枚小甜甜~';
+            productIntro.innerHTML = '来自海拔1500米高山果园的有机红富士苹果，无化肥农药，自然生长180天，果肉饱满多汁，香甜可口，是您送礼佳品的不二之选！';
             addHighlightAnimation(productIntro);
         }
 
-        // 更新产品特点
         if (productFeatures) {
-            productFeatures.innerHTML = '🌿神仙苹果养成记<br>长在海拔1800m的云雾结界里，昼夜温差给苹果镀上糖霜！果农手作酵素堆肥，每颗都有身份证溯源码，孕期宝宝都能安心啃~';
+            productFeatures.innerHTML = '采用有机种植方式，无化学农药，果园全天然生态环境，每一颗苹果都经过精心挑选，保证新鲜度和口感。果实色泽鲜艳，果皮光滑细腻。';
             addHighlightAnimation(productFeatures);
         }
 
-        // 更新口感体验
         if (productTaste) {
-            productTaste.innerHTML = '🍯会报恩的爆汁甜崽<br>脆到心巴的冰糖心！刀切下去"咔嚓"声超治愈，果肉像蜜渍水晶冻~冷藏后吃像在嚼苹果味冰淇淋，下午茶配肉桂粉直接封神！';
+            productTaste.innerHTML = '口感脆爽多汁，甜度适中（含糖量15°以上），酸甜平衡，入口即化，回味悠长。咬一口仿佛闻到了高山果园的清新空气。';
             addHighlightAnimation(productTaste);
         }
 
-        // 更新营养价值
         if (productNutrition) {
-            productNutrition.innerHTML = '💊维生素小金矿<br>每天一颗=喝3杯橙汁的VC量！果胶含量是普通苹果2倍，妥妥的肠道小熨斗~打工人久坐党快收下这颗抗氧小炸弹！';
+            productNutrition.innerHTML = '富含维生素C、膳食纤维和多种抗氧化物质，能够增强免疫力，促进消化，帮助肠道健康。每100克果肉约含52千卡热量，适合健康饮食。';
             addHighlightAnimation(productNutrition);
         }
 
-        // 更新食用建议
         if (productSuggestion) {
-            productSuggestion.innerHTML = '🧊神仙吃法安利<br>▫️健身餐：切块拌希腊酸奶+燕麦碗<br>▫️轻饮控：苹果片+洛神花冷泡水<br>▫️甜品控：空气炸锅180°烤15分钟=焦糖苹果挞<br>▫️养生派：苹果+红枣+银耳炖润肺羹<br><br>🌟Tips：收到后先用雪梨纸裹着放米缸，甜度还能再飙升！果柄青绿才是真正现摘的证明哦~#减脂期必囤 #办公室养生神器';
+            productSuggestion.innerHTML = '可直接食用，也可切片拌沙拉，或制作成苹果派、苹果汁等。餐前食用一个苹果有助于控制食欲，是减肥人士的理想选择。冷藏保存可延长新鲜度。';
             addHighlightAnimation(productSuggestion);
-        }
-
-        // 更新标签
-        const tagsContainer = document.querySelector('.template-preview .flex.flex-wrap.gap-2.mb-4');
-        if (tagsContainer) {
-            tagsContainer.innerHTML = `
-                <span class="inline-block text-xs px-2 py-1 rounded-full font-medium" style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #1b5e20;">有机认证</span>
-                <span class="inline-block text-xs px-2 py-1 rounded-full font-medium" style="background: linear-gradient(135deg, #ffcdd2, #ef9a9a); color: #b71c1c;">现摘现发</span>
-                <span class="inline-block text-xs px-2 py-1 rounded-full font-medium" style="background: linear-gradient(135deg, #bbdefb, #90caf9); color: #0d47a1;">甜度爆表</span>
-                <span class="inline-block text-xs px-2 py-1 rounded-full font-medium" style="background: linear-gradient(135deg, #fff9c4, #fff59d); color: #f57f17;">高海拔种植</span>
-            `;
         }
     }
 
@@ -456,7 +439,7 @@ function initAIAssistant() {
         element.style.transition = 'background-color 1s ease';
         element.style.backgroundColor = 'rgba(154, 163, 56, 0.2)';
 
-        setTimeout(() => {
+                        setTimeout(() => {
             element.style.backgroundColor = 'transparent';
         }, 1500);
     }
@@ -501,12 +484,12 @@ function initInteractionEffects() {
         publishBtn.addEventListener('click', function () {
             window.location.href = 'publish.html';
         });
+        }
     }
-}
 
-/**
- * 恢复之前上传的图片
- */
+    /**
+* 恢复之前上传的图片
+*/
 function restoreUploadedImages() {
     const imageContainer = document.querySelector('.image-container');
     const indicatorContainer = document.querySelector('.indicator-container');
@@ -558,14 +541,14 @@ function restoreUploadedImages() {
 
     } catch (e) {
         console.error('恢复上传图片失败:', e);
+        }
     }
-}
 
-/**
- * 显示提示消息
- * @param {string} message - 提示消息
- * @param {string} type - 提示类型 (success, error, warning, info)
- */
+    /**
+* 显示提示消息
+* @param {string} message - 提示消息
+* @param {string} type - 提示类型 (success, error, warning, info)
+*/
 function showToast(message, type = 'info') {
     // 检查是否已存在toast
     let toast = document.querySelector('.toast');
