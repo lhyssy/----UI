@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,6 @@
     <link rel="stylesheet" href="css/preview.css">
     <link rel="stylesheet" href="css/colors.css">
     <style>
-        
         #contentEditor {
             min-height: 300px;
             padding: 1rem;
@@ -112,35 +112,6 @@
         <!-- 图文预览 -->
         <div class="px-4 py-4">
             <div class="template-preview bg-white rounded-xl shadow-sm">
-                <!-- 头部信息 -->
-                <div class="p-4 border-b border-gray-100"
-                    style="background: linear-gradient(to right, rgba(154, 163, 56, 0.05), transparent);">
-                    <div class="mb-2 flex items-center">
-                        <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded mr-2"
-                            style="background: linear-gradient(135deg, #ffcdd2, #ef9a9a); color: #c62828;">限时特惠</span>
-                        <span class="bg-green-100 text-green-600 text-xs font-bold px-2 py-1 rounded"
-                            style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #2e7d32;">有机认证</span>
-                    </div>
-                    <!-- 标题部分添加编辑功能 -->
-                    <div class="title-edit-container">
-                        <h2 id="staticTitle" class="text-lg font-bold mb-2">高山果园红富士苹果 | 有机种植 · 自然成熟 · 脆甜多汁</h2>
-                        <div id="titleEditor" contenteditable="true"
-                            class="text-lg font-bold mb-2 border border-transparent rounded p-1 hidden"
-                            style="outline: none; background-color: rgba(154, 163, 56, 0.05);">高山果园红富士苹果 | 有机种植 · 自然成熟 ·
-                            脆甜多汁</div>
-                    </div>
-
-                    <!-- 描述部分添加编辑功能 -->
-                    <div class="desc-edit-container">
-                        <p id="staticDesc" class="text-sm text-gray-700 leading-relaxed">✨
-                            来自高海拔山区的红富士苹果，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。每一口都能感受到新鲜与甜脆，是您日常水果的理想选择。</p>
-                        <div id="descEditor" contenteditable="true"
-                            class="text-sm text-gray-700 leading-relaxed border border-transparent rounded p-1 hidden"
-                            style="outline: none; background-color: rgba(154, 163, 56, 0.05);">✨
-                            来自高海拔山区的红富士苹果，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。每一口都能感受到新鲜与甜脆，是您日常水果的理想选择。</div>
-                    </div>
-                </div>
-
                 <!-- 图片区域 -->
                 <div class="image-container">
                     <img id="carouselImage" src="" alt="Product image">
@@ -173,9 +144,9 @@
                     </div>
                 </div>
 
-                <!-- 文章内容 -->
+                <!-- 文本编辑区域 -->
                 <div class="p-4">
-                    <!-- 文本编辑区域 -->
+                    <!-- 编辑按钮 -->
                     <div class="mb-4 text-right">
                         <button id="toggleEditBtn" class="px-3 py-1 rounded-lg text-white text-sm shadow-sm"
                             style="background: linear-gradient(135deg, #9aa338, #a9b056);">
@@ -206,11 +177,36 @@
                     <!-- 可编辑文本区域 -->
                     <div id="contentEditor" class="bg-white border border-gray-200 rounded-lg p-3 shadow-sm mb-4"
                         style="min-height: 300px; display: none;">
-                        <!-- 这里将包含所有的文案内容，通过JavaScript填充 -->
+                        <!-- 标题和标签部分 -->
+                        <div class="mb-4">
+                            <div class="mb-2 flex items-center">
+                                <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded mr-2"
+                                    style="background: linear-gradient(135deg, #ffcdd2, #ef9a9a); color: #c62828;">限时特惠</span>
+                                <span class="bg-green-100 text-green-600 text-xs font-bold px-2 py-1 rounded"
+                                    style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #2e7d32;">有机认证</span>
+                            </div>
+                            <h2 class="text-lg font-bold mb-2">高山果园红富士苹果 | 有机种植 · 自然成熟 · 脆甜多汁</h2>
+                            <p class="text-sm text-gray-700 leading-relaxed">✨
+                                来自高海拔山区的红富士苹果，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。每一口都能感受到新鲜与甜脆，是您日常水果的理想选择。</p>
+                        </div>
+                        <!-- 其他内容将通过JavaScript填充 -->
                     </div>
 
                     <!-- 原始静态内容区域 -->
                     <div id="staticContent">
+                        <!-- 标题和标签部分 -->
+                        <div class="mb-4">
+                            <div class="mb-2 flex items-center">
+                                <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded mr-2"
+                                    style="background: linear-gradient(135deg, #ffcdd2, #ef9a9a); color: #c62828;">限时特惠</span>
+                                <span class="bg-green-100 text-green-600 text-xs font-bold px-2 py-1 rounded"
+                                    style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #2e7d32;">有机认证</span>
+                            </div>
+                            <h2 class="text-lg font-bold mb-2">高山果园红富士苹果 | 有机种植 · 自然成熟 · 脆甜多汁</h2>
+                            <p class="text-sm text-gray-700 leading-relaxed">✨
+                                来自高海拔山区的红富士苹果，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。每一口都能感受到新鲜与甜脆，是您日常水果的理想选择。</p>
+                        </div>
+
                         <!-- 添加产品标签 -->
                         <div class="flex flex-wrap gap-2 mb-4">
                             <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
@@ -228,7 +224,7 @@
                             style="border-color: #9aa338; background: linear-gradient(to right, rgba(154, 163, 56, 0.15), rgba(154, 163, 56, 0.05), transparent);">
                             <h3 class="font-bold mb-2 text-[#9aa338]">🍎 产品特点</h3>
                             <p class="text-sm text-gray-700 mb-3 leading-relaxed">
-                                这款红富士苹果产自高海拔山区，生长环境优越，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。果实成熟度高，颜色红润，外观光亮诱人。 </p>
+                                这款红富士苹果产自高海拔山区，生长环境优越，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。果实成熟度高，颜色红润，外观光亮诱人。</p>
                         </div>
 
                         <!-- 口感描述 -->
@@ -236,7 +232,7 @@
                             style="border-color: #e67e22; background: linear-gradient(to right, rgba(230, 126, 34, 0.15), rgba(230, 126, 34, 0.05), transparent);">
                             <h3 class="font-bold mb-2 text-orange-700">👅 口感体验</h3>
                             <p class="text-sm text-gray-700 mb-3 leading-relaxed">
-                                口感脆甜多汁，果肉细腻，香气怡人。咬一口，汁水四溢，甜度适中不腻口，是水果爱好者的不二之选。冷藏后食用，口感更佳。 </p>
+                                口感脆甜多汁，果肉细腻，香气怡人。咬一口，汁水四溢，甜度适中不腻口，是水果爱好者的不二之选。冷藏后食用，口感更佳。</p>
                         </div>
 
                         <!-- 营养价值 -->
@@ -244,7 +240,7 @@
                             style="border-color: #3498db; background: linear-gradient(to right, rgba(52, 152, 219, 0.15), rgba(52, 152, 219, 0.05), transparent);">
                             <h3 class="font-bold mb-2 text-blue-700">💪 营养价值</h3>
                             <p class="text-sm text-gray-700 mb-3 leading-relaxed">
-                                富含多种维生素和膳食纤维，有助于肠道健康，增强免疫力。每天一个苹果，医生远离我！特别适合注重健康生活的现代人。 </p>
+                                富含多种维生素和膳食纤维，有助于肠道健康，增强免疫力。每天一个苹果，医生远离我！特别适合注重健康生活的现代人。</p>
                         </div>
 
                         <!-- 食用建议 -->
@@ -252,10 +248,8 @@
                             style="border-color: #9b59b6; background: linear-gradient(to right, rgba(155, 89, 182, 0.15), rgba(155, 89, 182, 0.05), transparent);">
                             <h3 class="font-bold mb-2 text-purple-700">🍽️ 食用建议</h3>
                             <p class="text-sm text-gray-700 mb-3 leading-relaxed">
-                                建议冷藏后食用，口感更佳。可以直接作为水果享用，也可切片加入沙拉、搭配酸奶或制作苹果派。苹果还能制作成鲜榨果汁，搭配其他水果制作特色饮品，带来清新健康的口感体验。 </p>
+                                建议冷藏后食用，口感更佳。可以直接作为水果享用，也可切片加入沙拉、搭配酸奶或制作苹果派。苹果还能制作成鲜榨果汁，搭配其他水果制作特色饮品，带来清新健康的口感体验。</p>
                         </div>
-
-                        <div class="flex items-center justify-end mt-4 pt-3 border-t border-gray-100"></div>
                     </div>
                 </div>
             </div>
@@ -452,6 +446,87 @@
     <script src="js/common.js"></script>
     <script src="js/preview.js"></script>
     <script>
+        // AI优化后的文案内容
+        const optimizedContent = `
+            <div class="mb-4">
+                <div class="mb-2 flex items-center">
+                    <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded mr-2"
+                        style="background: linear-gradient(135deg, #ffcdd2, #ef9a9a); color: #c62828;">限时特惠</span>
+                    <span class="bg-green-100 text-green-600 text-xs font-bold px-2 py-1 rounded"
+                        style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #2e7d32;">有机认证</span>
+                </div>
+                <h2 class="text-lg font-bold mb-2">💫高山红富士｜咬一口就沦陷的冰糖心小炸弹！🍎</h2>
+                <p class="text-sm text-gray-700 leading-relaxed">#有机种植 #会爆汁的苹果 #产地直发</p>
+            </div>
+
+            <div class="flex flex-wrap gap-2 mb-4">
+                <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+                    style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #1b5e20;">有机认证</span>
+                <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+                    style="background: linear-gradient(135deg, #ffcdd2, #ef9a9a); color: #b71c1c;">特级品质</span>
+                <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+                    style="background: linear-gradient(135deg, #bbdefb, #90caf9); color: #0d47a1;">高山种植</span>
+                <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+                    style="background: linear-gradient(135deg, #fff9c4, #fff59d); color: #f57f17;">产地直发</span>
+            </div>
+
+            <div class="mb-5 text-center text-sm text-gray-700 leading-relaxed">
+                <p>——————🌲自然の馈赠——————</p>
+                <p class="mt-2">✨谁还没吃过这颗300天自然长成的红宝石！</p>
+                <p>海拔2000m+云端果园 | 365天有机养护</p>
+                <p>拒绝催熟剂❌ 不用膨大剂❌</p>
+                <p>自带有机小绿标认证 每一颗都是阳光吻过的红脸蛋</p>
+            </div>
+
+            <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+                style="border-color: #9aa338; background: linear-gradient(to right, rgba(154, 163, 56, 0.15), rgba(154, 163, 56, 0.05), transparent);">
+                <h3 class="font-bold mb-2 text-[#9aa338]">🍎 产品特点</h3>
+                <p class="text-sm text-gray-700 mb-3 leading-relaxed">
+                    🌱「有机喂养」不用农药的天然baby<br>
+                    ☀️「日光SPA」昼夜温差凝出冰糖心<br>
+                    📦「现摘现发」枝头到舌尖72h直达<br>
+                    📸「颜值爆表」自带高光滤镜的苹果届爱豆
+                </p>
+            </div>
+
+            <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+                style="border-color: #e67e22; background: linear-gradient(to right, rgba(230, 126, 34, 0.15), rgba(230, 126, 34, 0.05), transparent);">
+                <h3 class="font-bold mb-2 text-orange-700">👅 口感体验</h3>
+                <p class="text-sm text-gray-700 mb-3 leading-relaxed">
+                    🔥牙齿轻轻一碰就爆汁！果肉像初雪般细嫩<br>
+                    💥甜度直接拉满18°+ 却完全不齁嗓子！<br>
+                    ❄️冰镇后吃绝了！像在啃液态蜂蜜冻<br>
+                    ⚠️温馨提示：吃前备好纸巾 汁水多到能洗脸
+                </p>
+            </div>
+
+            <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+                style="border-color: #3498db; background: linear-gradient(to right, rgba(52, 152, 219, 0.15), rgba(52, 152, 219, 0.05), transparent);">
+                <h3 class="font-bold mb-2 text-blue-700">💪 营养价值</h3>
+                <p class="text-sm text-gray-700 mb-3 leading-relaxed">
+                    🍏维C含量≈3颗柠檬 熬夜党快码住<br>
+                    🍎果胶含量MAX 噗噗困难户救星<br>
+                    🍐每天1颗=给肠道做瑜伽<br>
+                    👩👧适配人群：健身党/宝妈/996打工人
+                </p>
+            </div>
+
+            <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+                style="border-color: #9b59b6; background: linear-gradient(to right, rgba(155, 89, 182, 0.15), rgba(155, 89, 182, 0.05), transparent);">
+                <h3 class="font-bold mb-2 text-purple-700">🍽️ 神仙吃法</h3>
+                <p class="text-sm text-gray-700 mb-3 leading-relaxed">
+                    ☀️早起切块拌酸奶碗 唤醒甜甜一整天<br>
+                    🍵下午茶做成ins风水果拼盘 秒杀甜品<br>
+                    🍹榨汁加气泡水+薄荷 自制冷饮店爆款<br>
+                    📸对半切开摆盘发朋友圈 收获99+点赞
+                </p>
+            </div>
+
+            <div class="mt-5 text-center p-3 rounded-lg bg-gradient-to-r from-pink-50 to-red-50">
+                <p class="text-sm text-red-600">🌟现在下单送苹果花胸针！把春天别在衣襟上～</p>
+            </div>
+        `;
+
         // 底部导航展示动画
         document.addEventListener('DOMContentLoaded', function () {
             // 处理去发布按钮的点击事件
@@ -470,12 +545,9 @@
             const editorToolbar = document.getElementById('editorToolbar');
             const contentEditor = document.getElementById('contentEditor');
             const staticContent = document.getElementById('staticContent');
-
-            // 头部标题和描述编辑
-            const staticTitle = document.getElementById('staticTitle');
-            const titleEditor = document.getElementById('titleEditor');
-            const staticDesc = document.getElementById('staticDesc');
-            const descEditor = document.getElementById('descEditor');
+            const generateCopyBtn = document.getElementById('generateCopyBtn');
+            const aiGeneratingContainer = document.getElementById('aiGeneratingContainer');
+            const aiProgressBar = document.getElementById('aiProgressBar');
 
             if (toggleEditBtn && contentEditor && staticContent) {
                 // 初始化文本编辑器
@@ -493,12 +565,6 @@
                         editorToolbar.classList.remove('hidden');
                         toggleEditBtn.innerHTML = '<i class="fas fa-check mr-1"></i> 保存文案';
                         toggleEditBtn.style.background = 'linear-gradient(135deg, #4caf50, #388e3c)';
-
-                        // 显示标题和描述编辑器
-                        staticTitle.classList.add('hidden');
-                        titleEditor.classList.remove('hidden');
-                        staticDesc.classList.add('hidden');
-                        descEditor.classList.remove('hidden');
                     } else {
                         // 保存并切换回静态模式
                         staticContent.innerHTML = contentEditor.innerHTML;
@@ -508,21 +574,46 @@
                         toggleEditBtn.innerHTML = '<i class="fas fa-edit mr-1"></i> 编辑文案';
                         toggleEditBtn.style.background = 'linear-gradient(135deg, #9aa338, #a9b056)';
 
-                        // 保存并隐藏标题和描述编辑器
-                        staticTitle.textContent = titleEditor.textContent;
-                        staticTitle.classList.remove('hidden');
-                        titleEditor.classList.add('hidden');
-
-                        staticDesc.textContent = descEditor.textContent;
-                        staticDesc.classList.remove('hidden');
-                        descEditor.classList.add('hidden');
-
                         // 可以在这里添加保存到服务器的代码
                         console.log('文案已保存');
                         // 显示保存成功提示
                         showSaveSuccess();
                     }
                 });
+
+                // AI生成按钮点击事件
+                if (generateCopyBtn) {
+                    generateCopyBtn.addEventListener('click', function () {
+                        // 显示生成状态
+                        aiGeneratingContainer.classList.remove('hidden');
+                        generateCopyBtn.disabled = true;
+                        generateCopyBtn.style.opacity = '0.7';
+
+                        // 模拟进度条动画
+                        let progress = 0;
+                        const progressInterval = setInterval(() => {
+                            progress += 2;
+                            aiProgressBar.style.width = `${progress}%`;
+
+                            if (progress >= 100) {
+                                clearInterval(progressInterval);
+                                setTimeout(() => {
+                                    // 更新内容
+                                    contentEditor.innerHTML = optimizedContent;
+                                    staticContent.innerHTML = optimizedContent;
+
+                                    // 隐藏生成状态
+                                    aiGeneratingContainer.classList.add('hidden');
+                                    generateCopyBtn.disabled = false;
+                                    generateCopyBtn.style.opacity = '1';
+
+                                    // 显示成功提示
+                                    showAiSuccess();
+                                }, 500);
+                            }
+                        }, 50);
+                    });
+                }
 
                 // 编辑器工具栏功能
                 const editorBtns = document.querySelectorAll('.editor-btn');
@@ -548,9 +639,19 @@
 
             // 显示保存成功提示
             function showSaveSuccess() {
+                showNotification('文案已保存', 'check-circle');
+            }
+
+            // 显示AI生成成功提示
+            function showAiSuccess() {
+                showNotification('AI优化完成', 'magic');
+            }
+
+            // 通用提示框函数
+            function showNotification(message, icon) {
                 const notification = document.createElement('div');
                 notification.classList.add('save-notification');
-                notification.innerHTML = '<i class="fas fa-check-circle mr-2"></i>文案已保存';
+                notification.innerHTML = `<i class="fas fa-${icon} mr-2"></i>${message}`;
                 notification.style.position = 'fixed';
                 notification.style.bottom = '80px';
                 notification.style.left = '50%';
