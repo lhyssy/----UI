@@ -380,9 +380,9 @@
 <div class="bg-white px-4 pt-4 pb-5 user-card">
     <div class="flex items-center">
         <img src="https://plus.unsplash.com/premium_photo-1686269460470-a44c06f16e0a?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-             alt="用户头像" class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm">
+             alt="用户头像" class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm user-avatar">
         <div class="ml-4">
-            <h2 class="font-bold text-lg">农夫老李</h2>
+            <h2 class="font-bold text-lg user-name">农夫老李</h2>
             <p class="text-sm text-gray-500">ID: 12345678</p>
 
         </div>
@@ -412,15 +412,24 @@
 <!-- 平台账号 -->
 <h2 class="font-bold text-lg mb-3 mt-3 text-center">已绑定账号</h2>
 <div class="bg-white rounded-xl p-4 shadow-sm account-card">
-    <div class="flex items-center justify-between">
-        <div class="flex items-center">
-            <img src="https://plus.unsplash.com/premium_photo-1686269460470-a44c06f16e0a?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                 alt="用户头像" class="w-10 h-10 rounded-full object-cover">
-            <div class="ml-3">
-                <div class="font-medium">老李的花园</div>
-                <div class="text-xs text-gray-500 mt-0.5">小红书 @绿色农产品</div>
-            </div>
+    <!-- 账号列表容器 -->
+    <div id="accountsList" class="space-y-4">
+        <!-- 默认提示 -->
+        <div id="accountsEmptyState" class="text-center py-6">
+            <i class="fas fa-user-plus text-gray-300 text-4xl mb-3"></i>
+            <p class="text-gray-500">您还未绑定任何账号</p>
+            <p class="text-gray-400 text-sm mt-1">添加账号可以同步发布您的宣传内容</p>
         </div>
+
+        <!-- 账号项将被动态添加到这里 -->
+    </div>
+
+    <!-- 添加账号按钮 -->
+    <div class="flex justify-center mt-4">
+        <button id="addAccountBtn"
+                class="flex items-center text-[rgba(255,142,50,0.88)] text-sm px-3 py-1 rounded-full border border-[rgba(255,142,50,0.88)]">
+            <i class="fas fa-plus mr-1"></i> 添加账号
+        </button>
     </div>
 </div>
 
@@ -714,6 +723,46 @@
     </div>
 </div>
 
+<!-- 账号编辑弹窗 -->
+<div class="modal" id="accountEditModal">
+    <div class="bg-white rounded-xl max-w-md w-full mx-auto">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold" id="accountModalTitle">添加社交账号</h3>
+            <button class="text-gray-500 close-btn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="space-y-6 p-2">
+            <!-- 添加一个隐藏的输入框用于存储编辑状态 -->
+            <input type="hidden" id="accountEditIndex" value="-1">
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">选择平台</label>
+                <select id="platformSelect"
+                        class="w-full border-2 border-gray-200 p-3 rounded-lg focus:outline-none focus:border-green-500 transition-colors">
+                    <option value="小红书">小红书</option>
+                    <option value="抖音">抖音</option>
+                    <option value="微信视频号">微信视频号</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">账号ID</label>
+                <input type="text" id="accountIdInput"
+                       class="w-full border-2 border-gray-200 p-3 rounded-lg focus:outline-none focus:border-green-500 transition-colors"
+                       placeholder="请输入您的账号ID">
+            </div>
+            <button id="saveAccountBtn"
+                    class="w-full py-3 px-4 rounded-lg text-white font-medium transition-all hover:opacity-90 relative"
+                    style="background-color: rgba(255,142,50,0.88)">
+                <span id="saveAccountBtnText">绑定账号</span>
+                <div id="saveAccountSpinner" class="hidden absolute inset-0 flex items-center justify-center">
+                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                </div>
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- 在页面中添加提示容器 -->
 <div id="toast" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-[9999]"></div>
 
@@ -724,6 +773,25 @@
     // 内容标签页切换功能 - 页面加载完成后立即执行
     window.addEventListener('DOMContentLoaded', function () {
         console.log('DOM已加载完成，开始初始化事件...');
+
+        // 直接为添加账号按钮绑定事件
+        const addAccountBtn = document.getElementById('addAccountBtn');
+        if (addAccountBtn) {
+            console.log('找到添加账号按钮，绑定点击事件');
+            addAccountBtn.addEventListener('click', function () {
+                console.log('添加账号按钮被点击');
+                // 重置表单
+                document.getElementById('accountModalTitle').textContent = '添加社交账号';
+                document.getElementById('accountIdInput').value = '';
+                document.getElementById('accountEditIndex').value = '-1';
+                document.getElementById('platformSelect').value = '小红书';
+
+                // 显示弹窗
+                showModal('accountEdit');
+            });
+        } else {
+            console.error('未找到添加账号按钮元素');
+        }
 
         // 标签切换功能
         const tabs = document.querySelectorAll('.tab-item');
@@ -839,11 +907,17 @@
 
     // 弹窗控制函数
     function showModal(type) {
-        console.log('显示弹窗:', type);
+        console.log('调用showModal函数，参数:', type);
+        console.log('需要显示的弹窗ID:', `${type}Modal`);
+
+        // 检查DOM中是否存在该弹窗
+        const modalExists = document.getElementById(`${type}Modal`);
+        console.log('弹窗元素是否存在:', !!modalExists);
 
         try {
             // 先隐藏所有弹窗
             const modals = document.querySelectorAll('.modal');
+            console.log('找到的弹窗数量:', modals.length);
             modals.forEach(modal => {
                 modal.style.display = 'none';
                 modal.style.opacity = '0';
@@ -854,18 +928,21 @@
             if (modal) {
                 // 先显示
                 modal.style.display = 'flex';
+                console.log('已设置弹窗为flex显示');
 
                 // 强制重排确保显示后再添加过渡
                 void modal.offsetWidth;
 
                 // 设置透明度触发过渡
                 modal.style.opacity = '1';
+                console.log('已设置弹窗透明度为1');
 
                 // 为内容添加动画
                 const content = modal.querySelector('.bg-white');
                 if (content) {
                     content.style.transform = 'translateY(0) scale(1)';
                     content.style.opacity = '1';
+                    console.log('已设置内容动画');
                 }
             } else {
                 console.error(`找不到弹窗: ${type}Modal`);
@@ -905,20 +982,63 @@
 
     // 检查登录状态
     function checkLoginStatus() {
+        console.log('检查登录状态...');
         const userLoggedIn = localStorage.getItem('userLoggedIn');
+        console.log('登录状态:', userLoggedIn);
+
         if (!userLoggedIn) {
+            console.log('未登录，正在重定向到访客页面');
             // 如果未登录，重定向到访客页面
             window.location.href = 'profile-guest.html';
             return;
         }
 
+        // 清除用户账号数据，确保每次加载时默认为空
+        localStorage.removeItem('userAccounts');
+
         // 已登录，加载用户信息
         const userName = localStorage.getItem('userName');
-        const userAvatar = localStorage.getItem('userAvatar');
+        const userPhoto = localStorage.getItem('userPhoto');
+
+        console.log('用户名:', userName);
+        console.log('头像数据是否存在:', !!userPhoto);
+
+        if (userPhoto && userPhoto.length > 100) {
+            console.log('头像数据长度:', userPhoto.length);
+            console.log('头像数据前缀:', userPhoto.substring(0, 50) + '...');
+        }
 
         // 更新页面显示
-        document.querySelector('.user-name').textContent = userName;
-        document.querySelector('.user-avatar').src = userAvatar;
+        try {
+            const userNameElements = document.querySelectorAll('.user-name');
+            userNameElements.forEach(el => {
+                console.log('更新用户名元素:', el.className);
+                el.textContent = userName || '农夫老李';
+            });
+
+            const userAvatarElements = document.querySelectorAll('.user-avatar');
+            console.log('找到头像元素数量:', userAvatarElements.length);
+
+            userAvatarElements.forEach((el, index) => {
+                console.log(`更新头像元素 ${index + 1}:`, el.className);
+                if (userPhoto) {
+                    el.src = userPhoto;
+                    el.onerror = function () {
+                        console.error('头像加载失败，使用默认图片');
+                        el.src = 'https://plus.unsplash.com/premium_photo-1686269460470-a44c06f16e0a?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+                    };
+                }
+            });
+
+            // 初始加载时也更新账号列表
+            if (typeof renderAccountsList === 'function') {
+                renderAccountsList();
+            }
+
+            console.log('用户信息更新完成');
+        } catch (error) {
+            console.error('更新用户信息时出错:', error);
+        }
     }
 
     // 页面加载时检查登录状态
@@ -945,8 +1065,21 @@
     // 提示函数 - 移到全局作用域
     function showToast(message, type = 'success') {
         const toast = document.getElementById('toast');
+        if (!toast) {
+            console.error('找不到toast元素');
+            return;
+        }
+
+        let typeClass = 'bg-green-500';
+
+        if (type === 'error') {
+            typeClass = 'bg-red-500';
+        } else if (type === 'info') {
+            typeClass = 'bg-blue-500';
+        }
+
         toast.innerHTML = `
-                <div class="bg-${type === 'error' ? 'red' : 'green'}-500 text-white px-6 py-3 rounded-lg shadow-lg animate-slideIn text-center min-w-[200px] max-w-[90%]" style="position: relative; z-index: 10000;">
+                <div class="${typeClass} text-white px-6 py-3 rounded-lg shadow-lg animate-slideIn text-center min-w-[200px] max-w-[90%]" style="position: relative; z-index: 10000;">
                     ${message}
                 </div>
             `;
@@ -956,6 +1089,80 @@
             toast.innerHTML = '';
             toast.classList.add('hidden');
         }, 2000);
+    }
+
+    // 渲染账号列表 - 移到全局作用域
+    function renderAccountsList() {
+        const accountsList = document.getElementById('accountsList');
+        const emptyState = document.getElementById('accountsEmptyState');
+
+        // 获取账号列表
+        const accounts = JSON.parse(localStorage.getItem('userAccounts') || '[]');
+
+        // 判断是否有账号
+        if (accounts.length === 0) {
+            emptyState.style.display = 'block';
+            // 清空可能存在的账号项
+            Array.from(accountsList.querySelectorAll('.account-item')).forEach(item => item.remove());
+            return;
+        }
+
+        // 隐藏空状态提示
+        emptyState.style.display = 'none';
+
+        // 清空现有内容
+        Array.from(accountsList.querySelectorAll('.account-item')).forEach(item => item.remove());
+
+        // 添加账号项
+        accounts.forEach(account => {
+            const accountElement = document.createElement('div');
+            accountElement.className = 'account-item mb-3 flex items-center justify-between bg-white rounded-lg p-4 hover:bg-gray-50 transition-colors shadow-sm';
+            accountElement.setAttribute('data-id', account.platform + '-' + account.id);
+
+            // 获取平台图标和颜色
+            let platformIcon, platformColor, platformDesc;
+            switch (account.platform) {
+                case '小红书':
+                    platformIcon = 'fa-hashtag';
+                    platformColor = 'bg-red-100 text-red-500';
+                    platformDesc = '图文笔记 | 实时互动';
+                    break;
+                case '抖音':
+                    platformIcon = 'fab fa-tiktok';
+                    platformColor = 'bg-gray-900 text-white';
+                    platformDesc = '短视频 | 推荐算法强';
+                    break;
+                case '微信视频号':
+                    platformIcon = 'fab fa-weixin';
+                    platformColor = 'bg-green-100 text-green-600';
+                    platformDesc = '微信生态 | 私域流量';
+                    break;
+                default:
+                    platformIcon = 'fa-share-alt';
+                    platformColor = 'bg-blue-100 text-blue-500';
+                    platformDesc = '社交平台 | 内容分享';
+            }
+
+            accountElement.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 rounded-full ${platformColor} flex items-center justify-center text-xl">
+                            <i class="${platformIcon}"></i>
+                        </div>
+                        <div class="ml-4">
+                            <div class="font-medium">${account.platform}</div>
+                            <div class="text-xs text-gray-500 mt-1">${platformDesc}</div>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <div class="text-gray-500 text-sm">ID: ${account.id}</div>
+                        <button class="delete-account-btn text-gray-400 hover:text-red-500 transition-colors ml-2">
+                            <i class="fas fa-unlink"></i>
+                        </button>
+                    </div>
+                `;
+
+            accountsList.appendChild(accountElement);
+        });
     }
 
     // 提交评价函数 - 移到全局作用域
@@ -1081,7 +1288,128 @@
         document.querySelector('.user-avatar').addEventListener('click', function () {
             showToast('编辑个人资料', 'info');
         });
+
+        // 保存账号信息
+        document.getElementById('saveAccountBtn').addEventListener('click', function () {
+            const accountId = document.getElementById('accountIdInput').value.trim();
+            const platform = document.getElementById('platformSelect').value;
+            const editIndex = parseInt(document.getElementById('accountEditIndex').value);
+
+            if (!accountId) {
+                showToast('请输入账号ID', 'error');
+                return;
+            }
+
+            // 显示加载动画
+            const btnText = document.getElementById('saveAccountBtnText');
+            const spinner = document.getElementById('saveAccountSpinner');
+            const saveBtn = this;
+
+            saveBtn.disabled = true;
+            btnText.classList.add('opacity-0');
+            spinner.classList.remove('hidden');
+
+            // 获取已保存的账号列表
+            let accounts = JSON.parse(localStorage.getItem('userAccounts') || '[]');
+
+            // 检查是否已经绑定相同平台和ID的账号
+            const existingAccount = accounts.find(acc =>
+                acc.platform === platform && acc.id === accountId &&
+                (editIndex === -1 || accounts.indexOf(acc) !== editIndex)
+            );
+
+            if (existingAccount) {
+                showToast('该平台账号已绑定，请勿重复绑定', 'error');
+                resetSaveButton(saveBtn, btnText, spinner);
+                return;
+            }
+
+            // 模拟API调用延迟
+            setTimeout(() => {
+                try {
+                    // 构建账号对象
+                    const accountObj = {
+                        id: accountId,
+                        platform: platform,
+                        bindTime: new Date().toISOString()
+                    };
+
+                    // 判断是编辑还是新增
+                    if (editIndex >= 0 && editIndex < accounts.length) {
+                        // 更新已有账号
+                        accounts[editIndex] = accountObj;
+                        showToast('账号信息已更新', 'success');
+                    } else {
+                        // 添加新账号
+                        accounts.push(accountObj);
+                        showToast('账号绑定成功', 'success');
+                    }
+
+                    // 保存到localStorage
+                    localStorage.setItem('userAccounts', JSON.stringify(accounts));
+
+                    // 更新账号显示
+                    renderAccountsList();
+
+                    // 关闭弹窗
+                    hideModal('accountEdit');
+                } catch (error) {
+                    console.error('保存账号信息失败:', error);
+                    showToast('操作失败，请重试', 'error');
+                } finally {
+                    resetSaveButton(saveBtn, btnText, spinner);
+                }
+            }, 2000); // 模拟2秒的API调用
+        });
+
+        // 重置保存按钮状态 - 移到全局作用域
+        function resetSaveButton(saveBtn, btnText, spinner) {
+            saveBtn.disabled = false;
+            btnText.classList.remove('opacity-0');
+            spinner.classList.add('hidden');
+        }
+
+        // 初始化账号列表
+        renderAccountsList();
+
+        // 为document添加事件委托，处理账号的删除
+        document.addEventListener('click', function (e) {
+            // 处理删除按钮点击
+            if (e.target.classList.contains('delete-account-btn') ||
+                e.target.closest('.delete-account-btn')) {
+                const accountItem = e.target.closest('.account-item');
+                const accountId = accountItem.getAttribute('data-id');
+                deleteAccount(accountId);
+                e.stopPropagation(); // 阻止事件冒泡
+            }
+        });
     });
+
+    // 删除账号
+    function deleteAccount(accountId) {
+        if (!confirm('确定要解绑该账号吗？')) {
+            return;
+        }
+
+        // 获取账号列表
+        let accounts = JSON.parse(localStorage.getItem('userAccounts') || '[]');
+
+        // 解析accountId (格式为 platform-id)
+        const [platform, id] = accountId.split('-');
+
+        // 过滤掉要删除的账号
+        accounts = accounts.filter(acc =>
+            !(acc.platform === platform && acc.id === id)
+        );
+
+        // 保存更新后的列表
+        localStorage.setItem('userAccounts', JSON.stringify(accounts));
+
+        // 重新渲染账号列表
+        renderAccountsList();
+
+        showToast('账号已解绑', 'success');
+    }
 </script>
 </body>
 
