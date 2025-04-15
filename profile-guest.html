@@ -311,9 +311,17 @@
         <div class="space-y-6">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">上传头像</label>
-                <div class="relative">
-                    <input type="file" id="photoInput" accept="image/*"
-                           class="w-full border-2 border-gray-200 p-3 rounded-lg focus:outline-none focus:border-green-500 transition-colors">
+                <div class="flex flex-col items-center">
+                    <div id="photoPreview"
+                         class="w-24 h-24 rounded-full bg-gray-200 mb-3 flex items-center justify-center overflow-hidden">
+                        <i class="fas fa-user text-gray-400 text-3xl"></i>
+                    </div>
+                    <label for="photoInput" class="cursor-pointer py-2 px-4 rounded-lg text-white text-sm"
+                           style="background-color: rgba(154, 163, 56, 0.8)">
+                        <i class="fas fa-camera mr-1"></i> 选择头像图片
+                    </label>
+                    <input type="file" id="photoInput" accept="image/*" class="hidden">
+                    <p class="text-xs text-gray-500 mt-2">支持JPG、PNG、GIF格式，大小不超过5MB</p>
                 </div>
             </div>
             <div>
@@ -446,23 +454,120 @@
     });
 
     // 提交数据并跳转
-    document.getElementById('submitBtn').addEventListener('click', () => {
-        const name = document.getElementById('nameInput').value.trim();
-        const photo = document.getElementById('photoInput').files[0];
+    document.getElementById('submitBtn').addEventListener('click', function () {
+        // 禁用按钮，防止重复提交
+        const submitBtn = this;
+        submitBtn.disabled = true;
+        submitBtn.innerText = '处理中...';
+        submitBtn.style.backgroundColor = 'rgba(255,142,50,0.5)';
 
-        if (!name || !photo) {
-            showToast('请填写姓名并上传照片', 'error');
+        const name = document.getElementById('nameInput').value.trim();
+        const photoInput = document.getElementById('photoInput');
+
+        // 验证输入
+        const showErrorAndReset = (message) => {
+            showToast(message, 'error');
+            submitBtn.disabled = false;
+            submitBtn.innerText = '确认';
+            submitBtn.style.backgroundColor = 'rgba(255,142,50,0.88)';
+        };
+
+        if (!photoInput.files || photoInput.files.length === 0) {
+            showErrorAndReset('请选择要上传的图片');
             return;
         }
 
-        // 存储数据到 localStorage
-        const photoURL = URL.createObjectURL(photo);
-        localStorage.setItem('userName', name);
-        localStorage.setItem('userPhoto', photoURL);
-        localStorage.setItem('userLoggedIn', 'true');
+        const photo = photoInput.files[0];
 
-        // 跳转到个人页面
-        window.location.href = 'profile.html';
+        if (!name) {
+            showErrorAndReset('请填写您的姓名');
+            return;
+        }
+
+        // 检查文件类型
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(photo.type)) {
+            showErrorAndReset('请上传JPG、PNG或GIF格式的图片');
+            return;
+        }
+
+        // 检查文件大小，限制为5MB
+        if (photo.size > 5 * 1024 * 1024) {
+            showErrorAndReset('图片大小不能超过5MB');
+            return;
+        }
+
+        // 显示加载提示
+        showToast('正在处理图片，请稍候...', 'info');
+        console.log('开始处理图片:', photo.name, photo.type, photo.size);
+
+        // 直接使用预览区域的图片数据
+        try {
+            const previewImg = document.querySelector('#photoPreview img');
+
+            if (previewImg && previewImg.src) {
+                // 从预览图中获取已转换的base64数据
+                const photoBase64 = previewImg.src;
+
+                // 存储数据到localStorage
+                localStorage.setItem('userName', name);
+                localStorage.setItem('userPhoto', photoBase64);
+                localStorage.setItem('userLoggedIn', 'true');
+
+                console.log('数据已保存到localStorage');
+
+                // 显示成功提示
+                showToast('登录成功，正在跳转...', 'success');
+
+                // 跳转到个人页面
+                setTimeout(() => {
+                    window.location.href = 'profile.html';
+                }, 1000);
+
+                return;
+            }
+
+            // 如果没有预览图，回退到FileReader方法
+            const reader = new FileReader();
+
+            reader.onerror = function () {
+                console.error('FileReader发生错误:', reader.error);
+                showErrorAndReset('图片处理失败，请重试');
+            };
+
+            reader.onload = function (e) {
+                try {
+                    console.log('图片读取成功, 数据长度:', e.target.result.length);
+
+                    const photoBase64 = e.target.result;
+                    localStorage.setItem('userName', name);
+                    localStorage.setItem('userPhoto', photoBase64);
+                    localStorage.setItem('userLoggedIn', 'true');
+
+                    // 测试localStorage是否成功保存
+                    const savedPhoto = localStorage.getItem('userPhoto');
+                    console.log('验证localStorage保存状态:', !!savedPhoto);
+
+                    showToast('登录成功，正在跳转...', 'success');
+
+                    setTimeout(() => {
+                        window.location.href = 'profile.html';
+                    }, 1000);
+                } catch (error) {
+                    console.error('处理图片数据时出错:', error);
+                    showErrorAndReset('处理图片时出错，请重试');
+                }
+            };
+
+            reader.readAsDataURL(photo);
+            console.log('已调用readAsDataURL方法');
+
+        } catch (error) {
+            console.error('图片处理过程中出错:', error);
+            showErrorAndReset('处理图片过程中出错，请重试');
+            console.error('调用readAsDataURL时出错:', error);
+            showErrorAndReset('读取图片失败，请重试');
+        }
     });
 
     // 底部导航跳转逻辑
@@ -476,6 +581,95 @@
                 window.location.href = link;
             }
         });
+    });
+
+    // 添加Toast提示功能
+    function showToast(message, type = 'success') {
+        // 先移除可能存在的旧toast
+        const existingToasts = document.querySelectorAll('.toast-message');
+        existingToasts.forEach(toast => {
+            document.body.removeChild(toast);
+        });
+
+        // 创建新的toast
+        const toast = document.createElement('div');
+        // 位置调整，从top-4改为top-20，避免被顶部导航栏遮挡
+        toast.className = `toast-message fixed top-20 left-1/2 transform -translate-x-1/2 py-3 px-5 rounded-lg shadow-lg z-[9999] text-white text-sm font-medium`;
+
+        // 设置不同状态的背景色和图标
+        let bgColor, icon;
+        switch (type) {
+            case 'error':
+                bgColor = 'rgba(220, 38, 38, 0.95)';
+                icon = '<i class="fas fa-times-circle mr-2"></i>';
+                break;
+            case 'info':
+                bgColor = 'rgba(59, 130, 246, 0.95)';
+                icon = '<i class="fas fa-info-circle mr-2"></i>';
+                break;
+            default:
+                bgColor = 'rgba(16, 185, 129, 0.95)';
+                icon = '<i class="fas fa-check-circle mr-2"></i>';
+        }
+
+        toast.style.backgroundColor = bgColor;
+        toast.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.2)';
+        toast.innerHTML = `${icon}${message}`;
+
+        // 添加动画效果
+        toast.style.transition = 'all 0.3s ease';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translate(-50%, -20px)';
+
+        document.body.appendChild(toast);
+
+        // 触发重绘后显示
+        setTimeout(() => {
+            toast.style.opacity = '1';
+            toast.style.transform = 'translate(-50%, 0)';
+        }, 10);
+
+        // 自动移除
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translate(-50%, -20px)';
+            setTimeout(() => {
+                if (document.body.contains(toast)) {
+                    document.body.removeChild(toast);
+                }
+            }, 300);
+        }, 3000);
+    }
+
+    // 图片预览功能
+    document.getElementById('photoInput').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // 检查文件类型
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+            showToast('请上传JPG、PNG或GIF格式的图片', 'error');
+            this.value = '';
+            return;
+        }
+
+        // 检查文件大小
+        if (file.size > 5 * 1024 * 1024) {
+            showToast('图片大小不能超过5MB', 'error');
+            this.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const preview = document.getElementById('photoPreview');
+            preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover" alt="头像预览">`;
+        };
+        reader.onerror = function () {
+            showToast('预览图片时出错', 'error');
+        };
+        reader.readAsDataURL(file);
     });
 </script>
 </body>
