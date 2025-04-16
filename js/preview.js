@@ -38,6 +38,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 处理AI内容优化
     initAIOptimization();
+
+    // 增强滚动效果
+    initScrollEffects();
+
+    // 为模板选项添加点击交互
+    initTemplateSelection();
+
+    // 初始化水波纹效果
+    initRippleEffect();
 });
 
 /**
@@ -55,10 +64,10 @@ function initParticlesBackground() {
                     }
                 },
                 "color": {
-                    "value": "#9aa338"
+                    "value": ["#9aa338", "#a9b056", "#e67e22", "#3498db"]
                 },
                 "shape": {
-                    "type": "circle",
+                    "type": ["circle", "triangle", "polygon"],
                     "stroke": {
                         "width": 0,
                         "color": "#000000"
@@ -71,8 +80,8 @@ function initParticlesBackground() {
                     "value": 0.3,
                     "random": true,
                     "anim": {
-                        "enable": false,
-                        "speed": 1,
+                        "enable": true,
+                        "speed": 0.5,
                         "opacity_min": 0.1,
                         "sync": false
                     }
@@ -81,8 +90,8 @@ function initParticlesBackground() {
                     "value": 5,
                     "random": true,
                     "anim": {
-                        "enable": false,
-                        "speed": 40,
+                        "enable": true,
+                        "speed": 2,
                         "size_min": 0.1,
                         "sync": false
                     }
@@ -96,14 +105,14 @@ function initParticlesBackground() {
                 },
                 "move": {
                     "enable": true,
-                    "speed": 2,
+                    "speed": 1.5,
                     "direction": "none",
-                    "random": false,
+                    "random": true,
                     "straight": false,
                     "out_mode": "out",
                     "bounce": false,
                     "attract": {
-                        "enable": false,
+                        "enable": true,
                         "rotateX": 600,
                         "rotateY": 1200
                     }
@@ -114,7 +123,7 @@ function initParticlesBackground() {
                 "events": {
                     "onhover": {
                         "enable": true,
-                        "mode": "grab"
+                        "mode": "bubble"
                     },
                     "onclick": {
                         "enable": true,
@@ -129,8 +138,19 @@ function initParticlesBackground() {
                             "opacity": 0.5
                         }
                     },
+                    "bubble": {
+                        "distance": 100,
+                        "size": 6,
+                        "duration": 0.5,
+                        "opacity": 0.6,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 100,
+                        "duration": 0.4
+                    },
                     "push": {
-                        "particles_nb": 3
+                        "particles_nb": 4
                     }
                 }
             },
@@ -138,6 +158,32 @@ function initParticlesBackground() {
         });
     } else {
         console.warn('particlesJS 未加载，无法初始化粒子背景');
+        // 创建一个简单的备用粒子效果
+        createFallbackParticles();
+    }
+}
+
+/**
+ * 创建备用粒子效果
+ */
+function createFallbackParticles() {
+    const particlesContainer = document.getElementById('particles-js');
+    if (!particlesContainer) return;
+
+    // 添加一些简单的浮动元素作为备用
+    for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'fallback-particle';
+        particle.style.position = 'absolute';
+        particle.style.width = `${Math.random() * 10 + 2}px`;
+        particle.style.height = particle.style.width;
+        particle.style.backgroundColor = `rgba(154, 163, 56, ${Math.random() * 0.3 + 0.1})`;
+        particle.style.borderRadius = '50%';
+        particle.style.top = `${Math.random() * 100}%`;
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.animation = `float ${Math.random() * 15 + 5}s infinite ease-in-out ${Math.random() * 5}s`;
+
+        particlesContainer.appendChild(particle);
     }
 }
 
@@ -155,6 +201,15 @@ function initFloatingBackground() {
         for (let i = 1; i <= 3; i++) {
             const floatingBg = document.createElement('div');
             floatingBg.className = `floating-bg bg-${i}`;
+
+            // 添加纹理和内部结构以增强效果
+            const innerGlow = document.createElement('div');
+            innerGlow.style.position = 'absolute';
+            innerGlow.style.inset = '10%';
+            innerGlow.style.borderRadius = '50%';
+            innerGlow.style.background = 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%)';
+
+            floatingBg.appendChild(innerGlow);
             container.appendChild(floatingBg);
         }
     }
@@ -165,6 +220,29 @@ function initFloatingBackground() {
     floatingElements.forEach((el, index) => {
         // 为每个元素添加不同的动画延迟
         el.style.animationDelay = `${index * 2}s`;
+
+        // 添加鼠标交互效果
+        el.addEventListener('mouseover', function () {
+            this.style.transform = 'scale(1.1)';
+            this.style.boxShadow = '0 0 30px rgba(154, 163, 56, 0.3)';
+            this.style.transition = 'transform 0.5s, box-shadow 0.5s';
+        });
+
+        el.addEventListener('mouseout', function () {
+            this.style.transform = '';
+            this.style.boxShadow = '';
+            this.style.transition = 'transform 0.5s, box-shadow 0.5s';
+        });
+    });
+
+    // 添加基于滚动位置的视差效果
+    window.addEventListener('scroll', function () {
+        const scrollY = window.scrollY || window.pageYOffset;
+
+        floatingElements.forEach((el, index) => {
+            const speed = (index + 1) * 0.05;
+            el.style.transform = `translateY(${scrollY * speed}px) rotate(${scrollY * 0.02}deg)`;
+        });
     });
 }
 
@@ -184,7 +262,7 @@ function initImageCarousel() {
 
     // 如果没有图片，显示占位信息
     if (images.length === 0) {
-        imageContainer.classList.add('no-image');
+                        imageContainer.classList.add('no-image');
         imageContainer.setAttribute('data-placeholder', '暂无图片，请先上传');
         return;
     }
@@ -349,7 +427,7 @@ function initTextEditing() {
                     if (url) {
                         document.execCommand(command, false, url);
                     }
-                } else {
+            } else {
                     document.execCommand(command, false, value);
                 }
 
@@ -443,24 +521,70 @@ function initAIAssistant() {
  */
 function initInteractionEffects() {
     // 添加卡片悬停效果
-    const cards = document.querySelectorAll('.info-card');
+    const cards = document.querySelectorAll('.info-card, .bg-white, .template-option');
     cards.forEach(card => {
         card.classList.add('fade-in');
+
+        // 添加3D倾斜效果
+        card.addEventListener('mousemove', function (e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // 计算倾斜角度，最大为3度
+            const tiltX = ((y / rect.height) * 6) - 3;
+            const tiltY = (-(x / rect.width) * 6) + 3;
+
+            // 应用变换
+            this.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.01, 1.01, 1.01)`;
+
+            // 添加光影效果
+            const glare = this.querySelector('.card-glare') || document.createElement('div');
+            if (!glare.classList.contains('card-glare')) {
+                glare.className = 'card-glare';
+                glare.style.position = 'absolute';
+                glare.style.top = '0';
+                glare.style.left = '0';
+                glare.style.right = '0';
+                glare.style.bottom = '0';
+                glare.style.zIndex = '1';
+                glare.style.pointerEvents = 'none';
+                this.appendChild(glare);
+            }
+
+            // 更新光源位置
+            const glareX = (x / rect.width) * 100;
+            const glareY = (y / rect.height) * 100;
+            glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%)`;
+        });
+
+        // 移除倾斜效果
+        card.addEventListener('mouseleave', function () {
+            this.style.transform = '';
+            const glare = this.querySelector('.card-glare');
+            if (glare) {
+                glare.remove();
+            }
+        });
     });
 
     // 添加按钮点击效果
-    const buttons = document.querySelectorAll('.btn');
+    const buttons = document.querySelectorAll('.btn, .editor-btn, #toggleEditBtn, .ai-generate-btn');
     buttons.forEach(btn => {
         btn.addEventListener('mousedown', function () {
-            this.style.transform = 'scale(0.98)';
+            this.style.transform = 'scale(0.96)';
+            this.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.1)';
+            this.style.transition = 'transform 0.2s, box-shadow 0.2s';
         });
 
         btn.addEventListener('mouseup', function () {
             this.style.transform = '';
+            this.style.boxShadow = '';
         });
 
         btn.addEventListener('mouseleave', function () {
             this.style.transform = '';
+            this.style.boxShadow = '';
         });
     });
 
@@ -478,6 +602,105 @@ function initInteractionEffects() {
             window.location.href = 'publish.html';
         });
     }
+
+    // 增加图片预览交互
+    enhanceImagePreview();
+}
+
+/**
+ * 增强图片预览交互
+ */
+function enhanceImagePreview() {
+    const imageContainer = document.querySelector('.image-container');
+    if (!imageContainer) return;
+
+    // 添加双击放大功能
+    imageContainer.addEventListener('dblclick', function (e) {
+        e.preventDefault();
+        this.classList.toggle('expanded');
+
+        if (this.classList.contains('expanded')) {
+            this.style.position = 'fixed';
+            this.style.top = '50%';
+            this.style.left = '50%';
+            this.style.transform = 'translate(-50%, -50%)';
+            this.style.maxHeight = '90vh';
+            this.style.maxWidth = '90vw';
+            this.style.width = 'auto';
+            this.style.height = 'auto';
+            this.style.zIndex = '1000';
+
+            // 创建关闭按钮
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'expand-close-btn';
+            closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+            closeBtn.style.position = 'absolute';
+            closeBtn.style.top = '10px';
+            closeBtn.style.right = '10px';
+            closeBtn.style.zIndex = '1001';
+            closeBtn.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            closeBtn.style.color = 'white';
+            closeBtn.style.border = 'none';
+            closeBtn.style.borderRadius = '50%';
+            closeBtn.style.width = '30px';
+            closeBtn.style.height = '30px';
+            closeBtn.style.cursor = 'pointer';
+            closeBtn.style.display = 'flex';
+            closeBtn.style.alignItems = 'center';
+            closeBtn.style.justifyContent = 'center';
+
+            closeBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                imageContainer.classList.remove('expanded');
+                imageContainer.style = '';
+                this.remove();
+
+                if (overlay) overlay.remove();
+            });
+
+            this.appendChild(closeBtn);
+
+            // 创建背景覆盖
+            const overlay = document.createElement('div');
+            overlay.className = 'image-overlay';
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.right = '0';
+            overlay.style.bottom = '0';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            overlay.style.zIndex = '999';
+
+            overlay.addEventListener('click', function () {
+                imageContainer.classList.remove('expanded');
+                imageContainer.style = '';
+                closeBtn.remove();
+                this.remove();
+            });
+
+            document.body.appendChild(overlay);
+        } else {
+            this.style = '';
+            const closeBtn = document.querySelector('.expand-close-btn');
+            if (closeBtn) closeBtn.remove();
+
+            const overlay = document.querySelector('.image-overlay');
+            if (overlay) overlay.remove();
+        }
+    });
+
+    // 添加图片滑入动画
+    const images = imageContainer.querySelectorAll('img');
+    images.forEach(img => {
+        img.style.transform = 'translateX(100%)';
+        img.style.opacity = '0';
+        img.style.transition = 'transform 0.5s ease-out, opacity 0.5s ease-out';
+
+        setTimeout(() => {
+            img.style.transform = 'translateX(0)';
+            img.style.opacity = '1';
+        }, 300);
+    });
 }
 
 /**
@@ -690,13 +913,13 @@ function initPublishButton() {
             event.preventDefault();
             console.log('保存草稿按钮被点击');
             showToast('草稿已保存', 'success');
-        });
+            });
+        }
     }
-}
 
-/**
- * 初始化AI内容优化
- */
+    /**
+* 初始化AI内容优化
+*/
 function initAIOptimization() {
     // AI优化后的文案内容
     const optimizedContent = `
@@ -806,22 +1029,204 @@ function initAIOptimization() {
                         if (staticContent) staticContent.innerHTML = optimizedContent;
 
                         // 隐藏生成状态
-                        aiGeneratingContainer.classList.add('hidden');
-                        generateCopyBtn.disabled = false;
+                                aiGeneratingContainer.classList.add('hidden');
+                            generateCopyBtn.disabled = false;
                         generateCopyBtn.style.opacity = '1';
 
                         // 显示成功提示
                         showAiSuccess();
-                    }, 500);
-                }
+                        }, 500);
+                    }
             }, 50);
         });
     }
 }
 
 /**
- * 显示保存成功提示
+ * 初始化滚动效果
  */
+function initScrollEffects() {
+    // 获取所有需要应用滚动效果的元素
+    const animatedElements = document.querySelectorAll('.template-preview, .ai-assistant, .bg-white, .image-container');
+
+    // 创建IntersectionObserver来检测元素何时进入视口
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+                // 一旦元素已经显示，不再需要观察它
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        root: null, // 相对于视口
+        threshold: 0.1, // 当10%的元素可见时触发
+        rootMargin: '0px 0px -50px 0px' // 微调触发位置
+    });
+
+    // 开始观察每个元素
+    animatedElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        observer.observe(el);
+    });
+
+    // 添加滚动指示器
+    addScrollIndicator();
+}
+
+/**
+ * 添加滚动指示器
+ */
+function addScrollIndicator() {
+    const indicator = document.createElement('div');
+    indicator.className = 'scroll-indicator';
+    indicator.innerHTML = '<i class="fas fa-chevron-down"></i>';
+    indicator.style.position = 'fixed';
+    indicator.style.bottom = '100px';
+    indicator.style.left = '50%';
+    indicator.style.transform = 'translateX(-50%)';
+    indicator.style.width = '40px';
+    indicator.style.height = '40px';
+    indicator.style.borderRadius = '50%';
+    indicator.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+    indicator.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+    indicator.style.display = 'flex';
+    indicator.style.alignItems = 'center';
+    indicator.style.justifyContent = 'center';
+    indicator.style.color = '#9aa338';
+    indicator.style.zIndex = '40';
+    indicator.style.cursor = 'pointer';
+    indicator.style.animation = 'bounce 2s infinite';
+
+    document.body.appendChild(indicator);
+
+    // 检测滚动来隐藏指示器
+    let isVisible = true;
+    window.addEventListener('scroll', function () {
+        if (window.scrollY > 100 && isVisible) {
+            indicator.style.opacity = '0';
+            indicator.style.transform = 'translateX(-50%) translateY(20px)';
+            indicator.style.transition = 'opacity 0.5s, transform 0.5s';
+            isVisible = false;
+        } else if (window.scrollY <= 50 && !isVisible) {
+            indicator.style.opacity = '1';
+            indicator.style.transform = 'translateX(-50%) translateY(0)';
+            isVisible = true;
+        }
+    });
+
+    // 点击滚动到内容
+    indicator.addEventListener('click', function () {
+        window.scrollTo({
+            top: window.innerHeight * 0.3,
+            behavior: 'smooth'
+        });
+    });
+}
+
+/**
+ * 初始化模板选择交互
+ */
+function initTemplateSelection() {
+    const templateOptions = document.querySelectorAll('.template-option');
+    if (!templateOptions.length) return;
+
+    templateOptions.forEach(option => {
+        option.addEventListener('click', function () {
+            // 移除其他选项的选中状态
+            templateOptions.forEach(opt => opt.classList.remove('selected'));
+
+            // 添加当前选项的选中状态
+            this.classList.add('selected');
+
+            // 添加选中动画
+            this.style.animation = 'pulse 0.5s';
+            setTimeout(() => {
+                this.style.animation = '';
+            }, 500);
+
+            // 可以在这里添加应用模板的逻辑
+            const templateName = this.querySelector('.text-white').textContent.trim();
+            console.log(`选择了模板: ${templateName}`);
+
+            // 显示提示消息
+            showNotification(`已选择${templateName}`, 'check-circle');
+        });
+    });
+}
+
+/**
+ * 初始化水波纹效果
+ */
+function initRippleEffect() {
+    const buttons = document.querySelectorAll('.btn, .editor-btn, #toggleEditBtn, .ai-generate-btn, .bottom-nav-item, .template-option');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', function (e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // 创建水波纹元素
+            const ripple = document.createElement('span');
+            ripple.className = 'ripple';
+            ripple.style.position = 'absolute';
+            ripple.style.width = '0';
+            ripple.style.height = '0';
+            ripple.style.top = y + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.background = 'rgba(255, 255, 255, 0.5)';
+            ripple.style.transform = 'translate(-50%, -50%)';
+            ripple.style.borderRadius = '50%';
+            ripple.style.pointerEvents = 'none';
+            ripple.style.opacity = '0.6';
+
+            // 添加水波纹元素
+            if (this.style.position !== 'static') {
+                this.style.position = 'relative';
+            }
+            this.style.overflow = 'hidden';
+            this.appendChild(ripple);
+
+            // 动画水波纹
+            const diameter = Math.max(rect.width, rect.height) * 2;
+            ripple.style.animation = 'ripple 0.6s ease-out';
+            ripple.style.width = diameter + 'px';
+            ripple.style.height = diameter + 'px';
+
+            // 清除水波纹
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+
+    // 添加水波纹动画
+    if (!document.querySelector('#rippleAnimation')) {
+        const style = document.createElement('style');
+        style.id = 'rippleAnimation';
+        style.textContent = `
+            @keyframes ripple {
+                from {
+                    width: 0;
+                    height: 0;
+                    opacity: 0.6;
+                }
+                to {
+                    width: 600px;
+                    height: 600px;
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        }
+    }
+
+    /**
+* 显示保存成功提示
+*/
 function showSaveSuccess() {
     showNotification('文案已保存', 'check-circle');
 }
@@ -846,13 +1251,25 @@ function showNotification(message, icon) {
     notification.style.transform = 'translateX(-50%)';
     notification.style.padding = '8px 16px';
     notification.style.borderRadius = '20px';
-    notification.style.backgroundColor = 'rgba(76, 175, 80, 0.9)';
+    notification.style.backgroundColor = 'rgba(76, 175, 80, 0.8)';
     notification.style.color = 'white';
     notification.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.2)';
     notification.style.zIndex = '100';
     notification.style.transition = 'opacity 0.5s, transform 0.5s';
+    notification.style.backdropFilter = 'blur(5px)';
+    notification.style.webkitBackdropFilter = 'blur(5px)';
+    notification.style.border = '1px solid rgba(255, 255, 255, 0.2)';
 
     document.body.appendChild(notification);
+
+    // 添加进入动画
+    notification.style.opacity = '0';
+    notification.style.transform = 'translateX(-50%) translateY(20px)';
+
+    setTimeout(() => {
+        notification.style.opacity = '1';
+        notification.style.transform = 'translateX(-50%) translateY(0)';
+    }, 10);
 
     // 淡出效果
     setTimeout(() => {
@@ -868,7 +1285,7 @@ function showNotification(message, icon) {
  * 显示Toast消息
  */
 function showToast(message, type = 'info') {
-    let bgColor = 'rgba(33, 150, 243, 0.9)'; // 默认蓝色
+    let bgColor = 'rgba(33, 150, 243, 0.9)';
     let icon = 'info-circle';
 
     if (type === 'success') {

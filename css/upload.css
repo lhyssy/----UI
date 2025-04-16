@@ -277,12 +277,12 @@ body::before {
 }
 
 .step-indicator .step.active {
-  color: var(--primary-dark);
+  color: var(--primary-color);
 }
 
 .step-indicator .step.active .step-number {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-  box-shadow: 0 5px 10px rgba(154, 163, 56, 0.2);
+  background: linear-gradient(135deg, rgba(154, 163, 56, 1), rgba(83, 122, 90, 1));
+  box-shadow: 0 2px 8px rgba(154, 163, 56, 0.3);
   animation: pulse 2s infinite;
 }
 
@@ -294,7 +294,7 @@ body::before {
 }
 
 .step-indicator .connector.active {
-  background: linear-gradient(to right, var(--primary-color), var(--primary-dark));
+  background: linear-gradient(to right, rgba(154, 163, 56, 1), rgba(83, 122, 90, 1));
 }
 
 /* AI提示样式 */

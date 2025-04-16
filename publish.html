@@ -27,28 +27,6 @@
 
     <!-- 内容区包装器 -->
     <div class="content-wrapper">
-        <!-- 步骤指示器 -->
-        <div class="steps-container">
-            <div class="step">
-                <div class="step-number">
-                    <i class="fas fa-check text-xs"></i>
-                </div>
-                <div class="step-name">上传照片</div>
-            </div>
-            <div class="connector active"></div>
-            <div class="step">
-                <div class="step-number">
-                    <i class="fas fa-check text-xs"></i>
-                </div>
-                <div class="step-name">预览图文</div>
-            </div>
-            <div class="connector active"></div>
-            <div class="step active">
-                <div class="step-number">3</div>
-                <div class="step-name">选择平台</div>
-            </div>
-        </div>
-
         <!-- AI助手提示 -->
         <div class="ai-assistant">
             <div class="flex items-start">
@@ -202,11 +180,12 @@
     </div>
 
     <!-- 底部操作栏 -->
-    <div class="bottom-bar">
+    <div class="bottom-bar" style="background: linear-gradient(to bottom, #ffffff, #f9fafb);">
         <a href="preview.html" class="btn btn-prev">
             <i class="fas fa-arrow-left mr-1"></i> 上一步
         </a>
-        <button id="publishBtn" class="btn btn-publish">
+        <button id="publishBtn" class="btn btn-publish"
+            style="background: linear-gradient(135deg, rgba(154, 163, 56, 1), rgba(83, 122, 90, 1)); box-shadow: 0 4px 10px rgba(154, 163, 56, 0.3);">
             <i class="fas fa-paper-plane mr-1"></i> 发布内容
         </button>
     </div>
@@ -240,11 +219,11 @@
                 </div>
             </div>
 
-            <div class="flex justify-center space-x-3">
-                <button id="backToHomeBtn" class="btn btn-publish py-2 px-4 rounded">
+            <div class="flex justify-center space-x-3 modal-buttons">
+                <button id="backToHomeBtn" class="modal-back-btn">
                     返回首页
                 </button>
-                <button id="viewContentBtn" class="btn btn-prev py-2 px-4 rounded">
+                <button id="viewContentBtn" class="modal-view-btn">
                     查看内容
                 </button>
             </div>
