@@ -6,6 +6,8 @@
     <title>助农宣传 - 电商教程</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 添加 particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -15,50 +17,181 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
         }
+
+        /* 粒子背景 */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 浮动背景元素 */
+        .floating-circle {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            z-index: 1;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(45deg, rgba(154, 163, 56, 0.6), rgba(106, 114, 48, 0.6));
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .circle-2 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(169, 176, 86, 0.6), rgba(154, 163, 56, 0.6));
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -5s;
+        }
+
+        .circle-3 {
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(225deg, rgba(190, 195, 129, 0.6), rgba(154, 163, 56, 0.6));
+            top: 40%;
+            left: 30%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(20px, 20px); }
+            50% { transform: translate(-20px, 10px); }
+            75% { transform: translate(10px, -20px); }
+        }
+
+        /* 导航栏渐变 */
         .custom-nav-bg {
-            background-color: rgba(154, 163, 56, 1) !important;
+            background: linear-gradient(to right, rgba(154, 163, 56, 1), rgba(106, 114, 48, 1)) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
-        .custom-nav-bg2{
-            background-color: #a9b056 !important;
+
+        .custom-nav-bg2 {
+            background: linear-gradient(to right, rgba(169, 176, 86, 0.9), rgba(154, 163, 56, 0.9)) !important;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
+
+        /* 卡片样式增强 */
+        .tutorial-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tutorial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 光泽扫过效果 */
+        .tutorial-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to right,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .tutorial-card:hover::after {
+            animation: shine 1.5s ease;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) rotate(45deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateX(100%) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        /* 底部导航增强 */
+        .bottom-nav-item {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .bottom-nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background: rgba(15, 45, 73, 1);
+            border-radius: 3px;
+        }
+
+        /* 功能图标动画 */
+        .bottom-nav-item i {
+            transition: transform 0.3s ease;
+        }
+
+        .bottom-nav-item:hover i {
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* 按钮渐变 */
+        .gradient-btn {
+            background: linear-gradient(45deg, rgba(15, 45, 73, 1), rgba(25, 65, 93, 1));
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gradient-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(15, 45, 73, 0.3);
+        }
+
         .safe-area {
             padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
         }
-        .nav-item.active {
-            color: rgba(154, 163, 56, 1);
-        }
-        .nav-item.active i {
-            color: rgba(154, 163, 56, 1);
-        }
-        .category-pill {
-            transition: all 0.2s;
-        }
-        .category-pill.active {
-            background-color: rgb(126, 133, 45);
-            color: white;
-        }
-        .tutorial-card {
-            transition: all 0.2s;
-        }
-        .tutorial-card:active {
-            transform: scale(0.98);
-        }
 
-        .bg-olive-0{
-        background-color: #f3f4ec;
-        }
-        .bg-olive-10{
-        background-color: #ced29f;
-        }
-        .bg-olive-20{
-        background-color: #bec381;
-        }
-        .bg-olive-30{
-        background-color: #a9b056;
-        }
-        .bg-olive-40{
-        background-color: rgba(154, 163, 56, 1)
+        .bg-navy{
+        background-color: rgba(15, 45, 73, 1);
         }
         .text-navy{
         color: rgba(15, 45, 73, 1);
@@ -66,19 +199,24 @@
     </style>
 </head>
 <body class="safe-area">
+    <!-- 粒子背景 -->
+    <div id="particles-js"></div>
+    
+    <!-- 浮动背景元素 -->
+    <div class="floating-circle circle-1"></div>
+    <div class="floating-circle circle-2"></div>
+    <div class="floating-circle circle-3"></div>
+
     <!-- 顶部导航 -->
-    <div class="custom-nav-bg p-4 flex items-center justify-between">
+    <div class="custom-nav-bg p-4 flex items-center justify-between z-10 relative">
         <h1 class="text-xl font-bold text-navy">电商教程</h1>
         <div class="flex space-x-3">
             <div class="relative">
-                <input type="text" id="searchInput" class="w-48 bg-gray-100 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition-all duration-300" placeholder="搜索教程...">
+                <input type="text" id="searchInput" class="w-48 bg-white/20 backdrop-blur-md rounded-lg px-4 py-2 text-sm text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-300" placeholder="搜索教程...">
                 <button id="searchButton" class="text-navy">
                     <i class="fas fa-search text-lg"></i>
                 </button>
             </div>
-            <!--
-            <button class="text-gray-600" data-link="community.html"><i class="fas fa-users text-lg"></i></button>
-            <button class="text-gray-600" data-link="membership.html"><i class="fas fa-crown text-yellow-500 text-lg"></i></button>-->
         </div>
     </div>
     
@@ -95,7 +233,7 @@
     </div>
     
     <!-- 内容区域 -->
-    <div class="flex-1 overflow-y-auto bg-olive-0">
+    <div class="flex-1 overflow-y-auto bg-transparent z-10 relative pb-20">
         <!-- 推荐教程 -->
         <div class="px-4 py-4">
             <h2 class="font-bold text-lg mb-3">推荐教程</h2>
@@ -222,10 +360,11 @@
             </div>
         </div>
     </div>
+    </div>
     
     <!-- 底部导航栏 -->
-    <div class="fixed bottom-0 left-0 right-0 custom-nav-bg py-2 px-5 border-t border-gray-100">
-        <div class="flex justify-between">
+    <div class="fixed bottom-0 left-0 right-0 custom-nav-bg py-2 px-5 border-t border-white/10 backdrop-blur-lg z-20">
+        <div class="flex justify-around items-center">
             <div class="bottom-nav-item flex flex-col items-center text-navy" data-link="home.html">
                 <i class="fas fa-home text-xl"></i>
                 <span class="text-xs mt-1">首页</span>
@@ -245,8 +384,60 @@
         </div>
     </div>
 
-    <script src="js/common.js"></script>
+    <!-- Toast消息组件 -->
+    <div id="toast" class="fixed top-16 left-1/2 transform -translate-x-1/2 bg-navy/90 text-white px-6 py-3 rounded-full opacity-0 transition-all duration-300 backdrop-blur-md z-50"></div>
+
     <script>
+        // 初始化粒子效果
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#9aa338' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#9aa338',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false,
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'repulse' },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+
+        // Toast消息显示函数
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translate(-50%, 0)';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, -20px)';
+            }, 3000);
+        }
+
+        // 其他JavaScript代码保持不变...
         document.addEventListener('DOMContentLoaded', function() {
             // 教程点击事件
             document.querySelectorAll('.tutorial-item').forEach(item => {
@@ -354,4 +545,4 @@
             });
     </script>
 </body>
-</html> 
+</html>

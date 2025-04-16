@@ -45,14 +45,27 @@
         .bg-olive-40{
         background-color: rgba(154, 163, 56, 1)
         }
+        .bg-navy{
+        background-color: rgba(15, 45, 73, 1);
+        }
         .text-navy{
         color: rgba(15, 45, 73, 1);
         }
   </style>
 </head>
 <body class="bg-olive-0">
+    <!-- 顶部导航 -->
+    <header class="header py-4 px-5 flex items-center justify-between fixed top-0 left-0 w-full bg-olive-40 z-50">
+        <div class="flex items-center w-full relative">
+            <button class="back-button absolute left-0 slide-right" id="backButton">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h1 class="text-xl font-semibold slide-down w-full text-center">教程详细</h1>
+        </div>
+    </header>
+
   <!-- 标题图片区 -->
-  <div class="relative h-64 md:h-96 mb-8">
+  <div class="relative h-64 md:h-96 mb-8 mt-16 mt-16">
       <img src="https://images.unsplash.com/photo-1595475207225-428b62bda831?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
            class="w-full h-full object-cover"
            alt="农产品文案创作">
@@ -217,7 +230,7 @@
                   <i class="fas fa-share-alt text-xl"></i>
               </button>
           </div>
-          <button class="bg-green-600 text-white px-8 py-3 rounded-full 
+          <button class="bg-navy text-white px-8 py-3 rounded-full 
                       hover:bg-green-700 active:scale-95 transition-all">
               开始学习
           </button>

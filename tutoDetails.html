@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>农产品电商完全指南</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
       :root {
           --primary-color: rgba(154, 163, 56, 1);
@@ -55,14 +56,27 @@
         .bg-olive-40{
         background-color: rgba(154, 163, 56, 1)
         }
+        .bg-navy{
+        background-color: rgba(15, 45, 73, 1);
+        }
         .text-navy{
         color: rgba(15, 45, 73, 1);
         }
   </style>
 </head>
 <body class="bg-olive-0">
+    <!-- 顶部导航 -->
+    <header class="header py-4 px-5 flex items-center justify-between fixed top-0 left-0 w-full bg-olive-40 z-50">
+        <div class="flex items-center w-full relative">
+            <button class="back-button absolute left-0 slide-right" id="backButton">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h1 class="text-xl font-semibold slide-down w-full text-center">教程详细</h1>
+        </div>
+    </header>
+
   <!-- 标题图片区 -->
-  <div class="relative h-64 d:h-96 mb-8">
+  <div class="relative h-64 d:h-96 mb-8 mt-16">
       <img src="https://images.unsplash.com/photo-1556155092-490a1ba16284?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
            class="w-full h-full object-cover"
            alt="电商指南封面">
@@ -79,130 +93,221 @@
   </div>
 
   <!-- 正文内容容器 -->
-  <div class=" max-w-5xl mx-auto px-4 space-y-8">
-      <!-- 核心数据概览 -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div class="stat-card bg-white p-6 rounded-xl shadow-lg">
-              <h3 class="text-lg font-semibold text-gray-700">平均流量成本</h3>
-              <p class="text-3xl font-bold text-green-600 mt-2">5-18% </p>
-              <p class="text-sm text-gray-500 mt-1">因平台定位不同而异</p>
-          </div>
-          <div class="stat-card bg-white p-6 rounded-xl shadow-lg">
-              <h3 class="text-lg font-semibold text-gray-700">农产品损耗率</h3>
-              <p class="text-3xl font-bold text-green-600 mt-2">8-12% </p>
-              <p class="text-sm text-gray-500 mt-1">生鲜类目平均水平</p>
-          </div>
-          <div class="stat-card bg-white p-6 rounded-xl shadow-lg">
-              <h3 class="text-lg font-semibold text-gray-700">目标复购率</h3>
-              <p class="text-3xl font-bold text-green-600 mt-2">≥35% </p>
-              <p class="text-sm text-gray-500 mt-1">季度最低要求</p>
-          </div>
-      </div>
+<div class="max-w-5xl mx-auto px-4 space-y-8">
+    <!-- 平台选择卡片 -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="stat-card bg-white p-6 rounded-xl shadow-lg cursor-pointer active">
+            <h3 class="text-lg font-semibold text-navy">抖音开店</h3>
+            <p class="text-sm text-gray-500 mt-1">适合：短视频展示、直播带货</p>
+            <span class="inline-block mt-2 px-3 py-1 bg-olive-10 text-navy rounded-full text-sm">推荐入门</span>
+        </div>
+        <div class="stat-card bg-white p-6 rounded-xl shadow-lg opacity-50">
+            <h3 class="text-lg font-semibold text-gray-700">小红书开店</h3>
+            <p class="text-sm text-gray-500 mt-1">适合：图文展示、种草安利</p>
+        </div>
+        <div class="stat-card bg-white p-6 rounded-xl shadow-lg opacity-50">
+            <h3 class="text-lg font-semibold text-gray-700">淘宝开店</h3>
+            <p class="text-sm text-gray-500 mt-1">适合：长期经营、品牌建设</p>
+        </div>
+    </div>
 
-      <!-- 平台对比卡 -->
-      <div class="bg-white rounded-xl p-6 shadow-lg">
-          <h2 class="text-xl font-bold mb-4">主流平台对比</h2>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div class="platform-card bg-white p-4 shadow-md">
-                  <h3 class="font-semibold mb-2">淘宝/天猫</h3>
-                  <p class="text-gray-600">入驻费：5-10万</p>
-                  <p class="text-gray-600">佣金率：2-5% </p>
-                  <p class="text-sm text-green-600">√ 流量优势明显</p>
-              </div>
-              <div class="platform-card bg-white p-4 shadow-md">
-                  <h3 class="font-semibold mb-2">一亩田 </h3>
-                  <p class="text-gray-600">入驻费：0.5-2万</p>
-                  <p class="text-gray-600">流量成本：12-18% </p>
-                  <p class="text-sm text-green-600">√ 产地直供优势</p>
-              </div>
-              <div class="platform-card bg-white p-4 shadow-md">
-                  <h3 class="font-semibold mb-2">美菜商城 </h3>
-                  <p class="text-gray-600">保证金：2万起</p>
-                  <p class="text-gray-600">物流整合率：85%</p>
-                  <p class="text-sm text-green-600">√ B2B渠道优势</p>
-              </div>
-          </div>
-      </div>
+    <!-- 开店准备清单 -->
+    <div class="bg-white rounded-xl p-6 shadow-lg">
+        <h2 class="text-xl font-bold mb-4">开店前准备清单</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="p-4 bg-olive-0 rounded-lg">
+                <h3 class="font-semibold mb-3">必备材料</h3>
+                <ul class="space-y-2 text-gray-600">
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                        手机号码（用于注册）
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                        身份证原件
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                        农产品相关证件
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                        银行卡（用于收款）
+                    </li>
+                </ul>
+            </div>
+            <div class="p-4 bg-olive-0 rounded-lg">
+                <h3 class="font-semibold mb-3">设备要求</h3>
+                <ul class="space-y-2 text-gray-600">
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                        智能手机（4G以上内存）
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                        稳定的网络连接
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                        手机支架（建议准备）
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                        补光灯（建议准备）
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
-      <!-- 选品公式区 -->
-      <div class="formula-box p-6 rounded-xl shadow-lg">
-          <h2 class="text-xl font-bold mb-4">选品决策模型</h2>
-          <div class="flex flex-col md:flex-row items-center gap-6">
-              <div class="flex-1">
-                  <div class="bg-white p-4 rounded-lg shadow">
-                      <p class="text-xl font-bold text-green-800 mb-3">
-                          爆款概率 = (稀缺性 × 复购率) ÷ (物流难度 + 售后成本)
-                      </p>
-                      <ul class="text-sm text-gray-600 space-y-2">
-                          <li>• 稀缺性：市场同类产品数量的倒数</li>
-                          <li>• 复购率：30天内重复购买率 </li>
-                          <li>• 物流难度：运输时间和损耗率</li>
-                          <li>• 售后成本：退换货率与客诉率</li>
-                      </ul>
-                  </div>
-              </div>
-          </div>
-      </div>
+    <!-- 开店步骤详解 -->
+    <div class="bg-white rounded-xl p-6 shadow-lg">
+        <h2 class="text-xl font-bold mb-6">抖音开店详细步骤</h2>
+        <div class="space-y-6">
+            <!-- 第一步：下载注册 -->
+            <div class="p-4 bg-olive-0 rounded-lg">
+                <div class="flex items-center mb-3">
+                    <span class="w-8 h-8 rounded-full bg-navy text-white flex items-center justify-center font-bold mr-3">1</span>
+                    <h3 class="text-lg font-semibold">下载并注册抖音</h3>
+                </div>
+                <div class="ml-11">
+                    <ol class="list-decimal space-y-3 text-gray-600">
+                        <li>打开手机应用商店，搜索"抖音"并下载</li>
+                        <li>点击右下角"我"，再点击"注册"</li>
+                        <li>输入手机号码，获取验证码</li>
+                        <li>设置密码，完成注册</li>
+                    </ol>
+                    <div class="mt-3 p-3 bg-yellow-50 rounded-lg">
+                        <p class="text-yellow-800 text-sm">
+                            <i class="fas fa-exclamation-circle mr-2"></i>
+                            注意：请使用自己的手机号注册，不要使用他人账号
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-      <!-- 运营流程区 -->
-      <div class="bg-white rounded-xl p-6 shadow-lg">
-          <h2 class="text-xl font-bold mb-6">入驻运营流程</h2>
-          <div class="space-y-4">
-              <div class="p-4 bg-gray-50 rounded-lg">
-                  <div class="flex justify-between mb-2">
-                      <span class="font-medium">1. 资质准备</span>
-                      <span class="text-green-600">2-3工作日</span>
-                  </div>
-                  <ul class="text-sm text-gray-600 pl-4">
-                      <li>• 营业执照、食品经营许可证</li>
-                      <li>• 品控体系认证（推荐）</li>
-                  </ul>
-              </div>
-              <div class="p-4 bg-gray-50 rounded-lg">
-                  <div class="flex justify-between mb-2">
-                      <span class="font-medium">2. 平台选择</span>
-                      <span class="text-green-600">基于ROI </span>
-                  </div>
-                  <ul class="text-sm text-gray-600 pl-4">
-                      <li>• 流量成本评估</li>
-                      <li>• 目标用户匹配度</li>
-                  </ul>
-              </div>
-              <div class="p-4 bg-gray-50 rounded-lg">
-                  <div class="flex justify-between mb-2">
-                      <span class="font-medium">3. 运营策略</span>
-                      <span class="text-green-600">月度优化 </span>
-                  </div>
-                  <ul class="text-sm text-gray-600 pl-4">
-                      <li>• 广告投放≤总成本15%</li>
-                      <li>• 客单价优化方案</li>
-                  </ul>
-              </div>
-          </div>
-      </div>
+            <!-- 第二步：开通商家号 -->
+            <div class="p-4 bg-olive-0 rounded-lg">
+                <div class="flex items-center mb-3">
+                    <span class="w-8 h-8 rounded-full bg-navy text-white flex items-center justify-center font-bold mr-3">2</span>
+                    <h3 class="text-lg font-semibold">开通商家号</h3>
+                </div>
+                <div class="ml-11">
+                    <ol class="list-decimal space-y-3 text-gray-600">
+                        <li>点击"我"，选择"商家中心"</li>
+                        <li>选择"个人商家"，填写基本信息</li>
+                        <li>上传身份证正反面照片</li>
+                        <li>上传农产品相关证件</li>
+                        <li>等待1-2个工作日审核</li>
+                    </ol>
+                    <div class="mt-3 p-3 bg-yellow-50 rounded-lg">
+                        <p class="text-yellow-800 text-sm">
+                            <i class="fas fa-exclamation-circle mr-2"></i>
+                            拍照时请确保光线充足，照片清晰完整
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-      <!-- 成功案例展示 -->
-      <div class="case-study bg-white rounded-xl p-6 shadow-lg">
-          <h2 class="text-xl font-bold mb-4">实战案例分析</h2>
-          <div class="grid md:grid-cols-2 gap-6">
-              <div class="p-4 bg-green-50 rounded-lg">
-                  <h3 class="font-semibold mb-2">🌾 粮油基地案例 </h3>
-                  <p class="text-sm text-gray-600">通过一亩田平台对接50+批发商，年交易额破千万</p>
-                  <div class="mt-2 flex space-x-2">
-                      <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">产地直供</span>
-                      <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">规模化</span>
-                  </div>
-              </div>
-              <div class="p-4 bg-green-50 rounded-lg">
-                  <h3 class="font-semibold mb-2">🍎 水果合作社案例 </h3>
-                  <p class="text-sm text-gray-600">线上线下渠道整合，流量成本降低40%</p>
-                  <div class="mt-2 flex space-x-2">
-                      <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">全渠道</span>
-                      <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">成本优化</span>
-                  </div>
-              </div>
-          </div>
-      </div>
+            <!-- 第三步：店铺装修 -->
+            <div class="p-4 bg-olive-0 rounded-lg">
+                <div class="flex items-center mb-3">
+                    <span class="w-8 h-8 rounded-full bg-navy text-white flex items-center justify-center font-bold mr-3">3</span>
+                    <h3 class="text-lg font-semibold">店铺装修</h3>
+                </div>
+                <div class="ml-11">
+                    <ol class="list-decimal space-y-3 text-gray-600">
+                        <li>设置店铺名称（建议：地名+特产名）</li>
+                        <li>上传店铺头像（建议：产品实拍）</li>
+                        <li>编写店铺简介（突出特色和优势）</li>
+                        <li>设置联系方式</li>
+                    </ol>
+                    <div class="mt-3 bg-green-50 p-3 rounded-lg">
+                        <p class="text-sm text-green-800">
+                            <strong>店铺名称示例：</strong><br>
+                            "陕西洛川苹果基地"<br>
+                            "广西金秀脐橙园"
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第四步：上传商品 -->
+            <div class="p-4 bg-olive-0 rounded-lg">
+                <div class="flex items-center mb-3">
+                    <span class="w-8 h-8 rounded-full bg-navy text-white flex items-center justify-center font-bold mr-3">4</span>
+                    <h3 class="text-lg font-semibold">上传商品</h3>
+                </div>
+                <div class="ml-11">
+                    <ol class="list-decimal space-y-3 text-gray-600">
+                        <li>进入"商品管理"，点击"添加商品"</li>
+                        <li>选择商品分类（如：水果、蔬菜等）</li>
+                        <li>上传商品图片（至少3张）</li>
+                        <li>填写商品详情：
+                            <ul class="list-disc ml-6 mt-2 space-y-2">
+                                <li>商品名称要简单明了</li>
+                                <li>价格要实惠合理</li>
+                                <li>说明产地和新鲜程度</li>
+                                <li>描述口感和特色</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 常见问题解答 -->
+    <div class="bg-white rounded-xl p-6 shadow-lg">
+        <h2 class="text-xl font-bold mb-4">常见问题解答</h2>
+        <div class="space-y-4">
+            <div class="p-4 bg-olive-0 rounded-lg">
+                <h3 class="font-semibold mb-2">审核没通过怎么办？</h3>
+                <p class="text-gray-600">检查以下几点：</p>
+                <ul class="text-gray-600 ml-4 mt-2 space-y-1">
+                    <li>• 证件照片是否清晰</li>
+                    <li>• 经营类目是否选择正确</li>
+                    <li>• 资质证明是否齐全</li>
+                </ul>
+            </div>
+            <div class="p-4 bg-olive-0 rounded-lg">
+                <h3 class="font-semibold mb-2">如何提高销量？</h3>
+                <ul class="text-gray-600 ml-4 space-y-1">
+                    <li>• 每天坚持发视频和直播</li>
+                    <li>• 展示农产品生长环境</li>
+                    <li>• 介绍产品特色和口感</li>
+                    <li>• 及时回复顾客消息</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 成功案例 -->
+    <div class="case-study bg-white rounded-xl p-6 shadow-lg">
+        <h2 class="text-xl font-bold mb-4">成功案例分享</h2>
+        <div class="space-y-4">
+            <div class="p-4 bg-olive-0 rounded-lg">
+                <h3 class="font-semibold mb-3">陕西果农老李</h3>
+                <p class="text-gray-600 mb-3">从不会用智能手机到抖音带货达人的蜕变</p>
+                <ul class="text-gray-600 space-y-2">
+                    <li>• 每天固定时间直播，展示果园日常</li>
+                    <li>• 拍摄苹果从开花到成熟的过程</li>
+                    <li>• 展示现场采摘、打包过程</li>
+                    <li>• 月销售额突破20万</li>
+                </ul>
+            </div>
+
+            <div class="p-4 bg-olive-0 rounded-lg">
+                <h3 class="font-semibold mb-2"> 粮油基地案例 </h3>
+                <p class="text-gray-600 mb-3">通过一亩田平台对接50+批发商，年交易额破千万</p>
+                <ul class="text-gray-600 space-y-2">
+                    <li>• 每天固定时间直播，展示果园日常</li>
+                    <li>• 延时摄影，拍摄农作物生长过程</li>
+                    <li>• 同时展示农作物从播种到成熟的各项工序</li>
+                </ul>
+            </div>
+        </div>
+    </div>
   </div>
 
   <!-- 固定操作栏 -->
@@ -216,7 +321,7 @@
                 <i class="fas fa-share-alt text-xl"></i>
             </button>
         </div>
-        <button class="bg-green-600 text-white px-8 py-3 rounded-full 
+        <button class="bg-navy text-white px-8 py-3 rounded-full 
                     hover:bg-green-700 active:scale-95 transition-all">
             开始学习
         </button>
