@@ -1,548 +1,509 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>助农宣传 - 电商教程</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>禾语智宣 - 教程</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- 添加 particles.js -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/colors.css">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-            background-color: rgba(205, 210, 171, 0.9);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
+            background-color: #f5f7ee;
+            color: #333;
+            max-width: 100%;
             overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            background-color: #bec381;
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
         }
 
-        /* 粒子背景 */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(245, 247, 238, 0.85), rgba(245, 247, 238, 0.75));
+            z-index: -2;
+        }
+
         #particles-js {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 0;
-            pointer-events: none;
+            z-index: -1;
+            opacity: 0.6;
         }
 
-        /* 浮动背景元素 */
-        .floating-circle {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.5;
-            z-index: 1;
-            animation: float 15s infinite ease-in-out;
-        }
-
-        .circle-1 {
-            width: 300px;
-            height: 300px;
-            background: linear-gradient(45deg, rgba(154, 163, 56, 0.6), rgba(106, 114, 48, 0.6));
-            top: -100px;
-            left: -100px;
-            animation-delay: 0s;
-        }
-
-        .circle-2 {
-            width: 400px;
-            height: 400px;
-            background: linear-gradient(135deg, rgba(169, 176, 86, 0.6), rgba(154, 163, 56, 0.6));
-            bottom: -150px;
-            right: -150px;
-            animation-delay: -5s;
-        }
-
-        .circle-3 {
-            width: 250px;
-            height: 250px;
-            background: linear-gradient(225deg, rgba(190, 195, 129, 0.6), rgba(154, 163, 56, 0.6));
-            top: 40%;
-            left: 30%;
-            animation-delay: -10s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0); }
-            25% { transform: translate(20px, 20px); }
-            50% { transform: translate(-20px, 10px); }
-            75% { transform: translate(10px, -20px); }
-        }
-
-        /* 导航栏渐变 */
-        .custom-nav-bg {
-            background: linear-gradient(to right, rgba(154, 163, 56, 1), rgba(106, 114, 48, 1)) !important;
+        .app-header {
+            background: linear-gradient(135deg, rgba(154, 163, 56, 0.95), rgba(83, 122, 90, 0.95));
+            color: white;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .custom-nav-bg2 {
-            background: linear-gradient(to right, rgba(169, 176, 86, 0.9), rgba(154, 163, 56, 0.9)) !important;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+        .search-bar {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 5px 12px;
+            flex: 1;
+            margin: 0 8px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
-        /* 卡片样式增强 */
+        .search-bar:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.08);
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 14px;
+            width: 100%;
+            padding: 5px;
+        }
+
+        .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+        }
+
+        .category-nav {
+            background: rgba(154, 163, 56, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 10px;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .category-pill {
+            display: inline-block;
+            padding: 6px 16px;
+            margin: 0 4px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #537a5a;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(154, 163, 56, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-pill.active {
+            background: linear-gradient(135deg, #9aa338, #537a5a);
+            color: white;
+            border: none;
+        }
+
         .tutorial-card {
             background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05), 0 5px 10px rgba(0, 0, 0, 0.02);
+            margin-bottom: 12px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.5);
             position: relative;
             overflow: hidden;
         }
 
         .tutorial-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(83, 122, 90, 0.1), 0 8px 15px rgba(83, 122, 90, 0.05);
+            border-color: rgba(154, 163, 56, 0.3);
         }
 
-        /* 光泽扫过效果 */
-        .tutorial-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                to right,
-                transparent,
-                rgba(255, 255, 255, 0.3),
-                transparent
-            );
-            transform: rotate(45deg);
-            transition: all 0.5s ease;
-            opacity: 0;
+        .bottom-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 8px 0;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
         }
 
-        .tutorial-card:hover::after {
-            animation: shine 1.5s ease;
-        }
-
-        @keyframes shine {
-            0% {
-                transform: translateX(-100%) rotate(45deg);
-                opacity: 0;
-            }
-            50% {
-                opacity: 0.5;
-            }
-            100% {
-                transform: translateX(100%) rotate(45deg);
-                opacity: 0;
-            }
-        }
-
-        /* 底部导航增强 */
         .bottom-nav-item {
-            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 5px 0;
+            color: #666;
+            cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+        }
+        .bottom-nav-item:hover{
+            color: #537a5a
         }
 
-        .bottom-nav-item.active::after {
+        .bottom-nav-item.active {
+            color: #537a5a;
+        }
+
+        .bottom-nav-item::after {
             content: '';
             position: absolute;
-            bottom: -8px;
+            bottom: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(to right, #9aa338, #537a5a);
+            transition: width 0.3s ease;
             left: 50%;
             transform: translateX(-50%);
-            width: 20px;
-            height: 3px;
-            background: rgba(15, 45, 73, 1);
             border-radius: 3px;
         }
 
-        /* 功能图标动画 */
-        .bottom-nav-item i {
-            transition: transform 0.3s ease;
+        .bottom-nav-item.active::after {
+            width: 30px;
         }
 
-        .bottom-nav-item:hover i {
-            animation: bounce 0.5s ease;
+        @media (max-width: 640px) {
+            .app-header {
+                padding: 8px 10px;
+            }
+
+            .search-bar {
+                margin: 0 6px;
+                padding: 4px 10px;
+            }
+
+            .tutorial-card {
+                margin: 8px;
+            }
+
+            .category-pill {
+                padding: 4px 12px;
+                font-size: 12px;
+            }
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+        .floating-bg {
+            position: fixed;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(154, 163, 56, 0.1), rgba(83, 122, 90, 0.1));
+            z-index: -2;
+            animation: float 15s infinite ease-in-out;
         }
 
-        /* 按钮渐变 */
-        .gradient-btn {
-            background: linear-gradient(45deg, rgba(15, 45, 73, 1), rgba(25, 65, 93, 1));
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+        .bg-1 {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: -100px;
+            animation-delay: 0s;
         }
 
-        .gradient-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(15, 45, 73, 0.3);
+        .bg-2 {
+            width: 200px;
+            height: 200px;
+            top: 40%;
+            right: -50px;
+            animation-delay: 5s;
         }
 
-        .safe-area {
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        .bg-3 {
+            width: 250px;
+            height: 250px;
+            bottom: 10%;
+            left: 20%;
+            animation-delay: 2s;
         }
 
-        .bg-navy{
-        background-color: rgba(15, 45, 73, 1);
-        }
-        .text-navy{
-        color: rgba(15, 45, 73, 1);
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            50% {
+                transform: translate(20px, 20px) rotate(5deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
         }
     </style>
 </head>
-<body class="safe-area">
-    <!-- 粒子背景 -->
-    <div id="particles-js"></div>
-    
+
+<body>
     <!-- 浮动背景元素 -->
-    <div class="floating-circle circle-1"></div>
-    <div class="floating-circle circle-2"></div>
-    <div class="floating-circle circle-3"></div>
+    <div class="floating-bg bg-1"></div>
+    <div class="floating-bg bg-2"></div>
+    <div class="floating-bg bg-3"></div>
+
+    <div id="particles-js"></div>
 
     <!-- 顶部导航 -->
-    <div class="custom-nav-bg p-4 flex items-center justify-between z-10 relative">
-        <h1 class="text-xl font-bold text-navy">电商教程</h1>
-        <div class="flex space-x-3">
-            <div class="relative">
-                <input type="text" id="searchInput" class="w-48 bg-white/20 backdrop-blur-md rounded-lg px-4 py-2 text-sm text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-300" placeholder="搜索教程...">
-                <button id="searchButton" class="text-navy">
-                    <i class="fas fa-search text-lg"></i>
-                </button>
-            </div>
+    <header class="app-header">
+        <h1 class="text-lg font-medium">教程中心</h1>
+        <div class="search-bar">
+            <i class="fas fa-search text-white opacity-80 mr-1"></i>
+            <input type="text" placeholder="搜索教程和模板" id="searchInput">
         </div>
-    </div>
-    
+        <a href="profile.html" class="text-white">
+            <i class="fas fa-user"></i>
+        </a>
+    </header>
+
     <!-- 分类导航 -->
-    <div class="custom-nav-bg2 py-3 px-4 overflow-x-auto">
-        <div class="flex space-x-2 whitespace-nowrap">
-            <span class="category-pill active px-4 py-1.5 rounded-full text-sm font-medium">全部</span>
-            <span class="category-pill px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">新手入门</span>
-            <span class="category-pill px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">商品拍摄</span>
-            <span class="category-pill px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">文案撰写</span>
-            <span class="category-pill px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">引流技巧</span>
-            <span class="category-pill px-4 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">客户维护</span>
-        </div>
+    <div class="category-nav">
+        <span class="category-pill active">全部</span>
+        <span class="category-pill">新手入门</span>
+        <span class="category-pill">商品拍摄</span>
+        <span class="category-pill">文案撰写</span>
+        <span class="category-pill">引流技巧</span>
+        <span class="category-pill">客户维护</span>
     </div>
-    
+
     <!-- 内容区域 -->
-    <div class="flex-1 overflow-y-auto bg-transparent z-10 relative pb-20">
+    <div class="container mx-auto px-4 pb-24">
         <!-- 推荐教程 -->
-        <div class="px-4 py-4">
-            <h2 class="font-bold text-lg mb-3">推荐教程</h2>
-            <div class="bg-white rounded-xl overflow-hidden shadow-sm mb-4">
-                <img src="https://images.unsplash.com/photo-1556155092-490a1ba16284?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80" alt="教程封面" class="w-full h-40 object-cover">
-                <div class="p-4">
-                    <div class="flex items-center mb-2">
-                        <span class="text-xs px-2 py-0.5 bg-olive-10 text-navy rounded-full">新手入门</span>
-                        <span class="text-xs text-gray-500 ml-2">10分钟</span>
+        <div class="mt-4">
+            <h2 class="text-lg font-bold mb-3">推荐教程</h2>
+            <div class="tutorial-card">
+                <img src="https://images.unsplash.com/photo-1556155092-490a1ba16284" alt="教程封面" 
+                     class="w-full h-40 object-cover rounded-lg mb-4">
+                <div class="flex items-center mb-2">
+                    <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">新手入门</span>
+                    <span class="text-xs text-gray-500 ml-2">10分钟</span>
+                </div>
+                <h3 class="font-bold text-lg mb-2">农产品电商起步完全指南</h3>
+                <p class="text-sm text-gray-600 mb-3">从零开始，手把手教你入驻各大电商平台，选品、定价、上架全流程解析。</p>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2" alt="讲师头像" 
+                             class="w-6 h-6 rounded-full">
+                        <span class="text-sm text-gray-500 ml-2">李老师 · 电商顾问</span>
                     </div>
-                    <h3 class="font-bold mb-1">农产品电商起步完全指南</h3>
-                    <p class="text-sm text-gray-600 mb-3">从零开始，手把手教你入驻各大电商平台，选品、定价、上架全流程解析。</p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="讲师头像" class="w-6 h-6 rounded-full object-cover">
-                            <span class="text-xs text-gray-500 ml-2">李老师 · 电商顾问</span>
-                        </div>
-                        <a href="tutoDetails.html" class="text-navy text-sm font-medium">
-                            开始学习
-                        </a>
-                    </div>
+                    <a href="tutoDetails0.html" class="text-green-700 text-sm font-medium">开始学习</a>
                 </div>
             </div>
         </div>
-        
-        <!-- 教程列表 -->
-        <div class="px-4 pb-4">
-            <h2 class="font-bold text-lg mb-3">全部教程</h2>
-            
-            <!-- 教程项 -->
-            <div class="tutorial-card bg-white rounded-xl p-4 mb-3 shadow-sm">
-                <div class="flex">
-                    <img src="https://images.unsplash.com/photo-1589254065909-b7086229d08c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="教程缩略图" class="w-20 h-20 rounded-lg object-cover">
-                    <div class="ml-3 flex-1">
-                        <div class="flex items-center mb-1">
-                            <span class="text-xs px-2 py-0.5 bg-olive-10 text-navy rounded-full">商品拍摄</span>
-                        </div>
-                        <h3 class="font-medium text-sm">农产品拍摄技巧：让你的产品更有吸引力</h3>
-                        <p class="text-xs text-gray-500 mt-1">15分钟 · 5.2万次播放</p>
-                        <div class="flex items-center justify-between mt-1">
-                            <span class="text-xs text-gray-500">王老师 · 摄影师</span>
-                            <a href="tutoDetails1.html" class="text-xs text-navy font-medium">
-                                查看
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="tutorial-card bg-white rounded-xl p-4 mb-3 shadow-sm">
-                <div class="flex">
-                    <img src="https://images.unsplash.com/photo-1595475207225-428b62bda831?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="教程缩略图" class="w-20 h-20 rounded-lg object-cover">
-                    <div class="ml-3 flex-1">
-                        <div class="flex items-center mb-1">
-                            <span class="text-xs px-2 py-0.5 bg-olive-10 text-navy rounded-full">文案撰写</span>
-                        </div>
-                        <h3 class="font-medium text-sm">农产品文案创作技巧，让顾客爱上你的产品</h3>
-                        <p class="text-xs text-gray-500 mt-1">12分钟 · 3.8万次播放</p>
-                        <div class="flex items-center justify-between mt-1">
-                            <span class="text-xs text-gray-500">张老师 · 文案策划</span>
-                            <a href="tutoDetails2.html" class="text-xs text-navy font-medium">
-                                查看
-                            </a>
+
+        <!-- 全部教程列表 -->
+        <div class="mt-6">
+            <h2 class="text-lg font-bold mb-3">全部教程</h2>
+            <div class="space-y-4">
+                <!-- 教程卡片 -->
+                <div class="tutorial-card">
+                    <div class="flex">
+                        <img src="https://images.unsplash.com/photo-1589254065909-b7086229d08c" 
+                             alt="教程缩略图" class="w-24 h-24 rounded-lg object-cover">
+                        <div class="ml-4 flex-1">
+                            <div class="flex items-center mb-1">
+                                <span class="text-xs px-2 py-0.5 bg-green-100 text-green-800 rounded-full">商品拍摄</span>
+                            </div>
+                            <h3 class="font-medium mb-1">农产品拍摄技巧：让你的产品更有吸引力</h3>
+                            <p class="text-xs text-gray-500">15分钟 · 5.2万次播放</p>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-xs text-gray-500">王老师 · 摄影师</span>
+                                <a href="tutoDetails1.html" class="text-green-700 text-sm">查看</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="tutorial-card bg-white rounded-xl p-4 mb-3 shadow-sm">
-                <div class="flex">
-                    <img src="https://pic1.zhimg.com/v2-ca547f6646ef48702c1dd73ddcb6729c_1440w.jpg" alt="教程缩略图" class="w-20 h-20 rounded-lg object-cover">
-                    <div class="ml-3 flex-1">
-                        <div class="flex items-center mb-1">
-                            <span class="text-xs px-2 py-0.5 bg-olive-10 text-navy rounded-full">引流技巧</span>
-                        </div>
-                        <h3 class="font-medium text-sm">如何利用小红书引流，打造爆款农产品</h3>
-                        <p class="text-xs text-gray-500 mt-1">20分钟 · 8.1万次播放</p>
-                        <div class="flex items-center justify-between mt-1">
-                            <span class="text-xs text-gray-500">赵老师 · 运营专家</span>
-                            <a href= "tutoDetails3.html" class="text-xs text-navy font-medium">
-                                查看
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="tutorial-card bg-white rounded-xl p-4 mb-3 shadow-sm">
-                <div class="flex">
-                    <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="教程缩略图" class="w-20 h-20 rounded-lg object-cover">
-                    <div class="ml-3 flex-1">
-                        <div class="flex items-center mb-1">
-                            <span class="text-xs px-2 py-0.5 bg-olive-10 text-navy rounded-full">客户维护</span>
-                        </div>
-                        <h3 class="font-medium text-sm">客户复购率提升秘诀，让顾客持续下单</h3>
-                        <p class="text-xs text-gray-500 mt-1">18分钟 · 4.5万次播放</p>
-                        <div class="flex items-center justify-between mt-1">
-                            <span class="text-xs text-gray-500">刘老师 · 客户关系专家</span>
-                            <a href="tutoDetails4.html" class="text-xs text-navy font-medium">
-                                查看
-                            </a>
+
+                <div class="tutorial-card">
+                    <div class="flex">
+                        <img src="https://images.unsplash.com/photo-1595475207225-428b62bda831?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80"
+                             alt="教程缩略图" class="w-24 h-24 rounded-lg object-cover">
+                        <div class="ml-4 flex-1">
+                            <div class="flex items-center mb-1">
+                                <span class="text-xs px-2 py-0.5 bg-green-100 text-green-800 rounded-full">文案撰写</span>
+                            </div>
+                            <h3 class="font-medium mb-1">农产品文案创作技巧，让顾客爱上你的产品</h3>
+                            <p class="text-xs text-gray-500">12分钟 · 3.8万次播放</p>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-xs text-gray-500">张老师 · 文案策划</span>
+                                <a href="tutoDetails2.html" class="text-green-700 text-sm">查看</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="tutorial-card bg-white rounded-xl p-4 shadow-sm">
-                <div class="flex">
-                    <img src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" alt="教程缩略图" class="w-20 h-20 rounded-lg object-cover">
-                    <div class="ml-3 flex-1">
-                        <div class="flex items-center mb-1">
-                            <span class="text-xs px-2 py-0.5 bg-olive-10 text-navy rounded-full">新手入门</span>
-                        </div>
-                        <h3 class="font-medium text-sm">农产品包装与发货，提升用户体验</h3>
-                        <p class="text-xs text-gray-500 mt-1">16分钟 · 3.2万次播放</p>
-                        <div class="flex items-center justify-between mt-1">
-                            <span class="text-xs text-gray-500">孙老师 · 物流专家</span>
-                            <a href="tutoDetails5.html" class="text-xs text-navy font-medium">
-                                查看
-                            </a>
+
+                <div class="tutorial-card">
+                    <div class="flex">
+                        <img src="https://pic1.zhimg.com/v2-ca547f6646ef48702c1dd73ddcb6729c_1440w.jpg"
+                             alt="教程缩略图" class="w-24 h-24 rounded-lg object-cover">
+                        <div class="ml-4 flex-1">
+                            <div class="flex items-center mb-1">
+                                <span class="text-xs px-2 py-0.5 bg-green-100 text-green-800 rounded-full">引流技巧</span>
+                            </div>
+                            <h3 class="font-medium mb-1">如何利用小红书引流，打造爆款农产品</h3>
+                            <p class="text-xs text-gray-500">20分钟 · 8.1万次播放</p>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-xs text-gray-500">赵老师 · 运营专家</span>
+                                <a href="tutoDetails3.html" class="text-green-700 text-sm">查看</a>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="tutorial-card">
+                    <div class="flex">
+                        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80"
+                             alt="教程缩略图" class="w-24 h-24 rounded-lg object-cover">
+                        <div class="ml-4 flex-1">
+                            <div class="flex items-center mb-1">
+                                <span class="text-xs px-2 py-0.5 bg-green-100 text-green-800 rounded-full">客户维护</span>
+                            </div>
+                            <h3 class="font-medium mb-1">客户复购率提升秘诀，让顾客持续下单</h3>
+                            <p class="text-xs text-gray-500">18分钟 · 4.5万次播放</p>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-xs text-gray-500">刘老师 · 客户关系专家</span>
+                                <a href="tutoDetails4.html" class="text-green-700 text-sm">查看</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tutorial-card">
+                    <div class="flex">
+                        <img src="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80" 
+                             alt="教程缩略图" class="w-24 h-24 rounded-lg object-cover">
+                        <div class="ml-4 flex-1">
+                            <div class="flex items-center mb-1">
+                                <span class="text-xs px-2 py-0.5 bg-green-100 text-green-800 rounded-full">新手入门</span>
+                            </div>
+                            <h3 class="font-medium mb-1">农产品包装与发货，提升用户体验</h3>
+                            <p class="text-xs text-gray-500">16分钟 · 3.2万次播放</p>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-xs text-gray-500">孙老师 · 物流专家</span>
+                                <a href="tutoDetails5.html" class="text-green-700 text-sm">查看</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
             </div>
         </div>
     </div>
-    </div>
-    
-    <!-- 底部导航栏 -->
-    <div class="fixed bottom-0 left-0 right-0 custom-nav-bg py-2 px-5 border-t border-white/10 backdrop-blur-lg z-20">
-        <div class="flex justify-around items-center">
-            <div class="bottom-nav-item flex flex-col items-center text-navy" data-link="home.html">
+
+    <!-- 底部导航 -->
+    <div class="bottom-nav">
+        <div class="flex justify-around">
+            <a href="index.html" class="bottom-nav-item">
                 <i class="fas fa-home text-xl"></i>
                 <span class="text-xs mt-1">首页</span>
-            </div>
-            <div class="bottom-nav-item flex flex-col items-center text-navy" data-link="upload.html">
+            </a>
+            <a href="upload.html" class="bottom-nav-item">
                 <i class="fas fa-plus-circle text-xl"></i>
                 <span class="text-xs mt-1">创建</span>
-            </div>
-            <div class="bottom-nav-item flex flex-col items-center text-navy active" data-link="tutorials.html">
+            </a>
+            <a href="tutorials.html" class="bottom-nav-item active">
                 <i class="fas fa-book text-xl"></i>
                 <span class="text-xs mt-1">教程</span>
-            </div>
-            <div class="bottom-nav-item flex flex-col items-center text-navy" data-link="profile.html">
+            </a>
+            <a href="profile.html" class="bottom-nav-item">
                 <i class="fas fa-user text-xl"></i>
                 <span class="text-xs mt-1">我的</span>
-            </div>
+            </a>
         </div>
     </div>
 
-    <!-- Toast消息组件 -->
-    <div id="toast" class="fixed top-16 left-1/2 transform -translate-x-1/2 bg-navy/90 text-white px-6 py-3 rounded-full opacity-0 transition-all duration-300 backdrop-blur-md z-50"></div>
-
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // 初始化粒子效果
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 80, density: { enable: true, value_area: 800 } },
-                color: { value: '#9aa338' },
-                shape: { type: 'circle' },
-                opacity: { value: 0.5, random: false },
-                size: { value: 3, random: true },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: '#9aa338',
-                    opacity: 0.4,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 2,
-                    direction: 'none',
-                    random: false,
-                    straight: false,
-                    out_mode: 'out',
-                    bounce: false,
-                }
-            },
-            interactivity: {
-                detect_on: 'canvas',
-                events: {
-                    onhover: { enable: true, mode: 'repulse' },
-                    onclick: { enable: true, mode: 'push' },
-                    resize: true
-                }
-            },
-            retina_detect: true
-        });
-
-        // Toast消息显示函数
-        function showToast(message, type = 'info') {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.style.opacity = '1';
-            toast.style.transform = 'translate(-50%, 0)';
-            
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translate(-50%, -20px)';
-            }, 3000);
-        }
-
-        // 其他JavaScript代码保持不变...
         document.addEventListener('DOMContentLoaded', function() {
-            // 教程点击事件
-            document.querySelectorAll('.tutorial-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const tutorialTitle = this.querySelector('h3').textContent;
-                    showToast(`正在加载: ${tutorialTitle}`, 'loading');
-                    
-                    // 模拟加载教程内容
-                    setTimeout(() => {
-                        // 这里可以实现跳转到具体教程内容页面
-                        showToast(`教程《${tutorialTitle}》已加载`, 'success');
-                    }, 1500);
-                });
+            // 初始化粒子效果
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 20 },
+                    color: { value: '#9aa338' },
+                    shape: { type: 'circle' },
+                    opacity: { value: 0.3, random: true },
+                    size: { value: 5, random: true },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: '#9aa338',
+                        opacity: 0.2,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2,
+                        direction: 'none',
+                        random: false,
+                        straight: false,
+                        out_mode: 'out',
+                        bounce: false
+                    }
+                },
+                interactivity: {
+                    detect_on: 'canvas',
+                    events: {
+                        onhover: { enable: true, mode: 'grab' },
+                        onclick: { enable: true, mode: 'push' },
+                        resize: true
+                    }
+                },
+                retina_detect: true
             });
-            
-            // 过滤分类点击事件
-            document.querySelectorAll('.category-filter').forEach(filter => {
-                filter.addEventListener('click', function() {
-                    document.querySelectorAll('.category-filter').forEach(f => {
-                        f.classList.remove('active');
-                    });
+
+            // 分类导航点击事件
+            document.querySelectorAll('.category-pill').forEach(pill => {
+                pill.addEventListener('click', function() {
+                    document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
                     this.classList.add('active');
-                    
-                    const category = this.textContent.trim();
-                    showToast(`已筛选: ${category}`, 'info');
-                });
-            });
-            
-            // 搜索框事件
-            const searchInput = document.querySelector('.search-input');
-            if (searchInput) {
-                searchInput.addEventListener('keyup', function(e) {
-                    if (e.key === 'Enter') {
-                        const searchTerm = this.value.trim();
-                        if (searchTerm) {
-                            showToast(`正在搜索: ${searchTerm}`, 'info');
-                        }
-                    }
-                });
-            }
-            
-            // 收藏按钮点击事件
-            document.querySelectorAll('.favorite-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation(); // 防止触发教程项目的点击事件
-                    
-                    const isFavorite = this.classList.contains('text-yellow-500');
-                    const tutorialTitle = this.closest('.tutorial-item').querySelector('h3').textContent;
-                    
-                    if (isFavorite) {
-                        // 取消收藏
-                        this.classList.remove('text-yellow-500');
-                        this.classList.add('text-gray-300');
-                        showToast(`已取消收藏: ${tutorialTitle}`, 'info');
-                    } else {
-                        // 添加收藏
-                        this.classList.remove('text-gray-300');
-                        this.classList.add('text-yellow-500');
-                        showToast(`已收藏: ${tutorialTitle}`, 'success');
-                    }
                 });
             });
 
-            document.addEventListener('DOMContentLoaded', function() {
             // 搜索功能
-            const searchButton = document.getElementById('searchButton');
             const searchInput = document.getElementById('searchInput');
-
-            // 点击搜索按钮时显示/隐藏搜索框
-            searchButton.addEventListener('click', function() {
-                searchInput.classList.toggle('hidden');
-                if (!searchInput.classList.contains('hidden')) {
-                    searchInput.focus();
-                }
-            });
-
-            // 监听输入事件
             searchInput.addEventListener('input', function(e) {
-                const keyword = e.target.value.trim().toLowerCase();
-                filterTutorials(keyword);
-            });
-
-            // 过滤教程函数
-            function filterTutorials(keyword) {
-                // 获取所有教程卡片（包括推荐教程和普通教程）
-                const tutorialCards = document.querySelectorAll('.tutorial-card, .bg-white.rounded-xl.overflow-hidden');
+                const searchTerm = e.target.value.toLowerCase();
+                const tutorialCards = document.querySelectorAll('.tutorial-card');
                 
                 tutorialCards.forEach(card => {
                     const title = card.querySelector('h3').textContent.toLowerCase();
-                    const categoryElement = card.querySelector('.text-xs.px-2.py-0.5');
-                    const category = categoryElement ? categoryElement.textContent.toLowerCase() : '';
-                    const descriptionElement = card.querySelector('p');
-                    const description = descriptionElement ? descriptionElement.textContent.toLowerCase() : '';
+                    const category = card.querySelector('.text-xs').textContent.toLowerCase();
                     
-                    // 匹配标题、分类或描述
-                    const match = title.includes(keyword) || 
-                                category.includes(keyword) || 
-                                description.includes(keyword);
-                    
-                    // 显示或隐藏卡片
-                    card.style.display = match ? '' : 'none';
+                    if (title.includes(searchTerm) || category.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
             });
-            }
-            });
-            });
+        });
     </script>
 </body>
 </html>
