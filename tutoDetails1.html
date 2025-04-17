@@ -7,6 +7,32 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        .app-header {
+            background: linear-gradient(135deg, rgba(154, 163, 56, 0.95), rgba(83, 122, 90, 0.95));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    .below{
+        background: linear-gradient(135deg, rgba(154, 163, 56, 0.95), rgba(83, 122, 90, 0.95));
+            color: white;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
         .lesson-header {
             background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%);
         }
@@ -59,7 +85,7 @@
 </head>
 <body class="bg-olive-0">
     <!-- 顶部导航 -->
-    <header class="header py-4 px-5 flex items-center justify-between fixed top-0 left-0 w-full bg-olive-40 z-50">
+    <header class="app-header py-4 px-5 flex items-center justify-between fixed top-0 left-0 w-full bg-olive-40 z-50">
         <div class="flex items-center w-full relative">
             <a class="back-button absolute left-0 slide-right" id="backButton"
                 href="tutorials.html">
