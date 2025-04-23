@@ -1,196 +1,119 @@
 // 模拟数据
 const mockData = {
-  today: {
-    views: [20, 15, 25, 30, 28, 35, 25],
-    interactions: [12, 18, 26, 22, 25, 35, 45],
+  newUser: {
+    views: [5, 5, 5, 5, 5, 5, 5],
+    interactions: [5, 5, 5, 5, 5, 5, 5],
     labels: ['8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'],
-    totalViews: 178,
-    totalInteractions: 183,
-    viewsGrowth: 5.5,
-    interactionGrowth: 3.7,
-    viewsIncrease: 12,
+    totalViews: 0,
+    totalInteractions: 0,
+    viewsGrowth: 0,
+    interactionGrowth: 0,
+    viewsIncrease: 0,
     funnel: {
-      views: 178,
-      clicks: 138,
-      details: 89,
-      cart: 48,
-      orders: 23
+      views: 0,
+      clicks: 0,
+      details: 0,
+      cart: 0,
+      orders: 0
     },
     platforms: [
-      { name: '小红书', percentage: 41 },
-      { name: '微信', percentage: 33 },
-      { name: '抖音', percentage: 26 }
+      { name: '抖音', percentage: 33.33 },
+      { name: '小红书', percentage: 33.33 },
+      { name: '微信', percentage: 33.34 }
     ],
-    popularContent: [
-      {
-        title: '🍓谁懂啊！在办公室吃草莓被追着要链接！现摘的丹东九九，咬一口爆浆的甜，连叶子都带着奶香✨',
-        image: 'https://images.unsplash.com/photo-1587393855524-087f83d95bc9?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        platform: '小红书',
-        tags: ['小红书', '热门'],
-        stats: {
-          views: 84,
-          comments: 14,
-          likes: 22,
-          shares: 8
-        }
-      },
-      {
-        title: '紧急通知：你的夏日 "菠萝补给站" 已上线！新鲜直采，甜爽暴击，速来查收',
-        image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
-        platform: '微信',
-        tags: ['微信', '推荐'],
-        stats: {
-          views: 76,
-          comments: 12,
-          likes: 15,
-          shares: 5
-        }
-      }
-    ]
+    popularContent: []
+  },
+  today: {
+    views: [5, 5, 5, 5, 5, 5, 5],
+    interactions: [5, 5, 5, 5, 5, 5, 5],
+    labels: ['8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'],
+    totalViews: 0,
+    totalInteractions: 0,
+    viewsGrowth: 0,
+    interactionGrowth: 0,
+    viewsIncrease: 0,
+    funnel: {
+      views: 0,
+      clicks: 0,
+      details: 0,
+      cart: 0,
+      orders: 0
+    },
+    platforms: [
+      { name: '抖音', percentage: 33.33 },
+      { name: '小红书', percentage: 33.33 },
+      { name: '微信', percentage: 33.34 }
+    ],
+    popularContent: []
   },
   week: {
-    views: [80, 95, 120, 110, 130, 140, 150],
-    interactions: [40, 52, 68, 54, 60, 70, 80],
+    views: [5, 5, 5, 5, 5, 5, 5],
+    interactions: [5, 5, 5, 5, 5, 5, 5],
     labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-    totalViews: 825,
-    totalInteractions: 424,
-    viewsGrowth: 4.3,
-    interactionGrowth: 2.2,
-    viewsIncrease: 42,
+    totalViews: 0,
+    totalInteractions: 0,
+    viewsGrowth: 0,
+    interactionGrowth: 0,
+    viewsIncrease: 0,
     funnel: {
-      views: 825,
-      clicks: 643,
-      details: 362,
-      cart: 206,
-      orders: 99
+      views: 0,
+      clicks: 0,
+      details: 0,
+      cart: 0,
+      orders: 0
     },
     platforms: [
-      { name: '小红书', percentage: 28 },
-      { name: '微信', percentage: 39 },
-      { name: '抖音', percentage: 35 }
+      { name: '抖音', percentage: 33.33 },
+      { name: '小红书', percentage: 33.33 },
+      { name: '微信', percentage: 33.34 }
     ],
-    popularContent: [
-      {
-        title: '🍓谁懂啊！在办公室吃草莓被追着要链接！现摘的丹东九九，咬一口爆浆的甜，连叶子都带着奶香✨',
-        image: 'https://images.unsplash.com/photo-1587393855524-087f83d95bc9?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        platform: '小红书',
-        tags: ['小红书', '热门'],
-        stats: {
-          views: 145,
-          comments: 24,
-          likes: 32,
-          shares: 18
-        }
-      },
-      {
-        title: '紧急通知：你的夏日 "菠萝补给站" 已上线！新鲜直采，甜爽暴击，速来查收',
-        image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
-        platform: '微信',
-        tags: ['微信', '推荐'],
-        stats: {
-          views: 116,
-          comments: 15,
-          likes: 25,
-          shares: 12
-        }
-      }
-    ]
+    popularContent: []
   },
   month: {
-    views: [200, 220, 240, 230, 250, 260, 270],
-    interactions: [80, 92, 108, 94, 100, 110, 120],
+    views: [5, 5, 5, 5, 5, 5, 5],
+    interactions: [5, 5, 5, 5, 5, 5, 5],
     labels: ['第一周', '第二周', '第三周', '第四周', '第五周', '第六周', '第七周'],
-    totalViews: 1670,
-    totalInteractions: 704,
-    viewsGrowth: 3.6,
-    interactionGrowth: 1.8,
-    viewsIncrease: 70,
+    totalViews: 0,
+    totalInteractions: 0,
+    viewsGrowth: 0,
+    interactionGrowth: 0,
+    viewsIncrease: 0,
     funnel: {
-      views: 1670,
-      clicks: 1302,
-      details: 733,
-      cart: 417,
-      orders: 200
+      views: 0,
+      clicks: 0,
+      details: 0,
+      cart: 0,
+      orders: 0
     },
     platforms: [
-      { name: '小红书', percentage: 27 },
-      { name: '微信', percentage: 42 },
-      { name: '抖音', percentage: 31 }
+      { name: '抖音', percentage: 33.33 },
+      { name: '小红书', percentage: 33.33 },
+      { name: '微信', percentage: 33.34 }
     ],
-    popularContent: [
-      {
-        title: '🍓谁懂啊！在办公室吃草莓被追着要链接！现摘的丹东九九，咬一口爆浆的甜，连叶子都带着奶香✨',
-        image: 'https://images.unsplash.com/photo-1587393855524-087f83d95bc9?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        platform: '小红书',
-        tags: ['小红书', '热门'],
-        stats: {
-          views: 245,
-          comments: 34,
-          likes: 42,
-          shares: 28
-        }
-      },
-      {
-        title: '紧急通知：你的夏日 "菠萝补给站" 已上线！新鲜直采，甜爽暴击，速来查收',
-        image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
-        platform: '微信',
-        tags: ['微信', '推荐'],
-        stats: {
-          views: 216,
-          comments: 25,
-          likes: 35,
-          shares: 22
-        }
-      }
-    ]
+    popularContent: []
   },
   all: {
-    views: [200, 220, 240, 230, 250, 260, 270],
-    interactions: [80, 92, 108, 94, 100, 110, 120],
+    views: [5, 5, 5, 5, 5, 5, 5],
+    interactions: [5, 5, 5, 5, 5, 5, 5],
     labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月'],
-    totalViews: 1670,
-    totalInteractions: 704,
-    viewsGrowth: 3.6,
-    interactionGrowth: 1.8,
-    viewsIncrease: 70,
+    totalViews: 0,
+    totalInteractions: 0,
+    viewsGrowth: 0,
+    interactionGrowth: 0,
+    viewsIncrease: 0,
     funnel: {
-      views: 1670,
-      clicks: 1302,
-      details: 733,
-      cart: 417,
-      orders: 200
+      views: 0,
+      clicks: 0,
+      details: 0,
+      cart: 0,
+      orders: 0
     },
     platforms: [
-      { name: '小红书', percentage: 27 },
-      { name: '微信', percentage: 42 },
-      { name: '抖音', percentage: 31 }
+      { name: '抖音', percentage: 33.33 },
+      { name: '小红书', percentage: 33.33 },
+      { name: '微信', percentage: 33.34 }
     ],
-    popularContent: [
-      {
-        title: '🍓谁懂啊！在办公室吃草莓被追着要链接！现摘的丹东九九，咬一口爆浆的甜，连叶子都带着奶香✨',
-        image: 'https://images.unsplash.com/photo-1587393855524-087f83d95bc9?q=80&w=2206&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-        platform: '小红书',
-        tags: ['小红书', '热门'],
-        stats: {
-          views: 245,
-          comments: 34,
-          likes: 42,
-          shares: 28
-        }
-      },
-      {
-        title: '紧急通知：你的夏日 "菠萝补给站" 已上线！新鲜直采，甜爽暴击，速来查收',
-        image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=300&q=80',
-        platform: '微信',
-        tags: ['微信', '推荐'],
-        stats: {
-          views: 216,
-          comments: 25,
-          likes: 35,
-          shares: 22
-        }
-      }
-    ]
+    popularContent: []
   }
 };
 
@@ -216,7 +139,7 @@ function updateCharts(timeRange) {
     const opacity = 0.3 + (value / maxViews) * 0.7;
     const bar = document.createElement('div');
     bar.className = 'bar' + (index >= data.views.length - 2 ? ' highlight' : '');
-    bar.style.height = `${height}%`;
+    bar.style.height = '5%';
     bar.style.opacity = opacity;
     bar.setAttribute('data-value', value);
     viewsChart.appendChild(bar);
@@ -231,7 +154,7 @@ function updateCharts(timeRange) {
     const opacity = 0.3 + (value / maxInteractions) * 0.7;
     const bar = document.createElement('div');
     bar.className = 'bar' + (index >= data.interactions.length - 2 ? ' highlight' : '');
-    bar.style.height = `${height}%`;
+    bar.style.height = '5%';
     bar.style.opacity = opacity;
     bar.setAttribute('data-value', value);
     interactionChart.appendChild(bar);
@@ -327,46 +250,25 @@ function updateCharts(timeRange) {
   platformChart.setOption(platformOption);
 
   // 更新热门内容
+  updatePopularContent();
+}
+
+function updatePopularContent() {
   const popularContent = document.getElementById('popularContent');
-  popularContent.innerHTML = '';
-  data.popularContent.forEach(content => {
-    const div = document.createElement('div');
-    div.className = 'popular-item bg-white stagger-item';
-    div.innerHTML = `
-      <img src="${content.image}" alt="${content.title}" class="popular-image w-full">
-      <div class="p-4">
-        <h4 class="font-medium">${content.title}</h4>
-        <div class="flex items-center mt-2">
-          ${content.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+  popularContent.innerHTML = `
+        <div class="bg-white rounded-xl p-6 text-center">
+            <div class="text-gray-400 mb-2">
+                <i class="fas fa-inbox text-4xl"></i>
+            </div>
+            <p class="text-gray-500">您尚未发布内容</p>
         </div>
-        <div class="flex justify-between mt-3 text-sm text-gray-500">
-          <div class="flex items-center">
-            <i class="far fa-eye mr-1"></i>
-            <span>${content.stats.views.toLocaleString()}</span>
-          </div>
-          <div class="flex items-center">
-            <i class="far fa-comment mr-1"></i>
-            <span>${content.stats.comments.toLocaleString()}</span>
-          </div>
-          <div class="flex items-center">
-            <i class="far fa-heart mr-1"></i>
-            <span>${content.stats.likes.toLocaleString()}</span>
-          </div>
-          <div class="flex items-center">
-            <i class="fas fa-share-alt mr-1"></i>
-            <span>${content.stats.shares.toLocaleString()}</span>
-          </div>
-        </div>
-      </div>
     `;
-    popularContent.appendChild(div);
-  });
 }
 
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
-  // 默认显示今日数据
-  updateCharts('today');
+  // 默认显示新用户数据
+  updateCharts('newUser');
 
   // 添加时间范围切换事件监听
   const timeTabs = document.querySelectorAll('.time-tab');
