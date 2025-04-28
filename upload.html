@@ -258,7 +258,7 @@
                         "events": {
                             "onhover": {
                                 "enable": true,
-                                "mode": "grab"
+                                "mode": "repulse"
                             },
                             "onclick": {
                                 "enable": true,
@@ -268,13 +268,27 @@
                         },
                         "modes": {
                             "grab": {
-                                "distance": 140,
+                                "distance": 400,
                                 "line_linked": {
-                                    "opacity": 0.5
+                                    "opacity": 1
                                 }
                             },
+                            "bubble": {
+                                "distance": 400,
+                                "size": 40,
+                                "duration": 2,
+                                "opacity": 8,
+                                "speed": 3
+                            },
+                            "repulse": {
+                                "distance": 100,
+                                "duration": 0.4
+                            },
                             "push": {
-                                "particles_nb": 3
+                                "particles_nb": 4
+                            },
+                            "remove": {
+                                "particles_nb": 2
                             }
                         }
                     },
@@ -333,6 +347,7 @@
     </script>
     <!-- 引用外部的upload.js脚本 -->
     <script src="js/upload.js"></script>
+    <script src="js/data-transfer.js"></script>
 </body>
 
 </html>
