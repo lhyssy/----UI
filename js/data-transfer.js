@@ -541,40 +541,11 @@ async function callCozeWorkflow(productData) {
             throw new Error(`API调用失败: ${response.status} - ${errorText}`);
         }
         
-        // 检查响应类型
-        if (!response.body) {
-            throw new Error('API返回的响应不包含可读流');
-        }
+        // 直接读取完整响应体为JSON
+        const result = await response.json();
+        console.log('API返回完整响应:', result);
         
-        // 读取响应流
-        const reader = response.body.getReader();
-        let result = '';
-        
-        while (true) {
-            const { done, value } = await reader.read();
-            
-            if (done) {
-                break;
-            }
-            
-            // 将Uint8Array转换为字符串
-            const chunk = new TextDecoder().decode(value);
-            result += chunk;
-            
-            // 打印调试信息
-            console.log('收到流数据块:', chunk.length, '字节');
-        }
-        
-        console.log('完整响应数据:', result);
-        
-        // 尝试解析JSON响应
-        try {
-            const jsonResult = JSON.parse(result);
-            return jsonResult;
-        } catch (e) {
-            // 如果不是JSON，则返回文本内容
-            return { content: result };
-        }
+        return result;
         
     } catch (error) {
         console.error('Coze API调用失败:', error);
@@ -594,30 +565,11 @@ function handleCozeResult(result) {
         return;
     }
     
-    // 确定内容来源
-    let content = '';
+    // 提取实际文案内容
+    let content = extractContentFromCozeResponse(result);
     
-    if (typeof result === 'string') {
-        // 如果返回的是字符串
-        content = result;
-    } else if (result.content) {
-        // 如果返回的对象有content字段
-        content = result.content;
-    } else if (result.response) {
-        // 如果返回的对象有response字段
-        content = result.response;
-    } else if (result.data && result.data.content) {
-        // 如果返回的对象有data.content字段
-        content = result.data.content;
-    } else {
-        // 如果找不到内容，尝试将整个结果转为字符串
-        try {
-            content = JSON.stringify(result, null, 2);
-        } catch (e) {
-            console.error('无法解析工作流返回结果:', e);
-            return;
-        }
-    }
+    // 输出解析后的内容，方便调试
+    console.log('提取后的文案内容:', content);
     
     if (!content) {
         console.error('无法提取Coze工作流返回内容');
@@ -640,6 +592,9 @@ function handleCozeResult(result) {
     // 将返回内容处理为HTML格式
     const formattedContent = formatCozeContent(content);
     
+    // 输出格式化后的HTML内容，方便调试
+    console.log('格式化后的HTML内容:', formattedContent.substring(0, 500) + '...');
+    
     // 将Coze返回的内容填充到编辑区域
     contentEditor.innerHTML = formattedContent;
     
@@ -647,6 +602,96 @@ function handleCozeResult(result) {
     const editorToolbar = document.getElementById('editorToolbar');
     if (editorToolbar) {
         editorToolbar.classList.remove('hidden');
+    }
+}
+
+/**
+ * 从Coze API响应中提取实际的文案内容
+ * @param {Object|string} response - API响应
+ * @returns {string} - 提取的文案内容
+ */
+function extractContentFromCozeResponse(response) {
+    try {
+        // 如果是字符串，尝试解析JSON
+        if (typeof response === 'string') {
+            try {
+                response = JSON.parse(response);
+            } catch (e) {
+                // 如果不是有效的JSON，直接返回原文本
+                return response;
+            }
+        }
+        
+        // 处理标准Coze API响应格式
+        if (response.data) {
+            // 如果data字段是字符串且包含JSON转义符号
+            if (typeof response.data === 'string' && response.data.includes('\\')) {
+                // 尝试进行JSON解析
+                try {
+                    // 先移除两端引号(如果有)
+                    let cleanData = response.data;
+                    if (cleanData.startsWith('"') && cleanData.endsWith('"')) {
+                        cleanData = cleanData.slice(1, -1);
+                    }
+                    
+                    // 解析JSON数组或对象
+                    if (cleanData.startsWith('[') || cleanData.startsWith('{')) {
+                        const parsedData = JSON.parse(cleanData);
+                        
+                        // 如果是数组，拼接所有元素
+                        if (Array.isArray(parsedData)) {
+                            return parsedData.join('');
+                        }
+                        
+                        // 如果是对象，尝试提取文本内容
+                        if (typeof parsedData === 'object') {
+                            // 尝试不同的可能字段名
+                            const possibleFields = ['text', 'content', 'message', 'output'];
+                            for (const field of possibleFields) {
+                                if (parsedData[field]) {
+                                    return parsedData[field];
+                                }
+                            }
+                            // 如果没有找到特定字段，返回整个对象的字符串表示
+                            return JSON.stringify(parsedData);
+                        }
+                    }
+                    
+                    // 清理转义字符
+                    return cleanData
+                        .replace(/\\n/g, '\n')
+                        .replace(/\\"/g, '"')
+                        .replace(/\\\\/g, '\\');
+                    
+                } catch (e) {
+                    console.error('解析data字段失败:', e);
+                    // 返回原始data内容，后续会做格式化处理
+                    return response.data;
+                }
+            }
+            
+            // 如果data不是字符串或没有转义符号
+            return typeof response.data === 'string' 
+                ? response.data 
+                : JSON.stringify(response.data);
+        }
+        
+        // 检查其他可能的字段
+        const possibleFields = ['content', 'text', 'message', 'output', 'response'];
+        for (const field of possibleFields) {
+            if (response[field]) {
+                return typeof response[field] === 'string' 
+                    ? response[field] 
+                    : JSON.stringify(response[field]);
+            }
+        }
+        
+        // 如果无法找到任何有效内容，返回整个响应的字符串表示
+        return JSON.stringify(response);
+        
+    } catch (error) {
+        console.error('提取内容时出错:', error);
+        return String(response);
     }
 }
 
@@ -659,6 +704,140 @@ function formatCozeContent(content) {
     // 如果内容已经是HTML，直接返回
     if (content.trim().startsWith('<') && content.includes('</')) {
         return content;
+    }
+    
+    // 清理内容
+    content = content
+        // 移除可能的多余引号和转义字符
+        .replace(/^["']|["']$/g, '')
+        .replace(/\\n/g, '\n')
+        .replace(/\\"/g, '"')
+        .replace(/\\\\/g, '\\')
+        // 移除可能的JSON前缀，如 ["output", "content..."]
+        .replace(/^\["output",.*?,"/, '')
+        // 移除结尾的引号和方括号
+        .replace(/"\]$/, '');
+    
+    // 通过表情符号和标题特性识别小红书风格文案
+    const isXiaohongshuStyle = content.includes('🍎') || 
+                               content.includes('💫') || 
+                               content.includes('👅') || 
+                               content.includes('——') ||
+                               content.includes('#');
+    
+    if (isXiaohongshuStyle) {
+        // 处理小红书风格文案格式
+        
+        // 提取标题部分（通常包含表情符号和商品名）
+        let title = '';
+        const titleMatch = content.match(/(.+?)(?:\n|$)/);
+        if (titleMatch) {
+            title = titleMatch[1].trim();
+        }
+        
+        // 提取标签（通常以#开头）
+        const tags = [];
+        const tagRegex = /#[^\s#]+/g;
+        let match;
+        while ((match = tagRegex.exec(content)) !== null) {
+            tags.push(match[0]);
+        }
+        
+        // 从内容中提取各个部分
+        const sections = {
+            '产品特点': '',
+            '口感体验': '',
+            '营养价值': '',
+            '食用建议': ''
+        };
+        
+        // 查找各部分内容
+        let currentSection = '';
+        const lines = content.split('\n');
+        for (const line of lines) {
+            // 检查是否是新部分的开始
+            if (line.includes('产品特点') || line.includes('特点') || line.includes('🍎')) {
+                currentSection = '产品特点';
+                continue;
+            } else if (line.includes('口感体验') || line.includes('口感') || line.includes('👅')) {
+                currentSection = '口感体验';
+                continue;
+            } else if (line.includes('营养价值') || line.includes('营养') || line.includes('💪')) {
+                currentSection = '营养价值';
+                continue;
+            } else if (line.includes('食用建议') || line.includes('吃法') || line.includes('🍽️')) {
+                currentSection = '食用建议';
+                continue;
+            }
+            
+            // 如果有当前部分，添加内容
+            if (currentSection && sections[currentSection] !== undefined) {
+                sections[currentSection] += (sections[currentSection] ? '\n' : '') + line;
+            }
+        }
+        
+        // 构建HTML
+        let html = `
+        <div class="mb-4">
+            <div class="mb-2 flex items-center">
+                <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded mr-2"
+                    style="background: linear-gradient(135deg, #ffcdd2, #ef9a9a); color: #c62828;">限时特惠</span>
+                <span class="bg-green-100 text-green-600 text-xs font-bold px-2 py-1 rounded"
+                    style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #2e7d32;">有机认证</span>
+            </div>
+            <h2 class="text-lg font-bold mb-2">${title || '农产品推荐'}</h2>
+            <p class="text-sm text-gray-700 leading-relaxed">${tags.join(' ')}</p>
+        </div>`;
+        
+        // 添加标签部分
+        html += `
+        <div class="flex flex-wrap gap-2 mb-4">
+            <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+                style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #1b5e20;">有机认证</span>
+            <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+                style="background: linear-gradient(135deg, #bbdefb, #90caf9); color: #0d47a1;">高山种植</span>
+            <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+                style="background: linear-gradient(135deg, #fff9c4, #fff59d); color: #f57f17;">产地直发</span>
+        </div>`;
+        
+        // 添加各部分内容
+        if (sections['产品特点']) {
+            html += `
+            <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+                style="border-color: #9aa338; background: linear-gradient(to right, rgba(154, 163, 56, 0.15), rgba(154, 163, 56, 0.05), transparent);">
+                <h3 class="font-bold mb-2 text-[#9aa338]">🍎 产品特点</h3>
+                <p class="text-sm text-gray-700 mb-3 leading-relaxed">${sections['产品特点'].replace(/\n/g, '<br>')}</p>
+            </div>`;
+        }
+        
+        if (sections['口感体验']) {
+            html += `
+            <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+                style="border-color: #e67e22; background: linear-gradient(to right, rgba(230, 126, 34, 0.15), rgba(230, 126, 34, 0.05), transparent);">
+                <h3 class="font-bold mb-2 text-orange-700">👅 口感体验</h3>
+                <p class="text-sm text-gray-700 mb-3 leading-relaxed">${sections['口感体验'].replace(/\n/g, '<br>')}</p>
+            </div>`;
+        }
+        
+        if (sections['营养价值']) {
+            html += `
+            <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+                style="border-color: #3498db; background: linear-gradient(to right, rgba(52, 152, 219, 0.15), rgba(52, 152, 219, 0.05), transparent);">
+                <h3 class="font-bold mb-2 text-blue-700">💪 营养价值</h3>
+                <p class="text-sm text-gray-700 mb-3 leading-relaxed">${sections['营养价值'].replace(/\n/g, '<br>')}</p>
+            </div>`;
+        }
+        
+        if (sections['食用建议']) {
+            html += `
+            <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+                style="border-color: #9b59b6; background: linear-gradient(to right, rgba(155, 89, 182, 0.15), rgba(155, 89, 182, 0.05), transparent);">
+                <h3 class="font-bold mb-2 text-purple-700">🍽️ 食用建议</h3>
+                <p class="text-sm text-gray-700 mb-3 leading-relaxed">${sections['食用建议'].replace(/\n/g, '<br>')}</p>
+            </div>`;
+        }
+        
+        return html;
     }
     
     // 将换行符转换为<br>标签
