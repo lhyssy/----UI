@@ -178,7 +178,7 @@
 
                         // 跳转到预览页面
                         setTimeout(() => {
-                window.location.href = 'preview.html';
+                            window.location.href = 'preview.html';
                         }, 1000);
                     }
                 }, 100);
@@ -364,7 +364,7 @@
                     previewArea.style.display = 'none';
                 }
 
-        // 更新下一步按钮状态
+                // 更新下一步按钮状态
                 if (nextButton) {
                     nextButton.disabled = uploadedImages.length === 0;
                 }

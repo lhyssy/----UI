@@ -262,7 +262,7 @@ function initImageCarousel() {
 
     // 如果没有图片，显示占位信息
     if (images.length === 0) {
-                        imageContainer.classList.add('no-image');
+        imageContainer.classList.add('no-image');
         imageContainer.setAttribute('data-placeholder', '暂无图片，请先上传');
         return;
     }
@@ -427,7 +427,7 @@ function initTextEditing() {
                     if (url) {
                         document.execCommand(command, false, url);
                     }
-            } else {
+                } else {
                     document.execCommand(command, false, value);
                 }
 
@@ -913,11 +913,11 @@ function initPublishButton() {
             event.preventDefault();
             console.log('保存草稿按钮被点击');
             showToast('草稿已保存', 'success');
-            });
-        }
+        });
     }
+}
 
-    /**
+/**
 * 初始化AI内容优化
 */
 function initAIOptimization() {
@@ -1029,14 +1029,14 @@ function initAIOptimization() {
                         if (staticContent) staticContent.innerHTML = optimizedContent;
 
                         // 隐藏生成状态
-                                aiGeneratingContainer.classList.add('hidden');
-                            generateCopyBtn.disabled = false;
+                        aiGeneratingContainer.classList.add('hidden');
+                        generateCopyBtn.disabled = false;
                         generateCopyBtn.style.opacity = '1';
 
                         // 显示成功提示
                         showAiSuccess();
-                        }, 500);
-                    }
+                    }, 500);
+                }
             }, 50);
         });
     }
@@ -1221,10 +1221,10 @@ function initRippleEffect() {
             }
         `;
         document.head.appendChild(style);
-        }
     }
+}
 
-    /**
+/**
 * 显示保存成功提示
 */
 function showSaveSuccess() {
