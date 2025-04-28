@@ -921,87 +921,6 @@ function initPublishButton() {
 * 初始化AI内容优化
 */
 function initAIOptimization() {
-    // AI优化后的文案内容
-    const optimizedContent = `
-        <div class="mb-4">
-            <div class="mb-2 flex items-center">
-                <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded mr-2"
-                    style="background: linear-gradient(135deg, #ffcdd2, #ef9a9a); color: #c62828;">限时特惠</span>
-                <span class="bg-green-100 text-green-600 text-xs font-bold px-2 py-1 rounded"
-                    style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #2e7d32;">有机认证</span>
-            </div>
-            <h2 class="text-lg font-bold mb-2">💫高山红富士｜咬一口就沦陷的冰糖心小炸弹！🍎</h2>
-            <p class="text-sm text-gray-700 leading-relaxed">#有机种植 #会爆汁的苹果 #产地直发</p>
-        </div>
-
-        <div class="flex flex-wrap gap-2 mb-4">
-            <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
-                style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #1b5e20;">有机认证</span>
-            <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
-                style="background: linear-gradient(135deg, #ffcdd2, #ef9a9a); color: #b71c1c;">特级品质</span>
-            <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
-                style="background: linear-gradient(135deg, #bbdefb, #90caf9); color: #0d47a1;">高山种植</span>
-            <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
-                style="background: linear-gradient(135deg, #fff9c4, #fff59d); color: #f57f17;">产地直发</span>
-        </div>
-
-        <div class="mb-5 text-center text-sm text-gray-700 leading-relaxed">
-            <p>——————🌲自然の馈赠——————</p>
-            <p class="mt-2">✨谁还没吃过这颗300天自然长成的红宝石！</p>
-            <p>海拔2000m+云端果园 | 365天有机养护</p>
-            <p>拒绝催熟剂❌ 不用膨大剂❌</p>
-            <p>自带有机小绿标认证 每一颗都是阳光吻过的红脸蛋</p>
-        </div>
-
-        <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
-            style="border-color: #9aa338; background: linear-gradient(to right, rgba(154, 163, 56, 0.15), rgba(154, 163, 56, 0.05), transparent);">
-            <h3 class="font-bold mb-2 text-[#9aa338]">🍎 产品特点</h3>
-            <p class="text-sm text-gray-700 mb-3 leading-relaxed">
-                🌱「有机喂养」不用农药的天然baby<br>
-                ☀️「日光SPA」昼夜温差凝出冰糖心<br>
-                📦「现摘现发」枝头到舌尖72h直达<br>
-                📸「颜值爆表」自带高光滤镜的苹果届爱豆
-            </p>
-        </div>
-
-        <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
-            style="border-color: #e67e22; background: linear-gradient(to right, rgba(230, 126, 34, 0.15), rgba(230, 126, 34, 0.05), transparent);">
-            <h3 class="font-bold mb-2 text-orange-700">👅 口感体验</h3>
-            <p class="text-sm text-gray-700 mb-3 leading-relaxed">
-                🔥牙齿轻轻一碰就爆汁！果肉像初雪般细嫩<br>
-                💥甜度直接拉满18°+ 却完全不齁嗓子！<br>
-                ❄️冰镇后吃绝了！像在啃液态蜂蜜冻<br>
-                ⚠️温馨提示：吃前备好纸巾 汁水多到能洗脸
-            </p>
-        </div>
-
-        <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
-            style="border-color: #3498db; background: linear-gradient(to right, rgba(52, 152, 219, 0.15), rgba(52, 152, 219, 0.05), transparent);">
-            <h3 class="font-bold mb-2 text-blue-700">💪 营养价值</h3>
-            <p class="text-sm text-gray-700 mb-3 leading-relaxed">
-                🍏维C含量≈3颗柠檬 熬夜党快码住<br>
-                🍎果胶含量MAX 噗噗困难户救星<br>
-                🍐每天1颗=给肠道做瑜伽<br>
-                👩👧适配人群：健身党/宝妈/996打工人
-            </p>
-        </div>
-
-        <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
-            style="border-color: #9b59b6; background: linear-gradient(to right, rgba(155, 89, 182, 0.15), rgba(155, 89, 182, 0.05), transparent);">
-            <h3 class="font-bold mb-2 text-purple-700">🍽️ 神仙吃法</h3>
-            <p class="text-sm text-gray-700 mb-3 leading-relaxed">
-                ☀️早起切块拌酸奶碗 唤醒甜甜一整天<br>
-                🍵下午茶做成ins风水果拼盘 秒杀甜品<br>
-                🍹榨汁加气泡水+薄荷 自制冷饮店爆款<br>
-                📸对半切开摆盘发朋友圈 收获99+点赞
-            </p>
-        </div>
-
-        <div class="mt-5 text-center p-3 rounded-lg bg-gradient-to-r from-pink-50 to-red-50">
-            <p class="text-sm text-red-600">🌟现在下单送苹果花胸针！把春天别在衣襟上～</p>
-        </div>
-    `;
-
     const generateCopyBtn = document.getElementById('generateCopyBtn');
     const aiGeneratingContainer = document.getElementById('aiGeneratingContainer');
     const aiProgressBar = document.getElementById('aiProgressBar');
@@ -1009,35 +928,19 @@ function initAIOptimization() {
     const staticContent = document.getElementById('staticContent');
 
     if (generateCopyBtn && aiGeneratingContainer && aiProgressBar) {
-        generateCopyBtn.addEventListener('click', function () {
-            // 显示生成状态
-            aiGeneratingContainer.classList.remove('hidden');
-            generateCopyBtn.disabled = true;
-            generateCopyBtn.style.opacity = '0.7';
-
-            // 模拟进度条动画
-            let progress = 0;
-            const progressInterval = setInterval(() => {
-                progress += 2;
-                aiProgressBar.style.width = `${progress}%`;
-
-                if (progress >= 100) {
-                    clearInterval(progressInterval);
-                    setTimeout(() => {
-                        // 更新内容
-                        if (contentEditor) contentEditor.innerHTML = optimizedContent;
-                        if (staticContent) staticContent.innerHTML = optimizedContent;
-
-                        // 隐藏生成状态
-                        aiGeneratingContainer.classList.add('hidden');
-                        generateCopyBtn.disabled = false;
-                        generateCopyBtn.style.opacity = '1';
-
-                        // 显示成功提示
-                        showAiSuccess();
-                    }, 500);
-                }
-            }, 50);
+        generateCopyBtn.addEventListener('click', function() {
+            // 检查是否已有data-transfer.js提供的功能
+            if (window.initAIOptimizationButton) {
+                console.log('使用真实AI优化功能');
+                // 不做任何事情，由data-transfer.js处理AI优化功能
+                return;
+            }
+            
+            // 使用真实AI优化前的提示
+            showNotification("正在连接AI引擎...", "sync");
+            
+            console.log('AI优化按钮被点击，但data-transfer.js未提供处理能力');
+            showToast('AI优化功能暂时不可用，请稍后再试', 'warning');
         });
     }
 }

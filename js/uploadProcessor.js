@@ -73,15 +73,26 @@ function simulateUpload(fileData, progressBar, uploadStatus) {
             clearInterval(interval);
             
             // 更新状态
-            uploadStatus.textContent = '上传完成，正在分析...';
+            uploadStatus.textContent = '上传完成';
             
             // 触发上传完成事件
             document.dispatchEvent(new CustomEvent('uploadComplete', {
                 detail: { file: fileData.file, dataUrl: fileData.dataUrl }
             }));
             
-            // 模拟AI分析
-            simulateAIAnalysis(fileData, uploadStatus);
+            // 设置文件为已上传状态
+            fileData.uploaded = true;
+            
+            // 存储上传的图片数据，但不生成模拟分析结果
+            sessionStorage.setItem('lastUploadedImage', fileData.dataUrl);
+            
+            // 显示成功消息
+            showToast('图片上传成功！', 'success');
+            
+            // 跳转到预览页面
+            setTimeout(() => {
+                window.location.href = 'preview.html';
+            }, 1000);
         }
         
         // 更新进度条
@@ -96,98 +107,6 @@ function simulateUpload(fileData, progressBar, uploadStatus) {
             uploadStatus.textContent = '优化图像质量...';
         }
     }, 200);
-}
-
-/**
- * 模拟AI分析过程
- * @param {Object} fileData - 文件数据对象
- * @param {HTMLElement} uploadStatus - 状态文本元素
- */
-function simulateAIAnalysis(fileData, uploadStatus) {
-    // 设置文件为已上传状态
-    fileData.uploaded = true;
-    
-    // 模拟AI分析的不同阶段
-    uploadStatus.textContent = 'AI分析图像中...';
-    
-    setTimeout(() => {
-        uploadStatus.textContent = '识别图像内容...';
-    }, 1000);
-    
-    setTimeout(() => {
-        uploadStatus.textContent = '生成关键描述...';
-    }, 2000);
-    
-    setTimeout(() => {
-        uploadStatus.textContent = '优化营销文案...';
-    }, 3000);
-    
-    // 分析完成
-    setTimeout(() => {
-        uploadStatus.textContent = '分析完成！';
-        
-        // 存储分析结果
-        const analysisResult = generateMockAnalysisResult(fileData);
-        sessionStorage.setItem('lastUploadedImage', fileData.dataUrl);
-        sessionStorage.setItem('lastAnalysisResult', JSON.stringify(analysisResult));
-        
-        // 触发分析完成事件
-        document.dispatchEvent(new CustomEvent('analysisComplete', {
-            detail: { 
-                file: fileData.file, 
-                dataUrl: fileData.dataUrl,
-                result: analysisResult
-            }
-        }));
-        
-        // 显示成功消息
-        showToast('图片上传并分析成功！', 'success');
-        
-        // 跳转到预览页面
-        setTimeout(() => {
-            window.location.href = 'preview.html';
-        }, 1000);
-    }, 4000);
-}
-
-/**
- * 生成模拟的分析结果
- * @param {Object} fileData - 文件数据对象
- * @returns {Object} 分析结果对象
- */
-function generateMockAnalysisResult(fileData) {
-    // 随机水果名称
-    const fruits = ['苹果', '香蕉', '橙子', '梨', '桃子', '葡萄', '西瓜', '草莓', '蓝莓', '樱桃'];
-    const fruit = fruits[Math.floor(Math.random() * fruits.length)];
-    
-    // 随机产地
-    const origins = ['山东', '陕西', '江苏', '浙江', '福建', '广东', '云南', '海南', '四川', '新疆'];
-    const origin = origins[Math.floor(Math.random() * origins.length)];
-    
-    // 随机品质特点
-    const qualities = ['有机', '生态', '绿色', '无公害', '纯天然', '优质', '精选', '高端', '新鲜', '特级'];
-    const quality = qualities[Math.floor(Math.random() * qualities.length)];
-    
-    // 构建分析结果
-    return {
-        productName: `${origin}${quality}${fruit}`,
-        category: '水果',
-        origin: origin,
-        features: [
-            `${quality}栽培，品质保证`,
-            '无农药残留，安全健康',
-            '新鲜采摘，产地直发',
-            '口感鲜美，营养丰富'
-        ],
-        marketingPoints: [
-            `${origin}特产，地理标志产品`,
-            '严选${quality}等级，保证品质',
-            '冷链配送，保鲜送达',
-            '支持7天无理由退换'
-        ],
-        suggestedPrice: (Math.random() * 20 + 10).toFixed(2),
-        timestamp: new Date().toISOString()
-    };
 }
 
 /**
@@ -212,17 +131,13 @@ if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         processUpload,
         showUploadProgress,
-        simulateUpload,
-        simulateAIAnalysis,
-        generateMockAnalysisResult
+        simulateUpload
     };
 } else {
     // 添加到全局对象
     window.uploadProcessor = {
         processUpload,
         showUploadProgress,
-        simulateUpload,
-        simulateAIAnalysis,
-        generateMockAnalysisResult
+        simulateUpload
     };
 } 
