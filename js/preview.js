@@ -588,6 +588,48 @@ function initInteractionEffects() {
         });
     });
 
+    // 为AI功能开关添加点击事件
+    const toggleSwitches = document.querySelectorAll('.bg-white .relative.inline-block');
+
+    toggleSwitches.forEach(toggle => {
+        // 添加鼠标样式，表明可点击
+        toggle.style.cursor = 'pointer';
+
+        toggle.addEventListener('click', function () {
+            // 获取内部的圆点
+            const circle = this.querySelector('span');
+
+            // 检查当前状态
+            const isActive = this.classList.contains('bg-green-500');
+
+            if (isActive) {
+                // 从打开切换到关闭状态
+                this.classList.remove('bg-green-500');
+                this.classList.add('bg-gray-300');
+
+                // 移动圆点到左侧
+                circle.style.right = 'auto';
+                circle.style.left = '1px';
+            } else {
+                // 从关闭切换到打开状态
+                this.classList.remove('bg-gray-300');
+                this.classList.add('bg-green-500');
+
+                // 移动圆点到右侧
+                circle.style.left = 'auto';
+                circle.style.right = '1px';
+            }
+
+            // 获取功能名称
+            const featureName = this.closest('.flex.items-center.justify-between')
+                .querySelector('.font-medium').textContent;
+
+            // 显示状态变化提示
+            const newState = isActive ? '已关闭' : '已开启';
+            showToast(`${featureName}${newState}`, isActive ? 'info' : 'success');
+        });
+    });
+
     // 修复iOS上的滚动问题
     if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
         document.addEventListener('touchmove', function (e) {
@@ -894,7 +936,7 @@ function initBottomNavAnimation() {
 }
 
 /**
- * 初始化发布按钮
+ * 初始化发布按钮功能
  */
 function initPublishButton() {
     const goToPublishBtn = document.getElementById('goToPublishBtn');
@@ -902,8 +944,47 @@ function initPublishButton() {
         goToPublishBtn.addEventListener('click', function (event) {
             event.preventDefault(); // 阻止默认行为
             console.log('去发布按钮被点击，准备跳转到发布页面');
-            // 简单跳转，不附加任何参数
-            window.location.href = 'publish.html';
+
+            // 获取文案内容
+            const contentEditor = document.getElementById('contentEditor');
+            const staticContent = document.getElementById('staticContent');
+
+            let content = '';
+
+            // 判断使用哪个内容区域
+            if (contentEditor && contentEditor.style.display !== 'none') {
+                // 从编辑区获取内容
+                content = contentEditor.innerText || contentEditor.textContent;
+            } else if (staticContent) {
+                // 从静态区域获取内容
+                content = staticContent.innerText || staticContent.textContent;
+            }
+
+            // 如果有内容，复制到剪贴板
+            if (content.trim()) {
+                try {
+                    navigator.clipboard.writeText(content).then(() => {
+                        console.log('文案已复制到剪贴板');
+
+                        // 在localStorage中存储一个标志，表示文案已复制
+                        localStorage.setItem('contentCopied', 'true');
+
+                        // 跳转到发布页面
+                        window.location.href = 'publish.html';
+                    }).catch(err => {
+                        console.error('复制到剪贴板失败:', err);
+                        showToast('复制内容失败，请手动复制', 'error');
+                        window.location.href = 'publish.html';
+                    });
+                } catch (err) {
+                    console.error('剪贴板API不可用:', err);
+                    showToast('复制内容失败，请手动复制', 'error');
+                    window.location.href = 'publish.html';
+                }
+            } else {
+                // 没有内容也跳转
+                window.location.href = 'publish.html';
+            }
         });
     }
 
@@ -928,17 +1009,17 @@ function initAIOptimization() {
     const staticContent = document.getElementById('staticContent');
 
     if (generateCopyBtn && aiGeneratingContainer && aiProgressBar) {
-        generateCopyBtn.addEventListener('click', function() {
+        generateCopyBtn.addEventListener('click', function () {
             // 检查是否已有data-transfer.js提供的功能
             if (window.initAIOptimizationButton) {
                 console.log('使用真实AI优化功能');
                 // 不做任何事情，由data-transfer.js处理AI优化功能
                 return;
             }
-            
+
             // 使用真实AI优化前的提示
             showNotification("正在连接AI引擎...", "sync");
-            
+
             console.log('AI优化按钮被点击，但data-transfer.js未提供处理能力');
             showToast('AI优化功能暂时不可用，请稍后再试', 'warning');
         });
