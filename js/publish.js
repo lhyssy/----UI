@@ -29,6 +29,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 修复iOS上的滚动问题
     fixIOSScroll();
+
+    // 检查是否有复制的文案内容
+    checkContentCopied();
 });
 
 /**
@@ -159,17 +162,16 @@ function initFloatingBackground() {
     });
 }
 
-    /**
-     * 初始化平台选择功能
-     */
-    function initPlatformSelection() {
+/**
+ * 初始化平台选择功能
+ */
+function initPlatformSelection() {
     const platformCards = document.querySelectorAll('.platform-card');
-    const selectedPlatforms = new Set();
-    const maxSelections = 5; // 最大选择数量
-    const platformCounter = document.getElementById('selected-count');
+    let selectedPlatform = null; // 改为单个选择的平台
+    const maxSelections = 1; // 修改为最大选择数量为1
 
     // 初始化checkmark显示
-        platformCards.forEach(card => {
+    platformCards.forEach(card => {
         // 确保小红书默认选择的checkmark正确显示
         if (card.classList.contains('selected')) {
             const checkmark = card.querySelector('.checkmark');
@@ -177,51 +179,16 @@ function initFloatingBackground() {
                 checkmark.innerHTML = '<i class="fas fa-check text-white text-xs"></i>';
             }
 
-            // 获取平台名称并添加到已选择集合中
-            const platformName = card.querySelector('.platform-name').textContent;
-            const platformId = platformName; // 使用平台名称作为ID
-            selectedPlatforms.add(platformId);
+            // 获取默认选择的平台
+            selectedPlatform = card.querySelector('.platform-name').textContent.trim();
         }
     });
-
-    // 从localStorage获取之前选择的平台
-    const savedPlatforms = localStorage.getItem('selectedPlatforms');
-    if (savedPlatforms) {
-        try {
-            const platforms = JSON.parse(savedPlatforms);
-            platforms.forEach(platform => {
-                selectedPlatforms.add(platform);
-            });
-
-            // 更新UI以显示之前的选择
-            platformCards.forEach(card => {
-                const platformName = card.querySelector('.platform-name').textContent;
-                const platformId = platformName; // 使用平台名称作为ID
-
-                if (selectedPlatforms.has(platformId)) {
-                    card.classList.add('selected');
-
-                    // 确保checkmark显示正确
-                    const checkmark = card.querySelector('.checkmark');
-                    if (checkmark && !checkmark.querySelector('i')) {
-                        checkmark.innerHTML = '<i class="fas fa-check text-white text-xs"></i>';
-                    }
-                }
-            });
-
-            // 更新计数器
-            updatePlatformCounter();
-        } catch (e) {
-            console.error('恢复选择的平台失败:', e);
-        }
-    }
 
     // 为每个平台卡片添加点击事件
     platformCards.forEach(card => {
         card.addEventListener('click', function () {
-            // 获取平台名称作为ID
-            const platformName = this.querySelector('.platform-name').textContent;
-            const platformId = platformName;
+            // 获取平台名称
+            const platformName = this.querySelector('.platform-name').textContent.trim();
 
             // 获取checkmark元素
             const checkmark = this.querySelector('.checkmark');
@@ -229,24 +196,33 @@ function initFloatingBackground() {
             if (this.classList.contains('selected')) {
                 // 取消选择
                 this.classList.remove('selected');
-                selectedPlatforms.delete(platformId);
+                selectedPlatform = null;
 
                 // 移除对钩图标
                 if (checkmark) {
                     checkmark.innerHTML = '';
                 }
 
-                showToast(`已取消选择 ${platformName}`, 'info');
-                    } else {
-                // 检查是否超过最大选择数量
-                if (selectedPlatforms.size >= maxSelections) {
-                    showToast(`最多只能选择 ${maxSelections} 个平台`, 'warning');
-                    return;
+            } else {
+                // 如果已经有选择的平台，先取消之前的选择
+                if (selectedPlatform) {
+                    // 找到之前选择的平台卡片
+                    const previousSelectedCard = Array.from(platformCards).find(card =>
+                        card.querySelector('.platform-name').textContent.trim() === selectedPlatform
+                    );
+
+                    if (previousSelectedCard) {
+                        previousSelectedCard.classList.remove('selected');
+                        const prevCheckmark = previousSelectedCard.querySelector('.checkmark');
+                        if (prevCheckmark) {
+                            prevCheckmark.innerHTML = '';
+                        }
+                    }
                 }
 
-                // 添加选择
+                // 添加新选择
                 this.classList.add('selected');
-                selectedPlatforms.add(platformId);
+                selectedPlatform = platformName;
 
                 // 添加对钩图标
                 if (checkmark) {
@@ -255,15 +231,7 @@ function initFloatingBackground() {
 
                 // 添加选择动画
                 addSelectionAnimation(this);
-
-                showToast(`已选择 ${platformName}`, 'success');
             }
-
-            // 更新计数器
-            updatePlatformCounter();
-
-            // 保存选择到localStorage
-            savePlatformSelections();
         });
 
         // 添加悬停效果
@@ -277,34 +245,6 @@ function initFloatingBackground() {
             this.classList.remove('hover');
         });
     });
-
-    // 更新平台选择计数器
-    function updatePlatformCounter() {
-        if (platformCounter) {
-            platformCounter.textContent = `${selectedPlatforms.size}/${maxSelections}`;
-
-            // 根据选择数量更新颜色
-            if (selectedPlatforms.size === 0) {
-                platformCounter.classList.remove('text-green-500', 'text-yellow-500');
-                platformCounter.classList.add('text-gray-400');
-            } else if (selectedPlatforms.size < maxSelections) {
-                platformCounter.classList.remove('text-gray-400', 'text-yellow-500');
-                platformCounter.classList.add('text-green-500');
-        } else {
-                platformCounter.classList.remove('text-gray-400', 'text-green-500');
-                platformCounter.classList.add('text-yellow-500');
-            }
-        }
-    }
-
-    // 保存平台选择到localStorage
-    function savePlatformSelections() {
-        const platforms = Array.from(selectedPlatforms);
-        localStorage.setItem('selectedPlatforms', JSON.stringify(platforms));
-    }
-
-    // 初始化时更新计数器
-    updatePlatformCounter();
 }
 
 /**
@@ -498,10 +438,10 @@ function initAIRecommendation() {
                 analysisPanel.classList.add('show');
             }, 10);
         }
-        }
     }
+}
 
-    /**
+/**
 * 初始化交互效果
 */
 function initInteractionEffects() {
@@ -526,6 +466,137 @@ function initInteractionEffects() {
             this.style.transform = '';
         });
     });
+
+    // 为开关按钮添加点击事件
+    const timeToggle = document.getElementById('timeToggle');
+    const tagToggle = document.getElementById('tagToggle');
+    const timeOptions = document.getElementById('timeOptions');
+    const tagOptions = document.getElementById('tagOptions');
+
+    // 初始化开关样式
+    initToggleSwitch(timeToggle);
+    initToggleSwitch(tagToggle);
+
+    // 添加点击事件
+    if (timeToggle) {
+        timeToggle.addEventListener('click', function () {
+            toggleSwitch(this);
+
+            // 显示/隐藏时间选项
+            if (timeOptions) {
+                if (this.classList.contains('active')) {
+                    timeOptions.classList.add('show');
+                } else {
+                    timeOptions.classList.remove('show');
+                }
+            }
+
+            // 获取功能名称和显示提示
+            const featureName = this.closest('.setting-item').querySelector('.font-medium').textContent;
+            const isActive = this.classList.contains('active');
+            showToast(`${featureName}${isActive ? '已开启' : '已关闭'}`, isActive ? 'success' : 'info');
+        });
+    }
+
+    if (tagToggle) {
+        tagToggle.addEventListener('click', function () {
+            toggleSwitch(this);
+
+            // 显示/隐藏标签选项
+            if (tagOptions) {
+                if (this.classList.contains('active')) {
+                    tagOptions.classList.add('show');
+                } else {
+                    tagOptions.classList.remove('show');
+                }
+            }
+
+            // 获取功能名称和显示提示
+            const featureName = this.closest('.setting-item').querySelector('.font-medium').textContent;
+            const isActive = this.classList.contains('active');
+            showToast(`${featureName}${isActive ? '已开启' : '已关闭'}`, isActive ? 'success' : 'info');
+        });
+    }
+
+    // 初始化时间选项点击事件
+    const timeSlots = document.querySelectorAll('.time-slot');
+    timeSlots.forEach(slot => {
+        slot.addEventListener('click', function () {
+            // 移除其他时间槽的选中状态
+            timeSlots.forEach(s => s.classList.remove('selected'));
+
+            // 选中当前时间槽
+            this.classList.add('selected');
+
+            // 显示提示
+            const time = this.getAttribute('data-time');
+            showToast(`已选择${time}发布`, 'success');
+        });
+    });
+}
+
+/**
+ * 初始化开关样式
+ * @param {HTMLElement} toggleElement - 开关元素
+ */
+function initToggleSwitch(toggleElement) {
+    if (!toggleElement) return;
+
+    // 清空开关内的所有内容，避免重叠
+    toggleElement.innerHTML = '';
+
+    // 确保移除active类，以便重新初始化状态
+    toggleElement.classList.remove('active');
+
+    // 设置基本样式
+    toggleElement.style.width = '44px';
+    toggleElement.style.height = '24px';
+    toggleElement.style.borderRadius = '12px';
+    toggleElement.style.backgroundColor = '#cbd5e0';
+    toggleElement.style.position = 'relative';
+    toggleElement.style.cursor = 'pointer';
+    toggleElement.style.transition = 'background-color 0.3s';
+
+    // 添加开关圆点
+    const circle = document.createElement('div');
+    circle.className = 'toggle-circle';
+    circle.style.width = '18px';
+    circle.style.height = '18px';
+    circle.style.borderRadius = '50%';
+    circle.style.backgroundColor = 'white';
+    circle.style.position = 'absolute';
+    circle.style.top = '3px';
+    circle.style.left = '3px';
+    circle.style.transition = 'transform 0.3s';
+    circle.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.2)';
+
+    toggleElement.appendChild(circle);
+}
+
+/**
+ * 切换开关状态
+ * @param {HTMLElement} toggleElement - 开关元素
+ */
+function toggleSwitch(toggleElement) {
+    if (!toggleElement) return;
+
+    const circle = toggleElement.querySelector('.toggle-circle');
+
+    if (toggleElement.classList.contains('active')) {
+        // 关闭开关
+        toggleElement.classList.remove('active');
+        toggleElement.style.backgroundColor = '#cbd5e0';
+        if (circle) {
+            circle.style.transform = 'translateX(0)';
+        }
+    } else {
+        // 开启开关
+        toggleElement.classList.add('active');
+        toggleElement.style.backgroundColor = '#48bb78';
+        if (circle) {
+            circle.style.transform = 'translateX(20px)';
+        }
+    }
 }
 
 /**
@@ -541,35 +612,389 @@ function initPublishButton() {
 
     publishBtn.addEventListener('click', function () {
         // 获取选择的平台
-        const selectedPlatforms = document.querySelectorAll('.platform-card.selected');
+        const selectedCard = document.querySelector('.platform-card.selected');
 
-        if (selectedPlatforms.length === 0) {
-            showToast('请至少选择一个发布平台', 'warning');
+        if (!selectedCard) {
+            showToast('请选择一个发布平台', 'warning');
             return;
         }
 
-        // 显示发布中状态
-        const originalText = this.innerHTML;
-        this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 发布中...';
-        this.disabled = true;
-        this.classList.add('btn-publishing');
+        const platformName = selectedCard.querySelector('.platform-name').textContent.trim();
 
-        // 显示进度模态框
-        showPublishingProgress(selectedPlatforms);
+        // 从localStorage获取预览页面的内容
+        const previewContent = localStorage.getItem('previewContent');
+        // 默认内容，当没有找到保存的内容时使用
+        const defaultContent = `
+            高山果园红富士苹果 | 有机种植 · 自然成熟 · 脆甜多汁
 
-        // 模拟发布过程
-        setTimeout(() => {
-            // 恢复按钮状态
-            this.innerHTML = originalText;
-            this.disabled = false;
-            this.classList.remove('btn-publishing');
+            ✨来自高海拔山区的红富士苹果，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。每一口都能感受到新鲜与甜脆，是您日常水果的理想选择。
 
-            // 更新并显示成功模态框
-            updateSuccessModal(selectedPlatforms);
+            🍎 产品特点
+            这款红富士苹果产自高海拔山区，生长环境优越，采用有机种植方式，不使用化学农药和化肥，保证了果实的天然品质。果实成熟度高，颜色红润，外观光亮诱人。
 
-            // 显示成功模态框
-            successModal.classList.add('show');
-        }, 2000);
+            👅 口感体验
+            口感脆甜多汁，果肉细腻，香气怡人。咬一口，汁水四溢，甜度适中不腻口，是水果爱好者的不二之选。冷藏后食用，口感更佳。
+
+            💪 营养价值
+            富含多种维生素和膳食纤维，有助于肠道健康，增强免疫力。每天一个苹果，医生远离我！特别适合注重健康生活的现代人。
+
+            🍽️ 食用建议
+            建议冷藏后食用，口感更佳。可以直接作为水果享用，也可切片加入沙拉、搭配酸奶或制作苹果派。苹果还能制作成鲜榨果汁，搭配其他水果制作特色饮品，带来清新健康的口感体验。
+        `;
+
+        // 根据选择的平台执行不同的发布逻辑
+        switch (platformName) {
+            case '小红书':
+                // 小红书发布页面URL
+                const xiaohongshuPublishUrl = 'https://creator.xiaohongshu.com/publish/publish';
+
+                // 将内容保存到localStorage，以便在小红书页面使用
+                localStorage.setItem('xhsContent', previewContent || defaultContent);
+
+                // 显示跳转提示
+                showToast('正在跳转到小红书发布页面...', 'info');
+
+                // 添加小红书内容填充脚本
+                const xhsFillScript = `
+                    // 等待小红书页面加载完成后执行
+                    window.addEventListener('load', function() {
+                        setTimeout(function() {
+                            // 获取从禾语智宣传输过来的内容
+                            const xhsContent = localStorage.getItem('xhsContent');
+                            if (!xhsContent) return;
+                            
+                            // 尝试不同的选择器查找小红书的文本编辑区
+                            const possibleSelectors = [
+                                '.publish-editor', 
+                                '[contenteditable="true"]', 
+                                'textarea',
+                                '.editor-container [contenteditable="true"]',
+                                '.note-editor-container [contenteditable="true"]',
+                                '.content-edit-area'
+                            ];
+                            
+                            let editor = null;
+                            for (const selector of possibleSelectors) {
+                                const elements = document.querySelectorAll(selector);
+                                if (elements && elements.length > 0) {
+                                    // 尝试找到最有可能是主编辑器的元素
+                                    for (const el of elements) {
+                                        if (el.offsetWidth > 200 && el.offsetHeight > 100) {
+                                            editor = el;
+                                            break;
+                                        }
+                                    }
+                                    if (editor) break;
+                                }
+                            }
+                            
+                            if (editor) {
+                                // 尝试填充内容到编辑器
+                                try {
+                                    // 先尝试设置innerHTML
+                                    if (typeof editor.innerHTML !== 'undefined') {
+                                        editor.innerHTML = xhsContent.replace(/\\n/g, '<br>');
+                                    } 
+                                    // 再尝试设置value（用于textarea）
+                                    else if (typeof editor.value !== 'undefined') {
+                                        editor.value = xhsContent;
+                                    }
+                                    // 最后尝试设置innerText
+                                    else {
+                                        editor.innerText = xhsContent;
+                                    }
+                                    
+                                    // 触发input和change事件
+                                    ['input', 'change'].forEach(eventType => {
+                                        const event = new Event(eventType, { bubbles: true });
+                                        editor.dispatchEvent(event);
+                                    });
+                                    
+                                    console.log('禾语智宣内容已自动填充到小红书');
+                                } catch (err) {
+                                    console.error('填充内容失败:', err);
+                                }
+                            } else {
+                                console.warn('未找到小红书编辑器，请手动复制内容');
+                                // 创建一个悬浮框显示内容，便于用户复制
+                                const floatDiv = document.createElement('div');
+                                floatDiv.style.position = 'fixed';
+                                floatDiv.style.top = '20px';
+                                floatDiv.style.right = '20px';
+                                floatDiv.style.width = '300px';
+                                floatDiv.style.maxHeight = '80vh';
+                                floatDiv.style.overflowY = 'auto';
+                                floatDiv.style.background = 'white';
+                                floatDiv.style.border = '1px solid #ddd';
+                                floatDiv.style.borderRadius = '8px';
+                                floatDiv.style.padding = '15px';
+                                floatDiv.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                                floatDiv.style.zIndex = '9999';
+                                floatDiv.innerHTML = \`
+                                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                                        <b>禾语智宣内容</b>
+                                        <button id="copyBtn" style="background:#9aa338;color:white;border:none;border-radius:4px;padding:5px 10px;cursor:pointer">复制</button>
+                                    </div>
+                                    <pre style="white-space:pre-wrap;word-break:break-word">\${xhsContent}</pre>
+                                \`;
+                                document.body.appendChild(floatDiv);
+                                
+                                // 添加复制功能
+                                document.getElementById('copyBtn').addEventListener('click', function() {
+                                    navigator.clipboard.writeText(xhsContent).then(function() {
+                                        this.textContent = '已复制!';
+                                        setTimeout(() => this.textContent = '复制', 2000);
+                                    }.bind(this)).catch(err => {
+                                        console.error('复制失败:', err);
+                                    });
+                                });
+                            }
+                        }, 2000); // 给页面加载一些时间
+                    });
+                `;
+
+                // 将填充脚本保存到localStorage
+                localStorage.setItem('xhsFillScript', xhsFillScript);
+
+                // 在新标签页打开小红书
+                window.open(xiaohongshuPublishUrl, '_blank');
+                break;
+
+            case '抖音':
+                // 抖音发布页面URL
+                const douyinPublishUrl = 'https://creator.douyin.com/creator-micro/content/upload';
+
+                // 将内容保存到localStorage，以便在抖音页面使用
+                localStorage.setItem('dyContent', previewContent || defaultContent);
+
+                // 显示跳转提示
+                showToast('正在跳转到抖音发布页面...', 'info');
+
+                // 添加抖音内容填充脚本
+                const dyFillScript = `
+                    // 等待抖音页面加载完成后执行
+                    window.addEventListener('load', function() {
+                        setTimeout(function() {
+                            // 获取从禾语智宣传输过来的内容
+                            const dyContent = localStorage.getItem('dyContent');
+                            if (!dyContent) return;
+                            
+                            // 尝试不同的选择器查找抖音的文本编辑区
+                            const possibleSelectors = [
+                                '.editor-input-content',
+                                '.public-DraftEditor-content',
+                                '[contenteditable="true"]',
+                                'textarea',
+                                '.caption-textarea'
+                            ];
+                            
+                            let editor = null;
+                            for (const selector of possibleSelectors) {
+                                const elements = document.querySelectorAll(selector);
+                                if (elements && elements.length > 0) {
+                                    // 尝试找到最有可能是主编辑器的元素
+                                    for (const el of elements) {
+                                        if (el.offsetWidth > 100 && el.offsetHeight > 30) {
+                                            editor = el;
+                                            break;
+                                        }
+                                    }
+                                    if (editor) break;
+                                }
+                            }
+                            
+                            if (editor) {
+                                // 尝试填充内容到编辑器
+                                try {
+                                    // 先尝试设置innerHTML
+                                    if (typeof editor.innerHTML !== 'undefined') {
+                                        editor.innerHTML = dyContent.replace(/\\n/g, '<br>');
+                                    } 
+                                    // 再尝试设置value（用于textarea）
+                                    else if (typeof editor.value !== 'undefined') {
+                                        editor.value = dyContent;
+                                    }
+                                    // 最后尝试设置innerText
+                                    else {
+                                        editor.innerText = dyContent;
+                                    }
+                                    
+                                    // 触发input和change事件
+                                    ['input', 'change'].forEach(eventType => {
+                                        const event = new Event(eventType, { bubbles: true });
+                                        editor.dispatchEvent(event);
+                                    });
+                                    
+                                    console.log('禾语智宣内容已自动填充到抖音');
+                                } catch (err) {
+                                    console.error('填充内容失败:', err);
+                                }
+                            } else {
+                                console.warn('未找到抖音编辑器，请手动复制内容');
+                                // 创建一个悬浮框显示内容，便于用户复制
+                                const floatDiv = document.createElement('div');
+                                floatDiv.style.position = 'fixed';
+                                floatDiv.style.top = '20px';
+                                floatDiv.style.right = '20px';
+                                floatDiv.style.width = '300px';
+                                floatDiv.style.maxHeight = '80vh';
+                                floatDiv.style.overflowY = 'auto';
+                                floatDiv.style.background = 'white';
+                                floatDiv.style.border = '1px solid #ddd';
+                                floatDiv.style.borderRadius = '8px';
+                                floatDiv.style.padding = '15px';
+                                floatDiv.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                                floatDiv.style.zIndex = '9999';
+                                floatDiv.innerHTML = \`
+                                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                                        <b>禾语智宣内容</b>
+                                        <button id="copyBtn" style="background:#111827;color:white;border:none;border-radius:4px;padding:5px 10px;cursor:pointer">复制</button>
+                                    </div>
+                                    <pre style="white-space:pre-wrap;word-break:break-word">\${dyContent}</pre>
+                                \`;
+                                document.body.appendChild(floatDiv);
+                                
+                                // 添加复制功能
+                                document.getElementById('copyBtn').addEventListener('click', function() {
+                                    navigator.clipboard.writeText(dyContent).then(function() {
+                                        this.textContent = '已复制!';
+                                        setTimeout(() => this.textContent = '复制', 2000);
+                                    }.bind(this)).catch(err => {
+                                        console.error('复制失败:', err);
+                                    });
+                                });
+                            }
+                        }, 2000); // 给页面加载一些时间
+                    });
+                `;
+
+                // 将填充脚本保存到localStorage
+                localStorage.setItem('dyFillScript', dyFillScript);
+
+                // 在新标签页打开抖音
+                window.open(douyinPublishUrl, '_blank');
+                break;
+
+            case '微信视频号':
+                // 微信视频号发布页面URL
+                const weixinPublishUrl = 'https://channels.weixin.qq.com/platform/post/create';
+
+                // 将内容保存到localStorage，以便在微信视频号页面使用
+                localStorage.setItem('wxContent', previewContent || defaultContent);
+
+                // 显示跳转提示
+                showToast('正在跳转到微信视频号发布页面...', 'info');
+
+                // 添加微信视频号内容填充脚本
+                const wxFillScript = `
+                    // 等待微信视频号页面加载完成后执行
+                    window.addEventListener('load', function() {
+                        setTimeout(function() {
+                            // 获取从禾语智宣传输过来的内容
+                            const wxContent = localStorage.getItem('wxContent');
+                            if (!wxContent) return;
+                            
+                            // 尝试不同的选择器查找微信视频号的文本编辑区
+                            const possibleSelectors = [
+                                '.editor-content',
+                                '.rich-text-editor',
+                                '[contenteditable="true"]',
+                                'textarea',
+                                '.weui-textarea'
+                            ];
+                            
+                            let editor = null;
+                            for (const selector of possibleSelectors) {
+                                const elements = document.querySelectorAll(selector);
+                                if (elements && elements.length > 0) {
+                                    // 尝试找到最有可能是主编辑器的元素
+                                    for (const el of elements) {
+                                        if (el.offsetWidth > 100 && el.offsetHeight > 30) {
+                                            editor = el;
+                                            break;
+                                        }
+                                    }
+                                    if (editor) break;
+                                }
+                            }
+                            
+                            if (editor) {
+                                // 尝试填充内容到编辑器
+                                try {
+                                    // 先尝试设置innerHTML
+                                    if (typeof editor.innerHTML !== 'undefined') {
+                                        editor.innerHTML = wxContent.replace(/\\n/g, '<br>');
+                                    } 
+                                    // 再尝试设置value（用于textarea）
+                                    else if (typeof editor.value !== 'undefined') {
+                                        editor.value = wxContent;
+                                    }
+                                    // 最后尝试设置innerText
+                                    else {
+                                        editor.innerText = wxContent;
+                                    }
+                                    
+                                    // 触发input和change事件
+                                    ['input', 'change'].forEach(eventType => {
+                                        const event = new Event(eventType, { bubbles: true });
+                                        editor.dispatchEvent(event);
+                                    });
+                                    
+                                    console.log('禾语智宣内容已自动填充到微信视频号');
+                                } catch (err) {
+                                    console.error('填充内容失败:', err);
+                                }
+                            } else {
+                                console.warn('未找到微信视频号编辑器，请手动复制内容');
+                                // 创建一个悬浮框显示内容，便于用户复制
+                                const floatDiv = document.createElement('div');
+                                floatDiv.style.position = 'fixed';
+                                floatDiv.style.top = '20px';
+                                floatDiv.style.right = '20px';
+                                floatDiv.style.width = '300px';
+                                floatDiv.style.maxHeight = '80vh';
+                                floatDiv.style.overflowY = 'auto';
+                                floatDiv.style.background = 'white';
+                                floatDiv.style.border = '1px solid #ddd';
+                                floatDiv.style.borderRadius = '8px';
+                                floatDiv.style.padding = '15px';
+                                floatDiv.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                                floatDiv.style.zIndex = '9999';
+                                floatDiv.innerHTML = \`
+                                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                                        <b>禾语智宣内容</b>
+                                        <button id="copyBtn" style="background:#07C160;color:white;border:none;border-radius:4px;padding:5px 10px;cursor:pointer">复制</button>
+                                    </div>
+                                    <pre style="white-space:pre-wrap;word-break:break-word">\${wxContent}</pre>
+                                \`;
+                                document.body.appendChild(floatDiv);
+                                
+                                // 添加复制功能
+                                document.getElementById('copyBtn').addEventListener('click', function() {
+                                    navigator.clipboard.writeText(wxContent).then(function() {
+                                        this.textContent = '已复制!';
+                                        setTimeout(() => this.textContent = '复制', 2000);
+                                    }.bind(this)).catch(err => {
+                                        console.error('复制失败:', err);
+                                    });
+                                });
+                            }
+                        }, 2000); // 给页面加载一些时间
+                    });
+                `;
+
+                // 将填充脚本保存到localStorage
+                localStorage.setItem('wxFillScript', wxFillScript);
+
+                // 在新标签页打开微信视频号
+                window.open(weixinPublishUrl, '_blank');
+                break;
+
+            default:
+                // 显示不支持的平台提示
+                showToast(`暂不支持发布到 ${platformName}`, 'warning');
+                break;
+        }
     });
 
     // 返回首页按钮点击事件
@@ -591,124 +1016,6 @@ function initPublishButton() {
             // 可以添加查看已发布内容的逻辑
             showToast('查看发布内容功能即将上线', 'info');
         });
-    }
-
-    /**
-     * 显示发布进度模态框
-     * @param {NodeList} platforms 选择的平台
-     */
-    function showPublishingProgress(platforms) {
-        // 创建进度模态框
-        let progressModal = document.getElementById('publishProgressModal');
-
-        if (!progressModal) {
-            progressModal = document.createElement('div');
-            progressModal.id = 'publishProgressModal';
-            progressModal.className = 'modal';
-            progressModal.innerHTML = `
-                <div class="modal-content publishing-modal">
-                    <div class="publishing-animation">
-                        <div class="spinner"></div>
-                    </div>
-                    <h3 class="text-lg font-bold mt-4 mb-2">正在发布内容</h3>
-                    <p class="text-gray-600 mb-4">您的内容正在发布到所选平台，请稍候...</p>
-                    <div id="platform-progress" class="platform-progress">
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(progressModal);
-        }
-
-        // 添加平台进度
-        const platformProgress = progressModal.querySelector('#platform-progress');
-        platformProgress.innerHTML = '';
-
-        platforms.forEach((platform, index) => {
-            const platformName = platform.querySelector('.platform-name').textContent;
-            const platformItem = document.createElement('div');
-            platformItem.className = 'platform-item';
-            platformItem.id = `platform-${index}`;
-            platformItem.innerHTML = `
-                <i class="fas fa-sync-alt fa-spin"></i>
-                <span>${platformName}</span>
-            `;
-            platformProgress.appendChild(platformItem);
-
-            // 模拟平台发布完成
-            setTimeout(() => {
-                platformItem.classList.add('done');
-                platformItem.querySelector('i').className = 'fas fa-check-circle';
-            }, 500 + (index * 300));
-        });
-
-        // 显示模态框
-        progressModal.classList.add('show');
-
-        // 2秒后自动关闭进度模态框
-        setTimeout(() => {
-            progressModal.classList.remove('show');
-            setTimeout(() => {
-                progressModal.remove();
-            }, 300);
-        }, 1800);
-    }
-
-    /**
-     * 更新成功模态框
-     * @param {NodeList} platforms 选择的平台
-     */
-    function updateSuccessModal(platforms) {
-        // 获取平台名称列表
-        const platformNames = Array.from(platforms).map(platform =>
-            platform.querySelector('.platform-name').textContent
-        );
-
-        // 更新模态框文本
-        const successText = document.getElementById('publishSuccessText');
-        if (successText) {
-            if (platformNames.length === 1) {
-                successText.textContent = `您的内容已成功发布到 ${platformNames[0]}！`;
-            } else {
-                const lastPlatform = platformNames.pop();
-                successText.textContent = `您的内容已成功发布到 ${platformNames.join('、')} 和 ${lastPlatform}！`;
-            }
-        }
-
-        // 更新平台图标区域
-        const platformContainer = document.getElementById('published-platforms');
-        if (platformContainer) {
-            platformContainer.innerHTML = '';
-
-            platforms.forEach(platform => {
-                const platformName = platform.querySelector('.platform-name').textContent;
-                const platformIcon = platform.querySelector('.platform-icon').cloneNode(true);
-
-                // 创建平台标签
-                const platformTag = document.createElement('div');
-                platformTag.className = 'flex flex-col items-center';
-
-                // 创建图标容器
-                const iconContainer = document.createElement('div');
-                iconContainer.className = 'w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-1 relative';
-                iconContainer.appendChild(platformIcon);
-
-                // 添加成功标记
-                const successMark = document.createElement('div');
-                successMark.className = 'absolute -right-1 -top-1 bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs animate-bounce';
-                successMark.innerHTML = '<i class="fas fa-check"></i>';
-                iconContainer.appendChild(successMark);
-
-                platformTag.appendChild(iconContainer);
-
-                // 添加平台名称
-                const nameSpan = document.createElement('span');
-                nameSpan.className = 'text-xs text-gray-600';
-                nameSpan.textContent = platformName;
-                platformTag.appendChild(nameSpan);
-
-                platformContainer.appendChild(platformTag);
-            });
-        }
     }
 }
 
@@ -789,28 +1096,57 @@ function showToast(message, type = 'info') {
     // 检查是否已存在toast
     let toast = document.querySelector('.toast');
 
+    // 如果不存在，创建一个新的toast元素
     if (!toast) {
         toast = document.createElement('div');
         toast.className = 'toast';
+
+        // 添加基本样式
+        toast.style.position = 'fixed';
+        toast.style.top = '80px'; // 改为顶部显示
+        toast.style.left = '50%';
+        toast.style.transform = 'translateX(-50%)';
+        toast.style.padding = '10px 20px';
+        toast.style.borderRadius = '25px';
+        toast.style.color = 'white';
+        toast.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+        toast.style.zIndex = '9999';
+        toast.style.display = 'flex';
+        toast.style.alignItems = 'center';
+        toast.style.justifyContent = 'center';
+        toast.style.transition = 'all 0.3s ease';
+        toast.style.opacity = '0';
+        toast.style.visibility = 'hidden';
+        toast.style.fontSize = '14px';
+        toast.style.fontWeight = '500';
+
         document.body.appendChild(toast);
+    } else {
+        // 如果toast已存在，确保位置设置为顶部
+        toast.style.top = '80px';
+        toast.style.bottom = 'auto';
     }
 
-    // 设置样式
-    toast.className = `toast toast-${type}`;
-
-    // 设置图标
+    // 定义icon变量
     let icon = '';
+
+    // 根据类型设置不同的背景色
     switch (type) {
         case 'success':
+            toast.style.backgroundColor = 'rgba(72, 187, 120, 0.95)';
             icon = '<i class="fas fa-check-circle mr-2"></i>';
             break;
         case 'error':
+            toast.style.backgroundColor = 'rgba(245, 101, 101, 0.95)';
             icon = '<i class="fas fa-times-circle mr-2"></i>';
             break;
         case 'warning':
+            toast.style.backgroundColor = 'rgba(237, 137, 54, 0.95)';
             icon = '<i class="fas fa-exclamation-triangle mr-2"></i>';
             break;
         case 'info':
+        default:
+            toast.style.backgroundColor = 'rgba(66, 153, 225, 0.95)';
             icon = '<i class="fas fa-info-circle mr-2"></i>';
             break;
     }
@@ -818,13 +1154,40 @@ function showToast(message, type = 'info') {
     // 设置内容
     toast.innerHTML = `${icon}${message}`;
 
+    // 添加额外的样式调整
+    const iconElement = toast.querySelector('i');
+    if (iconElement) {
+        iconElement.style.marginRight = '8px';
+    }
+
     // 显示提示
-    toast.classList.add('show');
+    toast.style.visibility = 'visible';
+    toast.style.opacity = '1';
 
     // 自动关闭
     setTimeout(() => {
-        toast.classList.remove('show');
+        toast.style.opacity = '0';
+
+        // 等待动画完成后隐藏元素
+        setTimeout(() => {
+            toast.style.visibility = 'hidden';
+        }, 300);
     }, 3000);
+}
+
+/**
+ * 检查是否有从预览页面复制的文案内容
+ */
+function checkContentCopied() {
+    const contentCopied = localStorage.getItem('contentCopied');
+
+    if (contentCopied === 'true') {
+        // 显示提示
+        showToast('文案已复制到剪贴板，可随时粘贴使用', 'success');
+
+        // 清除标志，避免下次进入页面仍显示提示
+        localStorage.removeItem('contentCopied');
+    }
 }
 
 // 导出公共函数
