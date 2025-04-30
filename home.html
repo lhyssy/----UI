@@ -657,7 +657,18 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="js/common.js"></script>
     <script>
+        // 页面加载完成后执行
         document.addEventListener('DOMContentLoaded', function () {
+            // 检查是否是首次加载
+            const isFirstLoad = sessionStorage.getItem('homeFirstLoad') === null;
+
+            if (isFirstLoad) {
+                // 标记为已加载
+                sessionStorage.setItem('homeFirstLoad', 'true');
+                // 首次加载时跳转到登录页面
+                window.location.href = 'profile-guest.html';
+            }
+
             // 初始化粒子效果
             if (window.particlesJS) {
                 particlesJS('particles-js', {
