@@ -462,7 +462,7 @@ function initAIAssistant() {
 
             // 显示成功提示
             showToast('AI内容生成成功！', 'success');
-        }, 2000);
+        }, 5000);
     });
 
     function generateAIContent() {
