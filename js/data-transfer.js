@@ -453,6 +453,9 @@ function initAIOptimizationButton() {
             const productData = JSON.parse(dataStorage.value);
 
             // 显示生成中状态
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> AI正在生成中...';
+            this.disabled = true;
             if (aiGeneratingContainer) {
                 aiGeneratingContainer.classList.remove('hidden');
             }
@@ -491,6 +494,7 @@ function initAIOptimizationButton() {
 
                     // 显示成功消息
                     showAISuccessMessage();
+                    showToast('AI内容生成成功！', 'success');
                 }, 1000);
 
             } catch (error) {
@@ -499,12 +503,17 @@ function initAIOptimizationButton() {
 
                 // 显示错误消息
                 showErrorMessage('AI优化失败，请稍后重试');
+                showToast('AI内容生成失败！', 'failure');
 
                 // 隐藏生成中状态
                 if (aiGeneratingContainer) {
                     aiGeneratingContainer.classList.add('hidden');
                 }
             }
+
+            // 恢复按钮状态
+            this.innerHTML = originalText;
+            this.disabled = false;
 
         } catch (error) {
             console.error('解析产品数据失败:', error);
@@ -701,157 +710,69 @@ function extractContentFromCozeResponse(response) {
  * @returns {string} - 格式化后的HTML内容
  */
 function formatCozeContent(content) {
-    // 如果内容已经是HTML，直接返回
-    if (content.trim().startsWith('<') && content.includes('</')) {
-        return content;
-    }
 
-    // 清理内容
-    content = content
-        // 移除可能的多余引号和转义字符
-        .replace(/^["']|["']$/g, '')
-        .replace(/\\n/g, '\n')
-        .replace(/\\"/g, '"')
-        .replace(/\\\\/g, '\\')
-        // 移除可能的JSON前缀，如 ["output", "content..."]
-        .replace(/^\["output",.*?,"/, '')
-        // 移除结尾的引号和方括号
-        .replace(/"\]$/, '');
-
-    // 通过表情符号和标题特性识别小红书风格文案
-    const isXiaohongshuStyle = content.includes('🍎') ||
-        content.includes('💫') ||
-        content.includes('👅') ||
-        content.includes('——') ||
-        content.includes('#');
-
-    if (isXiaohongshuStyle) {
-        // 处理小红书风格文案格式
-
-        // 提取标题部分（通常包含表情符号和商品名）
-        let title = '';
-        const titleMatch = content.match(/(.+?)(?:\n|$)/);
-        if (titleMatch) {
-            title = titleMatch[1].trim();
-        }
-
-        // 提取标签（通常以#开头）
-        const tags = [];
-        const tagRegex = /#[^\s#]+/g;
-        let match;
-        while ((match = tagRegex.exec(content)) !== null) {
-            tags.push(match[0]);
-        }
-
-        // 从内容中提取各个部分
-        const sections = {
-            '产品特点': '',
-            '口感体验': '',
-            '营养价值': '',
-            '食用建议': ''
-        };
-
-        // 查找各部分内容
-        let currentSection = '';
-        const lines = content.split('\n');
-        for (const line of lines) {
-            // 检查是否是新部分的开始
-            if (line.includes('产品特点') || line.includes('特点') || line.includes('🍎')) {
-                currentSection = '产品特点';
-                continue;
-            } else if (line.includes('口感体验') || line.includes('口感') || line.includes('👅')) {
-                currentSection = '口感体验';
-                continue;
-            } else if (line.includes('营养价值') || line.includes('营养') || line.includes('💪')) {
-                currentSection = '营养价值';
-                continue;
-            } else if (line.includes('食用建议') || line.includes('吃法') || line.includes('🍽️')) {
-                currentSection = '食用建议';
-                continue;
-            }
-
-            // 如果有当前部分，添加内容
-            if (currentSection && sections[currentSection] !== undefined) {
-                sections[currentSection] += (sections[currentSection] ? '\n' : '') + line;
-            }
-        }
-
-        // 构建HTML
-        let html = `
-        <div class="mb-4">
-            <div class="mb-2 flex items-center">
-                <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded mr-2"
-                    style="background: linear-gradient(135deg, #ffcdd2, #ef9a9a); color: #c62828;">限时特惠</span>
-                <span class="bg-green-100 text-green-600 text-xs font-bold px-2 py-1 rounded"
-                    style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #2e7d32;">有机认证</span>
-            </div>
-            <h2 class="text-lg font-bold mb-2">${title || '农产品推荐'}</h2>
-            <p class="text-sm text-gray-700 leading-relaxed">${tags.join(' ')}</p>
-        </div>`;
-
-        // 添加标签部分
-        html += `
-        <div class="flex flex-wrap gap-2 mb-4">
-            <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
-                style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #1b5e20;">有机认证</span>
-            <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
-                style="background: linear-gradient(135deg, #bbdefb, #90caf9); color: #0d47a1;">高山种植</span>
-            <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
-                style="background: linear-gradient(135deg, #fff9c4, #fff59d); color: #f57f17;">产地直发</span>
-        </div>`;
-
-        // 添加各部分内容
-        if (sections['产品特点']) {
-            html += `
-            <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
-                style="border-color: #9aa338; background: linear-gradient(to right, rgba(154, 163, 56, 0.15), rgba(154, 163, 56, 0.05), transparent);">
-                <h3 class="font-bold mb-2 text-[#9aa338]">🍎 产品特点</h3>
-                <p class="text-sm text-gray-700 mb-3 leading-relaxed">${sections['产品特点'].replace(/\n/g, '<br>')}</p>
-            </div>`;
-        }
-
-        if (sections['口感体验']) {
-            html += `
-            <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
-                style="border-color: #e67e22; background: linear-gradient(to right, rgba(230, 126, 34, 0.15), rgba(230, 126, 34, 0.05), transparent);">
-                <h3 class="font-bold mb-2 text-orange-700">👅 口感体验</h3>
-                <p class="text-sm text-gray-700 mb-3 leading-relaxed">${sections['口感体验'].replace(/\n/g, '<br>')}</p>
-            </div>`;
-        }
-
-        if (sections['营养价值']) {
-            html += `
-            <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
-                style="border-color: #3498db; background: linear-gradient(to right, rgba(52, 152, 219, 0.15), rgba(52, 152, 219, 0.05), transparent);">
-                <h3 class="font-bold mb-2 text-blue-700">💪 营养价值</h3>
-                <p class="text-sm text-gray-700 mb-3 leading-relaxed">${sections['营养价值'].replace(/\n/g, '<br>')}</p>
-            </div>`;
-        }
-
-        if (sections['食用建议']) {
-            html += `
-            <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
-                style="border-color: #9b59b6; background: linear-gradient(to right, rgba(155, 89, 182, 0.15), rgba(155, 89, 182, 0.05), transparent);">
-                <h3 class="font-bold mb-2 text-purple-700">🍽️ 食用建议</h3>
-                <p class="text-sm text-gray-700 mb-3 leading-relaxed">${sections['食用建议'].replace(/\n/g, '<br>')}</p>
-            </div>`;
-        }
-
-        return html;
-    }
-
-    // 将换行符转换为<br>标签
-    let html = content.replace(/\n/g, '<br>');
-
-    // 创建基本的结构
-    return `
-        <div class="mb-4">
-            <h2 class="text-lg font-bold mb-2">AI优化后的文案</h2>
-            <p class="text-sm text-gray-700 leading-relaxed">
-                ${html}
-            </p>
+    // 构建HTML
+    let html = `
+    <div class="mb-4">
+        <div class="mb-2 flex items-center">
+        <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded mr-2"
+            style="background: linear-gradient(135deg, #ffcdd2, #ef9a9a); color: #c62828;">限时特惠</span>
+        <span class="bg-green-100 text-green-600 text-xs font-bold px-2 py-1 rounded"
+            style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #2e7d32;">有机认证</span>
         </div>
-    `;
+        <h2 class="text-lg font-bold mb-2">${content.title || '农产品推荐'}</h2>
+        <p class="text-sm text-gray-700 leading-relaxed">${content.product_intro || ''}</p>
+    </div>`;
+
+    // 添加标签部分
+    html += `
+    <div class="flex flex-wrap gap-2 mb-4">
+        <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+        style="background: linear-gradient(135deg, #c8e6c9, #a5d6a7); color: #1b5e20;">有机认证</span>
+        <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+        style="background: linear-gradient(135deg, #bbdefb, #90caf9); color: #0d47a1;">高山种植</span>
+        <span class="inline-block text-xs px-2 py-1 rounded-full font-medium"
+        style="background: linear-gradient(135deg, #fff9c4, #fff59d); color: #f57f17;">产地直发</span>
+    </div>`;
+
+    // 添加各部分内容
+    if (content.product_features) {
+        html += `
+        <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+        style="border-color: #9aa338; background: linear-gradient(to right, rgba(154, 163, 56, 0.15), rgba(154, 163, 56, 0.05), transparent);">
+        <h3 class="font-bold mb-2 text-[#9aa338]">🍎 产品特点</h3>
+        <p class="text-sm text-gray-700 mb-3 leading-relaxed">${content.product_features.replace(/\n/g, '<br>')}</p>
+        </div>`;
+    }
+
+    if (content.taste_experience) {
+        html += `
+        <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+        style="border-color: #e67e22; background: linear-gradient(to right, rgba(230, 126, 34, 0.15), rgba(230, 126, 34, 0.05), transparent);">
+        <h3 class="font-bold mb-2 text-orange-700">👅 口感体验</h3>
+        <p class="text-sm text-gray-700 mb-3 leading-relaxed">${content.taste_experience.replace(/\n/g, '<br>')}</p>
+        </div>`;
+    }
+
+    if (content.nutritional_value) {
+        html += `
+        <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+        style="border-color: #3498db; background: linear-gradient(to right, rgba(52, 152, 219, 0.15), rgba(52, 152, 219, 0.05), transparent);">
+        <h3 class="font-bold mb-2 text-blue-700">💪 营养价值</h3>
+        <p class="text-sm text-gray-700 mb-3 leading-relaxed">${content.nutritional_value.replace(/\n/g, '<br>')}</p>
+        </div>`;
+    }
+
+    if (content.usage_suggestion) {
+        html += `
+        <div class="mb-5 border-l-4 pl-3 rounded-r-lg"
+        style="border-color: #9b59b6; background: linear-gradient(to right, rgba(155, 89, 182, 0.15), rgba(155, 89, 182, 0.05), transparent);">
+        <h3 class="font-bold mb-2 text-purple-700">🍽️ 食用建议</h3>
+        <p class="text-sm text-gray-700 mb-3 leading-relaxed">${content.usage_suggestion.replace(/\n/g, '<br>')}</p>
+        </div>`;
+    }
+
+    return html;
 }
 
 /**

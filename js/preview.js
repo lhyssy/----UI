@@ -440,12 +440,15 @@ function initTextEditing() {
 
 /**
  * 初始化AI助手
- */
+ * 报告：有关于AI优化的部分已经于data-transfer.js中实现
+ * 本代码只有生成toast的作用，所以在这里注释化
+ 
 function initAIAssistant() {
     const aiGenerateBtn = document.querySelector('.ai-generate-btn');
     if (!aiGenerateBtn) return;
 
     aiGenerateBtn.addEventListener('click', function () {
+        debugger;
         // 显示生成中状态
         const originalText = this.innerHTML;
         this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> AI正在生成中...';
@@ -462,7 +465,7 @@ function initAIAssistant() {
 
             // 显示成功提示
             showToast('AI内容生成成功！', 'success');
-        }, 2000);
+        }, 5000);
     });
 
     function generateAIContent() {
@@ -514,7 +517,7 @@ function initAIAssistant() {
             element.style.backgroundColor = 'transparent';
         }, 1500);
     }
-}
+}*/
 
 /**
  * 初始化交互效果
